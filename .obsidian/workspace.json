@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/DSP/1. Quantizzazione.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "1. Quantizzazione"
+              "title": "README"
             }
           }
         ]
@@ -183,11 +183,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "e95a8b1068f75f0a",
+  "active": "08d86cc9d4ce593b",
   "lastOpenFiles": [
+    "Anno 1/DSP-merged.md",
+    "README.md",
+    "Anno 1/DSP/1. Quantizzazione.md",
     "Anno 1/DSP/0. Introduzione.md",
     "Anno 1/Lezioni integrative DSP/1. Segnali.md",
-    "Anno 1/DSP/1. Quantizzazione.md",
     "Anno 1/DSP/immagini/scala virgola fissa.svg",
     "Anno 1/DSP/immagini/oversampling.svg",
     "Anno 1/DSP/immagini/filtro passa basso.svg",
