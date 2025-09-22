@@ -1,0 +1,25 @@
+.markdown-source-view, .markdown-preview-view { max-width: 1000px; margin: auto; }
+
+img{
+	display : block;
+}
+
+img[alt*="center"]{
+
+	
+	margin: auto;
+}
+
+img[alt*="big"]{
+	width: 90%;
+}
+img[alt*="mid"]{
+	width: 70%;
+}
+
+img[alt*="small"]{
+	width: 50%;
+}
+
+img[alt*="full"]{width:100%;}
+
