@@ -6,6 +6,8 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiAtom",
+      "LiCircuitBoard",
       "LiInfo",
       "LiActivitySquare",
       "1️⃣"
@@ -34,5 +36,7 @@
   },
   "Anno 1": "1️⃣",
   "Anno 1/Lezioni integrative DSP": "LiInfo",
-  "Anno 1/DSP": "LiActivitySquare"
+  "Anno 1/Digital Signal Processing": "LiActivitySquare",
+  "Anno 1/Electronic Embedded Systems": "LiCircuitBoard",
+  "Anno 1/Machine Learning": "LiAtom"
 }

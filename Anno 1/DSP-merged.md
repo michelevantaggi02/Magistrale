@@ -18,7 +18,7 @@ Per quantizzare aggiungiamo una quantità nota di rumore al segnale, ma il suo e
 ![[ADC.svg|center big]]
 Il filtro passa basso serve ad eliminare tutte le frequenze troppo alte per essere utilizzate.
 
-![[immagini/filtro passa basso.svg | small center]]
+![[filtro passa basso.svg| small center]]
 - **BP**: Banda passante
 - **BT**: Banda di transizione
 - **BA**: Banda di arresto
@@ -32,7 +32,7 @@ Il filtro passa basso serve ad eliminare tutte le frequenze troppo alte per esse
 Si intende per oversampling quel procedimento odove si aumenta la frequenza di campionamento ($f_c$) a un valore talmente alto che il filtro passa basso analogico non è più necessario.
 
 Viene poi inserito un filtro digitale che effettua la **decimazione** del segnale.
-![[immagini/oversampling.svg | center mid]]
+![[oversampling.svg| center mid]]
 
 - $f_c'$: frequenza di campionamento con oversampling (2x, 3x, 4x,...) 
 
@@ -53,7 +53,7 @@ La posizione della virgola è rilevante solo per noi, l'elaboratore può trattar
 >Il numero massimo: $2-\text{NFP}$
 
 Possiamo usare i numeri in virgola fissa come se fossero una scala:
-![[immagini/scala virgola fissa.svg | center big]]
+![[scala virgola fissa.svg| center big]]
 Se iniziamo a rappresentare in digitale le informazioni del mondo reale, si capisce facilmente che abbiamo numerose limitazioni.
 
 ## Gamma dinamica
