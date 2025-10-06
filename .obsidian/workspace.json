@@ -22,15 +22,15 @@
             }
           },
           {
-            "id": "d686e37f3651de50",
+            "id": "b726dc15973f2059",
             "type": "leaf",
             "state": {
               "type": "diagram-edit",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/immagini/caratteristica ingresso-uscita.svg"
+                "file": "Anno 1/Digital Signal Processing/immagini/lookup table.svg"
               },
               "icon": "lucide-file",
-              "title": "caratteristica ingresso-uscita.svg"
+              "title": "lookup table.svg"
             }
           }
         ]
@@ -197,14 +197,19 @@
   },
   "active": "62228538e91605d9",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing/immagini/caratteristica ingresso-uscita.svg",
+    "Anno 1/Digital Signal Processing/immagini/lookup table.svg",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
-    "Anno 1/Digital Signal Processing/immagini/errore.svg",
-    "Anno 1/Digital Signal Processing/immagini/diagramma rumore.svg",
+    "Anno 1/Digital Signal Processing/immagini/companding_digitale_esempio.svg",
+    "Anno 1/Digital Signal Processing/immagini/companding_digitale.svg",
+    "Anno 1/Digital Signal Processing/immagini/pdf_non_uniforme.png",
+    "Anno 1/Digital Signal Processing/immagini/amplificatore a guadagno variabile.svg",
+    "Anno 1/Digital Signal Processing/immagini/inverso_pdf_modificata.png",
+    "Anno 1/Digital Signal Processing/immagini/lagrida_latex_editor.png",
+    "Anno 1/Digital Signal Processing/immagini/x_primo_t.png",
+    "Anno 1/Digital Signal Processing/immagini/eta_primo_t.png",
+    "Anno 1/Digital Signal Processing/immagini/eta_t.png",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-    "Anno 1/Digital Signal Processing/immagini/quantizzazione_segnale.png",
-    "Anno 1/Digital Signal Processing/immagini/conversione_adc.png",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 1/Machine Learning/0. Introduzione.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
@@ -214,10 +219,6 @@
     "Anno 1/Electronic Embedded Systems",
     "Anno 1/DSP-merged.md",
     "Anno 1/Lezioni integrative DSP/1. Segnali.md",
-    "Anno 1/Digital Signal Processing/immagini/scala virgola fissa.svg",
-    "Anno 1/Digital Signal Processing/immagini/oversampling.svg",
-    "Anno 1/Digital Signal Processing/immagini/filtro passa basso.svg",
-    "Anno 1/Digital Signal Processing/immagini/ADC.svg",
     "Anno 1/Digital Signal Processing/immagini",
     "Anno 1/DSP/Untitled.md",
     "Anno 1/Digital Signal Processing",
@@ -227,7 +228,6 @@
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT2.m",
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT.m",
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT.asv",
-    "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part00/scatola.png",
     "Anno 1/dispense prof/DSP/1. Quantizzazione.md",
     "Anno 1/dispense prof/DSP/0. Introduzione.md",
     "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
