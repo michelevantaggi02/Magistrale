@@ -4,33 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "81f1b501682d8814",
+        "id": "5dd8cc74f9f376d8",
         "type": "tabs",
         "children": [
           {
-            "id": "62228538e91605d9",
+            "id": "4dfcfd123518f426",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
+                "file": "Anno 1/Digital Signal Processing/4. Spettro in frequenza.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "3. Quantizzazione ottima"
+              "title": "4. Spettro in frequenza"
             }
           },
           {
-            "id": "b726dc15973f2059",
+            "id": "41be58501ac792d9",
             "type": "leaf",
             "state": {
-              "type": "diagram-edit",
+              "type": "markdown",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/immagini/lookup table.svg"
+                "file": "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+                "mode": "source",
+                "source": false
               },
               "icon": "lucide-file",
-              "title": "lookup table.svg"
+              "title": "1. Segnali"
             }
           }
         ]
@@ -195,10 +197,19 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "62228538e91605d9",
+  "active": "4dfcfd123518f426",
   "lastOpenFiles": [
+    "Anno 1/Machine Learning/0. Introduzione.md",
+    "Anno 1/Digital Signal Processing/4. Spettro in frequenza.md",
+    "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+    "1. Segnali/Campionamento.md",
+    "1. Segnali",
     "Anno 1/Digital Signal Processing/immagini/lookup table.svg",
+    "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
+    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
+    "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
+    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/immagini/companding_digitale_esempio.svg",
     "Anno 1/Digital Signal Processing/immagini/companding_digitale.svg",
     "Anno 1/Digital Signal Processing/immagini/pdf_non_uniforme.png",
@@ -208,17 +219,12 @@
     "Anno 1/Digital Signal Processing/immagini/x_primo_t.png",
     "Anno 1/Digital Signal Processing/immagini/eta_primo_t.png",
     "Anno 1/Digital Signal Processing/immagini/eta_t.png",
-    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
-    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-    "Anno 1/Digital Signal Processing/0. Introduzione.md",
-    "Anno 1/Machine Learning/0. Introduzione.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Anno 1/Machine Learning",
     "Anno 1/Untitled.md",
     "README.md",
     "Anno 1/Electronic Embedded Systems",
     "Anno 1/DSP-merged.md",
-    "Anno 1/Lezioni integrative DSP/1. Segnali.md",
     "Anno 1/Digital Signal Processing/immagini",
     "Anno 1/DSP/Untitled.md",
     "Anno 1/Digital Signal Processing",
@@ -227,10 +233,8 @@
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT2016.asv",
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT2.m",
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT.m",
-    "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT.asv",
     "Anno 1/dispense prof/DSP/1. Quantizzazione.md",
     "Anno 1/dispense prof/DSP/0. Introduzione.md",
-    "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
     "Welcome.md"
   ]
 }
