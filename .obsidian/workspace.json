@@ -11,14 +11,14 @@
             "id": "4dfcfd123518f426",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/4. Spettro in frequenza.md",
-                "mode": "source",
-                "source": false
+                "aFile": "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+                "bFile": "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "4. Spettro in frequenza"
+              "icon": "diff",
+              "title": "Diff: 1. Segnali"
             }
           },
           {
@@ -199,17 +199,17 @@
   },
   "active": "4dfcfd123518f426",
   "lastOpenFiles": [
+    "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+    "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
+    "Anno 1/Digital Signal Processing/0. Introduzione.md",
+    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
+    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+    "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/4. Spettro in frequenza.md",
     "Anno 1/Machine Learning/0. Introduzione.md",
-    "Anno 1/Lezioni integrative DSP/1. Segnali.md",
     "1. Segnali/Campionamento.md",
     "1. Segnali",
     "Anno 1/Digital Signal Processing/immagini/lookup table.svg",
-    "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
-    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-    "Anno 1/Digital Signal Processing/0. Introduzione.md",
-    "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
-    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/immagini/companding_digitale_esempio.svg",
     "Anno 1/Digital Signal Processing/immagini/companding_digitale.svg",
     "Anno 1/Digital Signal Processing/immagini/pdf_non_uniforme.png",
