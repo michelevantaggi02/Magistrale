@@ -1,3 +1,36 @@
+# Indice
+- [[#Oversampling|Oversampling]]
+- [[#Fixed point|Fixed point]]
+- [[#Gamma Dinamica|Gamma Dinamica]]
+- [[#Floating point|Floating point]]
+- [[#ADC Bipolare E Unipolare.|ADC Bipolare E Unipolare.]]
+- [[#Errore Di Quantizzazione|Errore Di Quantizzazione]]
+	- [[#Errore Di Quantizzazione#Metriche Di Errore|Metriche Di Errore]]
+	- [[#Errore Di Quantizzazione#Errore come Variabile Casuale|Errore come Variabile Casuale]]
+- [[#Gamma Dinamica|Gamma Dinamica]]
+- [[#Rapporto Segnale-Rumore|Rapporto Segnale-Rumore]]
+- [[#Ottimizzazione Di Max|Ottimizzazione Di Max]]
+- [[#Quantizzazione Non Uniforme|Quantizzazione Non Uniforme]]
+- [[#Modificare Una p.d.f.|Modificare Una p.d.f.]]
+	- [[#Modificare Una p.d.f.#Implementazione|Implementazione]]
+- [[#Implementazioni Digitali Del Companding|Implementazioni Digitali Del Companding]]
+	- [[#Implementazioni Digitali Del Companding#$\mu$-law|$\mu$-law]]
+- [[#Quantizzazione Non Lineare Nel Video - HDR|Quantizzazione Non Lineare Nel Video - HDR]]
+- [[#Frequenza Digitale ($\omega$) E Intervallo Di Nyquist|Frequenza Digitale ($\omega$) E Intervallo Di Nyquist]]
+	- [[#Frequenza Digitale ($\omega$) E Intervallo Di Nyquist#IDTFT|IDTFT]]
+- [[#Proprietà Della DTFT|Proprietà Della DTFT]]
+	- [[#Proprietà Della DTFT#Ampiezze E Fasi Del Segnale|Ampiezze E Fasi Del Segnale]]
+	- [[#Proprietà Della DTFT#Risposta Impulsiva E in Frequenza|Risposta Impulsiva E in Frequenza]]
+	- [[#Proprietà Della DTFT#Proprietà Del Filtraggio|Proprietà Del Filtraggio]]
+	- [[#Proprietà Della DTFT#Equazioni Di Parzeval|Equazioni Di Parzeval]]
+- [[#IDFT|IDFT]]
+- [[#Sovracampionamento|Sovracampionamento]]
+- [[#Zero Padding|Zero Padding]]
+- [[#Complessità Della DFT|Complessità Della DFT]]
+- [[#Convoluzione Lineare Con Sequenze Di Durata Finita|Convoluzione Lineare Con Sequenze Di Durata Finita]]
+	- [[#Convoluzione Lineare Con Sequenze Di Durata Finita#Fenomeni Di Transitorio|Fenomeni Di Transitorio]]
+- [[#Convoluzione Circolare|Convoluzione Circolare]]
+
 # 0. Introduzione
 Libri consigliati:
 - Orfanidis "Introduction to signal processing" ([download gratuito](https://rutgers.app.box.com/s/5vsu06pp556g9dfsdvayh4k50wqpataw))
@@ -47,8 +80,8 @@ La posizione della virgola è rilevante solo per noi, l'elaboratore può trattar
 >[!example]
 >$[0; 2[$ in 8 bit
 >Abbiamo bisogno di un solo bit per rappresentare i numeri interi, visto che 2 è escluso:$$b_7,b_6b_5b_4b_3b_2b_1b_0$$
->Il numero più piccolo rappresentabile (**NFP**) : $2^{-7} = \frac 1{128}$
->Il numero massimo: $2-\text{NFP}$
+>Il numero più piccolo rappresentabile: $N_{FP}= 2^{-7} = \frac 1{128}$
+>Il numero massimo: $M_{FP} = 2-N_{FP}$
 
 Possiamo usare i numeri in virgola fissa come se fossero una scala:
 ![[scala virgola fissa.svg| center big]]
@@ -58,7 +91,7 @@ Se iniziamo a rappresentare in digitale le informazioni del mondo reale, si capi
 
 La gamma dinamica è il rapporto tra il valore massimo rappresentabile e il valore minimo rappresentabile.
 
-Il dynamic range di un formato fixed point è dato da:$$\left. \frac{(2^{B} - 1)\text{NFP}}{\text{NFP}}\right|_{dB} = 20\log_{10}(2^B-1) \approx 20 \log_{10}(2^B) = B(20 \log_{10}2) = 6B$$
+Il dynamic range di un formato fixed point è dato da:$$\frac{M_{FP}}{N_{FP}}=\left. \frac{(2^{B} - 1)N_{FP}}{N_{FP}}\right|_{dB} = 20\log_{10}(2^B-1) \approx 20 \log_{10}(2^B) = B(20 \log_{10}2) = 6B$$
 L'unico modo con cui possiamo aumentare i $dB$ di un fixed point è quello di aumentare i bit, aumentando i bit miglioriamo di un fattore di 6 la scala dinamica.
 
 ## Floating point
@@ -96,19 +129,14 @@ Il floating point ha infatti alcuni  valori speciali da utilizzare in determinat
 
 Il condensatore posto all'interno del campionatore serve a mantenere lo stesso valore del segnale per il tempo di campionamento $T$.
 
-Un convertitore Analogico-Digitale è caratterizzato da una range in cui opera $R$, diviso equamente (per un quantizzatore uniforme) in $2^B$ livelli di quantizzazione.
+Un convertitore Analogico-Digitale è caratterizzato da una **range** in cui opera $R$, diviso equamente (per un quantizzatore uniforme) in $2^B$ **livelli di quantizzazione**.
 
 La spaziatura tra i livelli, chiamata **larghezza dei livelli** (quantization width) o risoluzione del quantizzatore è data dalla formula:$$Q=\frac R{2^B}=\text{NFP}$$
 Questa equazione può anche essere riscritta nella forma:$$\frac RQ = 2^B$$
 
 ![[immagini/quantizzazione_segnale.png|center]]
 
-## Rapporto Segnale-Rumore
-
-![[immagini/errore.svg|center mid]]
-$$-\frac Q2 < \text{e}(n) \leq \frac Q2$$
-
-### ADC Bipolare E Unipolare.
+## ADC Bipolare E Unipolare.
 
 Se i valori di $R$ variano in una p.d.f. (probability density function) che varia tra $$ - \frac R2 \leq x_Q(nT) < \frac R2$$
 l'ADC si dice **bipolare**.
@@ -116,71 +144,91 @@ l'ADC si dice **bipolare**.
 Se invece i valori variano tra $$ 0 \leq x_Q(nT) < R$$
 allora si dice **unipolare**.
 
-Nella pratica il segnale $x(t)$ deve essere precondizionato analogicamente per rientrare nella scala di valori del quantizzatore bipolare.
+Nella pratica il segnale $x(t)$ deve essere *precondizionato analogicamente* per rientrare nella scala di valori del quantizzatore _bipolare_.
 
 Il limite maggiore ($\frac R2$) non è incluso tra i livelli assumibili, infatti il livello massimo è $\frac R2 - Q$.
 
-### Arrotondamento E Troncamento
+## Errore Di Quantizzazione
 
 Nella maggior parte dei casi i quantizzatori lavorano arrotondando il valore al livello più vicino. Si tratta della scelta preferita rispetto al troncamento per la maggior parte dei casi, in quanto produce una rappresentazione più simile al segnale.
 
-### Errore Di Quantizzazione
 L'**errore di quantizzazione** è l'errore che risulta dall'utilizzo del segnale quantizzato $x_Q(nT)$ al posto del segnale reale $x(nT)$, e la sua formula è:$$\text e(nT) = x_Q(nT) - x(nT)$$
 In generale l'errore di quantizzazione di un numero $x$ che si trova nel range $[- \frac R2, \frac R2]$ è:$$e = x_Q - x$$
 dove $x_Q$ è il valore quantizzato.
 
+### Metriche Di Errore
+
 Con l'arrotondamento l'errore varia tra $- \frac Q2$ e $\frac Q2$, inclusi, abbiamo quindi l'errore massimo: $$e_{\text{max}} = \frac Q2$$Questa è però una sovrastima dell'errore tipico che incontriamo, per ottenere un valore più rappresentativo dell'errore medio consideriamo la media e la media quadrata dei valori di $e$ definiti da:
-$$\bar{e} = \frac 1Q \int_{-\frac Q2}^{\frac Q2}{e\,\mathrm de} = 0$$
-$$\bar{e^2}=\frac 1Q \int_{-\frac Q2}^{\frac Q2}{e^2\,\mathrm de} = \frac{Q^2}{12}$$
-Il risultato $\bar e = 0$ indica che in media metà dei valori vengono arrotondati per eccesso e metà per difetto, quindi $\bar e$ non può essere usato come errore rappresentativo.
-Un valore più utilizzato per questo scopo è la **radice del quadrato della media degli errori (rms)**:$$e_{rms} = \sqrt{\bar{e^2}} = \frac Q{\sqrt{12}}$$
-Possiamo dare una interpretazione probabilistica assumendo che $e$ sia una variabile casuale con distribuzione uniforme nel range $[- \frac Q2; \frac Q2]$ avente la funzione di probabilità:
-	$$p(e) = \begin{cases} \frac 1Q & \text{se}\; -\frac Q2 \leq e \leq \frac Q2 \\ 0 & \text{altrimenti} \end{cases}$$
-La normalizzazione $\frac 1Q$ è necessaria per garantire:$$\int_{-\frac Q2}^{\frac Q2}{p(e)\,\mathrm de} = 1$$Si capisce che l'errore rappresenta l'*aspettativa statistica*:
+$$\begin{align*}
+\bar{e} = \frac 1Q \int_{-\frac Q2}^{\frac Q2}{e\,\mathrm de} = 0 &\quad \text{media}\\
+\bar{e^2}=\frac 1Q \int_{-\frac Q2}^{\frac Q2}{e^2\,\mathrm de} = \frac{Q^2}{12} & \quad \text{media quadrata}
+\end{align*}
+$$
+Il risultato $\bar e = 0$ indica che in media metà dei valori vengono arrotondati per eccesso e metà per difetto, quindi $\bar e$ __non può essere usato__ come errore rappresentativo.
+
+Un valore più utilizzato per questo scopo è la **radice del quadrato della media degli errori (RMS)**:$$e_{rms} = \sqrt{\bar{e^2}} = \frac Q{\sqrt{12}}$$
+### Errore come Variabile Casuale
+
+Possiamo dare una interpretazione probabilistica assumendo che $e$ sia una variabile casuale con __distribuzione uniforme__ nel range $[- \frac Q2; \frac Q2]$ avente la funzione di probabilità:
+$$p(e) = \begin{cases} \frac 1Q & \text{se}\; -\frac Q2 \leq e \leq \frac Q2 \\ 0 & \text{altrimenti} \end{cases}$$
+La normalizzazione $\frac 1Q$ è necessaria per garantire la distribuzione uniforme:$$\int_{-\frac Q2}^{\frac Q2}{p(e)\,\mathrm de} = 1$$Si capisce che l'errore rappresenta l'**aspettativa statistica**:
 $$E[e] = \int_{-\frac Q2}^{\frac Q2}{ep(e)\,\mathrm de}$$
 $$E[e^2] = \int_{-\frac Q2}^{\frac Q2}{e^2p(e)\,\mathrm de}$$
-L'interpretazione probabilistica del rumore di quantizzazione è molto utile per determinare gli effetti di quantizzazione mentre si propagano attraverso il sistema di calcolo digitale. 
+L'__interpretazione probabilistica__ del rumore di quantizzazione è molto utile per determinare gli __effetti di quantizzazione__ mentre si propagano attraverso il sistema di calcolo digitale. 
 $$x_Q(n) = x(n) + e(n)$$
-Possiamo pensare che il segnale quantizzato $x_Q(n)$ sia una versione rumorosa del segnale originale $x(n)$ con aggiunta una componente di rumore $e(n)$.
-Per i segnali a larga ampiezza e larga banda (i segnali che variano nell'intera scala di $R$ passando tra tutti i livelli di quantizzazione), la sequenza $e(n)$ può essere considerata come una sequenza di rumore bianco a p.d.f. uniforme stazionaria con media 0. 
-Sembra inoltre che $e(n)$ sia scorrelata rispetto al segnale originale $x(n)$.
-La varianza media è stata calcolata come:$$\sigma_e^2 = E[e^2(n)] = \frac{Q^2}{12}$$
+Possiamo pensare che il segnale quantizzato $x_Q(n)$ sia una __versione rumorosa__ del segnale originale $x(n)$ con aggiunta una __componente di rumore__ $e(n)$.
+
+Per i segnali a __larga ampiezza__ e __larga banda__, ovvero i segnali che variano nell'_intera scala_ di $R$ passando tra tutti i livelli di quantizzazione, la sequenza $e(n)$ può essere considerata come una __sequenza di rumore bianco__ a p.d.f. uniforme stazionaria con media 0. 
+
+Sembra inoltre che $e(n)$ sia __scorrelata__ rispetto al segnale originale $x(n)$.
+
+La __varianza media__ è stata calcolata come:$$\sigma_e^2 = E[e^2(n)] = \frac{Q^2}{12}$$
 L'assunzione che $e(n)$ sia un rumore bianco significa che la funzione delta di autocorrelazione:
 $$R_{ee}(k) = E[e(n+k)e(n)] = \sigma_e^2\delta(k)$$
-Similmente è scorrelata con $x(n)$, il che significa che ha 0 cross-correlation:
+Similmente è scorrelata con $x(n)$, il che significa che ha **0 cross-correlation**:
 $$R_{ex}(k) = E[e(n+k)x(n)] = 0$$
-Il modello non è accurato per segnali che variano lentamente a bassa ampiezza. Ad esempio con sinusoidi che si trovano esattamente nel mezzo di due livelli con ampiezza minore di Q/2. L'errore risultante sarebbe altamente periodico e diverso rispetto al rumore bianco casuale. Sarebbe anche altamente correlato con la sinusoide di input.
+Il modello non è accurato per segnali che variano lentamente a bassa ampiezza, ad esempio con sinusoidi che si trovano esattamente _nel mezzo_ di due livelli con ampiezza _minore_ di Q/2. L'errore risultante sarebbe altamente periodico e diverso rispetto al rumore bianco casuale, sarebbe anche altamente correlato con la sinusoide di input.
 
-Nell'audio digitale, le distorsioni causate da segnali a basso livello sono chiamate "granulation noise" e causano suoni fastidiosi. Possono essere eliminate virtualmente tramite l'uso di "dither", un rumore a basso livello aggiunto al segnale prima della quantizzazione.
-### Dynamic Range
+> [!note]
+> Nell'audio digitale, le distorsioni causate da segnali a basso livello sono chiamate "**granulation noise**" e causano suoni fastidiosi. Possono essere eliminate virtualmente tramite l'uso di "dither", un rumore a basso livello aggiunto al segnale prima della quantizzazione.
+## Gamma Dinamica
+
+> [!INFO]
+> ![[1. Quantizzazione#Gamma Dinamica]]
+
+
 $$\frac RQ = 2^B = \frac{M_{FP}}{N_{FP}}$$
-Pensando ad $R$ e $Q$ come i range del rumore del segnale e del rumore di quantizzazione, il loro rapporto è la **gamma dinamica**, che può essere espresso in $dB$:
+Pensando ad $R$ e $Q$ come i range del __rumore del segnale__ ($R$) e del **rumore di quantizzazione** ($Q$), il loro rapporto è la **gamma dinamica**, che può essere espresso in $dB$:
 $$20\log_{10}(\frac RQ) = 6B \;dB$$
+## Rapporto Segnale-Rumore
 
+![[immagini/errore.svg|center mid]]
+$$-\frac Q2 < \text{e}(n) \leq \frac Q2$$
+Il rapporto segnale-rumore di quantizzazione (**SQNR**) è dato da:$$\text{SQNR} = \left. \frac{P_{\text{signal}}}{P_{\text{quant\_noise}}}\right |_{dB} = 10\log_{10}\frac{P_x}{P_{\varepsilon n}}$$
+$$P_{\varepsilon n} = \frac {Q^2}{12} = \frac{{N_{FP}}^2}{12}$$
+Dobbiamo mantenere _scollegato_ il rumore di quantizzazione dal segnale:
 
+![[immagini/diagramma rumore.svg|center]]
+
+Parliamo di errore di quantizzazione quando: $$e(n) = x(n) - \hat x_Q(n)$$
+se lo riteniamo _scollegato_ rispetto al segnale, allora lo definiamo come **rumore di quantizzazione**:
+$$\left. \text{SQNR} = \frac {P_{sig}}{P_{noise}} \right |_{dB} = 10\log_{10}\frac{P_x}{P_{\varepsilon n}}$$
 
 
 # 3. Quantizzazione Ottima
-Il rapporto segnale-rumore di quantizzazione (SQNR) è dato da:$$\text{SQNR} = \left. \frac{P_{\text{signal}}}{P_{\text{quant\_noise}}}\right |_{dB} = 10\log_{10}\frac{P_x}{P_{\varepsilon n}}$$
-$$P_{\varepsilon n} = \frac {Q^2}{12} = \frac{{N_{FP}}^2}{12}$$
-Dobbiamo mantenere scollegato il rumore di quantizzazione dal segnale:
-![[immagini/diagramma rumore.svg|center]]
-Parliamo di errore di quantizzazione quando: $e(n) = x(n) - \hat x_Q(n)$, se lo riteniamo scollegato rispetto al segnale, allora lo definiamo come **rumore di quantizzazione**:
-$$\left. \text{SQNR} = \frac {P_{sig}}{P_{noise}} \right |_{dB} = 10\log_{10}\frac{P_x}{P_{\varepsilon n}}$$
-## Quantizzazione Ottima
 
-Il rapporto SQNR varia in base alla p.d.f., ma nella realtà i segnali non hanno una p.d.f. uniforme.
+Il rapporto SQNR varia in base alla p.d.f., ma nella realtà i segnali _non hanno_ una p.d.f. uniforme.
 
 Ad esempio la voce umana ha una p.d.f. esponenziale ($e^{- \lambda|x|}$), è quindi molto problematico utilizzare un quantizzatore uniforme.
 
 
 ![[caratteristica ingresso-uscita.svg | center]]
 
-### Ottimizzazione Di Max
+## Ottimizzazione Di Max
 
 Il nostro obiettivo è quello di massimizzare la SQNR dato un numero di bit fissato, minimizzando la probabilità di errore.
 
-Per arrivare a questo devo agire su $x_i$ e $y_i$, ovvero i limiti delle zone di decisione.
+Per arrivare a questo devo agire su $x_i$ e $y_i$, ovvero i __limiti delle zone di decisione__.
 
 Per prima cosa si calcola la potenza dell'errore $Q$:
 $$Q = 
@@ -206,6 +254,7 @@ Il quantizzatore di Max si specializza per ogni segnale in ingresso, questo va p
 Si può quindi seguire un altro approccio: andremo a **modificare la p.d.f.** del segnale in ingresso per **renderla uniforme**. Ovviamente questa operazione deve essere **reversibile** per riottenere il segnale originale.
 
 ## Modificare Una p.d.f.
+
 $$\eta = g(x)$$
 Dobbiamo avere una funzione che dato $x$ (variabile aleatoria) lo trasforma in una a p.d.f. uniforme.
 
@@ -218,17 +267,20 @@ La funzione deve seguire determinati fattori:
 
 la p.d.f. della funzione $\eta$ si ottiene tramite:$$P_\eta(\eta) = \left[\frac{P_x(x)}{| \frac{\partial {g(x)}}{\partial x}|}\right]_{x = g^{-1}(\eta)}$$
 e per i nostri obiettivi deve essere *costante*.
-$$\frac{\partial g(x)}{\partial x} = P_x(x) \to g(x) = \int P_x(x)\; \mathrm dx$$
+$$\frac{\partial g(x)}{\partial x} = P_x(x) \implies g(x) = \int P_x(x)\; \mathrm dx$$
+
+Devo quindi calcolare la LUT con la formula 
+$$\eta = g(x) = \int P_x(x)\;\mathrm dx$$
 ### Implementazione
 
 L'implementazione vera e propria di questa funzione si chiama **amplificatore a guadagno variabile**
+
 ![[amplificatore a guadagno variabile.svg|center big]]
 
 Ovviamente questo sistema va a cambiare lo spettro del segnale, non è quindi utilizzabile in circuiti che devono eseguirne l'analisi.
 
 >[!EXAMPLE] Segnale vocale
 >$$P_x(x)=\frac{\lambda}{2}e^{-\lambda|x|} \quad\quad \lambda^2 = \frac 2{\sigma^2}$$
->Nella realtà non tutte le voci seguono la stessa formula.
 >$$\frac{\partial g(x)}{\partial x} = P_x(x);\quad  x > 0$$
 >$$g(x) = \frac 12 e^{-\lambda |x|} + c; \quad x > 0$$
 >Bisogna provare che rispetta le proprietà:
@@ -246,21 +298,22 @@ La tecnica di **companding** indica la compressione e l'espansione, ovvero la mo
 ## Implementazioni Digitali Del Companding
 
 ![[companding_digitale.svg|center big]]
+
 Vogliamo codificare $x(t)$ analogico in un segnale digitale con quantizzazione non lineare.
 ![[companding_digitale_esempio.svg|center big]]
 Il nostro target della quantizzazione è di $B$ bit, sovracampioniamo scegliendo $B' > B$ bit tali che soddisfino i requisiti di rapporto segnale-rumore (SQNR).
 
 Il nostro obiettivo è calcolare $\eta = g(x)$ per comprimere i valori sovradimensionati $x(n)$ in una quantizzazione non lineare al target giusto ($B$).
 
-Devo calcolarli in anticipo perché non posso avere un sistema che riesca a calcolarli in real time, quindi li inserisco in una LUT (Look-Up Table).
+Devo calcolarli in anticipo perché nella pratica non posso avere un sistema che riesca a calcolarli in real time, quindi li inserisco in una LUT (Look-Up Table).
 ![[lookup table.svg|center mid]]
 Questa tecnica si può effettuare con segnali anche bidimensionali, ovviamente ridimensionando la LUT di conseguenza.
 
 
-$$\eta = g(x) = \frac{\ln(1+\mu |x|)}{\ln(1+\mu)}$$Questa è la formula calcolata e inserita nella LUT.
-
 ### $\mu$-law
-//TODO
+
+$$\eta = g(x) = \frac{\ln(1+\mu |x|)}{\ln(1+\mu)}$$
+Questa è la formula calcolata e inserita nella LUT.
 ## Quantizzazione Non Lineare Nel Video - HDR
 
 Non si occupa di migliorare il rapporto segnale-rumore, ma di estendere la dinamica il più possibile.

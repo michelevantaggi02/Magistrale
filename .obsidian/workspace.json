@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+                "file": "Anno 1/Digital Signal Processing-merged.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2. Quantizzazione uniforme"
+              "title": "Digital Signal Processing-merged"
             }
           },
           {
@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
+                "file": "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "1. Quantizzazione"
+              "title": "2. Quantizzazione uniforme"
             }
           }
         ]
@@ -199,16 +199,16 @@
   },
   "active": "70b828f80512c061",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
-    "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+    "Anno 1/Digital Signal Processing-merged.md",
     "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
+    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
+    "Anno 1/Lezioni integrative DSP/1. Segnali.md",
     "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "README.md",
-    "Anno 1/Digital Signal Processing-merged.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
     "Untitled.base",
