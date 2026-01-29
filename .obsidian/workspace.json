@@ -11,14 +11,14 @@
             "id": "70b828f80512c061",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
-                "mode": "source",
-                "source": false
+                "aFile": "Anno 1/Digital Signal Processing-merged.md",
+                "bFile": "Anno 1/Digital Signal Processing-merged.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "3. Quantizzazione ottima"
+              "icon": "diff",
+              "title": "Diff: Digital Signal Processing-merged  (Working Tree)"
             }
           },
           {
@@ -92,8 +92,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "d5c02c814b48a4b8",
@@ -200,9 +199,9 @@
   },
   "active": "70b828f80512c061",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing-merged.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
+    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
     "Anno 1/Lezioni integrative DSP/1. Segnali.md",
