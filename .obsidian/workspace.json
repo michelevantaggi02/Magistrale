@@ -11,14 +11,14 @@
             "id": "70b828f80512c061",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "Anno 1/Digital Signal Processing-merged.md",
-                "bFile": "Anno 1/Digital Signal Processing-merged.md",
-                "aRef": ""
+                "file": "Anno 1/Lezioni integrative DSP/2. Trasformata di Fourier.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "diff",
-              "title": "Diff: Digital Signal Processing-merged  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "2. Trasformata di Fourier"
             }
           },
           {
@@ -199,18 +199,22 @@
   },
   "active": "70b828f80512c061",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing-merged.md",
+    "Anno 1/Lezioni integrative DSP/immagini/fourier.svg",
+    "Anno 1/Lezioni integrative DSP/2. Trasformata di Fourier.md",
+    "Anno 1/Lezioni integrative DSP/immagini",
+    "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+    "^e56489.md",
+    "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
+    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
-    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
-    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-    "Anno 1/Lezioni integrative DSP/1. Segnali.md",
     "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
+    "Anno 1/Digital Signal Processing-merged.md",
+    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "README.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
-    "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
     "Untitled.base",
     "Untitled.md",
     "Anno 1/Digital Signal Processing/immagini/dft_oversampling.svg",
@@ -225,7 +229,6 @@
     "Anno 1/Digital Signal Processing/immagini/inverso_pdf_modificata.png",
     "Anno 1/Digital Signal Processing/immagini/lagrida_latex_editor.png",
     "Anno 1/Digital Signal Processing/immagini/x_primo_t.png",
-    "Anno 1/Digital Signal Processing/immagini/eta_primo_t.png",
     "Anno 1/Machine Learning",
     "Anno 1/Untitled.md",
     "Anno 1/Electronic Embedded Systems",
@@ -236,7 +239,6 @@
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/spectral_estim.m",
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT2016.m",
     "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT2016.asv",
-    "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT2.m",
     "Anno 1/dispense prof/DSP/1. Quantizzazione.md",
     "Anno 1/dispense prof/DSP/0. Introduzione.md",
     "Welcome.md"
