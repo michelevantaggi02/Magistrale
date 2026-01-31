@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Lezioni integrative DSP/2. Trasformata di Fourier.md",
+                "file": "Anno 1/Lezioni integrative DSP/3. Trasformata di Fourier.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2. Trasformata di Fourier"
+              "title": "3. Trasformata di Fourier"
             }
           },
           {
@@ -199,8 +199,10 @@
   },
   "active": "70b828f80512c061",
   "lastOpenFiles": [
+    "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
+    "Anno 1/Lezioni integrative DSP/3. Trasformata di Fourier.md",
+    "Anno 1/Lezioni integrative DSP/immagini/sis_lin.svg",
     "Anno 1/Lezioni integrative DSP/immagini/fourier.svg",
-    "Anno 1/Lezioni integrative DSP/2. Trasformata di Fourier.md",
     "Anno 1/Lezioni integrative DSP/immagini",
     "Anno 1/Lezioni integrative DSP/1. Segnali.md",
     "^e56489.md",
@@ -228,7 +230,6 @@
     "Anno 1/Digital Signal Processing/immagini/amplificatore a guadagno variabile.svg",
     "Anno 1/Digital Signal Processing/immagini/inverso_pdf_modificata.png",
     "Anno 1/Digital Signal Processing/immagini/lagrida_latex_editor.png",
-    "Anno 1/Digital Signal Processing/immagini/x_primo_t.png",
     "Anno 1/Machine Learning",
     "Anno 1/Untitled.md",
     "Anno 1/Electronic Embedded Systems",
