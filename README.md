@@ -14,3 +14,9 @@ Anno X\
 ```
 
 Una volta conclusi tutti gli appunti genererò un file chiamato "Materia-merged.pdf", che racchiude in un unico blocco tutti i file di una cartella.
+
+# Appunti completati
+
+In questa sezione sono presenti link diretti ai pdf già creati:
+
+- [Lezioni integrative DSP](Anno 1/export/pdf/Lezioni integrative DSP-merged.pdf)

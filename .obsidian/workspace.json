@@ -13,26 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Lezioni integrative DSP/3. Trasformata di Fourier.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "3. Trasformata di Fourier"
-            }
-          },
-          {
-            "id": "60564a978c7ce3c9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2. Quantizzazione uniforme"
+              "title": "README"
             }
           }
         ]
@@ -156,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+                "file": "README.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 1. Segnali"
+              "title": "Outline of README"
             }
           },
           {
@@ -197,10 +183,21 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "70b828f80512c061",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
+    "Anno.md",
+    "README.md",
+    "Anno 1/export/md/Lezioni integrative DSP-merged.md",
+    "Anno 1/export/pdf/Lezioni integrative DSP-merged.pdf",
+    "Anno 1/export/md/Digital Signal Processing-merged.md",
+    "Anno 1/export/pdf",
+    "Anno 1/export/md",
+    "Anno 1/export",
     "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
     "Anno 1/Lezioni integrative DSP/3. Trasformata di Fourier.md",
+    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+    "Anno 1/Lezioni integrative DSP/immagini/filtro.svg",
+    "Anno 1/Lezioni integrative DSP/immagini/Untitled.md",
     "Anno 1/Lezioni integrative DSP/immagini/sis_lin.svg",
     "Anno 1/Lezioni integrative DSP/immagini/fourier.svg",
     "Anno 1/Lezioni integrative DSP/immagini",
@@ -209,13 +206,10 @@
     "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
     "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
-    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
-    "Anno 1/Digital Signal Processing-merged.md",
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
-    "README.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Untitled.base",
     "Untitled.md",
@@ -229,19 +223,13 @@
     "Anno 1/Digital Signal Processing/immagini/pdf_non_uniforme.png",
     "Anno 1/Digital Signal Processing/immagini/amplificatore a guadagno variabile.svg",
     "Anno 1/Digital Signal Processing/immagini/inverso_pdf_modificata.png",
-    "Anno 1/Digital Signal Processing/immagini/lagrida_latex_editor.png",
     "Anno 1/Machine Learning",
     "Anno 1/Untitled.md",
     "Anno 1/Electronic Embedded Systems",
     "Anno 1/DSP-merged.md",
     "Anno 1/Digital Signal Processing/immagini",
     "Anno 1/DSP/Untitled.md",
-    "Anno 1/Digital Signal Processing",
-    "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/spectral_estim.m",
-    "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT2016.m",
-    "Anno 1/dispense prof/DSP/DSP2025/Lectures/Part01/Esercitazioni/Esercitazioni_Part01/rateconvCDDAT2016.asv",
     "Anno 1/dispense prof/DSP/1. Quantizzazione.md",
-    "Anno 1/dispense prof/DSP/0. Introduzione.md",
-    "Welcome.md"
+    "Anno 1/dispense prof/DSP/0. Introduzione.md"
   ]
 }
