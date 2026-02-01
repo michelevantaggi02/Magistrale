@@ -19,4 +19,4 @@ Una volta conclusi tutti gli appunti genererò un file chiamato "Materia-merged.
 
 In questa sezione sono presenti link diretti ai pdf già creati:
 
-- [Lezioni integrative DSP](Anno 1/export/pdf/Lezioni integrative DSP-merged.pdf)
+- [Lezioni integrative DSP](Anno%201/export/pdf/Lezioni%20integrative%20DSP-merged.pdf)
