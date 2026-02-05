@@ -1,6 +1,6 @@
 Benvenuti nei miei orribili appunti della magistrale in Ingegneria Informatica e Robotica!
 
-Il software utilizzato per organizzare gli appunti è Obsidian, con alcuni plugin che dovrebbero essere inclusi direttamente nel repository.
+Il software utilizzato per organizzare gli appunti è [Obsidian](https://obsidian.md/), con alcuni plugin che dovrebbero essere inclusi direttamente nel repository.
 
 La struttura degli appunti è molto semplice:
 
