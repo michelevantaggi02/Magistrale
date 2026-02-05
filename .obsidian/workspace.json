@@ -11,14 +11,14 @@
             "id": "462aa55dd8270cf7",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
-                "mode": "source",
-                "source": false
+                "aFile": "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
+                "bFile": "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "8. Filtri FIR - Finite Impulse Response"
+              "icon": "diff",
+              "title": "Diff: 8. Filtri FIR - Finite Impulse Response  (Working Tree)"
             }
           }
         ]
@@ -195,8 +195,11 @@
   },
   "active": "462aa55dd8270cf7",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing/immagini/Filtri_FIR.svg",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
+    "Pasted image 20260205183305.png",
+    "Pasted image 20260205183241.png",
+    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
+    "Anno 1/Digital Signal Processing/immagini/Filtri_FIR.svg",
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
     "Anno 1/Digital Signal Processing/immagini/amplificatore a guadagno variabile.svg",
     "Anno 1/Digital Signal Processing/immagini/diagramma rumore.svg",
@@ -207,10 +210,7 @@
     "Anno 1/Digital Signal Processing/immagini/hamming.png",
     "Anno 1/Digital Signal Processing/immagini/ris_frequenza.png",
     "Anno 1/Digital Signal Processing/immagini/sidelobes.png",
-    "Anno 1/Digital Signal Processing/immagini/ADC.svg",
-    "Anno 1/Digital Signal Processing/immagini/circ_conv_2.jpg",
     "Anno 1/export/md/Lezioni integrative DSP-merged.md",
-    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
