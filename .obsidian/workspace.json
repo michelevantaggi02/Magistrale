@@ -20,6 +20,20 @@
               "icon": "lucide-file",
               "title": "8. Filtri FIR - Finite Impulse Response"
             }
+          },
+          {
+            "id": "0941025a4fa2c717",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "8. Filtri FIR - Finite Impulse Response"
+            }
           }
         ]
       }
@@ -143,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Anno 1/export/pdf/Lezioni integrative DSP-merged.pdf",
+                "file": "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Lezioni integrative DSP-merged"
+              "title": "Outline of 8. Filtri FIR - Finite Impulse Response"
             }
           },
           {
@@ -194,24 +208,23 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "eb696fbb6ea160b8",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing/immagini/FIR_hamming_ris_freq.png",
-    "Anno 1/Digital Signal Processing/6. Finestratura.md",
+    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
+    "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
+    "Anno 1/Digital Signal Processing/6. Finestratura.md",
+    "Anno 1/Digital Signal Processing/immagini/FIR_hamming_ris_freq.png",
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
     "Anno 1/Digital Signal Processing/immagini/FIR_rec_window_freq_res.png",
     "Pasted image 20260205183305.png",
     "Anno 1/Digital Signal Processing/immagini/FIR_rec_window_response.png",
     "Pasted image 20260205183241.png",
-    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Digital Signal Processing/immagini/Filtri_FIR.svg",
     "Anno 1/Digital Signal Processing/immagini/amplificatore a guadagno variabile.svg",
     "Anno 1/Digital Signal Processing/immagini/diagramma rumore.svg",
     "Anno 1/Digital Signal Processing/immagini/schema_blocchi_finestra.svg",
     "Anno 1/Digital Signal Processing/immagini/schema_blocchi_stazionario.svg",
-    "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
-    "Anno 1/Digital Signal Processing/immagini/hamming.png",
     "Anno 1/export/md/Lezioni integrative DSP-merged.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
