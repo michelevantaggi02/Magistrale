@@ -92,7 +92,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 370.5
+    "width": 370.5,
+    "collapsed": true
   },
   "right": {
     "id": "d5c02c814b48a4b8",
@@ -207,7 +208,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6e19a07923072cbc",
+  "active": "7c718c9a69bc6f42",
   "lastOpenFiles": [
     "Anno 1/Digital Signal Processing/immagini/Gradino unitario 1.svg",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
