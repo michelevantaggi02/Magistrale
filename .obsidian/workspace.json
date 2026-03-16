@@ -148,7 +148,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-tags",
-              "title": "Tags"
+              "title": "Etichette"
             }
           },
           {
@@ -208,10 +208,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "7c718c9a69bc6f42",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing/immagini/Gradino unitario 1.svg",
+    "Anno 1/Digital Signal Processing/immagini/cerchio_unitario.png",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
+    "Pasted image 20260316113525.png",
+    "Anno 1/Digital Signal Processing/immagini/poli_zeri.png",
+    "Anno 1/Digital Signal Processing/immagini/Gradino unitario 1.svg",
     "Anno 1/Digital Signal Processing/immagini/Gradino unitario.svg",
     "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
@@ -224,9 +227,6 @@
     "Pasted image 20260205183305.png",
     "Anno 1/Digital Signal Processing/immagini/FIR_rec_window_response.png",
     "Pasted image 20260205183241.png",
-    "Anno 1/Digital Signal Processing/immagini/Filtri_FIR.svg",
-    "Anno 1/Digital Signal Processing/immagini/amplificatore a guadagno variabile.svg",
-    "Anno 1/Digital Signal Processing/immagini/diagramma rumore.svg",
     "Anno 1/export/md/Lezioni integrative DSP-merged.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
