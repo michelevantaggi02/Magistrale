@@ -11,14 +11,14 @@
             "id": "7c718c9a69bc6f42",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "Anno 1/Digital Signal Processing/0. Introduzione.md",
-                "bFile": "Anno 1/Digital Signal Processing/0. Introduzione.md",
-                "aRef": ""
+                "file": "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "diff",
-              "title": "Diff: 0. Introduzione  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "9. Filtri IIR - Infinite impulse response"
             }
           },
           {
@@ -157,12 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura"
+              "title": "Struttura di 9. Filtri IIR - Infinite impulse response"
             }
           },
           {
