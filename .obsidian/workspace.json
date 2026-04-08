@@ -179,7 +179,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -194,7 +194,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6e19a07923072cbc",
+  "active": "7c718c9a69bc6f42",
   "lastOpenFiles": [
     "Anno 1/Digital Signal Processing/descrizioni_filtri.png",
     "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
