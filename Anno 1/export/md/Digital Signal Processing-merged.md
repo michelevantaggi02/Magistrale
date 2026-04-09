@@ -158,12 +158,14 @@ Un convertitore Analogico-Digitale è caratterizzato da una __range__ in cui ope
 
 La spaziatura tra i livelli, chiamata __larghezza dei livelli__ (quantization width) o risoluzione del quantizzatore è data dalla formula:
 
-$$Q=\frac R{2^B}=\text{NFP}
+$$
+Q=\frac R{2^B}=\text{NFP}
 $$
 
 Questa equazione può anche essere riscritta nella forma:
 
-$$\frac RQ = 2^B
+$$
+\frac RQ = 2^B
 $$
 
 ![[immagini/quantizzazione_segnale.png|center]]
@@ -172,14 +174,16 @@ $$
 
 Se i valori di $R$ variano in una p.d.f. (probability density function) che varia tra
 
-$$ - \frac R2 \leq x_Q(nT) < \frac R2
+$$
+ - \frac R2 \leq x_Q(nT) < \frac R2
 $$
 
 l'ADC si dice __bipolare__.
 
 Se invece i valori variano tra
 
-$$ 0 \leq x_Q(nT) < R
+$$
+ 0 \leq x_Q(nT) < R
 $$
 
 allora si dice __unipolare__.
@@ -213,10 +217,13 @@ Con l'arrotondamento l'errore varia tra $- \frac Q2$ e $\frac Q2$, inclusi, abbi
 $$
 e_{\text{max}} = \frac Q2
 $$Questa è però una sovrastima dell'errore tipico che incontriamo, per ottenere un valore più rappresentativo dell'errore medio consideriamo la media e la media quadrata dei valori di $e$ definiti da:
-$$\begin{align*}
+$$
+
+\begin{align*}
 \bar{e} = \frac 1Q \int_{-\frac Q2}^{\frac Q2}{e\,\mathrm de} = 0 &\quad \text{media}\\
 \bar{e^2}=\frac 1Q \int_{-\frac Q2}^{\frac Q2}{e^2\,\mathrm de} = \frac{Q^2}{12} & \quad \text{media quadrata}
 \end{align*}
+
 $$
 
 Il risultato $\bar e = 0$ indica che in media metà dei valori vengono arrotondati per eccesso e metà per difetto, quindi $\bar e$ __non può essere usato__ come errore rappresentativo.
@@ -224,7 +231,9 @@ Il risultato $\bar e = 0$ indica che in media metà dei valori vengono arrotonda
 Un valore più utilizzato per questo scopo è la __radice del quadrato della media degli errori (RMS)__:
 
 $$
+
 e_{rms} = \sqrt{\bar{e^2}} = \frac Q{\sqrt{12}}
+
 $$
 
 ### Errore come Variabile Casuale
@@ -232,14 +241,19 @@ $$
 Possiamo dare una interpretazione probabilistica assumendo che $e$ sia una variabile casuale con __distribuzione uniforme__ nel range $[- \frac Q2; \frac Q2]$ avente la funzione di probabilità:
 
 $$
+
 p(e) = \begin{cases} \frac 1Q & \text{se}\; -\frac Q2 \leq e \leq \frac Q2 \\ 0 & \text{altrimenti} \end{cases}
+
 $$
 
 La normalizzazione $\frac 1Q$ è necessaria per garantire la distribuzione uniforme:
 
 $$
+
 \int_{-\frac Q2}^{\frac Q2}{p(e)\,\mathrm de} = 1
-$$Si capisce che l'errore rappresenta l'**aspettativa statistica**:
+
+$$
+Si capisce che l'errore rappresenta l'**aspettativa statistica**:
 $$
 
 E[e] = \int_{-\frac Q2}^{\frac Q2}{ep(e)\,\mathrm de}
@@ -288,8 +302,6 @@ Il modello non è accurato per segnali che variano lentamente a bassa ampiezza, 
 
 > [!INFO]
 > ![[1. Quantizzazione#Gamma Dinamica]]
-
-
 $$
 
 \frac RQ = 2^B = \frac{M_{FP}}{N_{FP}}
@@ -336,8 +348,6 @@ $$
 \left. \text{SQNR} = \frac {P_{sig}}{P_{noise}} \right |_{dB} = 10\log_{10}\frac{P_x}{P_{\varepsilon n}}
 
 $$
-
-
 # 3. Quantizzazione Ottima
 
 Il rapporto SQNR varia in base alla p.d.f., ma nella realtà i segnali _non hanno_ una p.d.f. uniforme.
@@ -367,12 +377,18 @@ Q =
 
 $$
 Data una p.d.f., i valori di decisione ottima $x_i$ e i livelli ottimi di output $y_i$ si ottengono impostando a 0 la derivata di $Q$:
-$$y_i = \frac 1{P_i}\int_{x_i}^{x_{i+1}}{xP_x(x)\;\mathrm dx} = E\{x \mid x_i < x < x_{i+1}\}
+$$
+
+y_i = \frac 1{P_i}\int_{x_i}^{x_{i+1}}{xP_x(x)\;\mathrm dx} = E\{x \mid x_i < x < x_{i+1}\}
+
 $$
 
 I livelli di uscita sono il __valore medio statistico__ delle zone di decisione
 
-$$x_i = \frac 12(y_i + y_{i+1})
+$$
+
+x_i = \frac 12(y_i + y_{i+1})
+
 $$
 
 Si può dedurre che spostando $y_i$ si spostano anche gli $x_i$.
@@ -389,7 +405,10 @@ Si può quindi seguire un altro approccio: andremo a __modificare la p.d.f.__ de
 
 ## Modificare Una p.d.f.
 
-$$\eta = g(x)
+$$
+
+\eta = g(x)
+
 $$
 
 Dobbiamo avere una funzione che dato $x$ (variabile aleatoria) lo trasforma in una a p.d.f. uniforme.
@@ -403,17 +422,26 @@ La funzione deve seguire determinati fattori:
 
 la p.d.f. della funzione $\eta$ si ottiene tramite:
 
-$$P_\eta(\eta) = \left[\frac{P_x(x)}{| \frac{\partial {g(x)}}{\partial x}|}\right]_{x = g^{-1}(\eta)}
+$$
+
+P_\eta(\eta) = \left[\frac{P_x(x)}{| \frac{\partial {g(x)}}{\partial x}|}\right]_{x = g^{-1}(\eta)}
+
 $$
 
 e per i nostri obiettivi deve essere _costante_.
 
-$$\frac{\partial g(x)}{\partial x} = P_x(x) \implies g(x) = \int \frac{P_x(x)}{P_\eta(\eta)}\; \mathrm dx
+$$
+
+\frac{\partial g(x)}{\partial x} = P_x(x) \implies g(x) = \int \frac{P_x(x)}{P_\eta(\eta)}\; \mathrm dx
+
 $$
 
 Devo quindi calcolare la LUT con la formula:
 
-$$\eta = g(x) = \int \frac{P_x(x)}{P_\eta(\eta)}\;\mathrm dx
+$$
+
+\eta = g(x) = \int \frac{P_x(x)}{P_\eta(\eta)}\;\mathrm dx
+
 $$
 
 Dove $P_\eta(\eta)$ è la funzione densità di probabilità __uniforme__ ($\frac 1R$), mentre $P_x(x)$ è quella del segnale che può essere conosciuta a priori oppure stimabile.
@@ -428,13 +456,18 @@ Ovviamente questo sistema va a cambiare lo spettro del segnale, non è quindi ut
 
 >[!EXAMPLE] Segnale vocale
 
-$$P_x(x)=\frac{\lambda}{2}e^{-\lambda|x|} \quad\quad \lambda^2 = \frac 2{\sigma^2}
->$$
+$$
+
+P_x(x)=\frac{\lambda}{2}e^{-\lambda|x|} \quad\quad \lambda^2 = \frac 2{\sigma^2}
+
+$$
 >
 $$\frac{\partial g(x)}{\partial x} = P_x(x);\quad  x > 0
->$$
 >
-$$g(x) = \frac R2 (1- e^{-\lambda x}); \quad x > 0
+$$
+
+$$
+g(x) = \frac R2 (1- e^{-\lambda x}); \quad x > 0
 >$$
 >
 >Bisogna provare che rispetta le proprietà:
@@ -487,7 +520,8 @@ Per questo sono state sviluppate 2 varianti:
 - __DTFT (Discrete-Time Fourier Transform)__: si applica alle sequenze fornendo una funzione continua, non può essere applicata in ambiente digitale in quanto bisogna discretizzare anche le frequenze.
 - __DFT (Discrete Fourier Transform)__: quantizza anche $\omega$ e può essere implementata digitalmente. Non rappresenta un'approssimazione della DTFT, ma una sua _rappresentazione esatta_, a patto che lo __spettro__ sia __finito__.
 
-$$\text{Fourier}:\quad x(t) \to X(f) = \int_{-\infty}^{+\infty}x(t)e^{-j2\pi ft}\;\mathrm dt = \int_{-\infty}^{+\infty}x(t)e^{-j\Omega t}\; \mathrm dt, \quad \Omega = 2\pi f
+$$
+\text{Fourier}:\quad x(t) \to X(f) = \int_{-\infty}^{+\infty}x(t)e^{-j2\pi ft}\;\mathrm dt = \int_{-\infty}^{+\infty}x(t)e^{-j\Omega t}\; \mathrm dt, \quad \Omega = 2\pi f
 $$
 
 $$
@@ -498,13 +532,14 @@ $$
 >Come si arriva ad avere $f_c$ al denominatore di $\omega$?
 > Bisogna tornare un po' indietro a quando si effettua il [[1. Segnali#Campionamento |Campionamento]].
 
-$$ \begin{align*}
+$$
+ \begin{align*}
 > x(t)\bigg|_{t=nT} = x(nT) & = \sum_{n = -\infty}^{\infty}x(n)e^{-j2\pi f (nT)} \\
 > & = \sum_{n = -\infty}^{\infty}x(n)e^{-j\frac{2\pi f}{f_c} n}
 > \end{align*} 
-> $$
 > 
-> 
+$$
+
 $$T = \frac 1{f_c}
 > $$
 >  
@@ -519,7 +554,8 @@ $$
 Il campionamento del segnale produce una __periodizzazione__ dello spettro, si ha quindi che la DTFT $X(\omega)$ è periodica di periodo $2\pi$.
 L'__intervallo di Nyquist__ della frequenza $[- \frac {f_c}2, \frac {f_c}2]$ nelle unità di $\omega$ è l'intervallo:
 
-$$[ - \pi \leq \omega \leq \pi]
+$$
+[ - \pi \leq \omega \leq \pi]
 $$
 
 Possiamo quindi dire che la DTFT è una rappresentazione esatta della Trasformata di Fourier solo per segnali a banda limitata, in quanto con il campionamento viene resa periodica in $\omega$, portando a non riuscire a rappresentare frequenze al di fuori dell'intervallo di Nyquist. Tuttavia se il segnale campionato rispetta correttamente il [[1. Segnali#^e56489|Teorema del Campionamento]], avremo a disposizione tutte le frequenze necessarie.
@@ -608,11 +644,13 @@ $$
 
 $$
 \text{DFT :}\quad X(\omega_k) = \sum_{n = 0}^{N-1}x(n)e^{-j \frac {2\pi}N k n}, \quad x(n) \neq 0, \quad 0 \le n \le N-1
-$$ ^6ad93d
+$$
 
-Se rispetto il vincolo $0 \le n \le N-1$ la DFT è una trasformata **esatta**.
+ ^6ad93d
 
-Nulla mi vieta di scegliere un altro valore $L \le N$, dove $0 \le n  \le L-1$. 
+Se rispetto il vincolo $0 \le n \le N-1$ la DFT è una trasformata __esatta__.
+
+Nulla mi vieta di scegliere un altro valore $L \le N$, dove $0 \le n  \le L-1$.
 
 ## IDFT
 
@@ -634,46 +672,56 @@ Questi vettori (anche senza sovracampionamento) rispettano la proprietà Hermiti
 
 ## Zero Padding
 
-Se prendo $L < N$ valori, posso aggiungere ($D = N - L$) zeri in fondo al segnale, non avrò cambiamenti nella **DTFT**, ma li avrò nella **DFT**, perché viene calcolata in base al numero di valori di $x$.
+Se prendo $L < N$ valori, posso aggiungere ($D = N - L$) zeri in fondo al segnale, non avrò cambiamenti nella __DTFT__, ma li avrò nella __DFT__, perché viene calcolata in base al numero di valori di $x$.
+
 $$\begin{align}
 X_D(\omega) & = \sum_{n = 0}^{L+D-1}x_D(n)e^{-j\omega n} \\
 &= \sum_{n = 0}^{L-1}x_D(n) e^{-j \omega n} &+& \sum_{n = L}^{L+D-1} 0 e^{-j\omega n}\\
 &= \sum_{n = 0}^{L-1}x(n) e^{-j\omega n} &+& 0\\
 &=X(\omega)
-\end{align}$$
+\end{align}
+$$
+
 ## Complessità Della DFT
 
 ![[#^6ad93d]]
 
-$$x(n)e^{-j\omega_k n} = x(n)(\cos(\omega_kn) -j\sin(\omega_kn))$$
-Bisogna fare quindi $2L$ **MACS** per ogni valore $\omega_k$.
+$$x(n)e^{-j\omega_k n} = x(n)(\cos(\omega_kn) -j\sin(\omega_kn))
+$$
+
+Bisogna fare quindi $2L$ __MACS__ per ogni valore $\omega_k$.
 
 Per tutta la DFT occorrono quindi $2LN$ operazioni, o $2N^2$ per $L=N$.
 
 Per $x(n)$ con valori complessi occorrono $4n^2$ operazioni.
 
 >[!important] FFT
->Si può ottimizzare il costo utilizzando l'algoritmo **FFT**, che viene eseguito in $N\log_2 N$ operazioni, a patto che $N = 2^m$.
+>Si può ottimizzare il costo utilizzando l'algoritmo __FFT__, che viene eseguito in $N\log_2 N$ operazioni, a patto che $N = 2^m$.
 >Nella maggior parte dei casi è molto più veloce portare $N$ alla potenza del due successiva tramite lo [[#Zero padding]] ed eseguire la FFT, piuttosto che eseguire direttamente la DFT.
 
 ## Convoluzione Lineare Con Sequenze Di Durata Finita
 
-$$y(n) = x(n) \ast h(n) = \sum_{k=0}^{N-1}h(k)x(h-k)$$
-Se la sequenza in ingresso ha *durata finita*:
-$$x(n) \neq 0 \, \text{per}\, 0 < n<L-1,\quad L >> N$$
-Si osserveranno **fenomeni di transitorio** e si otterrà quindi la sequenza $y(n)$ **più lunga** rispetto alla sequenza in ingresso $x(n)$.
+$$
+y(n) = x(n) \ast h(n) = \sum_{k=0}^{N-1}h(k)x(h-k)
+$$
+
+Se la sequenza in ingresso ha _durata finita_:
+
+$$
+x(n) \neq 0 \, \text{per}\, 0 < n<L-1,\quad L >> N
+$$
+
+Si osserveranno __fenomeni di transitorio__ e si otterrà quindi la sequenza $y(n)$ __più lunga__ rispetto alla sequenza in ingresso $x(n)$.
 
 ### Fenomeni Di Transitorio
 
 Si tratta di 3 fenomeni:
-- Il **transitorio di attacco** si ha quando la memoria del registro è vuota e inizia a riempirsi, in questo caso si avranno i valori inizialmente con valore 0 che pian piano verranno rimpiazzati dal primo valore e dai seguenti.
-- Una volta riempita la memoria si ha la **risposta a regime**, dove nel registro circolare scorrono i nuovi valori eliminando quelli più vecchi.
-- Quando il segnale termina il registro circolare inizia a svuotarsi, questa fase si chiama **transitorio di rilascio**, l'esecuzione termina quando tutti i campioni tornano a 0.
+- Il __transitorio di attacco__ si ha quando la memoria del registro è vuota e inizia a riempirsi, in questo caso si avranno i valori inizialmente con valore 0 che pian piano verranno rimpiazzati dal primo valore e dai seguenti.
+- Una volta riempita la memoria si ha la __risposta a regime__, dove nel registro circolare scorrono i nuovi valori eliminando quelli più vecchi.
+- Quando il segnale termina il registro circolare inizia a svuotarsi, questa fase si chiama __transitorio di rilascio__, l'esecuzione termina quando tutti i campioni tornano a 0.
 
 ## Convoluzione Circolare
 
-
-
-
 # 6. Finestratura
+
 Per poter lavorare con la DFT

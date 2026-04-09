@@ -11,14 +11,14 @@
             "id": "7c718c9a69bc6f42",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
-                "mode": "source",
-                "source": false
+                "aFile": "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+                "bFile": "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "9. Filtri IIR - Infinite impulse response"
+              "icon": "diff",
+              "title": "Diff: 2. Quantizzazione uniforme  (Working Tree)"
             }
           }
         ]
@@ -179,7 +179,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 217.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -196,9 +196,9 @@
   },
   "active": "7c718c9a69bc6f42",
   "lastOpenFiles": [
+    "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
     "Anno 1/Digital Signal Processing/descrizioni_filtri.png",
     "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
-    "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
     "Anno 1/Digital Signal Processing/immagini/cerchio_unitario.png",
     "Pasted image 20260316113525.png",
     "Anno 1/Digital Signal Processing/immagini/poli_zeri.png",
@@ -213,7 +213,6 @@
     "Anno 1/Digital Signal Processing/immagini/FIR_rec_window_freq_res.png",
     "Pasted image 20260205183305.png",
     "Anno 1/Digital Signal Processing/immagini/FIR_rec_window_response.png",
-    "Pasted image 20260205183241.png",
     "Anno 1/export/md/Lezioni integrative DSP-merged.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
