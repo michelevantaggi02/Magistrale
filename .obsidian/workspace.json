@@ -11,14 +11,14 @@
             "id": "4c0615b58ad28ce9",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
-                "mode": "source",
-                "source": false
+                "aFile": "Anno 1/Digital Signal Processing/_TOC_.md",
+                "bFile": "Anno 1/Digital Signal Processing/_TOC_.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "9. Filtri IIR - Infinite impulse response"
+              "icon": "diff",
+              "title": "Diff: _TOC_  (Working Tree)"
             }
           }
         ]
@@ -193,31 +193,32 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "08d86cc9d4ce593b",
+  "active": "4c0615b58ad28ce9",
   "lastOpenFiles": [
+    "Anno 1/Digital Signal Processing/_TOC_.md",
+    "Anno 1/Digital Signal Processing/6. Finestratura.md",
+    "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
+    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
+    "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
+    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
+    "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
+    "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
+    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
+    "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 1/Digital Signal Processing/immagini/resonator 1.png",
     "Anno 1/Digital Signal Processing/immagini/resonator.png",
-    "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
     "Anno 1/Digital Signal Processing-merged.md",
-    "Anno 1/Digital Signal Processing/descrizioni_filtri.png",
+    "Anno 1/Digital Signal Processing/immagini/descrizioni_filtri.png",
     "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
     "Anno 1/Digital Signal Processing/immagini/cerchio_unitario.png",
     "Pasted image 20260316113525.png",
     "Anno 1/Digital Signal Processing/immagini/poli_zeri.png",
     "Anno 1/Digital Signal Processing/immagini/Gradino unitario 1.svg",
     "Anno 1/Digital Signal Processing/immagini/Gradino unitario.svg",
-    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
-    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
-    "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
-    "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/immagini/FIR_hamming_ris_freq.png",
-    "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
     "Anno 1/Digital Signal Processing/immagini/FIR_rec_window_freq_res.png",
-    "Pasted image 20260205183305.png",
     "Anno 1/export/md/Lezioni integrative DSP-merged.md",
-    "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
-    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
-    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
     "Anno 1/export/pdf/Lezioni integrative DSP-merged.pdf",
     "README.md",
     "Anno.md",
@@ -231,7 +232,6 @@
     "Anno 1/Lezioni integrative DSP/1. Segnali.md",
     "^e56489.md",
     "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
-    "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Untitled.base",
     "Untitled.md",
