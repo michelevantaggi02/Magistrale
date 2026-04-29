@@ -193,8 +193,10 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "4c0615b58ad28ce9",
+  "active": "08d86cc9d4ce593b",
   "lastOpenFiles": [
+    "Anno 1/Digital Signal Processing/immagini/resonator 1.png",
+    "Anno 1/Digital Signal Processing/immagini/resonator.png",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
     "Anno 1/Digital Signal Processing-merged.md",
     "Anno 1/Digital Signal Processing/descrizioni_filtri.png",
@@ -212,7 +214,6 @@
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
     "Anno 1/Digital Signal Processing/immagini/FIR_rec_window_freq_res.png",
     "Pasted image 20260205183305.png",
-    "Anno 1/Digital Signal Processing/immagini/FIR_rec_window_response.png",
     "Anno 1/export/md/Lezioni integrative DSP-merged.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
@@ -238,7 +239,6 @@
     "1. Segnali/Campionamento.md",
     "1. Segnali",
     "Anno 1/Machine Learning",
-    "Anno 1/Untitled.md",
     "Anno 1/Electronic Embedded Systems",
     "Anno 1/Digital Signal Processing/immagini"
   ]
