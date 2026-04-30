@@ -11,14 +11,14 @@
             "id": "4c0615b58ad28ce9",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "Anno 1/Digital Signal Processing/_TOC_.md",
-                "bFile": "Anno 1/Digital Signal Processing/_TOC_.md",
-                "aRef": ""
+                "file": "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "diff",
-              "title": "Diff: _TOC_  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "9. Filtri IIR - Infinite impulse response"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 238.5
+    "width": 238.5,
+    "collapsed": true
   },
   "right": {
     "id": "d5c02c814b48a4b8",
@@ -178,7 +179,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 217.5
+    "width": 308.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -193,7 +194,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "4c0615b58ad28ce9",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
     "Anno 1/Digital Signal Processing/_TOC_.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
