@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 238.5,
-    "collapsed": true
+    "width": 238.5
   },
   "right": {
     "id": "d5c02c814b48a4b8",
@@ -179,7 +178,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 308.5
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -194,7 +193,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6e19a07923072cbc",
+  "active": "4c0615b58ad28ce9",
   "lastOpenFiles": [
     "Anno 1/Digital Signal Processing/_TOC_.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
