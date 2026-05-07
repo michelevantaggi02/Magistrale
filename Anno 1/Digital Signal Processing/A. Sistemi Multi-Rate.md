@@ -46,7 +46,7 @@ Come vedremo successivamente, il problema principale sarà l'__oversampling__.
 
 ![[tipi_impulso.png]]
 
-## Zero-order Hold Interpolation
+### Zero-order Hold Interpolation (Impulso rettangolare)
 
 ![[zero-hold.png]]
 
@@ -54,4 +54,26 @@ Lo zero-order hold è la forma di impulso più semplice, è piatta per tutta la 
 
 Può avere bassi risultati a meno che non si abbia una frequenza di campionamento abbastanza alta.
 
+### Interpolazione Lineare (Impulso triangolare)
 
+![[linear_interp.png]]
+
+Un impulso triangolare effettua l'interpolazione lineare tra due campioni adiacenti, la sua durata è il doppio di quella dell'impulso rettangolare.
+
+Questo impulso produce un'approssimazione migliore della forma d'onda originale, ma è ancora presente un sostanziale errore.
+
+### Interpolazione Parabolica (Impulso parabolico)
+
+![[interp_parab.png]]
+
+L'interpolazione parabolica ha la durata del doppio di quella triangolare, quindi quattro volte quella rettangolare.
+
+Ha gli zeri a $0$, $\pm T_s$, $\pm 2 T_s , e genera risultati migliori.
+
+### Sovracampionamento per l'interpolazione
+
+Se il segnale originale non varia di molto nella durata dell'impulso è facile ottenere una buona ricostruzione.
+
+Il sovracampionamento è una pratica comune per ottenere un segnale ricostruito accurato, utilizzando un DAC semplice.
+
+Slide 15
