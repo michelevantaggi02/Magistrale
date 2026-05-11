@@ -169,3 +169,16 @@ Possiamo quindi semplificare la formula mantenendo solo la parte dove $i=j$, ott
 $$\begin{align} y_{\text{up}}(nL+i) &= \sum_{k'=-M}^{M-1}\sum_{j=0}^{L-1} d_j(k) \underbracket {x_{\text{up}}(nL+i-kL-j)}_{\text{0 per } i \neq j}\\ &= \sum_{k=-M}^{M-1}d_i(k)x(nL-kL) \\ y_i(n) &= \sum_{k=-M}^{M-1}d_i(k)x(n-k) \end{align} \quad ,i=0,…,L-1$$
 
 ![[filtro_polifase.png]]
+
+## Decimazione
+
+La decimazione è l'operazione inversa dell'interpolazione, ovvero l'operazione di convertire il segnale da una frequenza di campionamento più alta ad una più bassa.
+
+>[!attention]
+>Non dobbiamo confondere il _sottocampionamento_ con la __decimazione__, in quanto con la decimazione dobbiamo essere sicuri di __rispettare l'intervallo di Nyquist__.
+>
+>Nel caso in cui voglio decimare un segnale interpolato in precedenza con lo stesso ordine, allora decimazione e sottocampionamento coincidono.
+
+### Decimatore Ideale
+
+
