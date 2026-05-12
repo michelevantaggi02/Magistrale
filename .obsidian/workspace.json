@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "63d1502c178549a6",
+        "id": "a691624bc0ec7026",
         "type": "tabs",
         "children": [
           {
-            "id": "39325432cf3b9b4e",
+            "id": "44cb79422bb272f3",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "sovracampionamento",
+                "query": "\"# Metodo Del Campionamento in Frequenza\"",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -174,11 +175,11 @@
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 358.5
+    "width": 444.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -193,30 +194,29 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "39325432cf3b9b4e",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
+    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
+    "Anno 1/Digital Signal Processing/A. Sistemi Multi-Rate.md",
+    "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
+    "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
+    "Anno 1/Digital Signal Processing/6. Finestratura.md",
+    "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
+    "Anno 1/Digital Signal Processing/immagini/dac_eq_blocchi.png",
+    "Anno 1/Digital Signal Processing/immagini/multi_stato.jpg",
+    "Anno 1/Digital Signal Processing/immagini/blocchi_rate_conv.svg",
+    "Anno 1/Digital Signal Processing/rate_converter.svg",
+    "Anno 1/Digital Signal Processing/immagini/adc_decim.png",
+    "Pasted image 20260512113134.png",
+    "Pasted image 20260512113056.png",
+    "Anno 1/Digital Signal Processing/immagini/blocchi_ideal_decim.png",
+    "Anno 1/Digital Signal Processing/immagini/decimatore_ideale.svg",
     "Anno 1/Digital Signal Processing/immagini/filtro_polifase.png",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-    "Anno 1/Digital Signal Processing/A. Sistemi Multi-Rate.md",
-    "Anno 1/Digital Signal Processing/immagini/campioni_upsampler.png",
-    "Anno 1/Digital Signal Processing/immagini/oversampling_interpolatore.png",
-    "Anno 1/Digital Signal Processing/immagini/blocchi_interpolatore.png",
-    "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
-    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
-    "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
-    "Anno 1/Digital Signal Processing/6. Finestratura.md",
-    "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
     "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
-    "Anno 1/Digital Signal Processing/immagini/oversampling_id.png",
-    "Anno 1/Digital Signal Processing/immagini/fir_oversampled.png",
-    "Anno 1/Digital Signal Processing/immagini/filtro_ricor.png",
-    "Anno 1/Digital Signal Processing/immagini/interp_parab.png",
-    "Anno 1/Digital Signal Processing/immagini/linear_interp.png",
-    "Anno 1/Digital Signal Processing/immagini/zero-hold.png",
-    "Anno 1/Digital Signal Processing/immagini/tipi_impulso.png",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Anno 1/Digital Signal Processing-merged.md",
     "Anno 1/Digital Signal Processing/_TOC_.md",

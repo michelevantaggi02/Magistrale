@@ -181,4 +181,101 @@ La decimazione è l'operazione inversa dell'interpolazione, ovvero l'operazione 
 
 ### Decimatore Ideale
 
+![[decimatore_ideale.svg]]
 
+Devo garantire che il mio segnale abbia spettro fino a $\frac{f_s''}{2}$, creo quindi un filtro passa basso.
+
+Ho una perdita di informazioni irreversibile, ma necessaria per poter rappresentare il segnale alla nuova frequenza di campionamento.
+
+![[blocchi_ideal_decim.png]]
+
+>[!note]
+>Ovviamente non possiamo utilizzare i filtri ideali, tipicamente si usano filtri FIR con Kaiser:
+>
+>$$f_{\text{stop}} < \frac{f_s''}{2}$$
+>
+>$$\Delta f = 2(\frac{f_s''}{2} - f_{\text{stop}})$$
+
+Il costo computazionale sarebbe $N=2ML$, solo che dovendo scartare i campioni intermedi posso effettuare il calcolo ogni $L$ campioni, portando il costo computazionale equivalente a quello di un filtro polifase $N=2M$.
+
+### ADC Basati Sulla Decimazione
+
+![[adc_decim.png]]
+
+Con il decimatore ho 2 vantaggi principali:
+- Il filtro Anti-aliasing è semplificato
+- L'ADC veloce può usare meno bit, o a parità di bit ha un rapporto segnale-rumore migliore
+
+## Sample Rate Converter
+
+$$f_s'' = \frac LM f_s'$$
+
+Si implementa concatenando un interpolatore con un decimatore.
+
+>[!important]
+>Si potrebbe pensare che l'ordine non conti, ma bisogna ricordare che la decimazione è un'operazione distruttiva (con perdita di dati), bisogna quindi sempre fare __prima l'interpolazione__ e poi la decimazione.
+
+C'è inoltre un vantaggio applicabile all'architettura del rate converter:
+
+
+![[blocchi_rate_conv.svg]]
+
+Posso quindi implementare un solo filtro con:
+
+$$\omega_c'' = \frac{2\pi f_c}{f_s''} = \min(\frac \pi L, \frac \pi M) = \frac \pi{\max(L,M)}$$
+
+I 2 filtri sono però molto diversi tra loro, quindi in base a quale è più grande dovrò progettare un filtro interpolatore o decimatore.
+
+## Filtri Multi Stadio
+
+Per interpolatori e decimatori con coefficienti molto grandi il filtro rischia di diventare eccessivamente costoso.
+
+Per risolvere il problema si possono implementare più interpolatori in serie, con coefficienti molto più piccoli (si tende a restare sotto il 10).
+
+Nei rate converter si scompone soltanto il componente di cui si deve progettare il filtro.
+
+L'ordine con cui mettere in serie i filtri più piccoli dipende dal convertitore:
+
+- Dal più grande al più piccolo per gli interpolatori
+- Dal più piccolo al più grande per i decimatori
+
+![[multi_stato.jpg]]
+
+## Equalizzazione DAC
+
+![[dac_eq_blocchi.png]]
+
+In genere la risposta impulsiva di un DAC è rettangolare con durata il tempo di stazionamento.
+
+In un sistema con oversampling l'uscita dell'interpolatore viene ricostruita da un DAC a scala, che opera alla frequenza interpolata.
+
+In questo caso la sua risposta in frequenza (normalizzata al gain) è:
+
+$$H_{\text{dac}}(f) = \frac{\sin(\pi f / f_s')}{\pi f / f_s'}e^{j \pi f / f_s'}$$
+
+Che causa dell'attenuazione nell'intervallo di Nyquist per un massimo di 4dB.
+
+Per un filtro interpolatore con coefficiente $L$, che ha la frequenza di taglio $f_c = \frac{f_s}2 = \frac{f_s'}{2L}$, la massima attenuazione in banda passante sarà:
+
+$$|H_{\text{dac}}(f)| =\left| \frac{\sin(\pi f / f_s')}{\pi f / f_s'}\right | = \frac{\sin(\pi / 2L)}{\pi / 2L}$$
+
+Per valori molto grandi di $L$ l'attenuazione è insignificante e tendente a 0dB.
+
+Per valori piccoli di $L$ (Ad esempio per $L \leq 8$) è desiderabile compensare questa attenuazione progettando il filtro interpolatore in modo che abbia una __forma inversa__ rispetto alla risposta del DAC nella banda passante.
+
+Il filtro _equalizzato_ desiderato avrà quindi la formula:
+
+$$D(f) = \begin{cases} 
+LD_{\text{eq}}(f), & \text{se } |f| \leq \frac{f_s}2\\
+0,& \text{se } \frac{f_s}2 < |f| \leq \frac{f_s'}2
+\end{cases}$$
+dove $D_{\text{eq}}(f)$ è l'inversa della risposta $H_{\text{dac}}(f)$ con la sua fase rimossa per lavorare solo con la parte reale.
+
+In digitale avremo:
+
+$$D(\omega') = \begin{cases}
+L\frac{\omega'/2}{\sin(\omega'/2)}, & \text{se } |\omega'| \leq \frac \pi L\\
+0,& \text{se } \frac\pi L < |\omega'| \leq \pi
+\end{cases} $$
+
+Tale filtro può essere progettato utilizzando il [[8. Filtri FIR - Finite Impulse Response#^14b2ae|Metodo del campionamento in frequenza]]
