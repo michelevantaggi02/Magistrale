@@ -1,7 +1,7 @@
 {
   "minimumDepth": 1,
   "maximumDepth": 2,
-  "listStyle": "number",
+  "listStyle": "bullet",
   "useMarkdown": false,
   "title": "# Indice"
 }
