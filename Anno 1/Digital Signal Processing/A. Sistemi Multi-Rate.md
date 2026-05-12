@@ -297,4 +297,3 @@ Inoltre, dato che l'impulso deve essere a valori reali, dobbiamo rimpiazzare l'e
 $$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i)\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
 
 ![[freq_sampling.png]]
-
