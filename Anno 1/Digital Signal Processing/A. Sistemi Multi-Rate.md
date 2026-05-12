@@ -263,6 +263,8 @@ Per valori molto grandi di $L$ l'attenuazione è insignificante e tendente a 0dB
 
 Per valori piccoli di $L$ (Ad esempio per $L \leq 8$) è desiderabile compensare questa attenuazione progettando il filtro interpolatore in modo che abbia una __forma inversa__ rispetto alla risposta del DAC nella banda passante.
 
+![[disegno_eq_dac.png]]
+
 Il filtro _equalizzato_ desiderato avrà quindi la formula:
 
 $$D(f) = \begin{cases} 
@@ -278,4 +280,21 @@ L\frac{\omega'/2}{\sin(\omega'/2)}, & \text{se } |\omega'| \leq \frac \pi L\\
 0,& \text{se } \frac\pi L < |\omega'| \leq \pi
 \end{cases} $$
 
-Tale filtro può essere progettato utilizzando il [[8. Filtri FIR - Finite Impulse Response#^14b2ae|Metodo del campionamento in frequenza]]
+Tale filtro può essere progettato utilizzando il [[8. Filtri FIR - Finite Impulse Response#^14b2ae|Metodo del campionamento in frequenza]].
+
+Se l'ordine del filtro da progettare è infatti conosciuto (come nel nostro caso dove $N=  2LM + 1$), possiamo calcolare i pesi attraverso la IDFT a N punti:
+
+$$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')e^{j\omega_i'k'}, \quad -LM \leq k' \leq LM $$
+
+Il filtro finestrato causale risulta come:
+
+$$h(n') = \tilde d(n'-LM)w(n'), \quad 0 \leq n' \leq N-1$$
+
+Dato che il filtro è progettato per salire gradualmente nella banda passante, per ottenere una vera attenuazione con kaiser dobbiamo progettare la finestra con un livello di attenuazione più alto.
+
+Inoltre, dato che l'impulso deve essere a valori reali, dobbiamo rimpiazzare l'equazione scrivendola nella forma del coseno:
+
+$$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i)\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
+
+![[freq_sampling.png]]
+
