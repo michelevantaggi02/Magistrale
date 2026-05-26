@@ -11,14 +11,14 @@
             "id": "44cb79422bb272f3",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "README.md",
-                "mode": "source",
-                "source": false
+                "aFile": "Anno 1/export/md/Digital Signal Processing-merged.md",
+                "bFile": "Anno 1/export/md/Digital Signal Processing-merged.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "README"
+              "icon": "diff",
+              "title": "Diff: Digital Signal Processing-merged  (Working Tree)"
             }
           }
         ]
@@ -178,7 +178,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 508.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -195,15 +195,17 @@
   },
   "active": "44cb79422bb272f3",
   "lastOpenFiles": [
+    "Anno 1/export/md/Digital Signal Processing-merged.md",
+    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
+    "Digital Signal Processing-merged.pdf",
+    "Anno 1/export/md/Lezioni integrative DSP-merged.md",
+    "Anno 1/export/pdf/Lezioni integrative DSP-merged.pdf",
     "Anno 1/export/pdf/Digital Signal Processing-merged.pdf",
     "README.md",
     "Anno 1/export/pdf/Digital.md",
-    "Anno 1/export/md/Digital Signal Processing-merged.md",
-    "Anno 1/export/md/Digital Signal Processing-merged.md",
     "Anno 1/Digital Signal Processing/A. Sistemi Multi-Rate.md",
     "Anno 1/Digital Signal Processing/immagini/disegno_eq_dac.png",
     "Anno 1/Digital Signal Processing/immagini/freq_sampling.png",
-    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
     "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
@@ -224,8 +226,6 @@
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Anno 1/Digital Signal Processing/_TOC_.md",
     "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
-    "Anno 1/export/md/Lezioni integrative DSP-merged.md",
-    "Anno 1/export/pdf/Lezioni integrative DSP-merged.pdf",
     "Anno.md",
     "Anno 1/export/pdf",
     "Anno 1/export/md",
@@ -238,7 +238,6 @@
     "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
     "Untitled.base",
     "1. Segnali",
-    "Anno 1/Machine Learning",
-    "Anno 1/Electronic Embedded Systems"
+    "Anno 1/Machine Learning"
   ]
 }

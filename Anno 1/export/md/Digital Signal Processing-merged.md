@@ -36,6 +36,7 @@
 - [[#8. Filtri FIR - Finite Impulse Response|8. Filtri FIR - Finite Impulse Response]]
 	- [[#8. Filtri FIR - Finite Impulse Response#Comportamenti Di Non Idealità|Comportamenti Di Non Idealità]]
 	- [[#8. Filtri FIR - Finite Impulse Response#Progettare Un Filtro FIR - Metodo Delle Finestre|Progettare Un Filtro FIR - Metodo Delle Finestre]]
+	- [[#8. Filtri FIR - Finite Impulse Response#Metodo Del Campionamento in Frequenza|Metodo Del Campionamento in Frequenza]]
 	- [[#8. Filtri FIR - Finite Impulse Response#Filtro Sotto-Banda|Filtro Sotto-Banda]]
 - [[#9. Filtri IIR - Infinite Impulse Response|9. Filtri IIR - Infinite Impulse Response]]
 	- [[#9. Filtri IIR - Infinite Impulse Response#Introduzione - Trasformata Z|Introduzione - Trasformata Z]]
@@ -63,6 +64,8 @@ L'esame è diviso in 2 parti:
 
 1. Esercizi al pc su Matlab della durata di 3h. Complesso perché gli esercizi non sono esattamente come fatti a lezione, ti da un problema e devi capire tu come risolverlo (ex: devi capire se progettare un filtro FIR, o un equalizzatore parametrico, o devi effettuare una quantizzazione di un segnale). Puoi però usare qualsiasi strumento, appunti, internet ecc…
 2. Orale a domanda secca da cui poi devi dire tutto il possibile, non ancora dato ma impossibile sbagliare (nel senso che se non la sai non puoi cambiare argomento e sei bocciato)
+
+
 
 # 1. Quantizzazione
 
@@ -168,6 +171,8 @@ Il floating point ha infatti alcuni valori speciali da utilizzare in determinati
 - zero
 - infinity
 - not a number
+
+
 
 # 2. Quantizzazione Uniforme
 
@@ -398,6 +403,8 @@ $$
 
 $$
 
+
+
 # 3. Quantizzazione Ottima
 
 Il rapporto SQNR varia in base alla p.d.f., ma nella realtà i segnali _non hanno_ una p.d.f. uniforme.
@@ -550,6 +557,8 @@ Non si occupa di migliorare il rapporto segnale-rumore, ma di estendere la dinam
 - In fase di riproduzione devo invertire la legge.
 - I display quelli buoni utilizzano 10-12 bit di dinamica.
 
+
+
 # 4. Spettro in Frequenza - DTFT
 
 La Trasformata di Fourier non può essere applicata su segnali discretizzati nel tempo e nei valori.
@@ -659,6 +668,8 @@ Possiamo calcolare __energia__ e __potenza__ di un segnale tramite le Equazioni 
 $$
 \sum_{n = -\infty}^{\infty}|x(n)|^2 = \frac 1{2\pi}\int_{-\infty}^{+\infty}|X(\omega)|^2\;\mathrm d\omega
 $$
+
+
 
 # 5. Trasformata Discreta Di Fourier (DFT)
 
@@ -813,43 +824,35 @@ Si chiama convoluzione circolare proprio perché lavora su sequenze periodiche (
 Dobbiamo studiare la finestratura nella DTFT, perché la DFT lavora soltanto con segnali finiti.
 
 $$
-
 w(n) = \begin{cases}
 1, & 0 \leq n \leq L-1\\
 0, & \text{altrove}
 \end{cases}
-
 $$
 
 $$
-
 x_L(n) = x(n) \cdot w(n) = w(n) = \begin{cases}
 x(n), & 0 \leq n \leq L-1\\
 0, & \text{altrove}
 \end{cases}
-
 $$
 
 $$
-
 \begin{align*}
 X(\omega) &= \sum_{n=-\infty}^{\infty}x(n)e^{-j\omega n}\\\\
 X_L(\omega) &= \sum_{n=0}^{L-1}x(n)e^{-j\omega n}\\\\
 
 &X(\omega) \neq X_L(\omega)
 \end{align*}
-
 $$
 
 $$
-
 \begin{align}
 x_L(n) & = x(n) \cdot w(n) \\ \\
 \updownarrow F & \quad \updownarrow F \quad \updownarrow F\\
 \\
 X_L(\omega) & = X(\omega) * W(\omega)
 \end{align}
-
 $$
 
 ## Finestra Nel Dominio Delle Frequenze
@@ -857,9 +860,7 @@ $$
 Si ha quindi che la formula per il segnale finestrato nel dominio delle frequenze è:
 
 $$
-
 X_L(\omega) = \int_{-\pi}^{\pi}X(\omega)\cdot W(\omega) \; \mathrm d \frac \omega{2\pi}
-
 $$
 
 Ma qual è la formula della funzione finestra? Calcoliamo la DTFT:
@@ -871,12 +872,10 @@ Ma qual è la formula della funzione finestra? Calcoliamo la DTFT:
 >$$
 
 $$
-
 \begin{align}
 W(\omega) &= \sum_{n =-\infty}^{+\infty}w[n]e^{-j\omega n} = \sum_{n = 0}^{L-1}w[n]e^{-j\omega n} = \sum_{n=0}^{L-1}e^{-j\omega n}\\
 &= \frac{1- e^{-j\omega L}}{1-e^{-j\omega}}=\frac{\sin(\omega L /2)}{\sin(\omega/2)} \cdot e^{-j\omega(L-1) /2}
 \end{align}
-
 $$
 
 Dove la prima parte rappresenta il __modulo__ e la seconda la __fase__.
@@ -896,9 +895,8 @@ Porta anche ad una perdita di __risoluzione delle frequenze__, rendendo più dif
 >Nella finestratura è limitato dalla lunghezza dei dati
 
 $$
-
 \Delta f = \frac 1{T_L}
-
+>
 $$
 
 ![[ris_frequenza.png|center]]
@@ -912,12 +910,10 @@ Non possiamo migliorare la situazione aumentando la risoluzione, bisogna utilizz
 Finestra a forma di coseno rialzato:
 
 $$
-
 w(n) = \begin{cases}
 0.54 - 0.46\cos(\frac{2\pi}{L-1}), &0\leq n\leq L-1\\
 0&\text{altrimenti}
 \end{cases}
-
 $$
 
 ![[hamming.png|center]]
@@ -927,7 +923,6 @@ Ho dimezzato la risoluzione rispetto alla finestra rettangolare, ma per raggiung
 # Finestre Parametriche Di Kaiser
 
 $$
-
 w(n) = \frac{I_0(\alpha \sqrt{1- \frac{(n-M)^2}{M^2} })}{I_0(\alpha)}
 $$
 
@@ -1250,11 +1245,7 @@ $$
 7. Calcola $M = (N - 1)/2$
 8. Calcola la funzione finestra di Kaiser $w(n)$
 9. Calcola la risposta impulsiva del segnale finestrato:
-$$
-
-h(n) = w(n)d(n-M) = w(n) \frac{\sin(\omega_c(n-M))}{\pi(n-M)}
-
-$$
+$$h(n) = w(n)d(n-M) = w(n) \frac{\sin(\omega_c(n-M))}{\pi(n-M)}$$
 >[!NOTE]
 >in particolare avremo
 $$h(M) = w(M)\omega_c / \pi = \omega_c / \pi$$
@@ -2480,3 +2471,4 @@ Inoltre, dato che l'impulso deve essere a valori reali, dobbiamo rimpiazzare l'e
 $$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i)\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
 
 ![[freq_sampling.png]]
+
