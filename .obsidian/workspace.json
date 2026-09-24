@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "5f9208db83b1428e",
+        "id": "bc17eda3ed2c6583",
         "type": "tabs",
         "children": [
           {
-            "id": "805d080fe2631384",
+            "id": "8a134fd33faac010",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/export/md/Digital Signal Processing-merged.md",
+                "file": "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Digital Signal Processing-merged"
+              "title": "0. Immagini, filtri e gradienti"
             }
           }
         ]
@@ -41,10 +41,12 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
-              "title": "Esplora risorse"
+              "title": "Esplora file"
             }
           },
           {
@@ -182,10 +184,10 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Apri selezione rapida": false,
+      "switcher:Apri selettore rapido": false,
+      "daily-notes:Apri nota giornaliera": false,
       "graph:Apri vista grafo": false,
       "canvas:Crea nuova lavagna": false,
-      "daily-notes:Apri nota del giorno": false,
       "templates:Inserisci modello": false,
       "command-palette:Apri riquadro comandi": false,
       "bases:Crea nuova Base": false,
@@ -193,8 +195,19 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "805d080fe2631384",
+  "active": "08d86cc9d4ce593b",
   "lastOpenFiles": [
+    "Anno 2/Autonomous Robotics/scripts_python",
+    "Anno 2/Autonomous Robotics",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.10_istogramma.png",
+    "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.9_gain_bias.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.7_operatori.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.5_immagine_funzione.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini",
+    "Anno 1/Digital Signal Processing/0. Introduzione.md",
+    "Anno 2/Deep Learning And Robot Perception",
+    "Anno 2",
     "Anno 1/export/md/Digital Signal Processing-merged.md",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
     "Digital Signal Processing-merged.pdf",
@@ -214,15 +227,10 @@
     "Anno 1/Digital Signal Processing/immagini/multi_stato.jpg",
     "Anno 1/Digital Signal Processing/immagini/blocchi_rate_conv.svg",
     "Anno 1/Digital Signal Processing/rate_converter.svg",
-    "Anno 1/Digital Signal Processing/immagini/adc_decim.png",
-    "Pasted image 20260512113134.png",
-    "Pasted image 20260512113056.png",
-    "Anno 1/Digital Signal Processing/immagini/blocchi_ideal_decim.png",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
     "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
-    "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Anno 1/Digital Signal Processing/_TOC_.md",
     "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
@@ -232,12 +240,8 @@
     "Anno 1/export",
     "Anno 1/Lezioni integrative DSP/3. Trasformata di Fourier.md",
     "Anno 1/Lezioni integrative DSP/immagini/Untitled.md",
-    "Anno 1/Lezioni integrative DSP/immagini",
     "Anno 1/Lezioni integrative DSP/1. Segnali.md",
     "^e56489.md",
-    "Anno 1/Lezioni integrative DSP/0. Introduzione.md",
-    "Untitled.base",
-    "1. Segnali",
-    "Anno 1/Machine Learning"
+    "Anno 1/Lezioni integrative DSP/0. Introduzione.md"
   ]
 }
