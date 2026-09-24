@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "bc17eda3ed2c6583",
+        "id": "71802863e3795ae1",
         "type": "tabs",
         "children": [
           {
-            "id": "8a134fd33faac010",
+            "id": "af8f1358be3046ce",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -144,13 +144,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/A. Sistemi Multi-Rate.md",
+                "file": "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura di A. Sistemi Multi-Rate"
+              "title": "Struttura"
             }
           },
           {
@@ -195,19 +195,21 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "08d86cc9d4ce593b",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
-    "Anno 2/Deep Learning And Robot Perception/immagini/2.14_usi.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/2.13_risultato.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/2.13_equal_discre.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/2.12_hist_equal.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.27_gauss_vs_box.png",
     "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.28_gauss.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.26_filtri_lineari.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.24_moving_average.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.22_bordi.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/stride.svg",
+    "Anno 2/Deep Learning And Robot Perception/immagini/matrice_piccola.svg",
+    "Anno 2/Deep Learning And Robot Perception/immagini/kernel_out_of_bounds.svg",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.21_proprieta_conv.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/2.20_lsi.png",
     "Anno 2/Autonomous Robotics/scripts_python",
     "Anno 2/Autonomous Robotics",
-    "Anno 2/Deep Learning And Robot Perception/immagini/2.10_istogramma.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/2.9_gain_bias.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/2.7_operatori.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/2.5_immagine_funzione.png",
     "Anno 2/Deep Learning And Robot Perception/immagini",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 2/Deep Learning And Robot Perception",
@@ -221,13 +223,10 @@
     "README.md",
     "Anno 1/export/pdf/Digital.md",
     "Anno 1/Digital Signal Processing/A. Sistemi Multi-Rate.md",
-    "Anno 1/Digital Signal Processing/immagini/disegno_eq_dac.png",
-    "Anno 1/Digital Signal Processing/immagini/freq_sampling.png",
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
     "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
-    "Anno 1/Digital Signal Processing/immagini/dac_eq_blocchi.png",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
