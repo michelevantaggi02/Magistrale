@@ -17,14 +17,14 @@
     "marginType": "1",
     "showTitle": true,
     "open": true,
-    "scale": 100,
+    "scale": 75,
     "landscape": false,
     "marginTop": "10",
     "marginBottom": "10",
     "marginLeft": "10",
     "marginRight": "10",
     "displayHeader": false,
-    "displayFooter": true,
+    "displayFooter": false,
     "cssSnippet": "0"
   }
 }

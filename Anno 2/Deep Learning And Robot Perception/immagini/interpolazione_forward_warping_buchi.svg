@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 480" width="100%" height="100%">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#2563eb" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#16a34a" />
+    </marker>
+    <marker id="arrow-main" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#475569" />
+    </marker>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <style>
+    .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #1e293b; }
+    .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #64748b; }
+    .cell-txt { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .cell-txt-small { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 500; text-anchor: middle; dominant-baseline: central; fill: #ef4444; }
+    .legend-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #0f172a; }
+    .legend-txt { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #334155; }
+    .note-box { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #1e3a8a; }
+  </style>
+
+  <!-- Background -->
+  <rect width="950" height="480" fill="#ffffff" rx="8" />
+
+  <!-- ==================== SORGENTE: MATRICE 3x3 ==================== -->
+  <g transform="translate(40, 50)">
+    <text x="75" y="-15" class="title" text-anchor="middle">Immagine Sorgente (3 × 3)</text>
+    <text x="75" y="5" class="subtitle" text-anchor="middle">Coordinate (x, y)</text>
+
+    <!-- Griglia 3x3 (celle 50x50) -->
+    <!-- Riga 0 -->
+    <rect id="src_0_0" x="0" y="20" width="50" height="50" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="4" />
+    <text x="25" y="45" class="cell-txt" fill="#1e40af">p₁</text>
+
+    <rect id="src_0_1" x="50" y="20" width="50" height="50" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="4" />
+    <text x="75" y="45" class="cell-txt" fill="#1e40af">p₂</text>
+
+    <rect id="src_0_2" x="100" y="20" width="50" height="50" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="4" />
+    <text x="125" y="45" class="cell-txt" fill="#1e40af">p₃</text>
+
+    <!-- Riga 1 -->
+    <rect x="0" y="70" width="50" height="50" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5" rx="4" />
+    <text x="25" y="95" class="cell-txt" fill="#475569">p₄</text>
+
+    <rect x="50" y="70" width="50" height="50" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5" rx="4" />
+    <text x="75" y="95" class="cell-txt" fill="#475569">p₅</text>
+
+    <rect x="100" y="70" width="50" height="50" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5" rx="4" />
+    <text x="125" y="95" class="cell-txt" fill="#475569">p₆</text>
+
+    <!-- Riga 2 -->
+    <rect x="0" y="120" width="50" height="50" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5" rx="4" />
+    <text x="25" y="145" class="cell-txt" fill="#475569">p₇</text>
+
+    <rect x="50" y="120" width="50" height="50" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5" rx="4" />
+    <text x="75" y="145" class="cell-txt" fill="#475569">p₈</text>
+
+    <rect x="100" y="120" width="50" height="50" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5" rx="4" />
+    <text x="125" y="145" class="cell-txt" fill="#475569">p₉</text>
+
+    <text x="75" y="195" class="subtitle" text-anchor="middle">Griglia regolare continua</text>
+  </g>
+
+  <!-- Freccia di trasformazione al centro -->
+  <g transform="translate(215, 130)">
+    <line x1="0" y1="0" x2="85" y2="0" stroke="#475569" stroke-width="3" marker-end="url(#arrow-main)" />
+    <text x="42" y="-14" class="title" text-anchor="middle" font-size="14px" fill="#2563eb">Scale 2×</text>
+    <text x="42" y="22" class="subtitle" text-anchor="middle" font-size="11px">Forward Mapping</text>
+    <text x="42" y="36" class="subtitle" text-anchor="middle" font-size="11px">p' = 2 · p</text>
+  </g>
+
+  <!-- ==================== DESTINAZIONE: MATRICE 6x6 ==================== -->
+  <g transform="translate(330, 40)">
+    <text x="135" y="-10" class="title" text-anchor="middle">Immagine Scalata Forward (6 × 6)</text>
+    <text x="135" y="10" class="subtitle" text-anchor="middle">Dimensione raddoppiata (celle 45 × 45)</text>
+
+    <!-- Griglia 6x6 (celle 45x45) -->
+    <!-- RIGA 0 -->
+    <!-- col 0 (p1 mappato) -->
+    <rect id="dst_0_0" x="0" y="25" width="45" height="45" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5" rx="4" />
+    <text x="22.5" y="47.5" class="cell-txt" fill="#1e40af">p₁</text>
+
+    <!-- col 1 (VUOTO) -->
+    <rect x="45" y="25" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+    <text x="67.5" y="47.5" class="cell-txt-small">VUOTO</text>
+
+    <!-- col 2 (p2 mappato) -->
+    <rect id="dst_0_2" x="90" y="25" width="45" height="45" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5" rx="4" />
+    <text x="112.5" y="47.5" class="cell-txt" fill="#1e40af">p₂</text>
+
+    <!-- col 3 (VUOTO) -->
+    <rect x="135" y="25" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+    <text x="157.5" y="47.5" class="cell-txt-small">VUOTO</text>
+
+    <!-- col 4 (p3 mappato) -->
+    <rect id="dst_0_4" x="180" y="25" width="45" height="45" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5" rx="4" />
+    <text x="202.5" y="47.5" class="cell-txt" fill="#1e40af">p₃</text>
+
+    <!-- col 5 (VUOTO) -->
+    <rect x="225" y="25" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+    <text x="247.5" y="47.5" class="cell-txt-small">VUOTO</text>
+
+    <!-- RIGA 1 (TUTTA VUOTA) -->
+    <g transform="translate(0, 70)">
+      <rect x="0" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="22.5" y="22.5" class="cell-txt-small">VUOTO</text>
+      <rect x="45" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="67.5" y="22.5" class="cell-txt-small">VUOTO</text>
+      <rect x="90" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="112.5" y="22.5" class="cell-txt-small">VUOTO</text>
+      <rect x="135" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="157.5" y="22.5" class="cell-txt-small">VUOTO</text>
+      <rect x="180" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="202.5" y="22.5" class="cell-txt-small">VUOTO</text>
+      <rect x="225" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="247.5" y="22.5" class="cell-txt-small">VUOTO</text>
+    </g>
+
+    <!-- RIGA 2 (p4, vuoto, p5, vuoto, p6, vuoto) -->
+    <g transform="translate(0, 115)">
+      <rect x="0" y="0" width="45" height="45" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" rx="4" />
+      <text x="22.5" y="22.5" class="cell-txt" fill="#334155">p₄</text>
+      <rect x="45" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="67.5" y="22.5" class="cell-txt-small">VUOTO</text>
+      <rect x="90" y="0" width="45" height="45" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" rx="4" />
+      <text x="112.5" y="22.5" class="cell-txt" fill="#334155">p₅</text>
+      <rect x="135" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="157.5" y="22.5" class="cell-txt-small">VUOTO</text>
+      <rect x="180" y="0" width="45" height="45" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" rx="4" />
+      <text x="202.5" y="22.5" class="cell-txt" fill="#334155">p₆</text>
+      <rect x="225" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <text x="247.5" y="22.5" class="cell-txt-small">VUOTO</text>
+    </g>
+
+    <!-- RIGA 3 (TUTTA VUOTA) -->
+    <g transform="translate(0, 160)">
+      <rect x="0" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="45" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="90" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="135" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="180" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="225" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+    </g>
+
+    <!-- RIGA 4 (p7, vuoto, p8, vuoto, p9, vuoto) -->
+    <g transform="translate(0, 205)">
+      <rect x="0" y="0" width="45" height="45" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" rx="4" />
+      <text x="22.5" y="22.5" class="cell-txt" fill="#334155">p₇</text>
+      <rect x="45" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="90" y="0" width="45" height="45" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" rx="4" />
+      <text x="112.5" y="22.5" class="cell-txt" fill="#334155">p₈</text>
+      <rect x="135" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="180" y="0" width="45" height="45" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" rx="4" />
+      <text x="202.5" y="22.5" class="cell-txt" fill="#334155">p₉</text>
+      <rect x="225" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+    </g>
+
+    <!-- RIGA 5 (TUTTA VUOTA) -->
+    <g transform="translate(0, 250)">
+      <rect x="0" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="45" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="90" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="135" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="180" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+      <rect x="225" y="0" width="45" height="45" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" rx="4" />
+    </g>
+  </g>
+
+  <!-- ==================== 3 LINEE DI PROIEZIONE (DALLA 1a RIGA ALLA 1a RIGA) ==================== -->
+  <!-- Linea 1: da p1 sorgente (x=65, y=70) a p1 target (x=330+22.5=352.5, y=40+25=65) -->
+  <path d="M 65 70 C 140 10, 260 20, 345 65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow)" />
+
+  <!-- Linea 2: da p2 sorgente (x=115, y=70) a p2 target (x=330+112.5=442.5, y=40+25=65) -->
+  <path d="M 115 70 C 180 15, 340 15, 435 65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow)" />
+
+  <!-- Linea 3: da p3 sorgente (x=165, y=70) a p3 target (x=330+202.5=532.5, y=40+25=65) -->
+  <path d="M 165 70 C 240 15, 430 15, 525 65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow)" />
+
+  <!-- ==================== LEGENDA A DESTRA ==================== -->
+  <g transform="translate(635, 50)" filter="url(#shadow)">
+    <!-- Box Legenda -->
+    <rect width="285" height="340" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" rx="8" />
+
+    <text x="15" y="30" class="legend-title">LEGENDA &amp; PROBLEMA</text>
+    <line x1="15" y1="42" x2="270" y2="42" stroke="#cbd5e1" stroke-width="1" />
+
+    <!-- Elemento 1: Pixel Mappati -->
+    <rect x="15" y="55" width="28" height="28" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="4" />
+    <text x="29" y="69" class="cell-txt" fill="#1e40af" font-size="12px">p₁</text>
+    <text x="52" y="68" class="legend-txt" font-weight="600">Pixel Mappati Direttamente</text>
+    <text x="52" y="83" class="subtitle" font-size="11px">Posizioni a indici pari (2x, 2y)</text>
+
+    <!-- Elemento 2: Buchi / Da Interpolare -->
+    <rect x="15" y="105" width="28" height="28" fill="#fee2e2" stroke="#ef4444" stroke-width="2" stroke-dasharray="3,3" rx="4" />
+    <text x="29" y="119" class="cell-txt-small" font-size="9px">✕</text>
+    <text x="52" y="117" class="legend-txt" font-weight="bold" fill="#b91c1c">RIMASTI VUOTI / DA INTERPOLARE</text>
+    <text x="52" y="132" class="subtitle" font-size="11px">Buchi generati dal forward warping</text>
+    <text x="52" y="146" class="subtitle" font-size="11px">(3 su 4 pixel rimangono non assegnati!)</text>
+
+    <!-- Box Soluzione: Backward Warping -->
+    <rect x="12" y="170" width="261" height="155" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" rx="6" />
+    <text x="22" y="192" class="legend-title" fill="#1e40af" font-size="13px">SOLUZIONE: BACKWARD WARPING</text>
+    
+    <text x="22" y="215" class="note-box" font-weight="600">Perché non si fa il Forward Warping?</text>
+    <text x="22" y="232" class="note-box" font-size="11px">Spingere i pixel avanti lascia buchi (holes)</text>
+    <text x="22" y="247" class="note-box" font-size="11px">o sovrascritture se la mappa comprime.</text>
+
+    <text x="22" y="272" class="note-box" font-weight="600">Approccio Backward (all'indietro):</text>
+    <text x="22" y="289" class="note-box" font-size="11px">Ogni pixel target p' interpola da T⁻¹(p'):</text>
+    <text x="22" y="307" class="note-box" font-size="11px" font-weight="bold" fill="#1d4ed8">I'(p') = Interpola( I( T⁻¹(p') ) )</text>
+  </g>
+
+  <!-- Banner Riassuntivo in basso -->
+  <g transform="translate(40, 395)">
+    <rect width="880" height="65" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" rx="6" />
+    <text x="20" y="26" class="legend-txt" font-weight="bold" fill="#0f172a">Conclusione Didattica (Slide 7 e 11):</text>
+    <text x="20" y="47" class="legend-txt">Nello scaling di fattore 2, su una griglia 6 × 6 ci sono 36 celle ma solo 9 pixel sorgente. Ben 27 celle (il 75%) restano vuote e richiedono interpolazione (Nearest Neighbor, Bilineare o Bicubica).</text>
+  </g>
+</svg>

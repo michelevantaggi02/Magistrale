@@ -78,11 +78,14 @@ Per garantire la massima leggibilità, coerenza stilistica e compatibilità con 
   ```markdown
   # 1. Quantizzazione Uniforme
   ```
-- **Numerazione dei Titoli (Regola H3 in Giù)**:
-  - **Heading H1 (Capitolo)**: è l'unico livello che reca obbligatoriamente il numero progressivo del file (es. `# 1. Local Features e Harris Corner Detector`).
-  - **Heading da H3 in giù (`###`, `####`, ecc.)**:
-    - **No a sotto-numerazioni gerarchiche di sezione**: evitare prefissi decimali di paragrafo come `2.1`, `3.2`, `5.1.2`; i titoli di approfondimento devono essere puramente descrittivi (es. `### Detector: "Dove si trova il punto?"`, `### Regione Piatta (Flat Region)`).
-    - **Algoritmi e Pipeline Multi-Step (Buona Norma)**: quando una procedura, algoritmo o derivazione matematica è formalizzata in più passaggi sequenziali (come Harris, Canny, SIFT, ecc.), **è opportuno e raccomandato specificare a quale step ci si sta riferendo** (es. `### Step 1: Funzione di Errore della Finestra $E(u, v)$`, `### Step 2: Approssimazione di Taylor al Primo Ordine`, `### Step 3: Matrice dei Secondi Momenti $C$`) per orientare chiaramente il lettore all'interno della sequenza operativa.
+- **Numerazione dei Titoli (Regola Assoluta: Solo H1 è Numerato)**:
+  - **Heading H1 (Titolo del Documento)**: **È l'unico e solo livello di intestazione che può e deve recare il numero del capitolo**, e deve corrispondere esattamente al titolo del file (senza estensione `.md`):
+    ```markdown
+    # 1. Local Features e Harris Corner Detector
+    ```
+  - **Tutti gli altri Heading (da H2 in giù: `##`, `###`, `####`, ecc.)**: **NON devono avere alcun numero né prefissi numerici**.
+    - È severamente vietato inserire numeri di capitolo o sezione (niente `## 1. Titolo`, `## 2. Titolo`, niente numerazioni decimali come `2.1`, `3.2`, e niente prefissi numerati per step procedurali come `### Step 1:`).
+    - Tutti i titoli e sottotitoli interni al documento devono essere **puramente descrittivi** (es. `## Dai Filtri di Intensità al Warping Geometrico`, `### Funzione di Errore della Finestra $E(u, v)$`, `### Estrazione dei Keypoint e Corrispondenze SIFT`).
 - **Capitalization dei titoli**: applicare il **Title Case** alle intestazioni (titoli principali con maiuscole sulle parole piene, come impostato nel linter).
 - **Spaziature degli Heading**: lasciare sempre una riga vuota prima e dopo ciascuna intestazione.
 
@@ -201,6 +204,45 @@ def euler(p, v, w, T):
 >    - **subito dopo la conclusione dell'intero elenco** come elemento di approfondimento visivo globale;
 >    - oppure, se strettamente correlato a un singolo punto, l'elenco va formulato in modo che ciascun elemento sia conciso, rimandando alla figura posta immediatamente al termine della lista.
 
+### 3.9 Divieto dei Separatori Orizzontali (`---`)
+> [!IMPORTANT] Regola Tassativa: Nessuna Linea Orizzontale (`---`) nel Testo
+> È **severamente vietato** inserire righe divisorie orizzontali (`---`) all'interno dei file markdown degli appunti per separare capitoli, sezioni o pagine:
+> 1. **Continuità Tipografica Pulita**: La gerarchia visiva del testo è interamente demandata agli heading strutturati (`#`, `##`, `###`) e alle spaziature verticali coerenti (righe vuote prima e dopo). L'inserimento di righe `---` spezza artificialmente la lettura, frammenta la struttura logica del documento e introduce disomogeneità tipografica.
+> 2. **Interferenza con gli Esportatori e il Merger**: I separatori `---` possono essere erroneamente interpretati da parser markdown, da `advanced-merger` o da `better-export-pdf` come delimitatori di frontmatter YAML o interruzioni di pagina arbitrarie, provocando salti pagina indesiderati o rendering difettosi nel PDF finale compilato.
+
+### 3.10 Stile e Voce dell'Autore (Impronta Personale di Scrittura)
+Gli appunti del vault non devono sembrare un'enciclopedia asettica o un manuale cattedratico impersonale, ma il quaderno di studio ragionato di un ingegnere che fissa i concetti in modo chiaro, intuitivo e operativo.
+
+#### 1. Voce Narrativa, Persona e Registro
+- **Prima persona naturale e spontanea**: Alternare la prima persona singolare (*"ho 3 matrici"*, *"se applico la convoluzione avrò come problema che..."*, *"non lo posso calcolare"*) e la prima persona plurale (*"abbiamo definito noi i pesi, ma nelle CNN..."*, *"ci torna utile"*, *"troviamo che"*).
+- **Divieto di preamboli accademici gonfiati**: Evitare introduzioni barocche o frasi di transizione prolisse (es. *"In questo capitolo estendiamo la trattazione affrontando le due grandi sfide..."* $\to$ **NO**). Andare subito al punto del problema: *"Nessuno ti dice come le immagini sono traslate o ruotate tra loro. Dobbiamo quindi trovare elementi in comune..."*.
+- **Tono da problem solver**: Spiegare con parole proprie e con metafore intuitive il motivo per cui si introduce una tecnica (*"perché facciamo questo?"*, *"qual è la limitazione?"*, *"cosa cambia tra analogico e digitale?"*).
+
+#### 2. Densità dei Paragrafi e Ritmo di Lettura
+- **Paragrafi snelli (1–4 righe al massimo)**: Spezzare il testo in blocchi compatti. Non scrivere muri di testo.
+- **Struttura ricorsiva agile**: Seguire il flusso naturale:
+  $$\text{Problema / Intuizione} \implies \text{Formula / Schema Visivo} \implies \text{Conseguenza Pratica / Cosa Ricordare}$$
+- **Zero fuffa**: Ogni riga deve aggiungere informazione concettuale, geometrica o implementativa.
+
+#### 3. Approccio alla Matematica
+- **Matematica al servizio della comprensione**: Riportare le formule fondamentali spiegando con precisione il ruolo fisico o geometrico di ogni variabile.
+- **Frecce e passaggi logici fluidi**: Usare collegamenti con $\to$ o $\implies$ nelle transizioni analitiche, omettendo derivazioni algebriche noiose o ovvie che appesantiscono la lettura senza aggiungere valore all'esame.
+- **Formule compatte**: Preferire formule pulite e ben leggibili, display block isolati con `$$` su riga singola o multilinea essenziali.
+
+#### 4. Immagini e Schemi come Baricentro
+- **Visual storytelling**: Introdurre l'immagine con una riga, mostrarla, e commentare a caldo il dettaglio saliente. Non riscrivere per esteso ciò che l'immagine mostra già con evidenza.
+- **Sintassi pulita**: Integrare le immagini con il formato naturale `![[immagine.png]]` o specificando il modificatore CSS (`|center mid`, `|center big`) quando occorre scalarla.
+
+#### 5. Callout Mirati e Ipertestualità (Wikilink)
+- **Callout agili**: Usare `>[!NOTE]`, `>[!IMPORTANT]`, `>[!EXAMPLE]`. Possono contenere grafici, formule o tabelle. Titoli brevi e orientati al tema (`>[!NOTE] PyTorch`, `>[!IMPORTANT] Errore di Drift`).
+- **Wikilink interni costanti**: Collegare sistematicamente i concetti tra note o all'interno della stessa nota usando la sintassi di Obsidian `[[NomeCapitolo#Sezione|Testo]]` o `[[#Sezione|Testo]]`.
+
+#### 6. Pragmatismo Ingegneristico, Codice e Hardware
+- Riportare sempre le implicazioni pratiche:
+  - Differenze di convenzione nei framework (es. $[C, H, W]$ in PyTorch vs $[H, W, C]$ in OpenCV/NumPy).
+  - Costo computazionale concreto (numero di MACs, ordine di grandezza $O(N)$, complessità con filtri separabili $k^2 \to 2k$).
+  - Compromessi fisici (rumore dei sensori, aliasing, clipping, overflow fixed point vs floating point).
+
 ---
 
 ## 4. Workflow Operativo per Nuovi Appunti o Rifiniture
@@ -278,4 +320,8 @@ Prima di concludere qualsiasi sessione di scrittura o refactoring di un appunto:
 - [ ] **Sintassi Tipografica Linter**: I termini chiave usano il doppio underscore `__termine__` e il corsivo usa il singolo `_termine_`.
 - [ ] **Integrità degli Elenchi**: Gli elenchi puntati o numerati non sono spezzati da immagini, callout o altri blocchi intermedi; ogni elenco viene concluso prima di inserire figure o callout di approfondimento.
 - [ ] **Callout Obsidian**: Gli esempi e le note utilizzano i callout standard Obsidian (`>[!example]`, `>[!note]`).
+- [ ] **Voce Autore (Prima Persona e Pragmatismo)**: Testo diretto, naturale, in prima persona (*"ho 3 matrici"*, *"troviamo"*, *"ci torna utile"*), senza preamboli accademici o formule cerimoniali.
+- [ ] **Densità e Ritmo**: Paragrafi snelli (1–4 righe), ritmo scorrevole, con l'intuizione fisica/geometrica spiegata chiaramente prima della formula.
+- [ ] **Ipertestualità (Wikilink)**: Presenza di collegamenti interni coerenti alle lezioni precedenti o alle sezioni correlate (`[[Capitolo#Sezione|Testo]]`).
 - [ ] **Newline Finale**: Il file termina con un newline singolo.
+
