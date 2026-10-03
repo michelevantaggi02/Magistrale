@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 260" width="100%" height="100%">
+  <defs>
+    <style>
+      .step-num { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: bold; fill: #ffffff; }
+      .step-title { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: bold; fill: #0f172a; }
+      .step-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 11.5px; fill: #475569; }
+      .math-code { font-family: monospace; font-size: 11px; fill: #1e293b; }
+    </style>
+    <marker id="pipe-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <rect width="960" height="260" fill="#f8fafc" rx="12" />
+
+  <!-- Titolo Pipeline -->
+  <text x="480" y="30" text-anchor="middle" class="step-title" font-size="16">Pipeline Completa dell'Algoritmo di Harris Corner Detection</text>
+
+  <!-- Step 1: Gradienti -->
+  <g transform="translate(30, 55)">
+    <rect width="160" height="175" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" rx="8" />
+    <circle cx="25" cy="25" r="14" fill="#f59e0b" />
+    <text x="25" y="30" text-anchor="middle" class="step-num">1</text>
+    <text x="50" y="30" class="step-title">Gradienti</text>
+    <g transform="translate(12, 55)">
+      <text x="0" y="15" class="step-desc">Derivate spaziali con</text>
+      <text x="0" y="30" class="step-desc">filtro gaussiano σ_d:</text>
+      <rect x="0" y="42" width="136" height="35" fill="#fef3c7" rx="4" />
+      <text x="68" y="58" text-anchor="middle" class="math-code">I_x = I * ∂G/∂x</text>
+      <text x="68" y="72" text-anchor="middle" class="math-code">I_y = I * ∂G/∂y</text>
+      <text x="0" y="100" class="step-desc" font-size="10.5">Scala di derivazione</text>
+    </g>
+  </g>
+
+  <!-- Freccia 1 -> 2 -->
+  <line x1="195" y1="142" x2="215" y2="142" stroke="#64748b" stroke-width="2" marker-end="url(#pipe-arrow)" />
+
+  <!-- Step 2: Prodotti Puntuali -->
+  <g transform="translate(220, 55)">
+    <rect width="160" height="175" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" rx="8" />
+    <circle cx="25" cy="25" r="14" fill="#f59e0b" />
+    <text x="25" y="30" text-anchor="middle" class="step-num">2</text>
+    <text x="50" y="30" class="step-title">Prodotti</text>
+    <g transform="translate(12, 55)">
+      <text x="0" y="15" class="step-desc">Prodotti puntuali dei</text>
+      <text x="0" y="30" class="step-desc">gradienti su ogni pixel:</text>
+      <rect x="0" y="42" width="136" height="48" fill="#fef3c7" rx="4" />
+      <text x="68" y="58" text-anchor="middle" class="math-code">I_x² = I_x · I_x</text>
+      <text x="68" y="72" text-anchor="middle" class="math-code">I_y² = I_y · I_y</text>
+      <text x="68" y="86" text-anchor="middle" class="math-code">I_xy = I_x · I_y</text>
+      <text x="0" y="110" class="step-desc" font-size="10.5">Matrice rango ≤ 1</text>
+    </g>
+  </g>
+
+  <!-- Freccia 2 -> 3 -->
+  <line x1="385" y1="142" x2="405" y2="142" stroke="#64748b" stroke-width="2" marker-end="url(#pipe-arrow)" />
+
+  <!-- Step 3: Integrazione Finestra C -->
+  <g transform="translate(410, 55)">
+    <rect width="160" height="175" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" rx="8" />
+    <circle cx="25" cy="25" r="14" fill="#f59e0b" />
+    <text x="25" y="30" text-anchor="middle" class="step-num">3</text>
+    <text x="50" y="30" class="step-title">Integrazione</text>
+    <g transform="translate(12, 55)">
+      <text x="0" y="15" class="step-desc">Convoluzione con</text>
+      <text x="0" y="30" class="step-desc">Gaussiana σ_i (finestra w):</text>
+      <rect x="0" y="42" width="136" height="40" fill="#fef3c7" rx="4" />
+      <text x="68" y="60" text-anchor="middle" class="math-code">C = [ I_x²  I_xy ] * G_σi</text>
+      <text x="68" y="76" text-anchor="middle" class="math-code">    [ I_xy  I_y² ]</text>
+      <text x="0" y="102" class="step-desc" font-size="10.5">Matrice dei momenti C</text>
+    </g>
+  </g>
+
+  <!-- Freccia 3 -> 4 -->
+  <line x1="575" y1="142" x2="595" y2="142" stroke="#64748b" stroke-width="2" marker-end="url(#pipe-arrow)" />
+
+  <!-- Step 4: Risposta R -->
+  <g transform="translate(600, 55)">
+    <rect width="160" height="175" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" rx="8" />
+    <circle cx="25" cy="25" r="14" fill="#0284c7" />
+    <text x="25" y="30" text-anchor="middle" class="step-num">4</text>
+    <text x="50" y="30" class="step-title">Risposta R</text>
+    <g transform="translate(12, 55)">
+      <text x="0" y="15" class="step-desc">Mappa dello score di</text>
+      <text x="0" y="30" class="step-desc">angolo ad ogni pixel:</text>
+      <rect x="0" y="42" width="136" height="35" fill="#e0f2fe" rx="4" />
+      <text x="68" y="64" text-anchor="middle" class="math-code">R = det C - k(tr C)²</text>
+      <text x="0" y="98" class="step-desc">R &gt; 0: Angolo</text>
+      <text x="0" y="112" class="step-desc">R &lt; 0: Bordo</text>
+    </g>
+  </g>
+
+  <!-- Freccia 4 -> 5 -->
+  <line x1="765" y1="142" x2="785" y2="142" stroke="#64748b" stroke-width="2" marker-end="url(#pipe-arrow)" />
+
+  <!-- Step 5: Selezione ed NMS -->
+  <g transform="translate(790, 55)">
+    <rect width="140" height="175" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" rx="8" />
+    <circle cx="25" cy="25" r="14" fill="#059669" />
+    <text x="25" y="30" text-anchor="middle" class="step-num">5</text>
+    <text x="50" y="30" class="step-title">Selezione</text>
+    <g transform="translate(10, 55)">
+      <text x="0" y="15" class="step-desc">1. Soglia su R:</text>
+      <text x="0" y="30" class="math-code" fill="#059669">R &gt; τ · max(R)</text>
+      <text x="0" y="52" class="step-desc">2. Non-Maximum</text>
+      <text x="0" y="67" class="step-desc">Suppression (NMS):</text>
+      <rect x="0" y="75" width="120" height="28" fill="#d1fae5" rx="4" />
+      <text x="60" y="94" text-anchor="middle" class="step-desc" font-weight="bold" fill="#047857">1 picco per corner</text>
+    </g>
+  </g>
+</svg>
