@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 2/Deep Learning And Robot Perception/2. Scale-Space, Descrittori SIFT e Feature Matching.md",
+                "file": "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2. Scale-Space, Descrittori SIFT e Feature Matching"
+              "title": "0. Immagini, filtri e gradienti"
             }
           }
         ]
@@ -144,7 +144,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Anno 2/Deep Learning And Robot Perception/2. Scale-Space, Descrittori SIFT e Feature Matching.md",
+                "file": "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -195,23 +195,24 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6e19a07923072cbc",
+  "active": "0c352f3ac14c6eff",
   "lastOpenFiles": [
     "Anno 2/Deep Learning And Robot Perception/note/lezione_5.md",
-    "Anno 2/Deep Learning And Robot Perception/2. Scale-Space, Descrittori SIFT e Feature Matching.md",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p74_edge_instability_blobs_vs_harris_laplace.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p73_harris_laplace_steps_diagram.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p72_harris_laplace_vs_sift_blobs_corners.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p71_response_peaks_at_half_width.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p70_1d_bar_to_blob_derivatives.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p65_ransac_hubble_matching_success.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p64_geometric_consistency_ransac_filter.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p63_ratio_test_motorcycle_results.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p62_lowe_ratio_test_comparison.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_04_p61_distance_vs_ratio_distribution.png",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_4.md",
-    "Anno 2/Deep Learning And Robot Perception/1. Local Features e Harris Corner Detector.md",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p46_hartley_normalization_coordinates.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p45_dlt_svd_smallest_singular_value.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p47_4matches_vs_40matches_error.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p48_error_vs_number_of_matches_curve.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p50_image_alignment_pipeline_overview.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p50_image_alignment_virtual_camera_pair.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p52_estimated_homography_residuals.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p53_canvas_inverse_warping_blending.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p54_outlier_catastrophic_failure.png",
     "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
+    "skills-lock.json",
+    "Anno 2/Deep Learning And Robot Perception/immagini/63.png",
+    "Anno 2/Deep Learning And Robot Perception/1. Local Features e Harris Corner Detector.md",
+    "Anno 2/Deep Learning And Robot Perception/2. Scale-Space, Descrittori SIFT e Feature Matching.md",
+    "Anno 2/Deep Learning And Robot Perception/note/lezione_4.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_3.md",
     "Anno 2/Deep Learning And Robot Perception/note",
     "Anno 2/Deep Learning And Robot Perception/Senza nome.md",
@@ -240,8 +241,6 @@
     "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Anno 1/Digital Signal Processing/_TOC_.md",
-    "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md",
-    "Anno.md",
-    "Anno 1/export/pdf"
+    "Anno 1/Lezioni integrative DSP/2. Segnali nei sistemi lineari.md"
   ]
 }
