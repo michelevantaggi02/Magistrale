@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 2/Deep Learning And Robot Perception/3. Trasformazioni Geometriche e Allineamento di Immagini.md",
+                "file": "Anno 2/Autonomous Robotics/note/lezione_6.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "3. Trasformazioni Geometriche e Allineamento di Immagini"
+              "title": "lezione_6"
             }
           }
         ]
@@ -80,7 +80,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 446.5110321044922
+    "width": 446.5110321044922,
+    "collapsed": true
   },
   "right": {
     "id": "d5c02c814b48a4b8",
@@ -197,10 +198,15 @@
   },
   "active": "0c352f3ac14c6eff",
   "lastOpenFiles": [
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_34_harris_autovalori.png",
+    "Anno 2/Autonomous Robotics/note/lezione_6.md",
+    "Senza nome.md",
     "Anno 2/Deep Learning And Robot Perception/2. Scale-Space, Descrittori SIFT e Feature Matching.md",
+    "STRUTTURA_E_GUIDA_APPUNTI.md",
+    "Anno 2/Deep Learning And Robot Perception/3. Trasformazioni Geometriche e Allineamento di Immagini.md",
+    "Anno 2/Autonomous Robotics/note",
     "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
     "Anno 2/Deep Learning And Robot Perception/1. Local Features e Harris Corner Detector.md",
-    "Anno 2/Deep Learning And Robot Perception/3. Trasformazioni Geometriche e Allineamento di Immagini.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
@@ -238,12 +244,7 @@
     "Anno 2/Deep Learning And Robot Perception/immagini",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 2/Deep Learning And Robot Perception",
-    "Anno 2",
     "Anno 1/export/md/Digital Signal Processing-merged.md",
-    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
-    "Anno 1/export/md/Lezioni integrative DSP-merged.md",
-    "Anno 1/export/pdf/Digital.md",
-    "Anno 1/Digital Signal Processing/A. Sistemi Multi-Rate.md",
-    "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md"
+    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md"
   ]
 }
