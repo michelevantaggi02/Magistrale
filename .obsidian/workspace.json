@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "669eed020d7229a8",
+        "id": "e200368f7e8c43ff",
         "type": "tabs",
         "children": [
           {
-            "id": "0c352f3ac14c6eff",
+            "id": "500ead5a4deb3b2f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 2/Autonomous Robotics/note/lezione_6.md",
+                "file": "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "lezione_6"
+              "title": "2. Sensori per la Robotica Mobile"
             }
           }
         ]
@@ -115,12 +115,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Anno 1/Lezioni integrative DSP/1. Segnali.md",
+                "file": "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
                 "linksCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 1. Segnali"
+              "title": "Collegamenti in uscita"
             }
           },
           {
@@ -144,7 +144,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Anno 2/Deep Learning And Robot Perception/3. Trasformazioni Geometriche e Allineamento di Immagini.md",
+                "file": "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -197,11 +197,29 @@
   },
   "active": "6e19a07923072cbc",
   "lastOpenFiles": [
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_34_harris_autovalori.png",
+    "Anno 2/Autonomous Robotics/note/lezione_5.md",
+    "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
+    "Anno 2/Autonomous Robotics/immagini/slide_29_accelerometer_spring_mass_damper_model.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_28_mems_gyroscope_ieee_spectrum.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_28_mechanical_gimbal_gyroscope.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_27_electronic_compass_magnetometer.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_20_gps_gnss_satellite_constellation_architecture.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_19_beacon_based_localization_indoor.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_17_camera_geometry_intrinsic_extrinsic.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_15_laser_scan_cartesian_plot.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_15_laser_scan_polar_raw.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_14_velodyne_puck_vlp16_lidar.png",
+    "Anno 2/Autonomous Robotics/1. Modelli di Movimento Stocastici.md",
     "Anno 2/Autonomous Robotics/note/lezione_6.md",
+    "Anno 2/Autonomous Robotics/note/lezione_4.md",
+    "STRUTTURA_E_GUIDA_APPUNTI.md",
+    "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
+    "Anno 2/Autonomous Robotics/zz. Argomenti extra.md",
+    "Anno 2/Autonomous Robotics/1. Modelli Cinematici e di Movimento.md",
+    "Anno 2/Autonomous Robotics/note/lezione_2.md",
+    "Anno 2/Autonomous Robotics/immagini",
     "Senza nome.md",
     "Anno 2/Deep Learning And Robot Perception/2. Scale-Space, Descrittori SIFT e Feature Matching.md",
-    "STRUTTURA_E_GUIDA_APPUNTI.md",
     "Anno 2/Deep Learning And Robot Perception/3. Trasformazioni Geometriche e Allineamento di Immagini.md",
     "Anno 2/Autonomous Robotics/note",
     "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
@@ -215,35 +233,17 @@
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_5.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_4.md",
-    "Anno 2/Deep Learning And Robot Perception/immagini/interpolazione_forward_warping_buchi.svg",
     "Anno 2/Deep Learning And Robot Perception/3. Scale-Space, Descrittori SIFT e Feature Matching.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas",
     "Anno 2/Deep Learning And Robot Perception/0. Indice del Corso.md",
     "Anno 2/Deep Learning And Robot Perception/1. Immagini, filtri e gradienti.md",
-    "Anno 2/Deep Learning And Robot Perception/2. Local Features e Harris Corner Detector.md",
     "Anno 2/export/pdf",
     "Anno 2/export/md",
     "Anno 2/export",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p46_hartley_normalization_coordinates.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p45_dlt_svd_smallest_singular_value.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p47_4matches_vs_40matches_error.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p48_error_vs_number_of_matches_curve.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p50_image_alignment_pipeline_overview.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p50_image_alignment_virtual_camera_pair.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p52_estimated_homography_residuals.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p53_canvas_inverse_warping_blending.png",
-    "Anno 2/Deep Learning And Robot Perception/immagini/slide_05_p54_outlier_catastrophic_failure.png",
     "skills-lock.json",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_3.md",
     "Anno 2/Deep Learning And Robot Perception/note",
-    "Anno 2/Deep Learning And Robot Perception/Senza nome.md",
-    "README.md",
     "Anno 2/Autonomous Robotics/scripts_python",
     "Anno 2/Autonomous Robotics",
-    "Anno 2/Deep Learning And Robot Perception/immagini",
-    "Anno 1/Digital Signal Processing/0. Introduzione.md",
-    "Anno 2/Deep Learning And Robot Perception",
-    "Anno 1/export/md/Digital Signal Processing-merged.md",
-    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md"
+    "Anno 2/Deep Learning And Robot Perception/immagini"
   ]
 }

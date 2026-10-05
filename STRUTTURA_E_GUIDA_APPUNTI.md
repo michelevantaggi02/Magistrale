@@ -43,7 +43,12 @@ Magistrale/
 │       ├── md/                          # File Markdown uniti (Advanced Merger)
 │       └── pdf/                         # PDF finali impaginati (Better Export PDF)
 ├── Anno 2/
-│   ├── Autonomous Robotics/             # [DA SVILUPPARE] Codice di laboratorio disponibile
+│   ├── Autonomous Robotics/             # [IN CORSO] Modelli cinematici, stocastici e laboratorio
+│   │   ├── 0. Modelli Cinematici e di Movimento.md
+│   │   ├── 1. Modelli di Movimento Stocastici.md
+│   │   ├── zz. Argomenti extra.md
+│   │   ├── immagini/                    # 24 figure estratte da slide ad alta risoluzione
+│   │   ├── note/                        # Trascrizioni grezze delle lezioni
 │   │   └── scripts_python/
 │   │       └── motion_models_todo.py    # Modelli cinematici unicycle (Euler, RK, odeint)
 │   └── Deep Learning And Robot Perception/ # [IN CORSO] Note approfondite di Computer Vision
@@ -62,7 +67,7 @@ Magistrale/
 | **Anno 1** | **Electronic Embedded Systems** | Bozza | `0. Introduzione.md` | Da espandere: programmazione FPGA, sintesi VHDL, toolchain Xilinx Vivado/Vitis, sistemi Real-Time. |
 | **Anno 1** | **Machine Learning** | Bozza | `0. Introduzione.md` | Da espandere: regressione lineare/logistica, SVM, alberi decisionali, clustering, PCA, metriche di valutazione. |
 | **Anno 2** | **Deep Learning And Robot Perception** | In corso | `0. Immagini, filtri e gradienti.md`, `immagini/` | Primo capitolo corposo già redatto (450+ righe) corredato da 53 figure. Da proseguire con CNN, feature detection, object detection, segmentation, 3D perception. |
-| **Anno 2** | **Autonomous Robotics** | Da iniziare | `scripts_python/motion_models_todo.py` | Nessuna nota `.md` ancora creata. Partire dai modelli cinematici discreti (Euler, Runge-Kutta) implementati nello script Python e coprire SLAM, navigazione e pianificazione traiettorie. |
+| **Anno 2** | **Autonomous Robotics** | In corso | `0. Modelli Cinematici e di Movimento.md`, `1. Modelli di Movimento Stocastici.md`, `zz. Argomenti extra.md`, `immagini/` (24 figure), `scripts_python/` | Lezioni 2 e 4 completate. Copre: modelli cinematici deterministici (unicycle, skid, Ackermann), integrazione discreta (Euler, RK2), Velocity Motion Model deterministico e stocastico, propagazione covarianza con Jacobiani, sampling Monte Carlo, banana distribution e configurazione AMCL in ROS. |
 
 ---
 
@@ -243,6 +248,24 @@ Gli appunti del vault non devono sembrare un'enciclopedia asettica o un manuale 
   - Costo computazionale concreto (numero di MACs, ordine di grandezza $O(N)$, complessità con filtri separabili $k^2 \to 2k$).
   - Compromessi fisici (rumore dei sensori, aliasing, clipping, overflow fixed point vs floating point).
 
+### 3.11 Revisione Critica delle Note e Segnalazione Errori Concettuali
+> [!IMPORTANT] Regola Tassativa: Analisi Critica e Segnalazione Obbligatoria degli Errori
+> Quando vengono fornite o analizzate le note della lezione (appunti scritti a mano, trascrizioni orali, schemi veloci o formule ricopiate):
+> 1. **Analisi Critica Obbligatoria**: È **tassativamente richiesto analizzare la presenza di errori a livello concettuale, matematico o notazionale** all'interno delle note grezze (es. segni algebrici errati, formule goniometriche incongruenti, sovrapposizione di simboli con significati multipli non distinti, definizioni tautologiche o passaggi logici fallaci).
+> 2. **Correzione Diretta nel Testo degli Appunti**: L'appunto finale deve incorporare direttamente la versione corretta, rigorosa e coerente con la teoria di riferimento (evitando di perpetuare sviste o ambiguità di trascrizione nel vault).
+> 3. **Segnalazione Post-Stesura per Visione e Confronto**: Al termine della redazione o riscrittura degli appunti, l'assistente AI **deve esplicitamente segnalare all'utente gli errori o le incongruenze rilevate nelle note di partenza**, specificando dove si trovava l'errore, qual era l'incongruenza concettuale e come è stato corretto nel capitolo. In questo modo l'utente può visionare la correzione, verificare la spiegazione e allineare la propria comprensione per lo studio e per l'esame.
+
+### 3.12 Separazione tra Contenuti di Lezione e Approfondimenti Extra (`zz. Argomenti extra.md`)
+> [!IMPORTANT] Regola Tassativa: Separazione dei Contenuti e Gestione degli Argomenti Extra
+> Gli appunti del corso devono mantenere un equilibrio perfetto tra fedeltà al programma d'esame e completezza teorico-scientifica:
+> 1. **Perimetro dei Documenti Primari di Lezione (`N. Titolo.md`)**:
+>    - I file principali numerati (`0. ...`, `1. ...`, `2. ...`) devono concentrarsi sul flusso didattico esposto dal docente a lezione e nelle slide, fornendo una trattazione chiara, scorrevole e direttamente incentrata sui requisiti dell'esame.
+>    - Se una proprietà o una formula compare nelle slide in forma di bullet point o enunciato sintetico (es. _"quadratic error in position"_, _"scale not determined"_), nel documento primario va spiegata l'intuizione fisica e la conseguenza applicativa essenziale, senza appesantire la lettura con lunghe deviazioni analitiche o dettagli costruttivi non richiesti.
+> 2. **Destinazione degli Approfondimenti Extra (`zz. Argomenti extra.md`)**:
+>    - Tutte le derivazioni matematiche estese, le dimostrazioni algebriche complesse, i modelli fisici di dettaglio o le nozioni collaterali tratte dai libri di testo o dalla letteratura di riferimento (es. _Siegwart et al._, _Thrun et al._, paper scientifici) che **non sono presenti direttamente e letteralmente nelle slide del docente** devono essere collocate nell'apposito file di approfondimento della materia: `zz. Argomenti extra.md`.
+> 3. **Citazione e Ipertestualità nei Documenti Primari**:
+>    - Ogni argomento collaterale o dimostrazione spostata nel file extra deve essere **puntualmente e propriamente citata** all'interno del documento principale tramite wikilink espliciti (es. `[[zz. Argomenti extra#Titolo Sezione|zz. Argomenti extra: Approfondimento ...]]`) o callout dedicati (`>[!NOTE] Approfondimento Teorico`), consentendo allo studente di consultare il dettaglio formale con un clic senza interrompere il filo conduttore principale.
+
 ---
 
 ## 4. Workflow Operativo per Nuovi Appunti o Rifiniture
@@ -268,10 +291,11 @@ flowchart TD
 
 ### 4.1 Stesura di un Nuovo Capitolo da File Forniti
 1. **Fase 1 - Estrazione Grafica da PDF (Step Prioritario)**: Prima di scrivere qualsiasi riga di testo, scansionare l'intero PDF, estrarre ad alta risoluzione tutti i grafici, le tabelle comparative, le mappe e gli esempi visivi salienti, applicare la pipeline anti-crop a 6 fasi (zero testo mozzato, padding di respiro adeguato) e archiviarli in `<Materia>/immagini/`.
-2. **Fase 2 - Analisi Note Manoscritte e Schemi Custom**: Esaminare le annotazioni manoscritte dello studente e le spiegazioni orali del docente. Generare schemi vettoriali custom (SVG) solo ed esclusivamente per chiarire concetti mancanti nelle slide o per rappresentare metafore/disegni esplicitamente richiesti dalle note alla lavagna (mantenendo invece le figure del PDF per tutto ciò che è già presente nei lucidi).
-3. **Fase 3 - Analisi, Traduzione e Rielaborazione**: Leggere e rielaborare i contenuti delle slide traducendoli integralmente in lingua italiana con rigore accademico e chiarezza didattica.
-4. **Fase 4 - Numerazione e Titolo**: Assegnare il nome file progressivo corretto (es. `Anno 2/Deep Learning And Robot Perception/1. Local Features e Harris Corner Detector.md`), allineando perfettamente l'heading H1.
+2. **Fase 2 - Analisi Note Manoscritte e Revisione Critica degli Errori**: Esaminare le annotazioni dello studente e le spiegazioni orali del docente. Analizzare criticamente la presenza di eventuali errori concettuali, formule trascritte con sviste algebriche o sovrapposizioni notazionali ambigue. Generare schemi vettoriali custom (SVG) solo per chiarire concetti mancanti o disegni alla lavagna.
+3. **Fase 3 - Analisi, Traduzione e Rielaborazione**: Leggere e rielaborare i contenuti delle slide traducendoli integralmente in lingua italiana con rigore accademico e chiarezza didattica, correggendo direttamente nel testo qualsiasi errore presente nelle note di partenza.
+4. **Fase 4 - Numerazione e Titolo**: Assegnare il nome file progressivo corretto (partendo da `0.` per il capitolo iniziale della materia), allineando perfettamente l'heading H1.
 5. **Fase 5 - Composizione e Integrazione Figure**: Redigere il documento alternando spiegazioni teoriche, formule KaTeX rigorose ed esempi visivi basati sulle immagini estratte, formattate con `![[immagine.png|center mid/big]]`.
+6. **Fase 6 - Segnalazione Finale delle Correzioni all'Utente**: Al termine della stesura, descrivere esplicitamente all'utente le incongruenze concettuali rilevate nelle note e le correzioni applicate, così da permettergli di visionare le modifiche e verificare la teoria.
 
 ### 4.2 Aggiornamento ed Esportazione
 1. **Aggregazione**: Tramite il plugin `advanced-merger` di Obsidian (oppure script dedicato), unire in ordine logico i capitoli in `Anno X/export/md/<Materia>-merged.md`.
@@ -289,7 +313,12 @@ flowchart TD
 - **Convenzione Tensori**: Indicare sempre esplicitamente la convenzione dei canali ($[C, H, W]$ per PyTorch vs $[H, W, C]$ per OpenCV/NumPy).
 
 ### 5.2 Autonomous Robotics (Anno 2)
-- **Contesto**: Modelli cinematici di robot mobili (unicycle, car-like, omnidirectional), odometria, filtri di stima bayesiana (EKF, Particle Filter), mapping e SLAM, trajectory planning e motion control.
+- **Contesto**: Modelli cinematici di robot mobili (unicycle, car-like, omnidirectional, skid-steering), modelli di movimento stocastici (velocity model, odometry model, sampling stocastico), sensori per robotica mobile (encoder di quadratura, IMU 6-DoF, ToF laser scanner 2D e LiDAR 3D, visione monoculare e stereoscopica, beacon e GPS/GNSS con RTK), filtri di stima bayesiana (EKF, Particle Filter), mapping e SLAM, trajectory planning e motion control.
+- **Capitoli Completati**:
+  - `0. Modelli Cinematici e di Movimento.md` (Lezione 2): cinematica del disco, car-like, unicycle, ICR, integrazione esatta ad arco vs approssimazioni di Eulero e Runge-Kutta.
+  - `1. Modelli di Movimento Stocastici.md` (Lezione 4): formulazione probabilistica dello stato, Velocity Motion Model, Odometry Motion Model, convenzioni parametri di rumore $\alpha_1 \dots \alpha_4$ (e ruolo di $\alpha_5$ per robot olonomi/omni), algoritmi di sampling stocastico con box-muller e inversione su CDF.
+  - `2. Sensori per la Robotica Mobile.md` (Lezione 5): classificazione PC/EC e attivi/passivi, encoder ottici in quadratura, IMU 3D e deriva quadratica $O(t^2)$, ToF Laser 2D (trigonometria polare-cartesiana per dati LIS) vs LiDAR 3D Velodyne VLP-16, telecamere e modello prospettico pinhole con matrici intrinseca ed estrinseca (bearing-only sensor), sistemi a beacon e GNSS/GPS con correzione RTK, appendice metrologica e sensori fisici (bussola, giroscopi meccanici/MEMS, accelerometro molla-massa-smorzatore).
+- **Materiale Grafico**: La cartella `immagini/` contiene tutte le figure vettoriali e raster estratte a 300 DPI dalle slide con padding 12px bianco e conformità anti-crop.
 - **Punto di Partenza**: Integrare le formule teoriche con il codice già strutturato in `scripts_python/motion_models_todo.py`:
   - Modello differenziale continuo: $\dot{x} = v \cos\theta$, $\dot{y} = v \sin\theta$, $\dot{\theta} = \omega$.
   - Discretizzazione ad arco (Exact velocity model) vs approssimazioni tangenziali (Euler, Runge-Kutta di secondo ordine).
@@ -323,5 +352,7 @@ Prima di concludere qualsiasi sessione di scrittura o refactoring di un appunto:
 - [ ] **Voce Autore (Prima Persona e Pragmatismo)**: Testo diretto, naturale, in prima persona (*"ho 3 matrici"*, *"troviamo"*, *"ci torna utile"*), senza preamboli accademici o formule cerimoniali.
 - [ ] **Densità e Ritmo**: Paragrafi snelli (1–4 righe), ritmo scorrevole, con l'intuizione fisica/geometrica spiegata chiaramente prima della formula.
 - [ ] **Ipertestualità (Wikilink)**: Presenza di collegamenti interni coerenti alle lezioni precedenti o alle sezioni correlate (`[[Capitolo#Sezione|Testo]]`).
+- [ ] **Analisi Critica e Segnalazione Errori Concettuali**: Le note grezze della lezione sono state esaminate criticamente per individuare errori concettuali, matematici o notazionali; le incongruenze sono state corrette direttamente nel testo e segnalate puntualmente all'utente nel messaggio di riepilogo per la revisione.
+- [ ] **Separazione Contenuti Extra**: Le dimostrazioni estese, i modelli fisici di dettaglio e le nozioni collaterali non presenti letteralmente nelle slide sono state collocate nel file `zz. Argomenti extra.md` della materia e puntualmente citate nel documento primario tramite wikilink.
 - [ ] **Newline Finale**: Il file termina con un newline singolo.
 
