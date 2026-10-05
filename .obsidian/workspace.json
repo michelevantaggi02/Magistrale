@@ -80,8 +80,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 446.5110321044922,
-    "collapsed": true
+    "width": 446.5110321044922
   },
   "right": {
     "id": "d5c02c814b48a4b8",
@@ -196,7 +195,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "0c352f3ac14c6eff",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
     "Anno 2/Deep Learning And Robot Perception/immagini/slide_34_harris_autovalori.png",
     "Anno 2/Autonomous Robotics/note/lezione_6.md",

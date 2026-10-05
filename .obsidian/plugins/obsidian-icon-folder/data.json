@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiMove3d",
+      "LiCamera",
+      "LiTranspose",
       "2️⃣",
-      "LiAtom",
-      "LiCircuitBoard",
-      "LiInfo",
-      "LiActivitySquare"
+      "LiAtom"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -39,5 +39,7 @@
   "Anno 1/Digital Signal Processing": "LiActivitySquare",
   "Anno 1/Electronic Embedded Systems": "LiCircuitBoard",
   "Anno 1/Machine Learning": "LiAtom",
-  "Anno 2": "2️⃣"
+  "Anno 2": "2️⃣",
+  "Anno 2/Autonomous Robotics": "LiMove3d",
+  "Anno 2/Deep Learning And Robot Perception": "LiCamera"
 }
