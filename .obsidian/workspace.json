@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 2/Autonomous Robotics/4. Localizzazione e Filtri di Bayes.md",
+                "file": "Anno 2/export/md/Autonomous Robotics-merged.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "4. Localizzazione e Filtri di Bayes"
+              "title": "Autonomous Robotics-merged"
             }
           }
         ]
@@ -197,8 +197,11 @@
   },
   "active": "500ead5a4deb3b2f",
   "lastOpenFiles": [
-    "Anno 2/Autonomous Robotics/3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md",
+    "Anno 2/export/pdf/Autonomous Robotics-merged.pdf",
+    "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
+    "Anno 2/export/md/Autonomous Robotics-merged.md",
     "Anno 2/Autonomous Robotics/4. Localizzazione e Filtri di Bayes.md",
+    "Anno 2/Autonomous Robotics/3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md",
     "Anno 2/Autonomous Robotics/immagini/slide_07_bayes_door_state_estimation_robot.png",
     "Anno 2/Autonomous Robotics/immagini/slide_07_bayes_hmm_dynamic_bayesian_network.png",
     "Anno 2/Autonomous Robotics/immagini/slide_07_bayes_belief_representations_taxonomy.png",
@@ -225,7 +228,6 @@
     "Anno 2/Deep Learning And Robot Perception/2. Scale-Space, Descrittori SIFT e Feature Matching.md",
     "Anno 2/Deep Learning And Robot Perception/3. Trasformazioni Geometriche e Allineamento di Immagini.md",
     "Anno 2/Autonomous Robotics/note",
-    "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
     "Anno 2/Deep Learning And Robot Perception/1. Local Features e Harris Corner Detector.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
@@ -234,7 +236,6 @@
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_5.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas",
     "Anno 2/export/pdf",
     "Anno 2/export/md",
