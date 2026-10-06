@@ -1,3 +1,5 @@
+# lezione\_4
+
 slide 3: dobbiamo riuscire a rilevare i punti di interesse unici che possono essere descritti facilmente
 
 slide 5: una buona identity card potrebbe essere la matrice della finestra del punto.

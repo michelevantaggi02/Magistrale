@@ -1,4 +1,6 @@
-slide 6: la state transition probability indica la probabilità  di cambiare stato.
+# lezione\_4
+
+slide 6: la state transition probability indica la probabilità di cambiare stato.
 
 slide 7: fissato un punto analizziamo la distribuzione e vediamo quanto è probabile quel punto (computazione di distribuzione).
 (sampling) parto da un punto sull'asse y, calcolo la funzione inversa e trovo il campione che ci serve.

@@ -1,3 +1,5 @@
+# lezione\_5
+
 slide 3: l'obiettivo finale di molti compiti di computer vision è quello di calcolare la trasformazione delle immagini. è quindi il percorso inverso rispetto all'image processing
 
 slide 5: la trasformazione di un'immagine prende la griglia rappresentante l'immagine e sposta o ruota, cambiando la posizione del contenuto. le tre famiglie di trasformazioni sono progressivamente più complesse, ed ognuna include la precedente.
@@ -20,15 +22,16 @@ slide 15: le trasformazioni lineari non cambiano l'origine.
 
 slide 16: non hanno la proprietà commutativa, applicare prima una o prima un'altra ha effetti diversi
 
-slide 19: in una trasformazione affine abbiamo 6  parametri
+slide 19: in una trasformazione affine abbiamo 6 parametri
 
 slide 22: le omografie sono un'altra classe di trasformazioni che vanno a cambiare anche il parallelismo delle linee
 
 slide 24: le omografie vengono calcolate tramite l'ultima riga delle matrici affini, e ci forniscono un cambio di prospettiva
 
-slide 25: ci sono molte omografie che generano lo stesso risultato nel mondo cartesiano, dobbiamo aggiungere delle limitazioni per evitare di avere un sistema che non  può essere risolto.
+slide 25: ci sono molte omografie che generano lo stesso risultato nel mondo cartesiano, dobbiamo aggiungere delle limitazioni per evitare di avere un sistema che non può essere risolto.
 
 slide 32-33: avendo $p=(x_1, y_1)$ e $p'=(x_1', y_1')$ i match individuati, posso calcolare la trasformazione:
+
 $$\begin{align}
 x_1' = x_1 + t_x \to t_x = x_1'-x_1\\ y_1' = y_1 + t_y \to t_y = y_1' - y_1
 \end{align}$$

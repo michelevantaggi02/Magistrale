@@ -1,6 +1,6 @@
-# zz. Argomenti extra
+# Zz. Argomenti Extra
 
-Questo documento raccoglie dimostrazioni, approfondimenti matematici e argomenti collaterali utili alla comprensione completa degli argomenti del corso di *Autonomous Robotics*, ma non strettamente richiesti come parte teorica principale d'esame.
+Questo documento raccoglie dimostrazioni, approfondimenti matematici e argomenti collaterali utili alla comprensione completa degli argomenti del corso di _Autonomous Robotics_, ma non strettamente richiesti come parte teorica principale d'esame.
 
 ## Metodi Di Integrazione ODE (Eulero, RK2, RK4)
 
@@ -47,8 +47,11 @@ Per aumentare l'accuratezza senza calcolare derivate analitiche superiori, i met
 
 Il metodo RK2 (noto anche come metodo del punto medio) calcola due stadi:
 1. Una prima stima di prova della pendenza all'inizio del passo:
+
    $$k_1 = T \, f(\mathbf{x}(kT), \mathbf{u}(kT), kT)$$
+
 2. Una seconda valutazione della pendenza nel punto medio dell'intervallo ($t + T/2$), usando lo stato stimato con metà incremento $k_1$:
+
    $$k_2 = T \, f\left(\mathbf{x}(kT) + \frac{1}{2} k_1, \; \mathbf{u}\left(kT + \frac{T}{2}\right), \; kT + \frac{T}{2}\right)$$
 
 La posa finale al passo successivo è:
@@ -106,7 +109,7 @@ $$
 
 ## Derivazione Analitica Del Drift Quadratico Nelle IMU
 
-Nelle Unità di Misura Inerziali (trattate in [[2. Sensori per la Robotica Mobile#Unità Di Misura Inerziale (IMU)|2. Sensori per la Robotica Mobile]]), la stima della posizione mediante navigazione inerziale pura (*dead reckoning*) richiede la doppia integrazione delle accelerazioni lineari depurate dalla gravità:
+Nelle Unità di Misura Inerziali (trattate in [[2. Sensori per la Robotica Mobile#Unità Di Misura Inerziale (IMU)|2. Sensori per la Robotica Mobile]]), la stima della posizione mediante navigazione inerziale pura (_dead reckoning_) richiede la doppia integrazione delle accelerazioni lineari depurate dalla gravità:
 
 $$
 \mathbf{p}(t) = \mathbf{p}(0) + \mathbf{v}(0)t + \int_{0}^{t} \left( \int_{0}^{\tau} \mathbf{a}_{\text{moto}}(s) \, ds \right) d\tau
@@ -138,7 +141,7 @@ $$
 \Delta p_x(t) = \int_{0}^{t} \int_{0}^{\tau} (g \cdot \delta\omega \cdot s) \, ds \, d\tau = \frac{1}{6} g \cdot \delta\omega \cdot t^3
 $$
 
-L'errore angolare nel giroscopio provoca quindi una deriva di posizione che cresce addirittura come **$O(t^3)$** a causa dell'accoppiamento con la gravità.
+L'errore angolare nel giroscopio provoca quindi una deriva di posizione che cresce addirittura come __$O(t^3)$__ a causa dell'accoppiamento con la gravità.
 
 ### Bias Costante Dell'Accelerometro E Deriva Quadratica $O(t^2)$
 
@@ -148,9 +151,10 @@ $$
 \Delta p(t) = \int_{0}^{t} \int_{0}^{\tau} \Delta a_{\text{bias}} \, ds \, d\tau = \frac{1}{2} \Delta a_{\text{bias}} \, t^2
 $$
 
-L'errore di posizione cresce in modo rigorosamente **quadratico $O(t^2)$**.
+L'errore di posizione cresce in modo rigorosamente __quadratico $O(t^2)$__.
 
 #### Esempio Numerico Quantitativo
+
 Consideriamo un accelerometro MEMS di fascia commerciale con un bias residuo di appena:
 
 $$
@@ -173,7 +177,7 @@ Questo risultato dimostra analiticamente l'impossibilità fisica di utilizzare u
 
 ### Giroscopi Ottici FOG Ed Effetto Sagnac
 
-Nelle applicazioni aerospaziali e nei veicoli autonomi ad alta affidabilità si impiegano i giroscopi a fibra ottica (**FOG**, *Fiber Optic Gyro*, come il sensore KVH 1750 citato nel capitolo principale). 
+Nelle applicazioni aerospaziali e nei veicoli autonomi ad alta affidabilità si impiegano i giroscopi a fibra ottica (__FOG__, _Fiber Optic Gyro_, come il sensore KVH 1750 citato nel capitolo principale).
 
 Il FOG sfrutta l'__Effetto Sagnac__: due fasci di luce laser a stato solido vengono iniettati in versi opposti (orario e antiorario) all'interno di una bobina di fibra ottica avvolta per centinaia di metri o chilometri di lunghezza.
 
@@ -226,6 +230,7 @@ X = \frac{u_L \cdot Z}{f}, \quad Y = \frac{v_L \cdot Z}{f}
 $$
 
 ### Analisi Dell'Errore Di Profondità
+
 Differenziando la profondità $Z$ rispetto alla disparità $d$:
 
 $$
@@ -239,8 +244,8 @@ $$
 $$
 
 Questo evidenzia due limiti fisici strutturali della stereo camera:
-1. **Incertezza quadratica con la distanza**: l'errore di profondità cresce con il quadrato della distanza $Z^2$.
-2. **Ruolo della baseline $b$**: aumentando la distanza tra le telecamere $b$ si riduce l'errore a lungo raggio, ma aumenta il volume minimo cieco vicino al robot (*blind zone*) e la difficoltà di trovare corrispondenze di feature visive (corrispondenza stereo).
+1. __Incertezza quadratica con la distanza__: l'errore di profondità cresce con il quadrato della distanza $Z^2$.
+2. __Ruolo della baseline $b$__: aumentando la distanza tra le telecamere $b$ si riduce l'errore a lungo raggio, ma aumenta il volume minimo cieco vicino al robot (_blind zone_) e la difficoltà di trovare corrispondenze di feature visive (corrispondenza stereo).
 
 ## Modellistica Dello Pseudorange Nei Sistemi GNSS / GPS
 
@@ -265,7 +270,7 @@ dove $\epsilon_i$ raggruppa i disturbi ambientali di propagazione:
 - Errori di effemeridi residue del satellite.
 - Rumore termico di ricezione e riflessioni multipath.
 
-Poiché le incognite dello stato da stimare sono **quattro**:
+Poiché le incognite dello stato da stimare sono __quattro__:
 
 $$
 \mathbf{s} = [x, \; y, \; z, \; c \cdot \delta t_{\text{rx}}]^T
@@ -281,21 +286,21 @@ Risolvendo il sistema non lineare con algoritmi di minimizzazione ai minimi quad
 
 ### Principio Operativo Dell'RTK (Real Time Kinematic)
 
-Nelle applicazioni di robotica agricola o veicolare (come la piattaforma Agrobot di ISARLab), la precisione metrica standard di $3 - 5\text{ m}$ è insufficiente per condurre un veicolo tra i filari. Si impiega pertanto la tecnologia **RTK (Real Time Kinematic)**.
+Nelle applicazioni di robotica agricola o veicolare (come la piattaforma Agrobot di ISARLab), la precisione metrica standard di $3 - 5\text{ m}$ è insufficiente per condurre un veicolo tra i filari. Si impiega pertanto la tecnologia __RTK (Real Time Kinematic)__.
 
 Il sistema RTK prevede:
-1. Una **Stazione Base fissa** a terra, installata su un punto geodetico di coordinate millimetriche note.
-2. Il **Rover mobile** montato a bordo del robot.
+1. Una __Stazione Base fissa__ a terra, installata su un punto geodetico di coordinate millimetriche note.
+2. Il __Rover mobile__ montato a bordo del robot.
 
-Anziché limitarsi a decodificare i bit del codice pseudo-casuale (PRN) del segnale, i ricevitori RTK tracciano la **fase dell'onda portante radio** a frequenza $L_1 = 1575.42\text{ MHz}$, la cui lunghezza d'onda nello spazio vale appena:
+Anziché limitarsi a decodificare i bit del codice pseudo-casuale (PRN) del segnale, i ricevitori RTK tracciano la __fase dell'onda portante radio__ a frequenza $L_1 = 1575.42\text{ MHz}$, la cui lunghezza d'onda nello spazio vale appena:
 
 $$
 \lambda = \frac{c}{f} = \frac{3 \times 10^8\text{ m/s}}{1.57542 \times 10^9\text{ Hz}} \approx 19.03\text{ cm}
 $$
 
-Misurando lo sfasamento della frazione di ciclo dell'onda con risoluzione inferiore all'1%, e risolvendo in tempo reale il problema dell'__ambiguità intera di fase__ (il numero intero incognito $N$ di cicli d'onda completi interposti tra satellite e antenna mediante tecniche a doppie differenze tra Base e Rover), il sistema cancella quasi integralmente gli errori atmosferici e di satellite comuni. 
+Misurando lo sfasamento della frazione di ciclo dell'onda con risoluzione inferiore all'1%, e risolvendo in tempo reale il problema dell'__ambiguità intera di fase__ (il numero intero incognito $N$ di cicli d'onda completi interposti tra satellite e antenna mediante tecniche a doppie differenze tra Base e Rover), il sistema cancella quasi integralmente gli errori atmosferici e di satellite comuni.
 
-La stima della posizione relativa del rover rispetto alla base fissa raggiunge un'accuratezza cinematica istantanea nell'ordine di **$1\text{ centimetro}$**.
+La stima della posizione relativa del rover rispetto alla base fissa raggiunge un'accuratezza cinematica istantanea nell'ordine di __$1\text{ centimetro}$__.
 
 ## Parametri Metrologici Avanzati E Fisica Dei Sensori
 
@@ -305,14 +310,14 @@ Questa sezione approfondisce le definizioni metrologiche e i modelli fisici acce
 
 Il range dinamico descrive la capacità del sensore di misurare contemporaneamente segnali di debole intensità e segnali di fondo scala senza saturazione:
 
-- **Per grandezze energetiche o di potenza** (ad esempio l'intensità luminosa catturata dai fotodiodi del LiDAR o la potenza dei segnali RF):
-  
+- __Per grandezze energetiche o di potenza__ (ad esempio l'intensità luminosa catturata dai fotodiodi del LiDAR o la potenza dei segnali RF):
+
   $$
   \text{DR}_{\text{power}} = 10 \log_{10} \left( \frac{P_{\max}}{P_{\min}} \right) \quad [\text{dB}]
   $$
 
-- **Per grandezze di ampiezza, tensione o campo** (tensioni dei piezometri, segnali elettrici dei ponti di Wheatstone):
-  
+- __Per grandezze di ampiezza, tensione o campo__ (tensioni dei piezometri, segnali elettrici dei ponti di Wheatstone):
+
   $$
   \text{DR}_{\text{voltage}} = 20 \log_{10} \left( \frac{V_{\max}}{V_{\min}} \right) \quad [\text{dB}]
   $$
@@ -345,11 +350,11 @@ $$
 
 Sul robot reale intervengono due effetti parassiti:
 
-1. **Distorsione Hard-Iron**: generata da corpi ferromagnetici permanentemente magnetizzati montati a bordo del robot (altoparlanti, viti ferrose, telaio in acciaio, magneti permanenti dei motori DC). Produce un campo magnetico costante $\mathbf{b}_{\text{hard}}$ solidale alla terna del robot che trasla il centro della circonferenza:
-   
+1. __Distorsione Hard-Iron__: generata da corpi ferromagnetici permanentemente magnetizzati montati a bordo del robot (altoparlanti, viti ferrose, telaio in acciaio, magneti permanenti dei motori DC). Produce un campo magnetico costante $\mathbf{b}_{\text{hard}}$ solidale alla terna del robot che trasla il centro della circonferenza:
+
    $$\mathbf{B}_{\text{misurato}} = \mathbf{B}_{\text{reale}} + \mathbf{b}_{\text{hard}}$$
 
-2. **Distorsione Soft-Iron**: generata da materiali ad alta permeabilità magnetica passivi (ferro dolce, schermature metalliche, piste di rame con correnti variabili) che deflettono e comprimono le linee di flusso del campo magnetico esterno a seconda dell'orientamento. È descritta da una matrice di deformazione $3 \times 3$ simmetrica $M_{\text{soft}}$, che deforma la circonferenza in un'ellisse inclinata.
+2. __Distorsione Soft-Iron__: generata da materiali ad alta permeabilità magnetica passivi (ferro dolce, schermature metalliche, piste di rame con correnti variabili) che deflettono e comprimono le linee di flusso del campo magnetico esterno a seconda dell'orientamento. È descritta da una matrice di deformazione $3 \times 3$ simmetrica $M_{\text{soft}}$, che deforma la circonferenza in un'ellisse inclinata.
 
 Il modello completo di misura della bussola è:
 
@@ -358,20 +363,21 @@ $$
 $$
 
 #### Procedura Di Calibrazione Ad Ellisse
+
 Per calibrare il magnetometro:
 1. Si fa compiere al robot una rotazione lenta di $360^\circ$ raccogliendo un insieme di punti sul piano.
 2. Si esegue un fitting di regressione ai minimi quadrati per individuare i parametri dell'ellisse (centro $\mathbf{b}_{\text{hard}}$, assi principali e inclinazione della matrice $M_{\text{soft}}$).
 3. Si applica la trasformazione inversa:
-   
+
    $$\mathbf{B}_{\text{calibrato}} = M_{\text{soft}}^{-1} (\mathbf{B}_{\text{misurato}} - \mathbf{b}_{\text{hard}})$$
-   
+
    riportando i dati su un cerchio unitario centrato nell'origine da cui ricavare l'angolo di rotta assoluto privo di offset:
-   
+
    $$\theta = \text{atan2}(B_{y,\text{calibrato}}, B_{x,\text{calibrato}})$$
 
 ### Meccanica Dei Micro-Giroscopi MEMS E Forza Di Coriolis
 
-I giroscopi miniaturizzati realizzati con tecnologia microelettro-meccanica (MEMS) non possono includere rotori rotanti ad alta velocità a causa dell'usura per attrito e dei limiti di fabbricazione microscopica. Sfruttano invece **strutture oscillanti risonanti** (diapason, pettini elettrostatici capacitivi o campane semisferiche al silicio).
+I giroscopi miniaturizzati realizzati con tecnologia microelettro-meccanica (MEMS) non possono includere rotori rotanti ad alta velocità a causa dell'usura per attrito e dei limiti di fabbricazione microscopica. Sfruttano invece __strutture oscillanti risonanti__ (diapason, pettini elettrostatici capacitivi o campane semisferiche al silicio).
 
 Una massa sismica microscopica $m$ viene mantenuta in oscillazione sinusoidale continua a frequenza di risonanza $\omega_r$ lungo un asse primario di attuazione $x$ con velocità istantanea:
 
@@ -393,9 +399,178 @@ $$
 
 La forza di Coriolis agisce interamente lungo l'asse ortogonale $y$:
 
-$$
-F_{c,y}(t) = -2m \, \Omega_z \, v_x(t)
-$$
-
 Questa forza ciclica induce un'oscillazione secondaria lungo l'asse $y$. La deflessione ortogonale viene misurata con elevata sensibilità rilevando la variazione differenziale di capacità $\Delta C$ tra elettrodi microscopici a pettine, fornendo un segnale di tensione proporzionale alla velocità angolare esterna $\Omega_z$.
 
+---
+
+## Derivazione Analitica Del Line Fitting (OLS E WLS) in Coordinate Polari
+
+Nel contesto del rilevamento di ostacoli piani da scansioni LiDAR, la rappresentazione esplicita cartesiana $y = mx + q$ fallisce quando la retta è parallela all'asse $y$ ($m \to \infty$). Si adotta la __forma normale di Hesse__:
+
+$$
+x \cos\alpha + y \sin\alpha - r = 0
+$$
+
+dove $r \ge 0$ è la distanza minima ortogonale dall'origine alla retta e $\alpha \in [-\pi, \pi]$ è l'angolo del vettore normale orientato.
+
+### Formulazione Del Problema Di Ottimizzazione OLS
+
+Dato un insieme di $N$ punti misurati nel piano $\{ (x_i, y_i) \}_{i=1}^N$, la distanza ortogonale con segno (residuo geometrico) tra il generico punto $P_i$ e la retta candidata è:
+
+$$
+d_i = x_i \cos\alpha + y_i \sin\alpha - r
+$$
+
+L'obiettivo dei Minimi Quadrati Ordinari (OLS, _Total Least Squares_) è minimizzare la somma dei quadrati delle distanze perpendicolari:
+
+$$
+S(\alpha, r) = \sum_{i=1}^N d_i^2 = \sum_{i=1}^N \left( x_i \cos\alpha + y_i \sin\alpha - r \right)^2
+$$
+
+#### 1. Ottimizzazione Rispetto Al Parametro Distanza $r$
+
+Calcoliamo la derivata parziale prima di $S$ rispetto a $r$ e poniamola uguale a zero:
+
+$$
+\frac{\partial S}{\partial r} = -2 \sum_{i=1}^N \left( x_i \cos\alpha + y_i \sin\alpha - r \right) = 0
+$$
+
+Dividendo per $-2N$:
+
+$$
+\frac{1}{N}\sum_{i=1}^N x_i \cos\alpha + \frac{1}{N}\sum_{i=1}^N y_i \sin\alpha - r = 0
+$$
+
+Definendo il baricentro (media campionaria) dei punti misurati come:
+
+$$
+\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i, \quad \bar{y} = \frac{1}{N} \sum_{i=1}^N y_i
+$$
+
+Otteniamo la relazione fondamentale in forma chiusa per $r$:
+
+$$
+r = \bar{x} \cos\alpha + \bar{y} \sin\alpha
+$$
+
+__Interpretazione geometrica__: la retta ottima stimata passa inderogabilmente per il baricentro $(\bar{x}, \bar{y})$ dei punti misurati.
+
+---
+
+#### 2. Ottimizzazione Rispetto all'Angolo Della Normale $\alpha$
+
+Sostituendo l'espressione di $r$ all'interno del residuo $d_i$:
+
+$$
+d_i = (x_i - \bar{x}) \cos\alpha + (y_i - \bar{y}) \sin\alpha
+$$
+
+Definiamo per brevità le coordinate scarto dal baricentro:
+
+$$
+\tilde{x}_i = x_i - \bar{x}, \quad \tilde{y}_i = y_i - \bar{y}
+$$
+
+La funzione di costo $S$ dipende ora unicamente da $\alpha$:
+
+$$
+S(\alpha) = \sum_{i=1}^N \left( \tilde{x}_i \cos\alpha + \tilde{y}_i \sin\alpha \right)^2 = \sum_{i=1}^N \left( \tilde{x}_i^2 \cos^2\alpha + \tilde{y}_i^2 \sin^2\alpha + 2 \tilde{x}_i \tilde{y}_i \cos\alpha \sin\alpha \right)
+$$
+
+Sfruttando le note identità trigonometriche di duplicazione degli angoli:
+- $\cos^2\alpha = \frac{1 + \cos(2\alpha)}{2}$
+- $\sin^2\alpha = \frac{1 - \cos(2\alpha)}{2}$
+- $2 \cos\alpha \sin\alpha = \sin(2\alpha)$
+
+Raggruppiamo i termini:
+
+$$
+S(\alpha) = \frac{1}{2} \sum_{i=1}^N (\tilde{x}_i^2 + \tilde{y}_i^2) + \frac{1}{2} \cos(2\alpha) \sum_{i=1}^N (\tilde{x}_i^2 - \tilde{y}_i^2) + \sin(2\alpha) \sum_{i=1}^N (\tilde{x}_i \tilde{y}_i)
+$$
+
+Deriviamo $S(\alpha)$ rispetto ad $\alpha$ e imponiamo la condizione di stazionarietà $\frac{d S}{d \alpha} = 0$:
+
+$$
+\frac{d S}{d \alpha} = -\sin(2\alpha) \sum_{i=1}^N (\tilde{x}_i^2 - \tilde{y}_i^2) + 2 \cos(2\alpha) \sum_{i=1}^N (\tilde{x}_i \tilde{y}_i) = 0
+$$
+
+Separando le variabili trigonometriche:
+
+$$
+\sin(2\alpha) \sum_{i=1}^N (\tilde{x}_i^2 - \tilde{y}_i^2) = 2 \cos(2\alpha) \sum_{i=1}^N (\tilde{x}_i \tilde{y}_i)
+$$
+
+Dividendo per $\cos(2\alpha)$:
+
+$$
+\tan(2\alpha) = \frac{2 \sum_{i=1}^N \tilde{x}_i \tilde{y}_i}{\sum_{i=1}^N (\tilde{x}_i^2 - \tilde{y}_i^2)} = \frac{-2 \sum_{i=1}^N (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^N (y_i - \bar{y})^2 - \sum_{i=1}^N (x_i - \bar{x})^2}
+$$
+
+L'angolo della normale $\alpha$ viene calcolato senza ambiguità di quadrante tramite la funzione $\text{atan2}$:
+
+$$
+\alpha = \frac{1}{2} \text{atan2}\left( -2 \sum_{i=1}^N \tilde{x}_i \tilde{y}_i, \; \sum_{i=1}^N (\tilde{y}_i^2 - \tilde{x}_i^2) \right)
+$$
+
+Se il valore calcolato di $r = \bar{x}\cos\alpha + \bar{y}\sin\alpha$ risulta negativo, si inverte la direzione della normale ($\alpha \leftarrow \alpha + \pi$, $r \leftarrow -r$) per preservare la convenzione standard $r \ge 0$.
+
+---
+
+### Estensione Ai Minimi Quadrati Pesati (WLS)
+
+Quando i singoli punti $P_i$ presentano varianze eterogenee $\sigma_i^2$ (ad esempio a causa della dispersione radiale LiDAR che cresce con la distanza misurata $\rho_i$), si introduce il peso stocastico:
+
+$$
+w_i = \frac{1}{\sigma_i^2}
+$$
+
+La funzione di costo WLS vale:
+
+$$
+S_w(\alpha, r) = \sum_{i=1}^N w_i \left( x_i \cos\alpha + y_i \sin\alpha - r \right)^2
+$$
+
+Il baricentro pesato si ottiene come:
+
+$$
+\bar{x}_w = \frac{\sum w_i x_i}{\sum w_i}, \quad \bar{y}_w = \frac{\sum w_i y_i}{\sum w_i} \implies r = \bar{x}_w \cos\alpha + \bar{y}_w \sin\alpha
+$$
+
+E l'orientamento della normale diventa:
+
+$$
+\tan(2\alpha) = \frac{-2 \sum_{i=1}^N w_i (x_i - \bar{x}_w)(y_i - \bar{y}_w)}{\sum_{i=1}^N w_i (y_i - \bar{y}_w)^2 - \sum_{i=1}^N w_i (x_i - \bar{x}_w)^2}
+$$
+
+---
+
+### Propagazione Delle Incertezze E Matrice Jacobiana $F_{PQ}$
+
+I punti di misura laser non sono grandezze deterministiche, ma variabili aleatorie raggruppate nel vettore di misura $\mathbf{P} \in \mathbb{R}^{2N}$:
+
+$$
+\mathbf{P} = \begin{bmatrix} \rho_1 & \theta_1 & \rho_2 & \theta_2 & \dots & \rho_N & \theta_N \end{bmatrix}^T
+$$
+
+con matrice di covarianza congiunta a blocchi diagonali $C_P \in \mathbb{R}^{2N \times 2N}$. Di conseguenza, anche i parametri stimati della retta $\mathbf{Q} = [\alpha, r]^T \in \mathbb{R}^2$ sono variabili aleatorie con matrice di covarianza $C_Q = C_{AR} \in \mathbb{R}^{2 \times 2}$:
+
+$$
+C_{AR} = \begin{bmatrix} \sigma_\alpha^2 & \sigma_{\alpha r} \\ \sigma_{\alpha r} & \sigma_r^2 \end{bmatrix}
+$$
+
+Applicando la legge di propagazione lineare delle covarianze mediante il Jacobiano della trasformazione di stima:
+
+$$
+C_{AR} = F_{PQ} \, C_P \, F_{PQ}^T
+$$
+
+dove $F_{PQ} \in \mathbb{R}^{2 \times 2N}$ è la matrice Jacobiana delle funzioni di stima $\alpha(\mathbf{P})$ e $r(\mathbf{P})$ rispetto al vettore delle misure $\mathbf{P}$:
+
+$$
+F_{PQ} = \begin{bmatrix}
+\frac{\partial \alpha}{\partial \rho_1} & \frac{\partial \alpha}{\partial \theta_1} & \dots & \frac{\partial \alpha}{\partial \rho_N} & \frac{\partial \alpha}{\partial \theta_N} \\[8pt]
+\frac{\partial r}{\partial \rho_1} & \frac{\partial r}{\partial \theta_1} & \dots & \frac{\partial r}{\partial \rho_N} & \frac{\partial r}{\partial \theta_N}
+\end{bmatrix}
+$$
+
+La conoscenza esplicita di $C_{AR}$ è indispensabile nei filtri di localizzazione e SLAM (es. EKF-SLAM basato su linee): consente al robot di calcolare l'ellisse di confidenza e la distanza di Mahalanobis tra le rette osservate all'istante $t$ e le pareti già censite nella mappa globale.

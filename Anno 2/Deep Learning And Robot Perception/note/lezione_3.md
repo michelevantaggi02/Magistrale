@@ -1,3 +1,5 @@
+# lezione\_3
+
 introduzione: Nel deep learning abbiamo solo i dati grezzi del segnale, a differenza del machine learning dove le features erano già fissate. Per i tipi di problemi che andremo a risolvere è meglio avere una rete neurale a fare il lavoro di estrazione delle features.
 
 slide 5: Nessuno ti dice come le immagini sono traslate e ruotate tra loro. Dobbiamo quindi addestrare un modello in grado di estrarre le features (gli elementi in comune) e di associarle tra immagini diverse così da poterle accoppiare. In questo modo riusciamo a capire in che modo è avvenuto il cambiamento di posa degli elementi.
@@ -44,6 +46,6 @@ slide 42: abbiamo due gaussiane: una per il filtro e una per pesare l'impatto di
 
 slide 46: aumentando entrambe (come in pratica) avremo meno punti, ma più robusti
 
-slide 53: il contrasto è presente anche dopo aver calcolato il gradiente. 
+slide 53: il contrasto è presente anche dopo aver calcolato il gradiente.
 
 Harris non è invariante alla scala, perché la finestra non riesce a registrare correttamente cambiamenti di scala.

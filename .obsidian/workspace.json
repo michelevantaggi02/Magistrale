@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
+                "file": "Anno 2/Autonomous Robotics/4. Localizzazione e Filtri di Bayes.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2. Sensori per la Robotica Mobile"
+              "title": "4. Localizzazione e Filtri di Bayes"
             }
           }
         ]
@@ -195,22 +195,25 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6e19a07923072cbc",
+  "active": "500ead5a4deb3b2f",
   "lastOpenFiles": [
-    "Anno 2/Autonomous Robotics/note/lezione_5.md",
-    "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
-    "Anno 2/Autonomous Robotics/immagini/slide_29_accelerometer_spring_mass_damper_model.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_28_mems_gyroscope_ieee_spectrum.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_28_mechanical_gimbal_gyroscope.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_27_electronic_compass_magnetometer.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_20_gps_gnss_satellite_constellation_architecture.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_beacon_based_localization_indoor.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_17_camera_geometry_intrinsic_extrinsic.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_15_laser_scan_cartesian_plot.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_15_laser_scan_polar_raw.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_14_velodyne_puck_vlp16_lidar.png",
-    "Anno 2/Autonomous Robotics/1. Modelli di Movimento Stocastici.md",
+    "Anno 2/Autonomous Robotics/3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md",
+    "Anno 2/Autonomous Robotics/4. Localizzazione e Filtri di Bayes.md",
+    "Anno 2/Autonomous Robotics/immagini/slide_07_bayes_door_state_estimation_robot.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_07_bayes_hmm_dynamic_bayesian_network.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_07_bayes_belief_representations_taxonomy.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_07_martinelli_robot_localization.png",
+    "Anno 2/Autonomous Robotics/note/lezione_7.md",
     "Anno 2/Autonomous Robotics/note/lezione_6.md",
+    "Anno 2/Autonomous Robotics/immagini/slide_06_bayes_door_state_estimation_robot.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_06_bayes_hmm_dynamic_bayesian_network.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_06_bayes_belief_representations_taxonomy.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_06_feature_ransac_comparison_process.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_06_feature_ransac_final_convergence.png",
+    "Anno 2/Autonomous Robotics/immagini/slide_06_feature_ransac_initial_sampling.png",
+    "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
+    "Anno 2/Autonomous Robotics/note/lezione_5.md",
+    "Anno 2/Autonomous Robotics/1. Modelli di Movimento Stocastici.md",
     "Anno 2/Autonomous Robotics/note/lezione_4.md",
     "STRUTTURA_E_GUIDA_APPUNTI.md",
     "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
@@ -232,11 +235,7 @@
     "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
     "Anno 1/Electronic Embedded Systems/0. Introduzione.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_5.md",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_4.md",
-    "Anno 2/Deep Learning And Robot Perception/3. Scale-Space, Descrittori SIFT e Feature Matching.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas",
-    "Anno 2/Deep Learning And Robot Perception/0. Indice del Corso.md",
-    "Anno 2/Deep Learning And Robot Perception/1. Immagini, filtri e gradienti.md",
     "Anno 2/export/pdf",
     "Anno 2/export/md",
     "Anno 2/export",
