@@ -43,14 +43,18 @@ Magistrale/
 │       ├── md/                          # File Markdown uniti (Advanced Merger)
 │       └── pdf/                         # PDF finali impaginati (Better Export PDF)
 ├── Anno 2/
-│   ├── Autonomous Robotics/             # [IN CORSO] Modelli cinematici, stocastici e laboratorio
+│   ├── Autonomous Robotics/             # [IN CORSO] Modelli cinematici, stocastici, sensori, feature, Bayes, Histogram Filter
 │   │   ├── 0. Modelli Cinematici e di Movimento.md
 │   │   ├── 1. Modelli di Movimento Stocastici.md
+│   │   ├── 2. Sensori per la Robotica Mobile.md
+│   │   ├── 3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md
+│   │   ├── 4. Localizzazione e Filtri di Bayes.md
+│   │   ├── 5. Localizzazione con Histogram Filter.md
 │   │   ├── zz. Argomenti extra.md
-│   │   ├── immagini/                    # 24 figure estratte da slide ad alta risoluzione
-│   │   ├── note/                        # Trascrizioni grezze delle lezioni
+│   │   ├── immagini/                    # 71 figure estratte e generate ad alta risoluzione
+│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..8)
 │   │   └── scripts_python/
-│   │       └── motion_models_todo.py    # Modelli cinematici unicycle (Euler, RK, odeint)
+│   │       └── motion_models_todo.py
 │   └── Deep Learning And Robot Perception/ # [IN CORSO] Note approfondite di Computer Vision
 │       ├── 0. Immagini, filtri e gradienti.md
 │       └── immagini/                    # 53 immagini di supporto per filtri, gradienti, Canny
@@ -67,7 +71,7 @@ Magistrale/
 | **Anno 1** | **Electronic Embedded Systems** | Bozza | `0. Introduzione.md` | Da espandere: programmazione FPGA, sintesi VHDL, toolchain Xilinx Vivado/Vitis, sistemi Real-Time. |
 | **Anno 1** | **Machine Learning** | Bozza | `0. Introduzione.md` | Da espandere: regressione lineare/logistica, SVM, alberi decisionali, clustering, PCA, metriche di valutazione. |
 | **Anno 2** | **Deep Learning And Robot Perception** | In corso | `0. Immagini, filtri e gradienti.md`, `immagini/` | Primo capitolo corposo già redatto (450+ righe) corredato da 53 figure. Da proseguire con CNN, feature detection, object detection, segmentation, 3D perception. |
-| **Anno 2** | **Autonomous Robotics** | In corso | `0. Modelli Cinematici e di Movimento.md`, `1. Modelli di Movimento Stocastici.md`, `zz. Argomenti extra.md`, `immagini/` (24 figure), `scripts_python/` | Lezioni 2 e 4 completate. Copre: modelli cinematici deterministici (unicycle, skid, Ackermann), integrazione discreta (Euler, RK2), Velocity Motion Model deterministico e stocastico, propagazione covarianza con Jacobiani, sampling Monte Carlo, banana distribution e configurazione AMCL in ROS. |
+| **Anno 2** | **Autonomous Robotics** | In corso | 6 file (`0.` - `5.`), `zz. Argomenti extra.md`, `immagini/` (71 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, ambiguità bimodale da beacon e simulazioni in Python. |
 
 ---
 
@@ -103,19 +107,43 @@ Come configurato in `obsidian-linter`:
 ### 3.3 Gestione Immagini e Snippet CSS `titoli.css`
 Il vault include una personalizzazione CSS attiva in `.obsidian/snippets/titoli.css` che controlla la resa visiva delle immagini tramite l'attributo `alt` (o alias dei wikilink).
 
+> [!IMPORTANT] Regola Tassativa: Centratura e Ridimensionamento Obbligatori per Ogni Immagine
+> È **severamente vietato inserire immagini "nude" o prive di modificatori** (es. `![[immagine.png]]`).
+> Ogni singola figura, grafico o schema inserito negli appunti **deve essere tassativamente centrato e appropriatamente ridimensionato**:
+> 1. **Centratura sempre obbligatoria**: Ogni immagine deve contenere la parola chiave `center` affinché lo snippet CSS attivo allinei correttamente l'elemento al centro sia in Live Preview che in Reading View (e nei PDF finali).
+> 2. **Priorità alla dimensione `small` (Regola di Leggibilità del Testo)**:
+>    - `small` (45%): **Dimensione prioritaria e predefinita**. Tarata al 45% proprio per consentire l'affiancamento a coppie. Va usata ogni volta che l'immagine **non contiene testo intrinseco** (o ha pochissime scritte grandi), come fotografie di robot o sensori, figure geometriche, maschere/matrici di filtri, diagrammi semplici, grafici essenziali o schemi vettoriali.
+>    - `mid` (70%): Da riservare alle immagini che contengono testo esplicito, formule matematiche, etichette di assi o legende che risulterebbero illeggibili o affaticanti da consultare a dimensione ridotta.
+>    - `big` (90%): Riservato esclusivamente a confronti articolati a più pannelli, pipeline a step multipli, mappe 2D/3D estese o grafici complessi ad alta densità di informazioni testuali.
+>    - `full` (100%): Riservato a casi eccezionali di panoramiche o griglie a tutta larghezza.
+> 3. **Convenzione di sintassi**: `![[nome_file.png|center <dimensione>]]` (es. `![[foto.png|center small]]`, `![[grafico_con_testo.png|center mid]]`, `![[pipeline_densa.png|center big]]`).
+
+#### 3.3.1 Regola Tassativa: Affiancamento Obbligatorio per Immagini `small` in Sequenza (Side-by-Side)
+> [!IMPORTANT] Immagini `small` Consecutive sulla Stessa Riga
+> Quando all'interno della stessa sezione o paragrafo compaiono **due (o più) immagini `small` consecutive** (ad esempio due prospettive di una piattaforma, due sensori confrontati, due maschere di filtri, o due grafici complementari):
+> 1. **Inserimento affiancato sulla stessa riga**: È **severamente vietato impilarle verticalmente** lasciando righe vuote tra l'una e l'altra. Devono essere scritte **sulla medesima riga di testo, separate solo da un singolo spazio**:
+>    ```markdown
+>    ![[immagine_1.png|center small]] ![[immagine_2.png|center small]]
+>    ```
+> 2. **Layout compatto ed eliminazione degli spazi vuoti**: Avendo ciascuna larghezza del 45%, lo snippet CSS le posiziona automaticamente una accanto all'altra centrate nel foglio (occupando insieme il 90% con spaziatura centrale uniforme di 12px), evitando spreco di spazio verticale e scrolling superfluo.
+> 3. **Sequenze di 3 o più immagini**: Se una sequenza comprende 3 o 4 immagini `small`, vanno comunque inserite consecutivamente sulla stessa riga (o a gruppi di due); il motore flexbox le manderà a capo automaticamente mantenendole perfettamente bilanciate a griglia.
+
 #### Classi Alt supportate
 - `center`: centra l'immagine orizzontalmente (`margin: auto;`).
-- `small`: imposta la larghezza al **50%** (`width: 50%;`).
-- `mid`: imposta la larghezza al **70%** (`width: 70%;`).
-- `big`: imposta la larghezza al **90%** (`width: 90%;`).
+- `small`: imposta la larghezza al **45%** (`width: 45%;`) $\to$ **Scelta prioritaria di default**; permette l'affiancamento a coppie.
+- `mid`: imposta la larghezza al **70%** (`width: 70%;`) $\to$ Per immagini con testo ed etichette rilevanti.
+- `big`: imposta la larghezza al **90%** (`width: 90%;`) $\to$ Per diagrammi complessi e multi-pannello ad alta densità.
 - `full`: imposta la larghezza al **100%** (`width: 100%;`).
 
 #### Esempi di Inclusione
 Nei file Markdown si possono combinare le direttive separandole da spazi:
 ```markdown
-![[filtro passa basso.svg|small center]]
-![[ADC.svg|center big]]
-![[2.10_istogramma.png|center mid]]
+<!-- Due immagini consecutive affiancate sulla stessa riga -->
+![[robot_agricolo.png|center small]] ![[robot_indoor.png|center small]]
+
+<!-- Immagine singola con testo o diagramma esteso -->
+![[istogramma_dettagliato.png|center mid]]
+![[architettura_pipeline.png|center big]]
 ```
 > [!NOTE] Risoluzione percorsi immagini
 > I file grafici vanno posizionati nella sottocartella `immagini/` appartenente alla materia corrente (es. `Anno 2/Deep Learning And Robot Perception/immagini/`). Obsidian risolve i link corti `![[nome_file.png]]` automaticamente.
@@ -236,7 +264,7 @@ Gli appunti del vault non devono sembrare un'enciclopedia asettica o un manuale 
 
 #### 4. Immagini e Schemi come Baricentro
 - **Visual storytelling**: Introdurre l'immagine con una riga, mostrarla, e commentare a caldo il dettaglio saliente. Non riscrivere per esteso ciò che l'immagine mostra già con evidenza.
-- **Sintassi pulita**: Integrare le immagini con il formato naturale `![[immagine.png]]` o specificando il modificatore CSS (`|center mid`, `|center big`) quando occorre scalarla.
+- **Sintassi pulita e conforme**: Integrare sempre le immagini specificando i modificatori obbligatori (`|center mid`, `|center big`, `|center small`), senza mai lasciare inclusioni prive di centratura e scala.
 
 #### 5. Callout Mirati e Ipertestualità (Wikilink)
 - **Callout agili**: Usare `>[!NOTE]`, `>[!IMPORTANT]`, `>[!EXAMPLE]`. Possono contenere grafici, formule o tabelle. Titoli brevi e orientati al tema (`>[!NOTE] PyTorch`, `>[!IMPORTANT] Errore di Drift`).
@@ -294,7 +322,7 @@ flowchart TD
 2. **Fase 2 - Analisi Note Manoscritte e Revisione Critica degli Errori**: Esaminare le annotazioni dello studente e le spiegazioni orali del docente. Analizzare criticamente la presenza di eventuali errori concettuali, formule trascritte con sviste algebriche o sovrapposizioni notazionali ambigue. Generare schemi vettoriali custom (SVG) solo per chiarire concetti mancanti o disegni alla lavagna.
 3. **Fase 3 - Analisi, Traduzione e Rielaborazione**: Leggere e rielaborare i contenuti delle slide traducendoli integralmente in lingua italiana con rigore accademico e chiarezza didattica, correggendo direttamente nel testo qualsiasi errore presente nelle note di partenza.
 4. **Fase 4 - Numerazione e Titolo**: Assegnare il nome file progressivo corretto (partendo da `0.` per il capitolo iniziale della materia), allineando perfettamente l'heading H1.
-5. **Fase 5 - Composizione e Integrazione Figure**: Redigere il documento alternando spiegazioni teoriche, formule KaTeX rigorose ed esempi visivi basati sulle immagini estratte, formattate con `![[immagine.png|center mid/big]]`.
+5. **Fase 5 - Composizione e Integrazione Figure**: Redigere il documento alternando spiegazioni teoriche, formule KaTeX rigorose ed esempi visivi basati sulle immagini estratte, formattate tassativamente con centratura e classe di dimensione appropriata (es. `![[immagine.png|center mid]]` o `![[immagine.png|center big]]`).
 6. **Fase 6 - Segnalazione Finale delle Correzioni all'Utente**: Al termine della stesura, descrivere esplicitamente all'utente le incongruenze concettuali rilevate nelle note e le correzioni applicate, così da permettergli di visionare le modifiche e verificare la teoria.
 
 ### 4.2 Aggiornamento ed Esportazione
@@ -318,6 +346,9 @@ flowchart TD
   - `0. Modelli Cinematici e di Movimento.md` (Lezione 2): cinematica del disco, car-like, unicycle, ICR, integrazione esatta ad arco vs approssimazioni di Eulero e Runge-Kutta.
   - `1. Modelli di Movimento Stocastici.md` (Lezione 4): formulazione probabilistica dello stato, Velocity Motion Model, Odometry Motion Model, convenzioni parametri di rumore $\alpha_1 \dots \alpha_4$ (e ruolo di $\alpha_5$ per robot olonomi/omni), algoritmi di sampling stocastico con box-muller e inversione su CDF.
   - `2. Sensori per la Robotica Mobile.md` (Lezione 5): classificazione PC/EC e attivi/passivi, encoder ottici in quadratura, IMU 3D e deriva quadratica $O(t^2)$, ToF Laser 2D (trigonometria polare-cartesiana per dati LIS) vs LiDAR 3D Velodyne VLP-16, telecamere e modello prospettico pinhole con matrici intrinseca ed estrinseca (bearing-only sensor), sistemi a beacon e GNSS/GPS con correzione RTK, appendice metrologica e sensori fisici (bussola, giroscopi meccanici/MEMS, accelerometro molla-massa-smorzatore).
+  - `3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md` (Lezione 6): mappe continue (line-map, geometriche) vs discrete (griglie di occupazione, quadtree, octomap), estrazione feature di linea da scansioni laser 2D (Hesse-normal form), algoritmi Split-and-Merge, RANSAC ed estrazione globale con trasformata di Hough a quattro quadranti.
+  - `4. Localizzazione e Filtri di Bayes.md` (Lezione 7): problema della localizzazione e sorgenti di incertezza, rappresentazione del belief (tassonomia unimodale, multimodale, griglia, topologica), HMM e rete bayesiana dinamica, algoritmo del Filtro di Bayes continuo, derivazione induttiva predizione/correzione, esempio della porta ed introduzione ai filtri gaussiani.
+  - `5. Localizzazione con Histogram Filter.md` (Lezione 8): Markov Localization non-parametrica su griglia discreta, superamento del limite computazionale dell'integrale continuo, formulazione discreta con mappa $M$, algoritmo Histogram Filter (predizione per convoluzione discreta e correzione bayesiana normalizzata), dicotomia distribution computation vs sampling stocastico, modello 1D con sensore range su beacon (ambiguità bimodale speculare a singolo beacon e risoluzione unimodale con beacon multipli), analisi di sensibilità della risoluzione spaziale $\Delta x$ e della maledizione della dimensionalità in SE(2).
 - **Materiale Grafico**: La cartella `immagini/` contiene tutte le figure vettoriali e raster estratte a 300 DPI dalle slide con padding 12px bianco e conformità anti-crop.
 - **Punto di Partenza**: Integrare le formule teoriche con il codice già strutturato in `scripts_python/motion_models_todo.py`:
   - Modello differenziale continuo: $\dot{x} = v \cos\theta$, $\dot{y} = v \sin\theta$, $\dot{\theta} = \omega$.
@@ -344,7 +375,8 @@ Prima di concludere qualsiasi sessione di scrittura o refactoring di un appunto:
 - [ ] **Title Case**: Le parole del titolo rispettano il Title Case.
 - [ ] **Titoli H3 in Giù (No Sotto-Numerazioni / Sì Step Algoritmici)**: Nessun titolo H3+ presenta sotto-numerazioni decimali di sezione (es. `2.1`); è invece mantenuta l'indicazione dello step (`Step N:`) per procedure e algoritmi a più passaggi.
 - [ ] **Risoluzione Immagini**: Tutte le immagini referenziate esistono nella sottocartella `immagini/` della materia.
-- [ ] **Snippet CSS Immagini**: Le immagini includono i modificatori di visualizzazione appropriati (es. `|center mid` o `|center big`).
+- [ ] **Centratura e Ridimensionamento Immagini**: Ogni singola immagine include obbligatoriamente `center` e la classe di dimensione appropriata (priorità a `|center small`), senza mai lasciare link grafici privi di modificatori.
+- [ ] **Affiancamento Immagini Small Consecutive**: Le immagini `small` che compaiono in sequenza sono posizionate sulla stessa riga (separate da uno spazio) per comparire affiancate orizzontalmente anziché impilate verticalmente.
 - [ ] **Formule Matematiche**: Tutte le formule matematiche sono bilanciate e conformi a KaTeX.
 - [ ] **Sintassi Tipografica Linter**: I termini chiave usano il doppio underscore `__termine__` e il corsivo usa il singolo `_termine_`.
 - [ ] **Integrità degli Elenchi**: Gli elenchi puntati o numerati non sono spezzati da immagini, callout o altri blocchi intermedi; ogni elenco viene concluso prima di inserire figure o callout di approfondimento.

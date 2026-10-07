@@ -19,6 +19,7 @@
 	- [[#1. Modelli Di Movimento Stocastici#Campionamento Con Modelli Eulero E Runge-Kutta 2|Campionamento Con Modelli Eulero E Runge-Kutta 2]]
 	- [[#1. Modelli Di Movimento Stocastici#Analisi Degli Scatter Plot: L'Effetto Delle Varianze|Analisi Degli Scatter Plot: L'Effetto Delle Varianze]]
 	- [[#1. Modelli Di Movimento Stocastici#Configurazione Di AMCL In ROS E Modelli Di Movimento|Configurazione Di AMCL In ROS E Modelli Di Movimento]]
+- [[#Frammento configurazione Nav2 AMCL (ROS2)|Frammento configurazione Nav2 AMCL (ROS2)]]
 - [[#2. Sensori per la Robotica Mobile|2. Sensori per la Robotica Mobile]]
 	- [[#2. Sensori per la Robotica Mobile#Il Ruolo Cruciale Della Percezione Nella Robotica Mobile|Il Ruolo Cruciale Della Percezione Nella Robotica Mobile]]
 	- [[#2. Sensori per la Robotica Mobile#Tassonomia E Classificazione Dei Sensori|Tassonomia E Classificazione Dei Sensori]]
@@ -44,6 +45,15 @@
 	- [[#4. Localizzazione E Filtri Di Bayes#Esempio Didattico Dettagliato: La Porta Di Thrun|Esempio Didattico Dettagliato: La Porta Di Thrun]]
 	- [[#4. Localizzazione E Filtri Di Bayes#Dimostrazione Formale Del Filtro Di Bayes per Induzione|Dimostrazione Formale Del Filtro Di Bayes per Induzione]]
 	- [[#4. Localizzazione E Filtri Di Bayes#Limiti dell'Ipotesi Di Markov E Verso I Filtri Gaussiani|Limiti dell'Ipotesi Di Markov E Verso I Filtri Gaussiani]]
+- [[#5. Localizzazione Con Histogram Filter|5. Localizzazione Con Histogram Filter]]
+	- [[#5. Localizzazione Con Histogram Filter#Dal Filtro Continuo Alla Tassellatura Dello Spazio|Dal Filtro Continuo Alla Tassellatura Dello Spazio]]
+	- [[#5. Localizzazione Con Histogram Filter#Formulazione Discreta Del Filtro Con Mappa|Formulazione Discreta Del Filtro Con Mappa]]
+	- [[#5. Localizzazione Con Histogram Filter#Algoritmo Dell'Histogram Filter|Algoritmo Dell'Histogram Filter]]
+- [[#Algoritmo procedurale dell'Histogram Filter|Algoritmo procedurale dell'Histogram Filter]]
+	- [[#Algoritmo procedurale dell'Histogram Filter#Calcolo Della Distribuzione Vs Campionamento Stocastico|Calcolo Della Distribuzione Vs Campionamento Stocastico]]
+	- [[#Algoritmo procedurale dell'Histogram Filter#Progettazione Di Un Histogram Filter 1D|Progettazione Di Un Histogram Filter 1D]]
+	- [[#Algoritmo procedurale dell'Histogram Filter#Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale|Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale]]
+	- [[#Algoritmo procedurale dell'Histogram Filter#Limiti Computazionali E Transizione Verso Spazi 2D|Limiti Computazionali E Transizione Verso Spazi 2D]]
 - [[#Zz. Argomenti Extra|Zz. Argomenti Extra]]
 	- [[#Zz. Argomenti Extra#Metodi Di Integrazione ODE (Eulero, RK2, RK4)|Metodi Di Integrazione ODE (Eulero, RK2, RK4)]]
 	- [[#Zz. Argomenti Extra#Derivazione Analitica Del Drift Quadratico Nelle IMU|Derivazione Analitica Del Drift Quadratico Nelle IMU]]
@@ -51,6 +61,7 @@
 	- [[#Zz. Argomenti Extra#Modellistica Dello Pseudorange Nei Sistemi GNSS / GPS|Modellistica Dello Pseudorange Nei Sistemi GNSS / GPS]]
 	- [[#Zz. Argomenti Extra#Parametri Metrologici Avanzati E Fisica Dei Sensori|Parametri Metrologici Avanzati E Fisica Dei Sensori]]
 	- [[#Zz. Argomenti Extra#Derivazione Analitica Del Line Fitting (OLS E WLS) in Coordinate Polari|Derivazione Analitica Del Line Fitting (OLS E WLS) in Coordinate Polari]]
+	- [[#Zz. Argomenti Extra#Formulazione Matriciale Dell'Histogram Filter Come Catena Di Markov|Formulazione Matriciale Dell'Histogram Filter Come Catena Di Markov]]
 
 # 0. Modelli Cinematici E Di Movimento
 
@@ -75,7 +86,7 @@ I modelli cinematici di movimento sono il punto di partenza: ci servono sia per 
 
 Per comprendere la cinematica di un veicolo su ruote, partiamo dal caso elementare di un disco che rotola su un piano orizzontale mantenendo il proprio piano sagittale (il piano verticale che contiene il disco):
 
-![[slide_06_rolling_disk.png]]
+![[slide_06_rolling_disk.png|center small]]
 
 Lo stato del sistema è descritto dalla __posa del robot__ $\mathbf{x}$, che rappresenta il vettore nello spazio di configurazione $\mathcal{C}$:
 
@@ -102,7 +113,7 @@ In questa fase non consideriamo forze, masse o coppie motrici: ci muoviamo nel c
 
 Per definire modelli cinematici analitici trattabili formuliamo alcune ipotesi ideali sul contatto ruota-suolo:
 
-![[slide_13_pure_rolling_wheel_contact.png]]
+![[slide_13_pure_rolling_wheel_contact.png|center small]]
 
 - Moto confinato su una superficie perfettamente piana.
 - Ruote rigide e indeformabili con contatto puntiforme con il terreno.
@@ -125,9 +136,7 @@ I veicoli terrestri su ruote si raggruppano principalmente in tre famiglie costr
 - Posa: $\mathbf{x} = [x, y, \theta]^T$
 - Segnale di controllo: $\mathbf{u} = [v, \omega]^T$ (velocità lineare e velocità angolare)
 
-![[slide_07_differential_steering_unicycle_model.png]]
-
-![[slide_07_differential_drive_robots.png]]
+![[slide_07_differential_steering_unicycle_model.png|center small]] ![[slide_07_differential_drive_robots.png|center small]]
 
 ### 2. Skid-Steering
 
@@ -135,9 +144,7 @@ Comune nei robot cingolati, nelle ruspe compatte (tipo Bobcat) e nei rover da es
 - Posa: $\mathbf{x} = [x, y, \theta]^T$
 - Segnale di controllo: $\mathbf{u} = [v, \omega]^T$
 
-![[slide_08_skid_steering_model.png]]
-
-![[slide_08_skid_steering_vehicles.png]]
+![[slide_08_skid_steering_model.png|center small]] ![[slide_08_skid_steering_vehicles.png|center small]]
 
 ### 3. Ackermann Steering (Car-Like)
 
@@ -145,13 +152,9 @@ Comune nei robot cingolati, nelle ruspe compatte (tipo Bobcat) e nei rover da es
 - Posa: $\mathbf{x} = [x, y, \theta, \psi]^T$, dove $\psi$ indica l'angolo di sterzo delle ruote anteriori.
 - Segnale di controllo: $\mathbf{u} = [v, \omega]^T$ (velocità longitudinale e velocità di variazione dello sterzo).
 
-![[slide_09_ackermann_turning_radius.png]]
+![[slide_09_ackermann_turning_radius.png|center small]] ![[slide_09_bicycle_model_kinematics.png|center small]]
 
-![[slide_09_bicycle_model_kinematics.png]]
-
-![[slide_09_ackermann_mechanism_3d.png]]
-
-![[slide_09_formula1_car.png]]
+![[slide_09_ackermann_mechanism_3d.png|center small]] ![[slide_09_formula1_car.png|center small]]
 
 >[!NOTE]
 >Nel seguito ci concentreremo quasi esclusivamente sul modello a guida differenziale (unicycle), che costituisce lo standard de facto anche nel middleware ROS (dove le velocità vengono scambiate sul topic `/cmd_vel`).
@@ -160,7 +163,7 @@ Comune nei robot cingolati, nelle ruspe compatte (tipo Bobcat) e nei rover da es
 
 Fissiamo una terna di riferimento cartesiana fissa inerziale nel mondo (_space frame_) e una terna solidale al telaio del robot (_body frame_):
 
-![[slide_12_unicycle_frames_kinematics.png]]
+![[slide_12_unicycle_frames_kinematics.png|center small]]
 
 La posa e il comando di controllo sono:
 
@@ -180,7 +183,7 @@ $$
 
 Conoscendo la posa iniziale $\mathbf{x}_0$ e la storia temporale dei comandi $\mathbf{u}(t) = [v(t), \omega(t)]^T$, integrando queste equazioni nel tempo possiamo ricostruire la traiettoria percorsa dal robot nel piano:
 
-![[slide_14_scaramuzza_trajectory_path.png]]
+![[slide_14_scaramuzza_trajectory_path.png|center small]]
 
 ## Discretizzazione Nel Dominio Digitale
 
@@ -192,7 +195,7 @@ $$
 \mathbf{x}_{t+1} = f(\mathbf{x}_t, \mathbf{u}_t, T)
 $$
 
-![[slide_14_pose_trajectory_discrete_simulation.png]]
+![[slide_14_pose_trajectory_discrete_simulation.png|center mid]]
 
 ### Metodo Di Eulero Esplicito
 
@@ -247,7 +250,7 @@ def runge_kutta(p, v, w, T):
 
 Eulero e Runge-Kutta sono schemi numerici approssimati. Se però assumiamo che i comandi di velocità $v$ e $\omega$ siano __rigorosamente costanti__ durante il periodo di controllo $T$, il moto del robot differenziale non deve essere approssimato: si muove esattamente lungo un __arco di circonferenza__.
 
-![[slide_18_velocity_motion_model_circle_arc.png]]
+![[slide_18_velocity_motion_model_circle_arc.png|center small]]
 
 Dal moto circolare uniforme sappiamo che il raggio dell'arco di traiettoria è dato da:
 
@@ -341,7 +344,6 @@ Possiamo affidarci a questi modelli per risolvere da soli il problema della loca
 Integrando nel tempo ad anello aperto, questi piccoli errori si sommano a ogni passo: l'odometria inevitabilmente __deriva__ (_drift_), e la posa stimata divergerà da quella reale.
 
 Per questo motivo, la cinematica e l'odometria costituiscono il modello di previsione temporale, ma per mantenere la stima accurata dovremo fondere le misure dei sensori esterocettivi (LiDAR, videocamere, sonar) all'interno di filtri di stima stocastici come i filtri di Bayes, l'Extended Kalman Filter (EKF) e gli algoritmi di SLAM.
-
 
 
 # 1. Modelli Di Movimento Stocastici
@@ -475,7 +477,7 @@ $$
 
 Non possiamo trasformare la covarianza in modo analitico esatto. Dobbiamo approssimare la funzione non lineare $f(X)$ sviluppandola in serie di Taylor al primo ordine attorno al valore atteso $\mu = E[X]$:
 
-![[slide_10_uncertainty_propagation_scalar_linearization.png|center mid]]
+![[slide_10_uncertainty_propagation_scalar_linearization.png|center small]]
 
 $$
 f(X) \approx f(\mu) + F_X (X - \mu)
@@ -580,7 +582,7 @@ $$
 
 Per estrarre i campioni di rumore $\epsilon_{\sigma^2}$ possiamo impiegare due distribuzioni:
 
-![[slide_18_normal_and_triangular_distributions.png|center mid]]
+![[slide_18_normal_and_triangular_distributions.png|center small]]
 
 1. __Distribuzione Normale Gaussiana__:
 
@@ -679,13 +681,13 @@ I quattro grafici mettono a confronto la posa precedente (la crocetta blu al cen
 
 Quando le varianze su velocità lineare e angolare sono bilanciate ($\alpha$ comparabili), la nuvola di campioni assume una forma ellissoidale allungata lungo la traiettoria, con dispersione uniforme:
 
-![[slide_19_sampling_equal_variances.png|center mid]]
+![[slide_19_sampling_equal_variances.png|center small]]
 
 ### 2. Elevata Varianza Angolare $\omega$ (Top-Right): La "Banana Shape"
 
 Quando la varianza sulla velocità angolare è elevata rispetto a quella traslazionale, la nube di pose si dispone lungo un arco di cerchio ben visibile, originando la celebre forma arcuata a banana (_banana-shaped distribution_):
 
-![[slide_19_sampling_large_omega_variance.png|center mid]]
+![[slide_19_sampling_large_omega_variance.png|center small]]
 
 Poiché il raggio della traiettoria è $r = \hat{v}/\hat{\omega}$, piccole variazioni di $\hat{\omega}$ provocano grandi cambiamenti nel raggio di curvatura, curvando la distribuzione delle particelle nello spazio cartesiano. Questa non-gaussianità palese è la ragione principale per cui l'Extended Kalman Filter (che presuppone distribuzioni gaussiane) fatica su lunghe manovre curve, mentre il Particle Filter eccelle.
 
@@ -693,13 +695,13 @@ Poiché il raggio della traiettoria è $r = \hat{v}/\hat{\omega}$, piccole varia
 
 Se la varianza su $\omega$ è quasi trascurabile rispetto a quella su $v$, il robot procede quasi in linea retta: i campioni collassano su una retta sottile allineata con l'avanzamento longitudinale:
 
-![[slide_19_sampling_small_omega_variance.png|center mid]]
+![[slide_19_sampling_small_omega_variance.png|center small]]
 
 ### 4. Elevata Varianza Su $\gamma$ (Bottom-Right)
 
 Quando incrementiamo il terzo parametro $\gamma$, l'orientamento $\theta$ subisce oscillazioni casuali supplementari, allargando l'apertura angolare della nube di pose senza alterare la curvatura media della traiettoria:
 
-![[slide_19_sampling_large_gamma_variance.png|center mid]]
+![[slide_19_sampling_large_gamma_variance.png|center small]]
 
 ## Configurazione Di AMCL In ROS E Modelli Di Movimento
 
@@ -749,7 +751,6 @@ amcl:
 >- Il parametro `alpha5` viene impiegato esclusivamente per piattaforme omnidirezionali (`omni`), dove modella la componente di rumore sulla traslazione laterale ortogonale (_strafe_).
 
 
-
 # 2. Sensori per la Robotica Mobile
 
 Nei capitoli precedenti ([[0. Modelli Cinematici e di Movimento|0. Modelli Cinematici e di Movimento]] e [[1. Modelli di Movimento Stocastici|1. Modelli di Movimento Stocastici]]) abbiamo affrontato la propagazione dello stato del robot nel tempo partendo dai comandi di controllo e dalla cinematica delle ruote. Abbiamo dimostrato matematicamente come, anche con modelli probabilistici raffinati, la pura integrazione nel tempo (odometria o _dead reckoning_) accumuli inesorabilmente incertezza: la varianza della distribuzione cresce senza limite e il robot "diventa cieco" rispetto alla propria posizione reale nel mondo.
@@ -767,7 +768,7 @@ I tre interrogativi cardine della navigazione autonoma dipendono interamente dal
 
 Nel nostro laboratorio (ISARLab) sono operative piattaforme robotiche eterogenee, ciascuna equipaggiata con una specifica suite sensoriale tarata sul dominio operativo:
 
-![[slide_05_agrobot_platform.png]]
+![[slide_05_agrobot_platform.png|center small]]
 
 La piattaforma __Agrobot__ è concepita per la navigazione autonoma in contesti agricoli non strutturati (vigneti e oliveti). Presenta una cinematica a slittamento (_skid steering_), trazione integrale su quattro ruote motrici e una suite di sensori altamente ridondante:
 - __LiDAR 3D Velodyne__: per la scansione volumetrica dei filari e la navigazione tra gli alberi.
@@ -776,7 +777,7 @@ La piattaforma __Agrobot__ è concepita per la navigazione autonoma in contesti 
 - __Encoder ottici sulle ruote__: per l'odometria cinematico-differenziale a breve termine.
 - __Camera multispettrale__: dedicata al monitoraggio dello stato di salute delle colture e dell'indice di vigore vegetativo.
 
-![[slide_05_turtlebot_platform.png]]
+![[slide_05_turtlebot_platform.png|center small]]
 
 La piattaforma __TurtleBot__ è invece il riferimento per la robotica di servizio indoor su pavimenti lisci. Dotata di cinematica a trazione differenziale pura, integra:
 - __Encoder ottici di quadratura__: calettati direttamente sull'asse dei due motori di trazione.
@@ -830,11 +831,11 @@ Un robot mobile deve percepire, analizzare e interpretare lo stato del proprio a
 
 L'encoder è un dispositivo elettromeccanico che converte la posizione angolare o il moto rotatorio di un albero in un segnale analogico o digitale, fungendo a tutti gli effetti da __trasduttore di angolo__.
 
-![[slide_11_optical_encoder_quadrature_signals.png]]
+![[slide_11_optical_encoder_quadrature_signals.png|center small]]
 
 Un encoder rotativo incrementale ottico è costituito da un disco trasparente calettato sull'albero rotante, su cui è serigrafato un reticolo circolare alternato di settori opachi e trasparenti ad alta densità. Una sorgente luminosa (LED infrarosso) illumina il reticolo, mentre sul lato opposto una coppia di fotorilevatori (fotodiodi o fototransistor) genera una transizione di tensione logica ogni volta che un settore opaco interrompe il fascio.
 
-![[slide_11_optical_encoder_disc_broadcom.png]]
+![[slide_11_optical_encoder_disc_broadcom.png|center small]]
 
 ### Canali In Quadratura E Determinazione Del Verso
 
@@ -866,8 +867,7 @@ Ciascun periodo dell'onda quadra viene suddiviso in 4 stati discreti ($S_1, S_2,
 
 Gli encoder incrementali integrano inoltre un terzo canale, denominato __Canale di Indice__ o __Index ($I$)__ (indicato con la traccia $I$ nello schema). Questo canale possiede un'unica fenditura radiale e genera un solo impulso isolato a ogni giro completo ($360^\circ$). Serve come punto di zero assoluto (_homing_) per azzerare i registri di conteggio e identificare la posizione iniziale assoluta del meccanismo.
 
-![[slide_11_robotic_arm_joint_encoders.png]]
-![[slide_11_wheel_motor_encoder_assembly.png]]
+![[slide_11_robotic_arm_joint_encoders.png|center small]] ![[slide_11_wheel_motor_encoder_assembly.png|center small]]
 
 Gli encoder trovano applicazione sistematica sia nei giunti rotoidali dei manipolatori robotici per la cinematica diretta, sia calettati sull'albero dei motori a corrente continua nelle ruote di trazione dei robot mobili per calcolare l'odometria differenziale.
 
@@ -875,7 +875,7 @@ Gli encoder trovano applicazione sistematica sia nei giunti rotoidali dei manipo
 
 L'__Inertial Measurement Unit (IMU)__ è un apparato propriocettivo a stato solido che sfrutta la combinazione di accelerometri e giroscopi per stimare la velocità angolare, l'accelerazione lineare e, mediante integrazione temporale, l'orientamento, la velocità traslazionale e la posizione relativa del veicolo mobile.
 
-![[slide_12_imu_3axis_accelerometers_gyroscopes.png]]
+![[slide_12_imu_3axis_accelerometers_gyroscopes.png|center small]]
 
 Una configurazione a 6 gradi di libertà (6-DoF) standard allinea 3 accelerometri lineari ortogonali lungo gli assi del sistema di riferimento solidale al corpo del robot (_body frame_ $\{b\}$, individuato dalla terna $x^b, y^b, z^b$) e 3 giroscopi angolari disposti attorno agli stessi assi:
 - __Giroscopi__: misurano i tassi di rotazione angolare istantanei $\boldsymbol{\omega}^b = [\omega_x, \omega_y, \omega_z]^T$ (rollio, beccheggio, imbardata).
@@ -899,7 +899,7 @@ dove $R_w^b$ è la matrice di rotazione che descrive l'orientamento del robot ri
 > [!NOTE] Approfondimento Teorico
 > Per la derivazione analitica formale dell'accoppiamento gravità-orientamento (che genera una deriva fino a $O(t^3)$), l'esempio numerico quantitativo ($18\text{ metri}$ di errore dopo $60\text{ s}$) e il principio fisico dell'effetto Sagnac nei giroscopi a fibra ottica FOG, si veda [[zz. Argomenti extra#Derivazione Analitica Del Drift Quadratico Nelle IMU|zz. Argomenti extra: Derivazione Analitica Del Drift Quadratico Nelle IMU]].
 
-![[slide_12_imu_fiber_optic_sensor.png]]
+![[slide_12_imu_fiber_optic_sensor.png|center small]]
 
 Nelle applicazioni critiche (aerospaziale, veicoli a guida autonoma) si impiegano sensori ad altissima precisione come i giroscopi a fibra ottica (__FOG__, _Fiber Optic Gyro_, quale il modulo KVH 1750 illustrato), capaci di ridurre la deriva a frazioni minime di grado all'ora.
 
@@ -918,7 +918,7 @@ Il fattore $2$ a denominatore tiene conto del tragitto bidirezionale (andata e r
 - __Laser scanner 2D__: il raggio laser è deflesso su un unico piano orizzontale tramite uno specchio rotante motorizzato. Il sensore produce una scansione polare bidimensionale $r(\theta)$ che interseca gli ostacoli lungo una singola "fetta" orizzontale dell'ambiente.
 - __LiDAR 3D__: sfrutta un fascio multiplo di laser sovrapposti o un prisma rotante bidirezionale per coprire un intero __angolo solido__ nello spazio tridimensionale, generando una densa __nuvola di punti__ (_point cloud_) che descrive l'ambiente in coordinate volumetriche $(X, Y, Z)$.
 
-![[slide_14_velodyne_puck_vlp16_lidar.png]]
+![[slide_14_velodyne_puck_vlp16_lidar.png|center small]]
 
 Un esempio industriale diffuso è il sensore __Velodyne Puck VLP-16__, equipaggiato a bordo del nostro robot Agrobot. Le specifiche operative del costruttore evidenziano le prestazioni tipiche di un sensore 3D compatto:
 
@@ -936,8 +936,7 @@ Un esempio industriale diffuso è il sensore __Velodyne Puck VLP-16__, equipaggi
 
 Per comprendere a fondo il funzionamento di un laser scanner 2D, analizziamo i dati reali acquisiti all'interno del laboratorio LIS (_Laboratorio di Sistemi Intelligenti_):
 
-![[slide_15_laser_scan_polar_raw.png]]
-![[slide_15_laser_scan_cartesian_plot.png]]
+![[slide_15_laser_scan_polar_raw.png|center small]] ![[slide_15_laser_scan_cartesian_plot.png|center small]]
 
 I dati grezzi forniti dal driver ROS del laser scanner non sono coppie di coordinate $(x, y)$, ma consistono in un vettore unidimensionale di distanze ordinate:
 
@@ -981,7 +980,7 @@ Come accennato nella panoramica iniziale, una telecamera stereoscopica utilizza 
 > [!NOTE] Approfondimento Teorico
 > Per la derivazione geometrica completa della triangolazione stereoscopica ($Z = \frac{f \cdot b}{d}$) e l'analisi dell'incertezza quadratica di profondità in funzione della baseline $b$, si veda [[zz. Argomenti extra#Geometria Della Visione Stereoscopica|zz. Argomenti extra: Geometria Della Visione Stereoscopica]].
 
-![[slide_17_camera_geometry_intrinsic_extrinsic.png]]
+![[slide_17_camera_geometry_intrinsic_extrinsic.png|center mid]]
 
 ### Il Modello Pinhole Ideale
 
@@ -1046,7 +1045,7 @@ La navigazione tramite punti cospicui noti (_beacons_) accompagna la storia dell
 - __Beacon naturali__: astri (stella polare, sole), cime montuose o profili costieri.
 - __Beacon artificiali__: fari marittimi lungo le coste, boe luminose e radiofari di navigazione aerea.
 
-![[slide_19_beacon_based_localization_indoor.png]]
+![[slide_19_beacon_based_localization_indoor.png|center small]]
 
 Nella robotica indoor sono stati sviluppati sistemi basati su colonne o fari riflettenti passivi posizionati sulle pareti o sul soffitto, interrogati da un emettitore rotante a bordo del robot. Misurando gli angoli azimutali $\theta_1, \theta_2, \dots$ di ritorno verso i beacon di coordinate note, il robot risolve un problema di __triangolazione trigonometrica__.
 
@@ -1061,7 +1060,7 @@ Per questo motivo, la ricerca moderna in robotica mobile ha progressivamente abb
 
 In ambienti esterni (_outdoor_), il sistema di riferimento a beacon per eccellenza è la costellazione satellitare __GNSS__ (_Global Navigation Satellite System_), di cui il __GPS__ (sviluppato inizialmente dal Dipartimento della Difesa USA col nome NAVSTAR e reso accessibile per scopi civili) è l'implementazione storica di riferimento.
 
-![[slide_20_gps_gnss_satellite_constellation_architecture.png]]
+![[slide_20_gps_gnss_satellite_constellation_architecture.png|center mid]]
 
 L'architettura del sistema GNSS si articola su tre segmenti operativi:
 1. __Segmento Spaziale (_Space Segment_)__: costellazione di 24-32 satelliti orbitanti a quota MEO (_Medium Earth Orbit_, circa $20.190\text{ km}$ di altitudine), distribuiti su 6 piani orbitali inclinati di $55^\circ$ rispetto all'equatore. Ciascun satellite compie un'orbita completa in circa 12 ore siderali, garantendo che da qualunque punto aperto della superficie terrestre siano costantemente visibili almeno 6-8 satelliti.
@@ -1128,7 +1127,7 @@ Per selezionare e modellare correttamente i sensori all'interno degli algoritmi 
 
 Il principio della bussola magnetica risale al 2000 a.C. in Cina, con la sospensione di magnetite naturale su fili di seta. Nei moderni robot mobili la bussola è implementata tramite __magnetometri a stato solido__ (a effetto Hall, magnetoresistivi anisotropi AMR o fluxgate):
 
-![[slide_27_electronic_compass_magnetometer.png]]
+![[slide_27_electronic_compass_magnetometer.png|center small]]
 
 I magnetometri misurano le componenti vettoriali del campo magnetico locale. Poiché il campo magnetico terrestre ha un'intensità debole (circa $30 - 50\text{ }\mu\text{T}$), le letture sono soggette a distorsioni dovute a componenti metalliche o campi parassiti a bordo del veicolo (distorsioni _hard-iron_ e _soft-iron_), che richiedono un'apposita procedura di calibrazione.
 
@@ -1139,8 +1138,7 @@ I magnetometri misurano le componenti vettoriali del campo magnetico locale. Poi
 
 I giroscopi sono sensori di orientamento che preservano o misurano la rotazione angolare in relazione a una terna di riferimento fissa. Si distinguono due categorie tecnologiche fondamentali:
 
-![[slide_28_mechanical_gimbal_gyroscope.png]]
-![[slide_28_mems_gyroscope_ieee_spectrum.png]]
+![[slide_28_mechanical_gimbal_gyroscope.png|center small]] ![[slide_28_mems_gyroscope_ieee_spectrum.png|center small]]
 
 - __Giroscopio meccanico a sospensione cardanica__: sfrutta la conservazione del momento angolare di un rotore massiccio rotante montato su giunti cardanici (_gimbals_), mantenendo l'orientamento assoluto nello spazio inerziale.
 - __Micro-giroscopi MEMS risonanti__: integrati su silicio (quali le strutture a campana semisferica risonante), sfruttano la deflessione generata dalla __forza di Coriolis__ su una massa microscopica mantenuta in oscillazione per misurare la velocità angolare istantanea.
@@ -1152,7 +1150,7 @@ I giroscopi sono sensori di orientamento che preservano o misurano la rotazione 
 
 L'accelerometro misura tutte le forze esterne che agiscono su di esso, inclusa la gravità. Dal punto di vista fisico, un accelerometro si comporta come un sistema __molla-massa-smorzatore__:
 
-![[slide_29_accelerometer_spring_mass_damper_model.png]]
+![[slide_29_accelerometer_spring_mass_damper_model.png|center small]]
 
 Una massa sismica di prova (_proof mass_) $m$ è vincolata a un telaio rigido tramite una molla di costante elastica $k$ e uno smorzatore con coefficiente di attrito $c$.
 
@@ -1172,7 +1170,6 @@ In questo capitolo abbiamo completato il panorama percettivo della robotica mobi
 - Il Laser scanner ToF 2D misura distanze planari trasformate in coordinate cartesiane tramite trigonometria elementare, mentre il LiDAR 3D (come il Velodyne Puck) genera nuvole di punti volumetriche.
 - La visione artificiale opera invece tramite proiezione prospettica su piano immagine (modello pinhole reale con parametri intrinseci ed estrinseci). La telecamera monoculare è un sensore di puro orientamento (_bearing_) che richiede visione stereo o integrazione con altri sensori per recuperare la scala metrica assoluta.
 - Nei prossimi capitoli uniremo i modelli di movimento probabilistici con i modelli di misura di questi sensori all'interno degli algoritmi di filtraggio bayesiano (Filtro di Kalman e Particle Filter) per risolvere il problema fondamentale della localizzazione autonoma.
-
 
 
 # 3. Rappresentazione dell'Ambiente Ed Estrazione Di Feature
@@ -1247,7 +1244,7 @@ $$
 
 Ciascun segmento di retta $\mathbf{l}_j$ è caratterizzato dagli estremi cartesiani $\left( (x_{s,j}, y_{s,j}), (x_{e,j}, y_{e,j}) \right)$ oppure dalla forma normale polare con intervallo di estensione.
 
-![[slide_06_map_continuous_vs_linemap_comparison.png|center big]]
+![[slide_06_map_continuous_vs_linemap_comparison.png|center mid]]
 
 Le proprietà salienti di questa rappresentazione includono:
 - __Risoluzione infinita__: non vi è alcuna quantizzazione spaziale indotta da una griglia discreta;
@@ -1283,7 +1280,7 @@ Quando l'obiettivo primario è il motion planning e la verifica istantanea delle
 
 L'ambiente libero viene suddiviso geometricamente in un insieme di celle poligonali convesse contigue $\mathcal{C}_1, \dots, \mathcal{C}_K$, tracciando segmenti verticali o estensioni dei vertici degli ostacoli (_trapezoidal decomposition_).
 
-![[slide_06_map_discrete_exact_decomposition.png|center mid]]
+![[slide_06_map_discrete_exact_decomposition.png|center small]]
 
 - All'interno di ciascuna cella convessa, due punti qualsiasi possono essere congiunti da un segmento rettilineo che non tocca alcun ostacolo;
 - Il motion planning si riduce alla ricerca su grafo tra celle adiacenti (attraversando i punti medi dei segmenti di confine) partendo dalla cella contenente lo `Start` fino a raggiungere quella del `Goal`.
@@ -1301,7 +1298,7 @@ Ogni cella $m_i$ conserva la probabilità stocastica di occupazione $P(m_i = 1)$
 - $P(m_i) \approx 0$ (bianco): spazio libero esplorato;
 - $P(m_i) = 0.5$ (grigio): cella inesplorata o stato sconosciuto.
 
-![[slide_06_map_discrete_fixed_occupancy_grid.png|center big]]
+![[slide_06_map_discrete_fixed_occupancy_grid.png|center mid]]
 
 - __Vantaggi__: modellazione naturale dell'incertezza dei sensori, aggiornamento ricorsivo bayesiano immediato, indipendenza dalla forma geometrica degli ostacoli;
 - __Svantaggi__: l'occupazione di memoria scala con l'area complessiva dell'ambiente ($O(L^2)$ in 2D e $O(L^3)$ in 3D), indipendentemente dal fatto che l'ambiente sia prevalentemente vuoto.
@@ -1312,9 +1309,7 @@ Per mitigare l'esplosione dimensionale delle griglie fisse preservando l'accurat
 - In 2D si utilizza un __Quadtree__: se una regione non è omogeneamente libera o occupata, viene divisa ricorsivamente in 4 quadranti (NW, NE, SW, SE); le aree uniformi rimangono memorizzate come blocchi grandi;
 - In 3D si estende il concetto a un __Octree__, dando origine a sistemi standard come __OctoMap__.
 
-![[slide_06_map_discrete_adaptive_quadtree.png|center mid]]
-
-![[slide_06_map_discrete_3d_octomap.png|center big]]
+![[slide_06_map_discrete_adaptive_quadtree.png|center small]] ![[slide_06_map_discrete_3d_octomap.png|center small]]
 
 > [!TIP] Caratteristiche di OctoMap in 3D
 > OctoMap permette la modellazione tridimensionale a voxel multirisoluzione, tracciando esplicitamente sia lo spazio occupato che lo spazio libero (essenziale per droni aerei e bracci robotici mobili). L'occupazione di memoria è compressa grazie al raggruppamento dei nodi foglia omogenei (_node pruning_).
@@ -1331,7 +1326,7 @@ dove:
 - I nodi $\mathcal{V}$ rappresentano luoghi fisici o aree salienti (es. _Stanza A_, _Incrocio Corridoio_, _Atrio_);
 - Gli archi $\mathcal{E}$ modellano la connettività e la navigabilità diretta tra i luoghi (porte, corridoi percorribili).
 
-![[slide_06_map_topological_graph_decomposition.png|center mid]]
+![[slide_06_map_topological_graph_decomposition.png|center small]]
 
 > [!IMPORTANT] Ruolo delle Mappe Topologiche nel Corso
 > Come chiarito a lezione, __le mappe topologiche non vengono utilizzate per la localizzazione fine metrica del robot__. Sebbene risultino estremamente potenti per la pianificazione globale di percorsi ad alto livello (_symbolic path planning_), esse non contengono informazioni metriche di dettaglio: un robot non può stimare con precisione millimetrica la propria terna $(x, y, \theta)$ basandosi esclusivamente su nodi e archi topologici astratti.
@@ -1376,7 +1371,7 @@ $$
 x \cos\alpha + y \sin\alpha - r = 0
 $$
 
-![[slide_06_feature_line_model_polar_hesse.png|center mid]]
+![[slide_06_feature_line_model_polar_hesse.png|center small]]
 
 I parametri geometrici hanno un significato fisico inequivocabile:
 - $r \ge 0$: distanza ortogonale minima dall'origine degli assi (la posizione del sensore) alla retta;
@@ -1405,7 +1400,7 @@ $$
 C_{i}^{\rho\theta} = \begin{bmatrix} \sigma_{\rho,i}^2 & 0 \\ 0 & \sigma_{\theta,i}^2 \end{bmatrix}
 $$
 
-![[slide_06_feature_laser_raw_uncertainty_gaussians.png|center mid]]
+![[slide_06_feature_laser_raw_uncertainty_gaussians.png|center small]]
 
 > [!NOTE] Ipotesi di Indipendenza e Matrice a Blocchi Diagonali
 > Nel contesto stocastico, la matrice di covarianza congiunta dell'intera scansione di $N$ punti viene modellata come una matrice diagonale a blocchi:
@@ -1661,7 +1656,6 @@ $$
 | __Ambito di Elezione__ | Scansioni LiDAR 2D pulite per muri continui | Riconoscimento linee globali e forme note | Dati 3D rumorosi, stereo vision, feature visuali |
 
 
-
 # 4. Localizzazione E Filtri Di Bayes
 
 La localizzazione rappresenta una delle competenze primarie per la mobilità autonoma: consiste nel determinare in tempo reale la posa di un robot (posizione sul piano e orientamento) all'interno di una mappa nota dell'ambiente, fondendo le informazioni provenienti dai sensori di bordo.
@@ -1683,7 +1677,7 @@ Questo capitolo sviluppa in modo rigoroso il framework probabilistico fondamenta
 
 Nel caso ideale teorico, la traiettoria di un veicolo terrestre potrebbe essere calcolata semplicemente integrando i comandi di velocità delle ruote o le letture degli encoder (odometria pura).
 
-![[slide_07_martinelli_robot_localization.png|center mid]]
+![[slide_07_martinelli_robot_localization.png|center small]]
 
 Nel mondo reale, l'evoluzione dello stato è soggetta a tre sorgenti ineliminabili di incertezza:
 1. __Rumore nei dati propriocettivi (Attuazione e Odometria)__:
@@ -1740,7 +1734,7 @@ $$
 
 Il formalismo matematico scelto per rappresentare la funzione $bel(\mathbf{x}_t)$ caratterizza la famiglia del filtro di stima. Come classificato nella letteratura di riferimento (Siegwart e Scaramuzza), si distinguono quattro modelli:
 
-![[slide_07_bayes_belief_representations_taxonomy.png|center big]]
+![[slide_07_bayes_belief_representations_taxonomy.png|center mid]]
 
 1. __Ipotesi Singola Continua (Gaussiana Unimodale - Pannello a)__:
    - Il belief è descritto da un'unica funzione di Gauss $\mathcal{N}(\boldsymbol{\mu}_t, \boldsymbol{\Sigma}_t)$;
@@ -1766,7 +1760,7 @@ Il formalismo matematico scelto per rappresentare la funzione $bel(\mathbf{x}_t)
 
 L'interazione temporale tra il robot e l'ambiente viene descritta come un __Modello di Markov Nascosto (Hidden Markov Model, HMM)__, schematizzabile mediante una rete bayesiana dinamica (_Dynamic Bayesian Network, DBN_):
 
-![[slide_07_bayes_hmm_dynamic_bayesian_network.png|center big]]
+![[slide_07_bayes_hmm_dynamic_bayesian_network.png|center small]]
 
 La rete evidenzia i tre flussi informativi del sistema:
 - Gli stati $\mathbf{x}_t$ sono nodi nascosti (_latenti_), non direttamente misurabili;
@@ -1879,7 +1873,7 @@ $$
 
 Per comprendere la meccanica computazionale del filtro senza le complicazioni dello spazio continuo tridimensionale, si analizza il celebre problema minimale formulato da Sebastian Thrun: un robot mobile deve determinare lo stato di una porta e attraversarla.
 
-![[slide_07_bayes_door_state_estimation_robot.png|center mid]]
+![[slide_07_bayes_door_state_estimation_robot.png|center small]]
 
 ### Definizione Del Modello Discreto
 
@@ -2140,6 +2134,343 @@ L'eleganza teorica del filtro di Bayes si scontra con la realtà sperimentale, i
 > __non è più necessario valutare la densità di probabilità punto per punto nell'intero spazio!__
 > Poiché una gaussiana è descritta in modo esaustivo unicamente dalla sua media $\boldsymbol{\mu}_t$ e dalla sua matrice di covarianza $\boldsymbol{\Sigma}_t$, il filtro di Bayes si riduce a un insieme chiuso di equazioni algebriche matriciali (le equazioni del __Filtro di Kalman__), aprendo la strada alla stima ottimale real-time per sistemi robotici complessi.
 
+
+# 5. Localizzazione Con Histogram Filter
+
+Nel capitolo precedente [[4. Localizzazione e Filtri di Bayes|4. Localizzazione e Filtri di Bayes]] abbiamo derivato la formulazione analitica del filtro di Bayes ricorsivo nello spazio continuo delle pose. Sebbene matematicamente ineccepibile, quel modello continuo pone un limite insormontabile per l'ingegnere che deve far girare il software su un calcolatore reale: l'algoritmo richiede di integrare su tutte le possibili pose pregresse e di valutare la funzione di belief su ogni singolo punto del continuo.
+
+In questo capitolo affrontiamo la prima grande soluzione computazionale non-parametrica: l'__Histogram Filter__ (noto in letteratura anche come _Markov Localization su griglia discreta_). Trasformiamo lo spazio continuo in una maglia finita di celle adiacenti, convertendo integrali intrattabili in somme discrete e rendendo la localizzazione globale e il tracciamento pienamente eseguibili in tempo reale.
+
+## Dal Filtro Continuo Alla Tassellatura Dello Spazio
+
+Rivediamo per un istante lo pseudocodice concettuale del filtro di Bayes continuo:
+
+$$
+\begin{aligned}
+&\textbf{Algorithm Bayes\_Filter}(bel(\mathbf{x}_{t-1}), \mathbf{u}_t, \mathbf{z}_t): \\
+&\quad \textbf{for all } \mathbf{x}_t \in \Omega \textbf{ do} \\
+&\quad\quad \overline{bel}(\mathbf{x}_t) = \int_{\Omega} p(\mathbf{x}_t \mid \mathbf{x}_{t-1}, \mathbf{u}_t) \, bel(\mathbf{x}_{t-1}) \, \mathrm{d}\mathbf{x}_{t-1} \\
+&\quad\quad bel(\mathbf{x}_t) = \eta \, p(\mathbf{z}_t \mid \mathbf{x}_t) \, \overline{bel}(\mathbf{x}_t) \\
+&\quad \textbf{end} \\
+&\quad \textbf{return } bel(\mathbf{x}_t)
+\end{aligned}
+$$
+
+### Limite Computazionale Del Belief Continuo
+
+Lo pseudocodice mostra con evidenza il blocco applicativo:
+- L'istruzione `for all x_t` imporrebbe di iterare su un numero infinito non-numerabile di punti nello spazio continuo $\Omega$ (ad esempio $\mathbb{R}^2 \times [-\pi, \pi)$ per un robot planare a guida differenziale);
+- Il passo di predizione richiede la risoluzione di un integrale su tutto lo spazio continuo $\Omega$, risolvibile in forma chiusa solo se le distribuzioni sono rigorosamente gaussiane lineari (come vedremo con il Filtro di Kalman);
+- La funzione di belief $bel(\mathbf{x}_t)$ non è un semplice valore scalare, ma una funzione che deve essere memorizzata e calcolata sull'intero dominio di supporto.
+
+Nessun processore può eseguire un ciclo infinito né allocare una funzione arbitraria a dimensionalità infinita.
+
+### Tassellazione Dello Spazio Delle Configurazioni
+
+L'idea fondante dell'Histogram Filter consiste nel __tassellare__ (_tessellate_) lo spazio continuo delle configurazioni del robot, partizionandolo in un numero finito $K$ di regioni disgiunte dette __celle__ o __bin__:
+
+$$
+\Omega = \bigcup_{k=1}^K C_k, \quad \text{con } C_i \cap C_j = \emptyset \quad \forall i \ne j
+$$
+
+All'interno di ciascuna cella $C_k$, la densità di probabilità viene assunta costante a tratti (_piecewise constant_):
+
+$$
+p(\mathbf{x}) = \frac{p_{k,t}}{|C_k|}, \quad \forall \mathbf{x} \in C_k
+$$
+
+dove $|C_k|$ è il volume (o area in 2D, lunghezza in 1D) della cella, e $p_{k,t}$ è la probabilità complessiva che la posa reale del veicolo ricada all'interno della cella $k$-esima.
+
+Sostituendo il continuo con un insieme discreto $\{x_1, x_2, \dots, x_K\}$ di pose rappresentative (tipicamente i baricentri geometrici delle celle), il problema si riduce da uno spazio continuo infinito a uno spazio di probabilità a dimensione finita $K$.
+
+### Risoluzione Dei Tre Problemi Classici Di Localizzazione
+
+Grazie alla sua natura non-parametrica, l'Histogram Filter non impone alcuna forma preconcetta alla densità di probabilità. Può rappresentare picchi multipli, valli, asimmetrie e distribuzioni totalmente piatte. Questo consente di gestire con disinvoltura tutti e tre i problemi canonici della mobilità autonoma:
+- __Position Tracking__: la posa iniziale è nota con precisione limitata; il filtro mantiene un cluster compatto di celle ad alta probabilità e ne segue l'evoluzione nel tempo;
+- __Global Localization__: la posa iniziale è totalmente sconosciuta; il filtro viene inizializzato con una distribuzione uniforme su tutte le $K$ celle ($p_{k,0} = 1/K$), e fa convergere la massa di probabilità man mano che arrivano misure significative dall'ambiente;
+- __Kidnapped Robot Problem__: il robot viene afferrato e teletrasportato in un punto arbitrario dell'ambiente senza ricevere comandi odometrici; le misure successive non coerenti con la predizione fanno collassare l'ipotesi precedente e generano nuovi picchi in corrispondenza della nuova posizione reale.
+
+## Formulazione Discreta Del Filtro Con Mappa
+
+Nel filtro continuo teorico la mappa dell'ambiente è spesso sottintesa nel condizionamento. Con l'Histogram Filter introduciamo esplicitamente la __mappa $M$__, in quanto le coordinate delle celle e le proprietà geometriche degli ostacoli sono ancorate al reticolo metrologico definito da $M$.
+
+### Variabili Di Stato E Notazione Matriciale Delle Celle
+
+All'istante temporale $t$, definiamo la variabile casuale discreta di stato $X_t$, che può assumere uno tra i valori finiti $\{x_1, x_2, \dots, x_K\}$.
+
+Definiamo formalmente il belief discreto a posteriori e a priori della cella $k$-esima:
+
+$$
+p_{k,t} := bel_t(x_k) := p(X_t = x_k \mid \mathbf{z}_{1:t}, \mathbf{u}_{1:t}, M)
+$$
+
+$$
+\overline{p}_{k,t} := \overline{bel}_t(x_k) := p(X_t = x_k \mid \mathbf{z}_{1:t-1}, \mathbf{u}_{1:t}, M)
+$$
+
+con il vincolo fondamentale di normalizzazione su tutto l'insieme discreto:
+
+$$
+\sum_{k=1}^K bel_t(x_k) = 1, \quad bel_t(x_k) \ge 0 \quad \forall k
+$$
+
+> [!NOTE] Significato della Variabile $x_k$
+> Nelle formule discrete, $x_k$ non indica la posizione vera del robot (che rimane ignota), ma una specifica __ipotesi di posa__ (il punto rappresentativo della cella $k$) che il robot sta valutando all'interno del ciclo iterativo di stima.
+
+### Modello Di Movimento Discreto
+
+La probabilità di transizione di stato continua $p(\mathbf{x}_t \mid \mathbf{x}_{t-1}, \mathbf{u}_t)$ viene convertita nella matrice di transizione tra coppie di celle:
+
+$$
+p(X_t = x_k \mid X_{t-1} = x_i, \mathbf{u}_t, M)
+$$
+
+Questa quantità risponde a una domanda operativa chiarissima: se all'istante precedente il robot si trovava nella cella $x_i$ e applichiamo l'azione di movimento $\mathbf{u}_t$, qual è la probabilità che il veicolo finisca all'interno della cella $x_k$?
+
+Nella pratica software, questa probabilità viene calcolata interrogando direttamente il nostro [[1. Modelli di Movimento Stocastici|modello di movimento stocastico]]:
+
+$$
+p(X_t = x_k \mid X_{t-1} = x_i, \mathbf{u}_t, M) = \text{motion\_model}(x_k, x_i, \mathbf{u}_t)
+$$
+
+### Modello Di Misura E Verosimiglianza
+
+Il secondo ingrediente fondamentale è la __verosimiglianza della misura__ (_measurement likelihood_):
+
+$$
+p(\mathbf{z}_t \mid X_t = x_k, M) = \text{measurement\_model}(\mathbf{z}_t, x_k, M)
+$$
+
+Essa quantifica la plausibilità di osservare la lettura sensoriale $\mathbf{z}_t$ condizionatamente all'ipotesi che il robot si trovi esattamente nella cella $x_k$, tenendo conto della disposizione geometrica degli elementi noti della mappa $M$ (pareti, porte, beacon radio).
+
+## Algoritmo Dell'Histogram Filter
+
+Possiamo ora scrivere l'algoritmo completo dell'Histogram Filter sia in notazione probabilistica compatta che in forma procedurale di alto livello.
+
+### Passo Di Predizione E Convoluzione Discreta
+
+Per calcolare il belief a priori $\overline{bel}_t(x_k)$ per ciascuna cella $x_k$, applichiamo la versione discreta del teorema della probabilità totale, sostituendo l'integrale continuo con la sommatoria su tutte le $K$ possibili celle di provenienza $x_i$:
+
+$$
+\overline{bel}_t(x_k) = \sum_{i=1}^K p(X_t = x_k \mid X_{t-1} = x_i, \mathbf{u}_t, M) \cdot bel_{t-1}(x_i)
+$$
+
+Geometricamente, questa operazione corrisponde a una __convoluzione discreta__ tra la distribuzione precedente e il kernel di incertezza introdotto dal comando di attuazione:
+- Il baricentro della distribuzione trasla nella direzione imposta dal comando $\mathbf{u}_t$;
+- La varianza complessiva aumenta, poiché il rumore degli attuatori disperde la probabilità sulle celle limitrofe, appiattendo progressivamente i picchi.
+
+### Passo Di Correzione E Normalizzazione Bayesiana
+
+Non appena il robot acquisisce la misura sensoriale $\mathbf{z}_t$, aggiorniamo puntualmente la probabilità di ciascuna cella moltiplicando la predizione a priori per la verosimiglianza della misura corrente:
+
+$$
+bel_t(x_k) = \eta \, p(\mathbf{z}_t \mid X_t = x_k, M) \cdot \overline{bel}_t(x_k)
+$$
+
+Il fattore di normalizzazione $\eta$ garantisce che la somma delle probabilità sull'intero reticolo rimanga rigorosamente unitaria:
+
+$$
+\eta = \frac{1}{\sum_{k=1}^K p(\mathbf{z}_t \mid X_t = x_k, M) \cdot \overline{bel}_t(x_k)}
+$$
+
+### Struttura Algoritmica E Confronto Formale
+
+Riassumiamo la procedura algoritmica implementata sui sistemi di bordo:
+
+```python
+# Algoritmo procedurale dell'Histogram Filter
+def histogram_filter(bel_prev, u_t, z_t, M):
+    bel_bar = {}
+    bel = {}
+    
+    # 1. Passo di Predizione (Total Probability Theorem)
+    for x_k in all_cells:
+        bel_bar[x_k] = 0.0
+        for x_i in all_cells:
+            prob_trans = motion_model(x_k, x_i, u_t, M)
+            bel_bar[x_k] += prob_trans * bel_prev[x_i]
+            
+    # 2. Passo di Correzione (Bayes Rule)
+    eta_inv = 0.0
+    for x_k in all_cells:
+        likelihood = measurement_model(z_t, x_k, M)
+        bel[x_k] = likelihood * bel_bar[x_k]
+        eta_inv += bel[x_k]
+        
+    # 3. Normalizzazione
+    for x_k in all_cells:
+        bel[x_k] /= eta_inv
+        
+    return bel
+```
+
+L'algoritmo opera in tempo polinomiale rispetto al numero di celle $K$:
+- La predizione valuta una doppia iterazione su tutte le coppie $(x_k, x_i)$, comportando una complessità temporale pari a $O(K^2)$;
+- La correzione e la normalizzazione scorrono il reticolo una sola volta per cella, con complessità pari a $O(K)$;
+- Per approfondire come questa operazione si esprima elegantemente in algebra lineare tramite matrici colonna-stocastiche e vettori di probabilità, si rimanda a [[zz. Argomenti extra#Formulazione Matriciale Dell'Histogram Filter Come Catena Di Markov|zz. Argomenti extra: Formulazione Matriciale dell'Histogram Filter]].
+
+## Calcolo Della Distribuzione Vs Campionamento Stocastico
+
+Un passaggio didattico cardine chiarito a lezione riguarda la netta distinzione concettuale e algoritmica tra due operazioni probabilistiche che spesso vengono confuse: la __valutazione della densità di distribuzione__ (_distribution computation_) e l'__estrazione di campioni__ (_sampling_).
+
+![[slide_07_distribution_computation.png|center small]] ![[slide_07_sampling_procedure.png|center small]]
+
+Esaminiamo in dettaglio cosa accade nei due grafici:
+
+### Distribution Computation Nei Filtri A Griglia
+
+Nel grafico di sinistra (_Distribution computation_), abbiamo una variabile nota (ad esempio una specifica posa ipotetica $x_k$ o una discrepanza geometrica $\nu = x_k - x_i - u_x$) e vogliamo determinarne l'esatto valore di probabilità o densità:
+- Si entra sull'asse orizzontale delle ascisse con il valore numerico $x$;
+- Si risale verticalmente fino a intersecare la curva analitica $p(x)$;
+- Si proietta il punto sull'asse verticale delle ordinate leggendo il valore di densità $p(x)$.
+
+Questo è esattamente il meccanismo impiegato dall'Histogram Filter: i punti $x_k$ sono fissati deterministicamente dai baricentri delle celle, e il filtro valuta la funzione analitica (ad esempio la curva gaussiana) per popolare i pesi di transizione e di verosimiglianza.
+
+### Sampling Stocastico Nei Metodi Monte Carlo
+
+Nel grafico di destra (_Sampling_), il flusso operativo è opposto:
+- Non conosciamo a priori il valore $x$, ma disponiamo della curva di densità $p(x)$;
+- Generiamo un numero casuale uniforme $u \in [0, 1]$ (sull'asse delle ordinate della funzione cumulativa CDF);
+- Tramite inversione della cumulativa o algoritmi di trasformazione (es. Box-Muller, rejection sampling), scendiamo sull'asse delle ascisse ricavando un campione numerico concreto $x \sim p(x)$.
+
+Questo secondo approccio è il cuore pulsante dei __Filtri a Particelle (Particle Filters)__ e degli algoritmi di propagazione Monte Carlo visti nei [[1. Modelli di Movimento Stocastici#Campionamento del Modello di Movimento con Velocità|modelli di movimento stocastici]].
+
+## Progettazione Di Un Histogram Filter 1D
+
+Per comprendere a fondo la dinamica del filtro senza l'appesantimento geometrico dell'orientamento angolare, progettiamo un Histogram Filter per un veicolo mobile che si sposta lungo un corridoio rettilineo monodimensionale.
+
+### Modello Cinematico E Rumore Odometrico
+
+Il robot si muove lungo l'asse $x \in [x_{\min}, x_{\max}]$. Il comando di attuazione è una traslazione richiesta $u = u_x$.
+
+Il moto reale è affetto da un disturbo stocastico additivo gaussiano a media nulla:
+
+$$
+x_t = x_{t-1} + u_x + \nu, \quad \nu \sim \mathcal{N}(0, \sigma_x^2)
+$$
+
+Date due celle ipotetiche con coordinate $x_k$ (arrivo) e $x_{t-1} = x_i$ (partenza), l'errore cinematico corrispondente a questa transizione vale:
+
+$$
+\nu = x_k - (x_i + u_x)
+$$
+
+Poiché il rumore segue una normale $\mathcal{N}(0, \sigma_x^2)$, la probabilità di transizione di stato tra le due celle si calcola valutando la densità gaussiana sull'errore $\nu$:
+
+$$
+p(X_t = x_k \mid X_{t-1} = x_i, u_x) = \text{prob}(\nu, 0, \sigma_x^2) = \frac{1}{\sqrt{2\pi}\sigma_x} \exp\left( -\frac{(x_k - x_i - u_x)^2}{2\sigma_x^2} \right)
+$$
+
+### Modello Di Misura Da Beacon E Distanza Radiale
+
+L'ambiente contiene punti di riferimento fissi a coordinate note detti __beacon__ (es. transponder a radiofrequenza o marker ottici, come descritto in [[2. Sensori per la Robotica Mobile#Sistemi Di Localizzazione A Beacon|2. Sensori per la Robotica Mobile]]).
+
+Il robot dispone di un sensore di distanza radiale (_range sensor_) che misura la distanza scalare rispetto a un beacon situato in posizione nota $m_1$:
+
+$$
+z_t = \|x_t - m_1\| + \mu = |x_t - m_1| + \mu, \quad \mu \sim \mathcal{N}(0, \sigma_z^2)
+$$
+
+Valutando la misura sull'ipotesi che il robot si trovi nella cella $x_k$, la distanza teorica attesa vale $|x_k - m_1|$. L'errore residuo sensoriale è:
+
+$$
+\mu = z_t - |x_k - m_1|
+$$
+
+La funzione di verosimiglianza di misura risulta quindi:
+
+$$
+p(z_t \mid X_t = x_k, m_1) = \text{prob}(\mu, 0, \sigma_z^2) = \frac{1}{\sqrt{2\pi}\sigma_z} \exp\left( -\frac{(z_t - |x_k - m_1|)^2}{2\sigma_z^2} \right)
+$$
+
+### Analisi Della Verosimiglianza: Bimodalità Con Singolo Beacon
+
+Prima di avviare qualsiasi simulazione numerica, esaminiamo criticamente la forma analitica della funzione di verosimiglianza $p(z_t \mid x_k, m_1)$.
+
+Poiché la metrica di distanza radiale in 1D contiene il modulo $|x_k - m_1|$, l'errore $\mu$ si annulla ogniqualvolta la distanza ipotetica uguaglia la misura:
+
+$$
+|x_k - m_1| = z_t \iff x_k - m_1 = \pm z_t \implies x_k = m_1 \pm z_t
+$$
+
+> [!IMPORTANT] L'Ambiguità Speculare del Singolo Beacon
+> Un sensore che misura unicamente il modulo della distanza in 1D non è in grado di distinguere se il robot si trova a sinistra o a destra del beacon.
+> Di conseguenza, la funzione di verosimiglianza associata a un singolo beacon è rigorosamente __bimodale__ (ha due picchi simmetrici uguali centrati in $m_1 - z_t$ e $m_1 + z_t$).
+> Se il robot parte con incertezza globale uniforme, una singola lettura non potrà mai localizzarlo univocamente: produrrà due ipotesi speculari identiche.
+
+### Disambiguazione Globale Tramite Beacon Multipli
+
+Per risolvere l'ambiguità geometrica, introduciamo nella mappa un secondo beacon posizionato in $m_2 \ne m_1$.
+
+Supponendo che i rumori di misura dei sensori siano reciprocamente scorrelati (indipendenza condizionale delle misure data la posa), la funzione di verosimiglianza congiunta si ottiene moltiplicando le singole verosimiglianze:
+
+$$
+p(\mathbf{z}_t \mid X_t = x_k, M) = p(z_{t,1} \mid x_k, m_1) \cdot p(z_{t,2} \mid x_k, m_2)
+$$
+
+Ciascun beacon genera una coppia di picchi simmetrici rispetto alla propria coordinata:
+- Il beacon 1 produce picchi a $x \in \{m_1 - z_{t,1}, \; m_1 + z_{t,1}\}$;
+- Il beacon 2 produce picchi a $x \in \{m_2 - z_{t,2}, \; m_2 + z_{t,2}\}$.
+
+Poiché il veicolo fisico si trova in un'unica posizione reale $x^*$, esattamente uno dei due picchi del primo beacon coinciderà con uno dei due picchi del secondo beacon (quello in cui $x^* \approx m_1 \pm z_{t,1} \approx m_2 \pm z_{t,2}$). Negli altri punti distanti, il prodotto tra un valore esponenzialmente piccolo e un picco vicino a zero abbatte la probabilità residua: l'ambiguità collassa e il belief diventa marcatamente __unimodale__.
+
+![[slide_08_histogram_1d_bimodal_likelihood.png|center mid]]
+
+La figura sopra illustra con limpidezza questo fenomeno fisico:
+- Nel pannello superiore, la linea tratteggiata rossa (singolo beacon in $m_1 = 0\text{ m}$ con misura $z = 4\text{ m}$) mostra i due picchi simmetrici a $-4\text{ m}$ e $+4\text{ m}$;
+- Aggiungendo il secondo beacon in $m_2 = 6\text{ m}$ (linea blu continua), il picco spuro a sinistra scompare completamente e sopravvive solo la reale posizione del veicolo a $+4\text{ m}$;
+- Nel pannello inferiore, seguiamo l'intero ciclo del filtro: il belief a priori (arancione) si allarga durante il movimento a causa del rumore di attuazione, ma l'aggiornamento di misura con i due beacon (verde) comprime l'incertezza restituendo una stima ad altissima accuratezza.
+
+## Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale
+
+La scelta della dimensione della cella $\Delta x$ è il parametro di compromesso principale dell'Histogram Filter:
+- __Risoluzione fine ($\Delta x$ piccolo)__:
+  - L'errore di quantizzazione spaziale decade proporzionalmente a $\Delta x$;
+  - La rappresentazione delle PDF è estremamente fedele;
+  - Il numero di celle $K = (x_{\max} - x_{\min}) / \Delta x$ cresce linearmente, e il tempo di calcolo della predizione cresce quadraticamente come $O(K^2) = O(1/\Delta x^2)$.
+- __Risoluzione grossolana ($\Delta x$ grande)__:
+  - Esecuzione rapidissima con poche celle;
+  - Se $\Delta x > \sigma_x$, la discretizzazione introduce un pesante rumore di quantizzazione deterministico che degrada le prestazioni e maschera l'incertezza del sensore.
+
+> [!TIP] Regola Empirica per la Scelta di $\Delta x$
+> Per evitare distorsioni da aliasing numerico nella convoluzione, la larghezza della cella $\Delta x$ deve essere scelta tale da campionare adeguatamente la deviazione standard del rumore di transizione:
+>
+> $$
+> \Delta x \le \frac{\sigma_x}{2}
+> $$
+>
+> garantendo che il kernel gaussiano occupi almeno 4-5 celle nella sommatoria discreta.
+
+## Limiti Computazionali E Transizione Verso Spazi 2D
+
+L'Histogram Filter 1D ha mostrato la semplicità e la robustezza del metodo su griglia. Cosa accade tuttavia quando passiamo al problema reale di localizzazione planare di un veicolo terrestre su un pavimento?
+
+### La Maledizione Della Dimensionalità In SE(2)
+
+Nel piano orizzontale, la posa del robot è un vettore tridimensionale $\mathbf{x} = [x, y, \theta]^T \in SE(2)$.
+
+Se discretizziamo ciascuna dimensione spaziale e angolare con un numero moderato di intervalli:
+- $N_x = 1000$ celle lungo l'asse $x$ (es. corridoio di $50\text{ m}$ con risoluzione $5\text{ cm}$);
+- $N_y = 1000$ celle lungo l'asse $y$ (es. corridoio di $50\text{ m}$ con risoluzione $5\text{ cm}$);
+- $N_\theta = 360$ celle per l'orientamento angolare (risoluzione di $1^\circ$);
+
+il numero totale di celle discrete nel reticolo 3D vale:
+
+$$
+K = N_x \times N_y \times N_\theta = 1000 \times 1000 \times 360 = 3.6 \times 10^8 \text{ celle}
+$$
+
+Memorizzare un belief a 360 milioni di float a 64 bit richiede circa $2.88\text{ GB}$ di RAM. Peggio ancora, eseguire il passo di predizione tramite convoluzione naïve richiederebbe $K^2 \approx 1.3 \times 10^{17}$ operazioni aritmetiche per ciascun ciclo di controllo, un calcolo del tutto proibitivo per qualunque calcolatore embedded.
+
+Questo collo di bottiglia è noto come __maledizione della dimensionalità__ (_curse of dimensionality_).
+
+### Prospettive E Confronto Tra Famiglie Di Filtri
+
+Per superare la maledizione della dimensionalità della griglia senza perdere la capacità di gestire sistemi complessi, la robotica moderna ha intrapreso due direzioni complementari:
+1. __Filtri Parametrici Gaussiani (Kalman Filter, EKF, UKF)__: rinunciano alla forma arbitraria assumendo densità rigorosamente unimodali; non memorizzano griglie ma solo media $\boldsymbol{\mu} \in \mathbb{R}^3$ e covarianza $\boldsymbol{\Sigma} \in \mathbb{R}^{3 \times 3}$, abbattendo la complessità a $O(1)$;
+2. __Filtri Non-Parametrici Monte Carlo (Particle Filters / MCL)__: invece di tassellare l'intero spazio di stato esaustivamente, campionano solo le regioni in cui la probabilità è significativamente non nulla tramite un insieme di $M$ particelle pesate ($M \approx 10^2 \div 10^4$), combinando la flessibilità dell'istogramma con l'efficienza computazionale.
+
+Nei prossimi capitoli estenderemo il modello al piano 2D e introdurremo la trattazione formale del Filtro di Kalman esteso.
 
 
 # Zz. Argomenti Extra
@@ -2718,3 +3049,88 @@ F_{PQ} = \begin{bmatrix}
 $$
 
 La conoscenza esplicita di $C_{AR}$ è indispensabile nei filtri di localizzazione e SLAM (es. EKF-SLAM basato su linee): consente al robot di calcolare l'ellisse di confidenza e la distanza di Mahalanobis tra le rette osservate all'istante $t$ e le pareti già censite nella mappa globale.
+
+## Formulazione Matriciale Dell'Histogram Filter Come Catena Di Markov
+
+Nel capitolo [[5. Localizzazione con Histogram Filter|5. Localizzazione con Histogram Filter]] abbiamo espresso l'aggiornamento dell'Histogram Filter tramite cicli iterativi `for` sulle singole celle $x_k$ e $x_i$. Quando lo spazio delle pose viene discretizzato in un numero finito $K$ di celle, il filtro di Bayes discreto può essere formulato con notevole eleganza e potenza computazionale attraverso l'algebra lineare delle __Catene di Markov a tempo discreto (DTMC)__.
+
+### Vettore Di Stato E Matrice Di Transizione Stocastica
+
+Rappresentiamo la distribuzione di probabilità dell'intero spazio all'istante $t$ come un vettore colonna di probabilità $\mathbf{p}_t \in \mathbb{R}^K$:
+
+$$
+\mathbf{p}_t = \begin{bmatrix} p_{1,t} \\ p_{2,t} \\ \vdots \\ p_{K,t} \end{bmatrix} = \begin{bmatrix} bel_t(x_1) \\ bel_t(x_2) \\ \vdots \\ bel_t(x_K) \end{bmatrix}
+$$
+
+con i vincoli di non negatività $p_{k,t} \ge 0$ e conservazione della massa probabilistica $\sum_{k=1}^K p_{k,t} = \mathbf{1}^T \mathbf{p}_t = 1$, dove $\mathbf{1} = [1, 1, \dots, 1]^T$.
+
+Definiamo la __matrice di transizione di stato__ $T(u_t) \in \mathbb{R}^{K \times K}$ associata al comando di controllo $u_t$:
+
+$$
+T_{k, i}(u_t) := p(X_t = x_k \mid X_{t-1} = x_i, u_t, M)
+$$
+
+L'elemento $T_{k, i}$ rappresenta la probabilità di transizione dalla cella di partenza $i$ (colonna) alla cella di destinazione $k$ (riga). La matrice $T$ gode della proprietà fondamentale di essere __colonna-stocastica__ (ogni colonna somma a 1):
+
+$$
+\sum_{k=1}^K T_{k, i}(u_t) = 1, \quad \forall i \in \{1, \dots, K\} \iff \mathbf{1}^T T(u_t) = \mathbf{1}^T
+$$
+
+### Passo Di Predizione Come Prodotto Matrice-Vettore
+
+L'equazione di predizione del filtro discreto (sommatoria su tutti gli stati antecedenti $x_i$) si riscrive come un unico prodotto matrice-vettore:
+
+$$
+\overline{p}_{k,t} = \sum_{i=1}^K T_{k, i}(u_t) \, p_{i, t-1} \implies \overline{\mathbf{p}}_t = T(u_t) \, \mathbf{p}_{t-1}
+$$
+
+Poiché $T(u_t)$ è colonna-stocastica, la conservazione della probabilità a priori è garantita automaticamente dall'algebra lineare:
+
+$$
+\mathbf{1}^T \overline{\mathbf{p}}_t = \mathbf{1}^T (T(u_t) \, \mathbf{p}_{t-1}) = (\mathbf{1}^T T(u_t)) \, \mathbf{p}_{t-1} = \mathbf{1}^T \mathbf{p}_{t-1} = 1
+$$
+
+### Struttura A Banda E Ottimizzazione Sparsa
+
+Nel caso di moto con rumore gaussiano stazionario, la probabilità $T_{k, i}$ decade esponenzialmente all'aumentare della distanza tra le celle $|x_k - (x_i + u_x)|$. Di conseguenza:
+- In un ambiente 1D con moto uniforme, $T(u_t)$ assume la struttura di una __matrice di Toeplitz a banda__;
+- Ponendo a zero le transizioni oltre la soglia $3\sigma_x$ (dove la densità gaussiana è trascurabile), la matrice diventa sparsa con larghezza di banda $W \ll K$;
+- La complessità computazionale del passo di predizione crolla da $O(K^2)$ a $O(K \cdot W)$, consentendo implementazioni ad alte prestazioni tramite librerie di algebra lineare sparsa (es. `scipy.sparse`).
+
+### Passo Di Correzione E Prodotto Di Hadamard
+
+Definiamo il vettore di verosimiglianza delle misure sensoriali $\mathbf{l}_t \in \mathbb{R}^K$, il cui $k$-esimo elemento è la densità valutata sull'ipotesi $x_k$:
+
+$$
+\mathbf{l}_t = \begin{bmatrix} p(z_t \mid X_t = x_1, M) \\ p(z_t \mid X_t = x_2, M) \\ \vdots \\ p(z_t \mid X_t = x_K, M) \end{bmatrix}
+$$
+
+Il passo di aggiornamento di misura corrisponde al __prodotto elemento per elemento di Hadamard__ (indicato con $\odot$) tra il vettore di likelihood e il vettore di predizione, riscalato dal fattore di normalizzazione $\eta$:
+
+$$
+\mathbf{p}_t = \eta \left( \mathbf{l}_t \odot \overline{\mathbf{p}}_t \right)
+$$
+
+dove il coefficiente scalare di normalizzazione $\eta$ è il reciproco del prodotto interno:
+
+$$
+\eta = \frac{1}{\mathbf{1}^T \left( \mathbf{l}_t \odot \overline{\mathbf{p}}_t \right)} = \frac{1}{\mathbf{l}_t^T \overline{\mathbf{p}}_t}
+$$
+
+### Dinamica Asintotica E Teorema Di Perron-Frobenius
+
+Se il robot si muove nell'ambiente senza effettuare alcuna misura correttiva ($z_t$ assente per $N$ passi consecutivi), il belief evolve come:
+
+$$
+\mathbf{p}_t = T^N \, \mathbf{p}_0
+$$
+
+Se la matrice di transizione è irriducibile e aperiodica (condizione tipica garantita dal rumore gaussiano che connette debolmente ogni stato a tutti gli altri), il __teorema di Perron-Frobenius__ assicura che $T$ ammette un unico autovalore dominante $\lambda_1 = 1$, e che per $N \to \infty$ il vettore $\mathbf{p}_t$ converge all'autovettore stazionario $\mathbf{p}_\infty$:
+
+$$
+\lim_{N \to \infty} \mathbf{p}_t = \mathbf{p}_\infty \quad \text{con} \quad T \mathbf{p}_\infty = \mathbf{p}_\infty
+$$
+
+Nel caso di rumore di traslazione simmetrico con pareti riflettenti o periodiche, tale stato asintotico corrisponde alla __distribuzione uniforme__ $\mathbf{p}_\infty = [1/K, \dots, 1/K]^T$: in assenza di retroazione sensoriale, l'accumulo ininterrotto dell'incertezza odometrica cancella ogni informazione pregressa conducendo alla totale perdita di localizzazione.
+
+

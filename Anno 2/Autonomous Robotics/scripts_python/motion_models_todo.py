@@ -70,7 +70,6 @@ def runge_kutta(p, v, w, T):
     return np.array([xn, yn, thn])
 
 
-#FIXME: sembra avere più errore di eulero, strano
 def velocity_model(p, v, w, T, eps=1e-9):
     """Move along the ARC of radius r = v / w (exact if v, w constant over T)."""
     x, y, th = p
@@ -99,7 +98,7 @@ def simulate(model, p0, t, T):
     P[0] = p0
 
     for i in range(1, N):
-        v, w = inputs(t[i])
+        v, w = inputs(t[i - 1])
         P[i] = model(P[i-1], v, w, T)
 
 

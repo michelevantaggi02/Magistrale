@@ -10,16 +10,54 @@ img[alt*="center"]{
 	margin: auto;
 }
 
-img[alt*="big"]{
+.markdown-rendered .image-embed[alt*="big"],
+.markdown-source-view.mod-cm6 .cm-content .image-embed[alt*="big"]{
 	width: 90%;
 }
-img[alt*="mid"]{
+.markdown-rendered .image-embed[alt*="mid"],
+.markdown-source-view.mod-cm6 .cm-content .image-embed[alt*="mid"]{
 	width: 70%;
 }
 
-img[alt*="small"]{
-	width: 50%;
+.markdown-rendered .image-embed[alt*="small"],
+.markdown-source-view.mod-cm6 .cm-content .image-embed[alt*="small"]{
+	width: 45%;
 }
 
-img[alt*="full"]{width:100%;}
+.markdown-rendered .image-embed[alt*="full"],
+.markdown-source-view.mod-cm6 .cm-content .image-embed[alt*="full"]{width:100%;}
 
+/* ========================================================
+   OBSIDIAN - CENTRATURA IMMAGINI CON "|center"
+   Funziona in Live Preview e Reading View
+   ======================================================== */
+
+/* 1. Live Preview e Reading View: allinea al centro la riga/blocco contenitore */
+.markdown-source-view.mod-cm6 .cm-line:has(.image-embed[alt*="center"]),
+.markdown-source-view.mod-cm6 .cm-embed-block:has(.image-embed[alt*="center"]),
+.markdown-rendered p:has(.image-embed[alt*="center"]) {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+}
+
+/* 2. Contenitore dell'immagine (inline-flex per consentire l'affiancamento quando sono sulla stessa riga) */
+.markdown-rendered .image-embed[alt*="center"],
+.markdown-source-view.mod-cm6 .cm-content .image-embed[alt*="center"] {
+    display: inline-flex !important;
+    justify-content: center !important;
+    margin: 4px 0 !important;
+}
+
+/* 3. Supporto per immagini standard Markdown ![]() e tag HTML */
+.markdown-rendered img[alt*="center"],
+.markdown-source-view.mod-cm6 img[alt*="center"] {
+    display: block !important;
+    margin-inline: auto !important;
+}
+.mermaid svg {
+    max-width: 90%;
+    height: auto;
+}

@@ -574,3 +574,87 @@ F_{PQ} = \begin{bmatrix}
 $$
 
 La conoscenza esplicita di $C_{AR}$ è indispensabile nei filtri di localizzazione e SLAM (es. EKF-SLAM basato su linee): consente al robot di calcolare l'ellisse di confidenza e la distanza di Mahalanobis tra le rette osservate all'istante $t$ e le pareti già censite nella mappa globale.
+
+## Formulazione Matriciale Dell'Histogram Filter Come Catena Di Markov
+
+Nel capitolo [[5. Localizzazione con Histogram Filter|5. Localizzazione con Histogram Filter]] abbiamo espresso l'aggiornamento dell'Histogram Filter tramite cicli iterativi `for` sulle singole celle $x_k$ e $x_i$. Quando lo spazio delle pose viene discretizzato in un numero finito $K$ di celle, il filtro di Bayes discreto può essere formulato con notevole eleganza e potenza computazionale attraverso l'algebra lineare delle __Catene di Markov a tempo discreto (DTMC)__.
+
+### Vettore Di Stato E Matrice Di Transizione Stocastica
+
+Rappresentiamo la distribuzione di probabilità dell'intero spazio all'istante $t$ come un vettore colonna di probabilità $\mathbf{p}_t \in \mathbb{R}^K$:
+
+$$
+\mathbf{p}_t = \begin{bmatrix} p_{1,t} \\ p_{2,t} \\ \vdots \\ p_{K,t} \end{bmatrix} = \begin{bmatrix} bel_t(x_1) \\ bel_t(x_2) \\ \vdots \\ bel_t(x_K) \end{bmatrix}
+$$
+
+con i vincoli di non negatività $p_{k,t} \ge 0$ e conservazione della massa probabilistica $\sum_{k=1}^K p_{k,t} = \mathbf{1}^T \mathbf{p}_t = 1$, dove $\mathbf{1} = [1, 1, \dots, 1]^T$.
+
+Definiamo la __matrice di transizione di stato__ $T(u_t) \in \mathbb{R}^{K \times K}$ associata al comando di controllo $u_t$:
+
+$$
+T_{k, i}(u_t) := p(X_t = x_k \mid X_{t-1} = x_i, u_t, M)
+$$
+
+L'elemento $T_{k, i}$ rappresenta la probabilità di transizione dalla cella di partenza $i$ (colonna) alla cella di destinazione $k$ (riga). La matrice $T$ gode della proprietà fondamentale di essere __colonna-stocastica__ (ogni colonna somma a 1):
+
+$$
+\sum_{k=1}^K T_{k, i}(u_t) = 1, \quad \forall i \in \{1, \dots, K\} \iff \mathbf{1}^T T(u_t) = \mathbf{1}^T
+$$
+
+### Passo Di Predizione Come Prodotto Matrice-Vettore
+
+L'equazione di predizione del filtro discreto (sommatoria su tutti gli stati antecedenti $x_i$) si riscrive come un unico prodotto matrice-vettore:
+
+$$
+\overline{p}_{k,t} = \sum_{i=1}^K T_{k, i}(u_t) \, p_{i, t-1} \implies \overline{\mathbf{p}}_t = T(u_t) \, \mathbf{p}_{t-1}
+$$
+
+Poiché $T(u_t)$ è colonna-stocastica, la conservazione della probabilità a priori è garantita automaticamente dall'algebra lineare:
+
+$$
+\mathbf{1}^T \overline{\mathbf{p}}_t = \mathbf{1}^T (T(u_t) \, \mathbf{p}_{t-1}) = (\mathbf{1}^T T(u_t)) \, \mathbf{p}_{t-1} = \mathbf{1}^T \mathbf{p}_{t-1} = 1
+$$
+
+### Struttura A Banda E Ottimizzazione Sparsa
+
+Nel caso di moto con rumore gaussiano stazionario, la probabilità $T_{k, i}$ decade esponenzialmente all'aumentare della distanza tra le celle $|x_k - (x_i + u_x)|$. Di conseguenza:
+- In un ambiente 1D con moto uniforme, $T(u_t)$ assume la struttura di una __matrice di Toeplitz a banda__;
+- Ponendo a zero le transizioni oltre la soglia $3\sigma_x$ (dove la densità gaussiana è trascurabile), la matrice diventa sparsa con larghezza di banda $W \ll K$;
+- La complessità computazionale del passo di predizione crolla da $O(K^2)$ a $O(K \cdot W)$, consentendo implementazioni ad alte prestazioni tramite librerie di algebra lineare sparsa (es. `scipy.sparse`).
+
+### Passo Di Correzione E Prodotto Di Hadamard
+
+Definiamo il vettore di verosimiglianza delle misure sensoriali $\mathbf{l}_t \in \mathbb{R}^K$, il cui $k$-esimo elemento è la densità valutata sull'ipotesi $x_k$:
+
+$$
+\mathbf{l}_t = \begin{bmatrix} p(z_t \mid X_t = x_1, M) \\ p(z_t \mid X_t = x_2, M) \\ \vdots \\ p(z_t \mid X_t = x_K, M) \end{bmatrix}
+$$
+
+Il passo di aggiornamento di misura corrisponde al __prodotto elemento per elemento di Hadamard__ (indicato con $\odot$) tra il vettore di likelihood e il vettore di predizione, riscalato dal fattore di normalizzazione $\eta$:
+
+$$
+\mathbf{p}_t = \eta \left( \mathbf{l}_t \odot \overline{\mathbf{p}}_t \right)
+$$
+
+dove il coefficiente scalare di normalizzazione $\eta$ è il reciproco del prodotto interno:
+
+$$
+\eta = \frac{1}{\mathbf{1}^T \left( \mathbf{l}_t \odot \overline{\mathbf{p}}_t \right)} = \frac{1}{\mathbf{l}_t^T \overline{\mathbf{p}}_t}
+$$
+
+### Dinamica Asintotica E Teorema Di Perron-Frobenius
+
+Se il robot si muove nell'ambiente senza effettuare alcuna misura correttiva ($z_t$ assente per $N$ passi consecutivi), il belief evolve come:
+
+$$
+\mathbf{p}_t = T^N \, \mathbf{p}_0
+$$
+
+Se la matrice di transizione è irriducibile e aperiodica (condizione tipica garantita dal rumore gaussiano che connette debolmente ogni stato a tutti gli altri), il __teorema di Perron-Frobenius__ assicura che $T$ ammette un unico autovalore dominante $\lambda_1 = 1$, e che per $N \to \infty$ il vettore $\mathbf{p}_t$ converge all'autovettore stazionario $\mathbf{p}_\infty$:
+
+$$
+\lim_{N \to \infty} \mathbf{p}_t = \mathbf{p}_\infty \quad \text{con} \quad T \mathbf{p}_\infty = \mathbf{p}_\infty
+$$
+
+Nel caso di rumore di traslazione simmetrico con pareti riflettenti o periodiche, tale stato asintotico corrisponde alla __distribuzione uniforme__ $\mathbf{p}_\infty = [1/K, \dots, 1/K]^T$: in assenza di retroazione sensoriale, l'accumulo ininterrotto dell'incertezza odometrica cancella ogni informazione pregressa conducendo alla totale perdita di localizzazione.
+
