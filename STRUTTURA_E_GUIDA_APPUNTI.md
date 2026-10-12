@@ -43,16 +43,17 @@ Magistrale/
 │       ├── md/                          # File Markdown uniti (Advanced Merger)
 │       └── pdf/                         # PDF finali impaginati (Better Export PDF)
 ├── Anno 2/
-│   ├── Autonomous Robotics/             # [IN CORSO] Modelli cinematici, stocastici, sensori, feature, Bayes, Histogram Filter
+│   ├── Autonomous Robotics/             # [IN CORSO] Modelli cinematici, stocastici, sensori, feature, Bayes, Histogram Filter, Particle Filter
 │   │   ├── 0. Modelli Cinematici e di Movimento.md
 │   │   ├── 1. Modelli di Movimento Stocastici.md
 │   │   ├── 2. Sensori per la Robotica Mobile.md
 │   │   ├── 3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md
 │   │   ├── 4. Localizzazione e Filtri di Bayes.md
 │   │   ├── 5. Localizzazione con Histogram Filter.md
+│   │   ├── 6. Localizzazione con Particle Filter.md
 │   │   ├── zz. Argomenti extra.md
-│   │   ├── immagini/                    # 71 figure estratte e generate ad alta risoluzione
-│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..8)
+│   │   ├── immagini/                    # 87 figure estratte e generate ad alta risoluzione
+│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..10)
 │   │   └── scripts_python/
 │   │       └── motion_models_todo.py
 │   └── Deep Learning And Robot Perception/ # [IN CORSO] Note approfondite di Computer Vision
@@ -69,9 +70,9 @@ Magistrale/
 | **Anno 1** | **Digital Signal Processing** | Concluso | 11 file (`0.` - `A.`), `immagini/` | Esportati `Digital Signal Processing-merged.md` e `.pdf`. Include quantizzazione, DTFT, DFT, finestratura, filtri FIR/IIR, multirate. |
 | **Anno 1** | **Lezioni integrative DSP** | Concluso | 4 file (`0.` - `3.`), `immagini/` | Esportati `Lezioni integrative DSP-merged.md` e `.pdf`. Tratta segnali analogici/continui, LTI e trasformata di Fourier continua. |
 | **Anno 1** | **Electronic Embedded Systems** | Bozza | `0. Introduzione.md` | Da espandere: programmazione FPGA, sintesi VHDL, toolchain Xilinx Vivado/Vitis, sistemi Real-Time. |
-| **Anno 1** | **Machine Learning** | Bozza | `0. Introduzione.md` | Da espandere: regressione lineare/logistica, SVM, alberi decisionali, clustering, PCA, metriche di valutazione. |
+| **Anno 1** | **Machine Learning** | Iniziato | `GUIDA_APPUNTI_MACHINE_LEARNING.md`, `dispense/ML_Notes.pdf`, `immagini/` | Guida specifica attiva in `Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md`. 13 capitoli d'esame (`0.`..`C.`) basati sulla dispensa del Prof. Costante (225 pp). Esclusi argomenti con `*` (Capitolo 6 GLMs). Pipeline per dispense LaTeX con figure originali ed esempi grafici ad-hoc. Stesura incrementale un capitolo alla volta. |
 | **Anno 2** | **Deep Learning And Robot Perception** | In corso | `0. Immagini, filtri e gradienti.md`, `immagini/` | Primo capitolo corposo già redatto (450+ righe) corredato da 53 figure. Da proseguire con CNN, feature detection, object detection, segmentation, 3D perception. |
-| **Anno 2** | **Autonomous Robotics** | In corso | 6 file (`0.` - `5.`), `zz. Argomenti extra.md`, `immagini/` (71 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, ambiguità bimodale da beacon e simulazioni in Python. |
+| **Anno 2** | **Autonomous Robotics** | In corso | 7 file (`0.` - `6.`), `zz. Argomenti extra.md`, `immagini/` (87 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8, 10 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, Monte Carlo Localization (Particle Filter) con Importance Sampling, ricampionamento CDF/Roulette wheel e Low-Variance, e simulazioni in Python. |
 
 ---
 
@@ -349,6 +350,7 @@ flowchart TD
   - `3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md` (Lezione 6): mappe continue (line-map, geometriche) vs discrete (griglie di occupazione, quadtree, octomap), estrazione feature di linea da scansioni laser 2D (Hesse-normal form), algoritmi Split-and-Merge, RANSAC ed estrazione globale con trasformata di Hough a quattro quadranti.
   - `4. Localizzazione e Filtri di Bayes.md` (Lezione 7): problema della localizzazione e sorgenti di incertezza, rappresentazione del belief (tassonomia unimodale, multimodale, griglia, topologica), HMM e rete bayesiana dinamica, algoritmo del Filtro di Bayes continuo, derivazione induttiva predizione/correzione, esempio della porta ed introduzione ai filtri gaussiani.
   - `5. Localizzazione con Histogram Filter.md` (Lezione 8): Markov Localization non-parametrica su griglia discreta, superamento del limite computazionale dell'integrale continuo, formulazione discreta con mappa $M$, algoritmo Histogram Filter (predizione per convoluzione discreta e correzione bayesiana normalizzata), dicotomia distribution computation vs sampling stocastico, modello 1D con sensore range su beacon (ambiguità bimodale speculare a singolo beacon e risoluzione unimodale con beacon multipli), analisi di sensibilità della risoluzione spaziale $\Delta x$ e della maledizione della dimensionalità in SE(2).
+  - `6. Localizzazione con Particle Filter.md` (Lezione 10): Monte Carlo Localization (MCL) non-parametrica a campioni stocastici, superamento della maledizione della dimensionalità dell'Histogram Filter, evoluzione e convergenza 2D nel piano (video Thrun a Stanford), fondamenti matematici dell'Importance Sampling ($w(x) = f(x)/g(x) \propto p(z_t \mid x_t)$), algoritmi di ricampionamento (Roulette Wheel vs Low-Variance Resampling a complessità lineare $O(M)$), modello 1D di moto e misura con beacon, degenerazione delle particelle ($N_{\text{eff}}$), dimensionamento di $M$, introduzione ad AMCL per il problema del robot rapito e propagazione non-lineare dell'incertezza rispetto alla linearizzazione EKF.
 - **Materiale Grafico**: La cartella `immagini/` contiene tutte le figure vettoriali e raster estratte a 300 DPI dalle slide con padding 12px bianco e conformità anti-crop.
 - **Punto di Partenza**: Integrare le formule teoriche con il codice già strutturato in `scripts_python/motion_models_todo.py`:
   - Modello differenziale continuo: $\dot{x} = v \cos\theta$, $\dot{y} = v \sin\theta$, $\dot{\theta} = \omega$.
@@ -359,7 +361,14 @@ flowchart TD
 - **Contesto**: Architetture hardware programmabili (FPGA, SoC, ASIC), logica riconfigurabile, linguaggi HDL (VHDL), flusso di sintesi logica e timing analysis su Xilinx Vivado/Vitis, interfaccia con sensori/attuatori e sistemi Real-Time.
 
 ### 5.4 Machine Learning (Anno 1)
-- **Contesto**: Apprendimento supervisionato (Loss function, Gradient Descent, Regolarizzazione $L_1/L_2$, Bias-Variance trade-off), apprendimento non supervisionato (K-Means, GMM, PCA, autoencoder), metriche di valutazione (Precision, Recall, ROC-AUC).
+- **Guida Operativa Dedicata**: Consultare tassativamente [[Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING|GUIDA_APPUNTI_MACHINE_LEARNING.md]] per il perimetro d'esame, la mappatura dei capitoli e le regole grafiche e notazionali.
+- **Testo di Riferimento Ufficiale**: Dispense del docente Prof. Gabriele Costante (`Anno 1/Machine Learning/dispense/ML_Notes.pdf`, 225 pagine).
+- **Perimetro Tassativo**: Il docente interroga unicamente sui temi e formalismi presenti nella dispensa. Divieto assoluto di nozioni esterne o superflue (non si usa `zz. Argomenti extra.md` per teorie terze).
+- **Esclusione Contenuti con Asterisco (`*`)**: Capitolo 6 (GLMs*), Sezione 7.2.1 (Multinomial Naive Bayes*) e Sezione 13.3 (EM Algorithm analitico*) sono esclusi dall'esame e non vengono redatti.
+- **Mappatura 13 Capitoli d'Esame**: `0. Notazione e Concetti Fondamentali` (Cap. 1), `1. Introduzione al Supervised Learning` (Cap. 2), `2. Teoria della Probabilita` (Cap. 3), `3. Regressione Lineare` (Cap. 4), `4. Algoritmi di Classificazione` (Cap. 5), `5. Modelli Generativi per la Classificazione` (Cap. 7), `6. Metodo dei Moltiplicatori di Lagrange` (Cap. 8), `7. Model Selection e Model Assessment` (Cap. 9), `8. Regressione Ridge e Lasso` (Cap. 10), `9. Support Vector Machines` (Cap. 11), `A. Reti Neurali` (Cap. 12), `B. Apprendimento Non Supervisionato` (Cap. 13), `C. PCA e ICA` (Cap. 14).
+- **Pipeline Grafica**: Estrazione ad alta risoluzione (300 DPI) delle figure originali dal PDF rimuovendo la didascalia LaTeX nativa (`fig_<cap>_<num>_<desc>.png`) e integrazione di grafici ed esempi didattici ad-hoc (`fig_ex_...png` o `schema_...svg`) per chiarire passaggi teorici astratti.
+- **Modalità di Stesura**: Rigorosamente un capitolo per volta, tradotto in italiano nello stile in prima persona ingegneristica dell'autore.
+
 
 ---
 

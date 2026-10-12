@@ -19,7 +19,6 @@
 	- [[#1. Modelli Di Movimento Stocastici#Campionamento Con Modelli Eulero E Runge-Kutta 2|Campionamento Con Modelli Eulero E Runge-Kutta 2]]
 	- [[#1. Modelli Di Movimento Stocastici#Analisi Degli Scatter Plot: L'Effetto Delle Varianze|Analisi Degli Scatter Plot: L'Effetto Delle Varianze]]
 	- [[#1. Modelli Di Movimento Stocastici#Configurazione Di AMCL In ROS E Modelli Di Movimento|Configurazione Di AMCL In ROS E Modelli Di Movimento]]
-- [[#Frammento configurazione Nav2 AMCL (ROS2)|Frammento configurazione Nav2 AMCL (ROS2)]]
 - [[#2. Sensori per la Robotica Mobile|2. Sensori per la Robotica Mobile]]
 	- [[#2. Sensori per la Robotica Mobile#Il Ruolo Cruciale Della Percezione Nella Robotica Mobile|Il Ruolo Cruciale Della Percezione Nella Robotica Mobile]]
 	- [[#2. Sensori per la Robotica Mobile#Tassonomia E Classificazione Dei Sensori|Tassonomia E Classificazione Dei Sensori]]
@@ -49,11 +48,10 @@
 	- [[#5. Localizzazione Con Histogram Filter#Dal Filtro Continuo Alla Tassellatura Dello Spazio|Dal Filtro Continuo Alla Tassellatura Dello Spazio]]
 	- [[#5. Localizzazione Con Histogram Filter#Formulazione Discreta Del Filtro Con Mappa|Formulazione Discreta Del Filtro Con Mappa]]
 	- [[#5. Localizzazione Con Histogram Filter#Algoritmo Dell'Histogram Filter|Algoritmo Dell'Histogram Filter]]
-- [[#Algoritmo procedurale dell'Histogram Filter|Algoritmo procedurale dell'Histogram Filter]]
-	- [[#Algoritmo procedurale dell'Histogram Filter#Calcolo Della Distribuzione Vs Campionamento Stocastico|Calcolo Della Distribuzione Vs Campionamento Stocastico]]
-	- [[#Algoritmo procedurale dell'Histogram Filter#Progettazione Di Un Histogram Filter 1D|Progettazione Di Un Histogram Filter 1D]]
-	- [[#Algoritmo procedurale dell'Histogram Filter#Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale|Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale]]
-	- [[#Algoritmo procedurale dell'Histogram Filter#Limiti Computazionali E Transizione Verso Spazi 2D|Limiti Computazionali E Transizione Verso Spazi 2D]]
+	- [[#5. Localizzazione Con Histogram Filter#Calcolo Della Distribuzione Vs Campionamento Stocastico|Calcolo Della Distribuzione Vs Campionamento Stocastico]]
+	- [[#5. Localizzazione Con Histogram Filter#Progettazione Di Un Histogram Filter 1D|Progettazione Di Un Histogram Filter 1D]]
+	- [[#5. Localizzazione Con Histogram Filter#Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale|Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale]]
+	- [[#5. Localizzazione Con Histogram Filter#Limiti Computazionali E Transizione Verso Spazi 2D|Limiti Computazionali E Transizione Verso Spazi 2D]]
 - [[#Zz. Argomenti Extra|Zz. Argomenti Extra]]
 	- [[#Zz. Argomenti Extra#Metodi Di Integrazione ODE (Eulero, RK2, RK4)|Metodi Di Integrazione ODE (Eulero, RK2, RK4)]]
 	- [[#Zz. Argomenti Extra#Derivazione Analitica Del Drift Quadratico Nelle IMU|Derivazione Analitica Del Drift Quadratico Nelle IMU]]
@@ -344,6 +342,7 @@ Possiamo affidarci a questi modelli per risolvere da soli il problema della loca
 Integrando nel tempo ad anello aperto, questi piccoli errori si sommano a ogni passo: l'odometria inevitabilmente __deriva__ (_drift_), e la posa stimata divergerà da quella reale.
 
 Per questo motivo, la cinematica e l'odometria costituiscono il modello di previsione temporale, ma per mantenere la stima accurata dovremo fondere le misure dei sensori esterocettivi (LiDAR, videocamere, sonar) all'interno di filtri di stima stocastici come i filtri di Bayes, l'Extended Kalman Filter (EKF) e gli algoritmi di SLAM.
+
 
 
 # 1. Modelli Di Movimento Stocastici
@@ -749,6 +748,7 @@ amcl:
 >Tuttavia, esaminando il codice sorgente reale di AMCL (`amcl_diff.cpp` e `amcl_omni.cpp`):
 >- Per un robot differenziale (`diff` o `diff-corrected`), __$\alpha_5$ non viene utilizzato affatto__: bastano unicamente i 4 parametri $\alpha_1 \dots \alpha_4$.
 >- Il parametro `alpha5` viene impiegato esclusivamente per piattaforme omnidirezionali (`omni`), dove modella la componente di rumore sulla traslazione laterale ortogonale (_strafe_).
+
 
 
 # 2. Sensori per la Robotica Mobile
@@ -1170,6 +1170,7 @@ In questo capitolo abbiamo completato il panorama percettivo della robotica mobi
 - Il Laser scanner ToF 2D misura distanze planari trasformate in coordinate cartesiane tramite trigonometria elementare, mentre il LiDAR 3D (come il Velodyne Puck) genera nuvole di punti volumetriche.
 - La visione artificiale opera invece tramite proiezione prospettica su piano immagine (modello pinhole reale con parametri intrinseci ed estrinseci). La telecamera monoculare è un sensore di puro orientamento (_bearing_) che richiede visione stereo o integrazione con altri sensori per recuperare la scala metrica assoluta.
 - Nei prossimi capitoli uniremo i modelli di movimento probabilistici con i modelli di misura di questi sensori all'interno degli algoritmi di filtraggio bayesiano (Filtro di Kalman e Particle Filter) per risolvere il problema fondamentale della localizzazione autonoma.
+
 
 
 # 3. Rappresentazione dell'Ambiente Ed Estrazione Di Feature
@@ -1656,6 +1657,7 @@ $$
 | __Ambito di Elezione__ | Scansioni LiDAR 2D pulite per muri continui | Riconoscimento linee globali e forme note | Dati 3D rumorosi, stereo vision, feature visuali |
 
 
+
 # 4. Localizzazione E Filtri Di Bayes
 
 La localizzazione rappresenta una delle competenze primarie per la mobilità autonoma: consiste nel determinare in tempo reale la posa di un robot (posizione sul piano e orientamento) all'interno di una mappa nota dell'ambiente, fondendo le informazioni provenienti dai sensori di bordo.
@@ -2135,6 +2137,7 @@ L'eleganza teorica del filtro di Bayes si scontra con la realtà sperimentale, i
 > Poiché una gaussiana è descritta in modo esaustivo unicamente dalla sua media $\boldsymbol{\mu}_t$ e dalla sua matrice di covarianza $\boldsymbol{\Sigma}_t$, il filtro di Bayes si riduce a un insieme chiuso di equazioni algebriche matriciali (le equazioni del __Filtro di Kalman__), aprendo la strada alla stima ottimale real-time per sistemi robotici complessi.
 
 
+
 # 5. Localizzazione Con Histogram Filter
 
 Nel capitolo precedente [[4. Localizzazione e Filtri di Bayes|4. Localizzazione e Filtri di Bayes]] abbiamo derivato la formulazione analitica del filtro di Bayes ricorsivo nello spazio continuo delle pose. Sebbene matematicamente ineccepibile, quel modello continuo pone un limite insormontabile per l'ingegnere che deve far girare il software su un calcolatore reale: l'algoritmo richiede di integrare su tutte le possibili pose pregresse e di valutare la funzione di belief su ogni singolo punto del continuo.
@@ -2471,6 +2474,7 @@ Per superare la maledizione della dimensionalità della griglia senza perdere la
 2. __Filtri Non-Parametrici Monte Carlo (Particle Filters / MCL)__: invece di tassellare l'intero spazio di stato esaustivamente, campionano solo le regioni in cui la probabilità è significativamente non nulla tramite un insieme di $M$ particelle pesate ($M \approx 10^2 \div 10^4$), combinando la flessibilità dell'istogramma con l'efficienza computazionale.
 
 Nei prossimi capitoli estenderemo il modello al piano 2D e introdurremo la trattazione formale del Filtro di Kalman esteso.
+
 
 
 # Zz. Argomenti Extra
@@ -3132,5 +3136,4 @@ $$
 $$
 
 Nel caso di rumore di traslazione simmetrico con pareti riflettenti o periodiche, tale stato asintotico corrisponde alla __distribuzione uniforme__ $\mathbf{p}_\infty = [1/K, \dots, 1/K]^T$: in assenza di retroazione sensoriale, l'accumulo ininterrotto dell'incertezza odometrica cancella ogni informazione pregressa conducendo alla totale perdita di localizzazione.
-
 

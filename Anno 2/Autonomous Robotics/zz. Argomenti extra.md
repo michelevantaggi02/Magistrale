@@ -658,3 +658,121 @@ $$
 
 Nel caso di rumore di traslazione simmetrico con pareti riflettenti o periodiche, tale stato asintotico corrisponde alla __distribuzione uniforme__ $\mathbf{p}_\infty = [1/K, \dots, 1/K]^T$: in assenza di retroazione sensoriale, l'accumulo ininterrotto dell'incertezza odometrica cancella ogni informazione pregressa conducendo alla totale perdita di localizzazione.
 
+## Derivazione Formale Della Traiettoria Completa Nel Particle Filter
+
+Nella trattazione standard della localizzazione robotica (Monte Carlo Localization), il filtro a particelle calcola ricorsivamente la distribuzione di probabilità a posteriori della sola posa istantanea:
+
+$$
+bel(x_t) = p(x_t \mid z_{1:t}, u_{1:t})
+$$
+
+Tuttavia, dal punto di vista dell'analisi teorica dei processi stocastici (come illustrato nelle lezioni avanzate del Prof. Valigi, slide 38–39), il Particle Filter trova la sua giustificazione analitica più rigorosa estendendo lo stato all'intera sequenza storica delle pose attraversate dal robot:
+
+$$
+x_{0:t} = \{ x_0, x_1, \dots, x_t \}
+$$
+
+Il belief della traiettoria completa è definito come la densità congiunta condizionata a tutte le osservazioni e azioni passate:
+
+$$
+bel(x_{0:t}) = p(x_{0:t} \mid z_{1:t}, u_{1:t})
+$$
+
+### Espansione Ricorsiva Tramite Regola Di Bayes E Proprietà Di Markov
+
+Isoliamo l'osservazione più recente $z_t$ dal set di tutte le misure sensoriali $z_{1:t} = \{ z_t, z_{1:t-1} \}$:
+
+$$
+bel(x_{0:t}) = p(x_{0:t} \mid z_t, z_{1:t-1}, u_{1:t})
+$$
+
+Applicando la regola di Bayes considerando $z_t$ come l'evidenza osservata condizionata alla traiettoria $x_{0:t}$, alla storia delle misure passate $z_{1:t-1}$ e ai comandi $u_{1:t}$:
+
+$$
+bel(x_{0:t}) = \frac{p(z_t \mid x_{0:t}, z_{1:t-1}, u_{1:t}) \, p(x_{0:t} \mid z_{1:t-1}, u_{1:t})}{p(z_t \mid z_{1:t-1}, u_{1:t})} = \eta \, p(z_t \mid x_{0:t}, z_{1:t-1}, u_{1:t}) \, p(x_{0:t} \mid z_{1:t-1}, u_{1:t})
+$$
+
+Sfruttiamo l'__assunzione markoviana del modello di misura__: la lettura del sensore $z_t$ all'istante $t$ è condizionatamente indipendente da tutte le pose passate $x_{0:t-1}$, dalle misure pregresse $z_{1:t-1}$ e dai comandi di controllo $u_{1:t}$, una volta nota la posa istantanea attuale $x_t$:
+
+$$
+p(z_t \mid x_{0:t}, z_{1:t-1}, u_{1:t}) = p(z_t \mid x_t)
+$$
+
+Sostituendo nella formulazione del belief:
+
+$$
+bel(x_{0:t}) = \eta \, p(z_t \mid x_t) \, p(x_{0:t} \mid z_{1:t-1}, u_{1:t})
+$$
+
+Scomponiamo ora il termine congiunto $p(x_{0:t} \mid z_{1:t-1}, u_{1:t})$ applicando la definizione di probabilità condizionata per isolare l'ultimo stato $x_t$ rispetto alla storia $x_{0:t-1}$:
+
+$$
+p(x_{0:t} \mid z_{1:t-1}, u_{1:t}) = p(x_t \mid x_{0:t-1}, z_{1:t-1}, u_{1:t}) \, p(x_{0:t-1} \mid z_{1:t-1}, u_{1:t})
+$$
+
+Applichiamo nuovamente l'__assunzione markoviana del modello di moto__:
+1. Lo stato attuale $x_t$ dipende unicamente dalla posa immediatamente precedente $x_{t-1}$ e dal comando di attuazione corrente $u_t$:
+
+   $$
+   p(x_t \mid x_{0:t-1}, z_{1:t-1}, u_{1:t}) = p(x_t \mid x_{t-1}, u_t)
+   $$
+
+2. La storia passata delle pose $x_{0:t-1}$ è indipendente dall'azione futura $u_t$:
+
+   $$
+   p(x_{0:t-1} \mid z_{1:t-1}, u_{1:t}) = p(x_{0:t-1} \mid z_{1:t-1}, u_{1:t-1}) = bel(x_{0:t-1})
+   $$
+
+Ricongiungendo tutti i termini, otteniamo l'equazione ricorsiva fondamentale per il belief della traiettoria:
+
+$$
+bel(x_{0:t}) = \eta \, p(z_t \mid x_t) \, p(x_t \mid x_{t-1}, u_t) \, bel(x_{0:t-1})
+$$
+
+Definendo il belief a priori della traiettoria (dopo il comando di moto ma prima della misura) come:
+
+$$
+\overline{bel}(x_{0:t}) = p(x_t \mid x_{t-1}, u_t) \, bel(x_{0:t-1})
+$$
+
+L'espressione si compatta nella forma canonica:
+
+$$
+bel(x_{0:t}) = \eta \, p(z_t \mid x_t) \, \overline{bel}(x_{0:t})
+$$
+
+### Corrispondenza Tra Target, Proposal E Pesi Di Importanza
+
+Questa derivazione analitica mostra esattamente la convergenza matematica con la teoria dell'__Importance Sampling__:
+- La __distribuzione target__ (quella reale da cui vorremmo campionare) è la posterior congiunta $f(x_{0:t}) = bel(x_{0:t})$;
+- La __distribuzione proposal__ (quella operativa da cui siamo capaci di campionare ricorsivamente per propagazione stocastica) è la prior congiunta $g(x_{0:t}) = \overline{bel}(x_{0:t})$;
+- Il __fattore di importanza analitico__ è il rapporto puntuale tra le due distribuzioni:
+
+$$
+w(x_{0:t}) = \frac{f(x_{0:t})}{g(x_{0:t})} = \frac{bel(x_{0:t})}{\overline{bel}(x_{0:t})} = \frac{\eta \, p(z_t \mid x_t) \, \overline{bel}(x_{0:t})}{\overline{bel}(x_{0:t})} = \eta \, p(z_t \mid x_t)
+$$
+
+Poiché nelle applicazioni pratiche il fattore di normalizzazione $\eta$ viene calcolato a valle tramite somma empirica sui pesi estratti:
+
+$$
+\eta = \left( \sum_{m=1}^M w_t^{[m]} \right)^{-1}
+$$
+
+Il peso non normalizzato assegnato a ciascuna particella $m$-esima al passo $t$ coincide esattamente con la verosimiglianza di misura valutata sulla posa corrente:
+
+$$
+w_t^{[m]} = p(z_t \mid x_t^{[m]})
+$$
+
+### Marginalizzazione E Riduzione Al Filtro Sulla Posa Istantanea
+
+Nelle applicazioni di localizzazione robotica ordinaria, memorizzare l'intera traiettoria $x_{0:t}$ per ciascuna delle $M$ particelle comporterebbe un consumo lineare di memoria $O(M \cdot t)$ che divergerebbe nel tempo.
+
+Poiché il robot necessita esclusivamente di conoscere dove si trova all'istante corrente $t$ per pianificare il controllo, la distribuzione di interesse $bel(x_t)$ si ottiene __marginalizzando__ il belief congiunto rispetto a tutte le pose passate $x_{0:t-1}$:
+
+$$
+bel(x_t) = \int \dots \int bel(x_{0:t}) \, \mathrm{d}x_0 \dots \mathrm{d}x_{t-1}
+$$
+
+Nell'approssimazione a particelle, questa marginalizzazione corrisponde a un'operazione computazionale a costo zero: è sufficiente __dimenticare la storia passata__ delle particelle e memorizzare unicamente il vettore dello stato corrente $x_t^{[m]}$ per $m = 1, \dots, M$. Ogni particella al passo $t$ è un campione estratto dalla densità marginale corretta $bel(x_t)$.
+
