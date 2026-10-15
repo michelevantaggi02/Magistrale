@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
+                "file": "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "1. Introduzione al Supervised Learning"
+              "title": "3. Quantizzazione ottima"
             }
           }
         ]
@@ -195,10 +195,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "c25e4be564c85922",
+  "active": "08d86cc9d4ce593b",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+    "Anno 1/Machine Learning-merged.md",
     "Anno 1/Machine Learning/2. Teoria della Probabilita.md",
+    "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
+    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+    "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
     "Anno 1/Machine Learning/immagini/fig_ex_2_mle_vs_map.png",
     "scratch/make_bayes_schema.py",
     "scratch/ch3_img-006_clean.png",
@@ -221,7 +224,6 @@
     "Anno 2/Deep Learning And Robot Perception/note/lezione_9.md",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_7.md",
-    "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
     "Anno 1/Machine Learning/dispense/ML_Notes.pdf",
     "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
     "scratch/make_split_schema.py",
@@ -242,8 +244,6 @@
     "Anno 2/Autonomous Robotics/4. Localizzazione e Filtri di Bayes.md",
     "Anno 2/Autonomous Robotics/note/lezione_8.md",
     "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
-    "Anno 2/Autonomous Robotics/zz. Argomenti extra.md",
-    "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"
   ]
