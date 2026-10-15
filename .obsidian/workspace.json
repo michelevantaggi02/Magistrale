@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "e200368f7e8c43ff",
+        "id": "5cc6254412a5857f",
         "type": "tabs",
         "children": [
           {
-            "id": "500ead5a4deb3b2f",
+            "id": "a8ddd4b215566f38",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "1. Introduzione al Supervised Learning"
+              "title": "Nuova scheda"
             }
           }
         ]
@@ -195,10 +191,23 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "500ead5a4deb3b2f",
+  "active": "08d86cc9d4ce593b",
   "lastOpenFiles": [
-    "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
+    "Anno 2/Autonomous Robotics/scripts_python/particle_filter_gaussiana_passo_2.png",
+    "Anno 2/Autonomous Robotics/scripts_python/particle_filter_gaussiana_passo_1.png",
+    "Anno 2/Autonomous Robotics/scripts_python/__pycache__/ParticleFilter_gemini_lecture_v1.cpython-314.pyc",
+    "Anno 2/Autonomous Robotics/scripts_python/ParticleFilter_gemini_lecture_v1.py",
+    "Anno 2/Autonomous Robotics/scripts_python/Histogram_gemini_lecture_v10.py",
+    "Senza nome.base",
+    "Senza nome.canvas",
+    "Anno 2/Deep Learning And Robot Perception/note/lezione_9.md",
+    "Anno 1/Digital Signal Processing/0. Introduzione.md",
+    "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
+    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
+    "Anno 2/Deep Learning And Robot Perception/note/lezione_7.md",
     "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
+    "Anno 1/Machine Learning/dispense/ML_Notes.pdf",
+    "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
     "Anno 1/Machine Learning/immagini/fig_ex_1_train_val_test_split.png",
     "scratch/make_split_schema.py",
     "Anno 1/Machine Learning/immagini/fig_2_7_cross_validation_schema.png",
@@ -209,18 +218,15 @@
     "Anno 1/Machine Learning/immagini/fig_2_4b_curve_fitting_m1.png",
     "Anno 1/Machine Learning/immagini/fig_2_4a_curve_fitting_m0.png",
     "Anno 1/Machine Learning/immagini/fig_2_3_curve_fitting_sinusoide.png",
-    "Anno 1/Machine Learning/immagini/fig_2_2_mnist_shifted_3.png",
     "Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md",
     "STRUTTURA_E_GUIDA_APPUNTI.md",
     "scratch/make_schema.py",
     "scratch",
     "Anno 1/Machine Learning/immagini",
     "Anno 1/Machine Learning/0. Introduzione.md",
-    "Anno 1/Machine Learning/dispense/ML_Notes.pdf",
     "Anno 1/Machine Learning/dispense",
     "Anno 2/Deep Learning And Robot Perception/4. Formazione dell'Immagine e Visione Stereo.md",
     "Anno 2/Deep Learning And Robot Perception/5. Visual Odometry e Structure from Motion.md",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_7.md",
     "Anno 2/Autonomous Robotics/note/lezione_7.md",
     "Anno 2/Autonomous Robotics/6. Localizzazione con Particle Filter.md",
     "Anno 2/Autonomous Robotics/note/lezione_10.md",
@@ -228,21 +234,12 @@
     "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
     "Anno 2/Autonomous Robotics/5. Localizzazione con Histogram Filter.md",
     "Anno 2/Autonomous Robotics/3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md",
-    "Anno 2/Autonomous Robotics/scripts_python/__pycache__/histogram_filter_1d.cpython-314.pyc",
-    "Anno 2/Autonomous Robotics/scripts_python/__pycache__",
-    "Anno 2/Autonomous Robotics/scripts_python/histogram_filter_1d.py",
     "Anno 2/Autonomous Robotics/4. Localizzazione e Filtri di Bayes.md",
     "Anno 2/Autonomous Robotics/note/lezione_8.md",
-    "Anno 2/Autonomous Robotics/scripts_python/motion_models_lecture.py",
     "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
     "Anno 2/Autonomous Robotics/zz. Argomenti extra.md",
     "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
     "Anno 2/Autonomous Robotics/1. Modelli di Movimento Stocastici.md",
-    "Anno 2/Deep Learning And Robot Perception/1. Local Features e Harris Corner Detector.md",
-    "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
-    "Anno 2/export/md/Autonomous Robotics-merged 1.md",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_3.md",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_4.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"
   ]

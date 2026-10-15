@@ -149,17 +149,51 @@ Nei file Markdown si possono combinare le direttive separandole da spazi:
 > [!NOTE] Risoluzione percorsi immagini
 > I file grafici vanno posizionati nella sottocartella `immagini/` appartenente alla materia corrente (es. `Anno 2/Deep Learning And Robot Perception/immagini/`). Obsidian risolve i link corti `![[nome_file.png]]` automaticamente.
 
-#### 3.3.1 Gerarchia e Priorità delle Immagini: PDF vs Immagini Generate
-> [!IMPORTANT] Regola di Priorità Assoluta: Figure Originali da PDF/Slide
-> Quando sono disponibili file sorgente esterni (slide in PDF, dispense docenti):
-> 1. **Preferenza primaria per le immagini del PDF**: Le figure originali estratte dal PDF hanno **sempre la precedenza assoluta** rispetto a qualsiasi immagine generata sinteticamente (tramite IA o codice programmatico). Esse contengono i grafici cartesiani esatti, i dataset reali di riferimento (es. Middlebury, standard scikit-image, curve empiriche) e la notazione visiva identica a quella utilizzata dal docente a lezione.
-> 2. **Ruolo delle immagini generate appositamente (SVG / Schemi Custom)**: La generazione ad-hoc di illustrazioni vettoriali (SVG) o diagrammi dedicati **non deve sostituire le figure del PDF**, ma va effettuata unicamente nei seguenti due casi:
+#### 3.3.2 Gerarchia e Priorità delle Immagini: Sorgenti Originali vs Immagini Generate
+> [!IMPORTANT] Regola di Priorità Assoluta: Figure Originali da Slide / PDF
+> Quando sono disponibili file sorgente esterni (slide PowerPoint `.pptx`, presentazioni, PDF, dispense dei docenti):
+> 1. **Preferenza primaria per le figure originali**: Le immagini e gli schemi originali estratti direttamente dalla sorgente hanno **sempre la precedenza assoluta** rispetto a qualsiasi immagine generata sinteticamente (tramite IA o codice programmatico). Esse contengono i grafici cartesiani esatti, i dataset reali di riferimento (es. Middlebury, standard scikit-image, curve empiriche) e la notazione visiva identica a quella utilizzata dal docente a lezione.
+> 2. **Ruolo delle immagini generate appositamente (SVG / Schemi Custom)**: La generazione ad-hoc di illustrazioni vettoriali (SVG) o diagrammi dedicati **non deve sostituire le figure delle slide**, ma va effettuata unicamente nei seguenti due casi:
 >    - **Integrazione di appunti scritti a mano / aggiunte orali del docente**: Quando gli appunti dello studente riportano disegni alla lavagna, metafore concettuali (es. _"la casetta traslata"_, diagrammi di partizione dello spazio degli autovalori, patch comparative) non presenti o solo accennate nelle slide.
 >    - **Mancanze o lacune didattiche oggettive**: Se nelle slide manca uno schema a blocchi fondamentale o una spiegazione visiva intermedia indispensabile per rendere l'appunto comprensibile e autosufficiente.
 
-#### 3.3.2 Pipeline e Controlli per Ricavare Correttamente le Immagini da PDF
-> [!IMPORTANT] Primo Step Obbligatorio del Workflow
-> L'estrazione, il ritaglio e la validazione delle immagini dal PDF **è tassativamente il PRIMO step da compiere**, ancor prima di iniziare la stesura del testo o la traduzione della lezione. Avere l'intero set di asset grafici estratto e validato consente di costruire l'esposizione attorno a figure concrete e verificabili.
+#### 3.3.3 Pipeline di Estrazione da PowerPoint e Slide Non-PDF (Unzip Diretto degli Asset)
+> [!IMPORTANT] Regola Tassativa: Estrazione Tramite Decompressione dell'Archivio
+> I formati moderni di presentazione come Microsoft PowerPoint (`.pptx`) o OpenDocument (`.odp`) sono archivi compressi ZIP standard (OpenXML / ODF).
+> Se il materiale didattico è fornito in uno di questi formati:
+> 1. **Decompressione diretta (Unzip)**: Il file `.pptx` (o `.odp`) deve essere decompresso direttamente tramite riga di comando (es. `unzip -q presentazione.pptx -d scratch/extracted_pptx/`) o script Python (`zipfile`).
+> 2. **Individuazione degli asset multimediali (`ppt/media/`)**:
+>    - Tutte le immagini bitmap (PNG, JPEG), i vettoriali importati (SVG, EMF, WMF) e i video incorporati (.mp4) si trovano archiviati a risoluzione nativa e lossless nella cartella:
+>      - `ppt/media/` per file Microsoft PowerPoint (`.pptx`)
+>      - `Pictures/` per file LibreOffice / OpenDocument (`.odp`)
+>    - Questo garantisce l'accesso immediato ai file originali a qualità massima, preservando trasparenze ed eliminando rischi di sfocatura o ritaglio accidentale.
+> 3. **Selezione delle sole immagini utili**:
+>    - Tra tutti i file presenti in `ppt/media/`, filtrare ed escludere elementi di layout o decorativi (loghi ripetuti dell'università, icone di numerazione, texture di sfondo, barre grafiche del layout).
+>    - Selezionare unicamente le figure didattiche rilevanti per la spiegazione (grafici, schemi, fotografie di robot/sensori, matrici e risultati sperimentali).
+> 4. **Conversione formati vettoriali proprietari (EMF/WMF)**:
+>    - Se alcuni diagrammi sono memorizzati come `imageX.emf` o `imageX.wmf`, convertirli in formato moderno standard (`svg` o `png` ad alta risoluzione) prima di inserirli nel vault.
+> 5. **Naming Semantico e Archiviazione**:
+>    - Rinominare le immagini selezionate seguendo la convenzione standard `slide_<num>_<descrizione_concisa>.png` (o `.svg`).
+>    - Spostare i file direttamente nella cartella `immagini/` della materia corrente.
+
+##### Gestione Contenuti Vettoriali e Grafici Nativi Assenti in `ppt/media/` (Workflow Ibrido e Fallback)
+> [!WARNING] Elementi Grafici NON Presenti nella Cartella `media/`
+> In PowerPoint alcuni contenuti visivi fondamentali **non sono file immagine** e non risiedono in `ppt/media/`:
+> - **Grafici nativi Office (`DrawingML Charts`)**: grafici a dispersione, cartesiani, a barre o a linee inseriti con lo strumento nativo di PowerPoint (strutturati in XML sotto `ppt/charts/` e con dati in `ppt/embeddings/*.xlsx`).
+> - **Forme vettoriali e schemi a blocchi (`Shapes`)**: diagrammi composti da rettangoli, frecce, cerchi o connettori nativi raggruppati tra loro (descritti vettorialmente in `ppt/slides/slideX.xml`).
+> - **Diagrammi `SmartArt`**: strutture gerarchiche e flussi di processo definiti in `ppt/diagrams/`.
+> - **Tabelle native**: strutture dati XML (`<a:tbl>`).
+> - **Didascalie o etichette sovrapposte a immagini**: caselle di testo o frecce posizionate dal docente sopra una foto (in `media/` risiede solo la foto "nuda" priva delle scritte sovrapposte).
+>
+> **Procedura Operativa di Fallback**:
+> 1. **Verifica Visiva delle Slide**: Durante l'analisi del capitolo, verificare sempre se la slide contiene un grafico cartesiano, uno schema SmartArt o annotazioni sovrapposte che non compaiono tra i file estratti da `ppt/media/`.
+> 2. **Rendering Headless a 300 DPI**: Per ciascuna di queste figure native, convertire la presentazione (o la specifica slide) in PDF via utility di sistema headless (es. `libreoffice --headless --convert-to pdf presentazione.pptx -outdir scratch/`) e renderizzare la pagina ad alta risoluzione (`pdftoppm -png -r 300`).
+> 3. **Ritaglio con Pipeline Anti-Crop**: Ritagliare il grafico o lo schema completo applicando rigorosamente la pipeline anti-crop a 6 fasi (Sezione 3.3.4), assicurando margini di respiro puliti (8–15 px) e zero testo troncato.
+> 4. **Trascrizione Nativa (Mermaid / Markdown)**: Se il diagramma nativo è un semplice schema di flusso logico o una tabella dati, privilegiare la trascrizione diretta in codice Mermaid (`flowchart`) o tabella Markdown nativa nel corpo della nota, migliorando leggibilità e manutenibilità.
+
+#### 3.3.4 Pipeline e Controlli per Ricavare Correttamente le Immagini da PDF
+> [!IMPORTANT] Primo Step Obbligatorio del Workflow per Sorgenti PDF
+> Nel caso in cui il materiale sorgente sia esclusivamente in formato PDF, l'estrazione, il ritaglio e la validazione delle immagini **è tassativamente il PRIMO step da compiere**, ancor prima di iniziare la stesura del testo o la traduzione della lezione. Avere l'intero set di asset grafici estratto e validato consente di costruire l'esposizione attorno a figure concrete e verificabili.
 
 Per garantire un'estrazione impeccabile ed evitare difetti visivi (in particolare il testo troncato a metà), seguire rigidamente questa procedura in 6 fasi:
 
@@ -188,6 +222,37 @@ Per garantire un'estrazione impeccabile ed evitare difetti visivi (in particolar
 6. **Archiviazione e Naming Semantico**:
    - Salvare l'immagine direttamente nella sottocartella `immagini/` della materia di appartenenza.
    - Adottare una convenzione di denominazione parlante e tracciabile, preferibilmente con riferimento alla slide d'origine: `slide_<num>_<descrizione_concisa>.png` (es. `slide_44_nms_real_corner_3d.png`, `slide_37_harris_stephens_values.png`).
+
+#### 3.3.5 Gestione e Incorporamento dei Video (Formati Nativi e Web per Obsidian)
+Quando nelle presentazioni, nei file sorgente o nelle lezioni sono presenti animazioni, simulazioni o video dimostrativi, gestirli secondo le modalità più idonee a Obsidian:
+
+1. **Video Locali Incorporati (estratti da `.pptx` o forniti come file)**:
+   - Se all'interno dell'archivio (in `ppt/media/`) è presente un file video (.mp4, .webm, .mov) rilevante per la comprensione didattica e di peso non eccessivo:
+     - Salvare il file video nella cartella `immagini/` della materia con nome parlante (es. `video_mcl_convergenza_thrun.mp4`).
+     - **Incorporamento Nativo HTML5**: Obsidian supporta nativamente i video tramite la sintassi wikilink embed:
+       ```markdown
+       ![[video_mcl_convergenza_thrun.mp4]]
+       ```
+       Obsidian visualizza inline un player video nativo completo di controlli (play/pausa, seekbar temporale, volume, fullscreen).
+     - **Contestualizzazione didattica**: Accompagnare sempre il video con una breve spiegazione o un callout che chiarisca l'esperimento o il fenomeno visualizzato (es. la progressiva convergenza delle particelle verso la vera posa del robot).
+
+2. **Video Esterni / Streaming (YouTube, Vimeo, Web link, repository esterni)**:
+   - Se il video è ospitato online (tramite link presente nella slide) o se il file video supera dimensioni ragionevoli (>30-50 MB) per non appesantire il vault:
+     - **Opzione Standard (Callout con Link Cliccabile)**: Racchiudere il link in un callout dedicato evidenziandone lo scopo didattico:
+       ```markdown
+       > [!example] Video Dimostrativo: Monte Carlo Localization in Azione
+       > Simulazione della convergenza del Particle Filter su robot mobile in ambiente indoor:
+       > 🔗 [Guarda su YouTube: Stanford MCL Robot Navigation (Sebastian Thrun)](https://www.youtube.com/watch?v=...)
+       ```
+     - **Opzione Embed Inline (Iframe per riproduzione diretta in Obsidian)**: Se si desidera consentire la riproduzione diretta del video YouTube/web all'interno della nota, Obsidian supporta il tag standard `<iframe>`:
+       ```markdown
+       <iframe width="100%" height="400" src="https://www.youtube.com/embed/CODICE_VIDEO" title="Simulazione MCL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+       ```
+     - **Opzione Thumbnail con Link**: Se è disponibile un fotogramma significativo del video (estratto dall'archivio o dalla slide):
+       ```markdown
+       ![[slide_10_video_mcl_preview.png|center mid]]
+       > [!note] [Guarda il video completo della dimostrazione](https://...)
+       ```
 
 ### 3.4 Callout di Obsidian
 I callout arricchiscono il testo dividendo le nozioni teoriche da esempi ed evidenze:
@@ -303,15 +368,15 @@ Quando si deve redigere una nuova materia, completare un capitolo esistente o ri
 
 ```mermaid
 flowchart TD
-    A["File/Slide Forniti (PDF)"] --> B["1. Estrazione, Ritaglio e Validazione Grafica da PDF (STEP PRIORITARIO)"]
-    B --> C["Salvataggio Immagini Validato in '<Materia>/immagini/'"]
+    A["File/Slide Forniti (PDF o PPTX/Slide)"] --> B["1. Estrazione Immagini e Video da Sorgente (STEP PRIORITARIO)"]
+    B --> C["Salvataggio Immagini e Video in '<Materia>/immagini/'"]
     A --> D["Note Manoscritte & Aggiunte del Docente"]
     D --> E{"Ci sono schemi mancanti o note alla lavagna?"}
     E -- "Sì" --> F["Generazione Diagrammi SVG/Schemi Custom"]
     F --> C
     E -- "No" --> G["2. Analisi, Traduzione e Rielaborazione Concettuale in Italiano"]
     C --> G
-    G --> H["3. Redazione Capitolo 'N. Titolo.md' (Integrazione Figure nei Callout)"]
+    G --> H["3. Redazione Capitolo 'N. Titolo.md' (Integrazione Figure nei Callout e Video)"]
     H --> I["Formattazione KaTeX, Convenzioni Linter (__grassetto__, _corsivo_)"]
     I --> L["Merge con Advanced Merger in 'export/md/'"]
     L --> M["Esportazione PDF con Better Export PDF in 'export/pdf/'"]
@@ -319,7 +384,10 @@ flowchart TD
 ```
 
 ### 4.1 Stesura di un Nuovo Capitolo da File Forniti
-1. **Fase 1 - Estrazione Grafica da PDF (Step Prioritario)**: Prima di scrivere qualsiasi riga di testo, scansionare l'intero PDF, estrarre ad alta risoluzione tutti i grafici, le tabelle comparative, le mappe e gli esempi visivi salienti, applicare la pipeline anti-crop a 6 fasi (zero testo mozzato, padding di respiro adeguato) e archiviarli in `<Materia>/immagini/`.
+1. **Fase 1 - Estrazione Grafica e Multimediale (Step Prioritario)**: Prima di scrivere qualsiasi riga di testo, estrarre tutte le immagini e gli eventuali video dai materiali sorgente:
+   - **Slide PowerPoint (`.pptx`) o formati compressi non-PDF**: eseguire la **decompressione diretta (unzip)** del file ed estrarre gli asset multimediali originali da `ppt/media/` (o cartella equivalente), selezionando a risoluzione nativa e lossless solo le figure e i video didatticamente rilevanti.
+   - **File esclusivamente PDF**: renderizzare le pagine ad alta risoluzione (almeno 150-300 DPI) ed applicare la pipeline anti-crop a 6 fasi (zero testo mozzato, padding di respiro adeguato).
+   - Archiviare tutti gli asset grafici e video direttamente nella cartella `<Materia>/immagini/`.
 2. **Fase 2 - Analisi Note Manoscritte e Revisione Critica degli Errori**: Esaminare le annotazioni dello studente e le spiegazioni orali del docente. Analizzare criticamente la presenza di eventuali errori concettuali, formule trascritte con sviste algebriche o sovrapposizioni notazionali ambigue. Generare schemi vettoriali custom (SVG) solo per chiarire concetti mancanti o disegni alla lavagna.
 3. **Fase 3 - Analisi, Traduzione e Rielaborazione**: Leggere e rielaborare i contenuti delle slide traducendoli integralmente in lingua italiana con rigore accademico e chiarezza didattica, correggendo direttamente nel testo qualsiasi errore presente nelle note di partenza.
 4. **Fase 4 - Numerazione e Titolo**: Assegnare il nome file progressivo corretto (partendo da `0.` per il capitolo iniziale della materia), allineando perfettamente l'heading H1.
@@ -375,10 +443,12 @@ flowchart TD
 ## 6. Checklist di Controllo Qualità per l'Assistente AI
 
 Prima di concludere qualsiasi sessione di scrittura o refactoring di un appunto:
-- [ ] **Priorità Grafica da PDF**: Le immagini, schemi e grafici presenti nei lucidi sorgente sono stati estratti dal PDF come **primo step operativo** prima della stesura del testo.
-- [ ] **Preferenza Immagini Originali**: È stata data preferenza assoluta alle figure originali del PDF rispetto a immagini generate sinteticamente (usando schemi custom/SVG solo per note manoscritte del docente o lacune didattiche).
-- [ ] **Controllo Anti-Crop del Testo**: Tutte le immagini estratte dal PDF sono esenti da testo tagliato a metà altezza (regola "tutto o niente": etichette/legenda incluse per intero, testo esterno/footer escluso completamente).
+- [ ] **Priorità Grafica e Multimediale da Slide/PDF**: Le immagini, schemi, grafici ed eventuali video presenti nei lucidi sorgente sono stati estratti come **primo step operativo** prima della stesura del testo.
+- [ ] **Estrazione da PowerPoint / Non-PDF**: Se la sorgente è un file `.pptx` o un archivio compresso, le immagini e i video utili sono stati ricavati prioritariamente tramite **decompressione dell'archivio (unzip)** da `ppt/media/`. Eventuali grafici nativi o schemi a forme assenti in `media/` sono stati recuperati tramite il **fallback headless PDF/anti-crop** o trascritti in Mermaid/Markdown.
+- [ ] **Preferenza Immagini Originali**: È stata data preferenza assoluta alle figure originali della sorgente rispetto a immagini generate sinteticamente (usando schemi custom/SVG solo per note manoscritte del docente o lacune didattiche).
+- [ ] **Controllo Anti-Crop del Testo (per PDF)**: Tutte le immagini estratte da PDF sono esenti da testo tagliato a metà altezza (regola "tutto o niente": etichette/legenda incluse per intero, testo esterno/footer escluso completamente).
 - [ ] **Margini di Respiro**: Le immagini estratte presentano margini di padding puliti (8-15 px) senza tratti o bordi tagliati a filo.
+- [ ] **Gestione Video**: Eventuali video didattici sono stati integrati nel modo più appropriato per Obsidian: incorporati come player nativo (`![[video.mp4]]`) per file locali estratti, oppure organizzati in callout con link cliccabili/iframe per video esterni o in streaming.
 - [ ] **Lingua Italiana**: Tutti i contenuti provenienti da file sorgente esterni (slide, dispense, paper) sono stati **tradotti e rielaborati in italiano** (mantenendo solo acronimi o termini tecnici consolidati).
 - [ ] **Coerenza Titolo e File**: Il titolo `# N. Titolo` combacia esattamente con il nome del file `.md`.
 - [ ] **Title Case**: Le parole del titolo rispettano il Title Case.
