@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
+                "file": "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "4. Spettro in frequenza - DTFT"
+              "title": "7. Stima Spettrale di Segnali Non Stazionari"
             }
           }
         ]
@@ -197,6 +197,8 @@
   },
   "active": "c25e4be564c85922",
   "lastOpenFiles": [
+    "Anno 1/Digital Signal Processing/6. Finestratura.md",
+    "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
     "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
@@ -242,8 +244,6 @@
     "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
     "Anno 2/Autonomous Robotics/5. Localizzazione con Histogram Filter.md",
     "Anno 2/Autonomous Robotics/3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md",
-    "Anno 2/Autonomous Robotics/4. Localizzazione e Filtri di Bayes.md",
-    "Anno 2/Autonomous Robotics/note/lezione_8.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"
   ]
