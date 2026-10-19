@@ -776,3 +776,371 @@ $$
 
 Nell'approssimazione a particelle, questa marginalizzazione corrisponde a un'operazione computazionale a costo zero: è sufficiente __dimenticare la storia passata__ delle particelle e memorizzare unicamente il vettore dello stato corrente $x_t^{[m]}$ per $m = 1, \dots, M$. Ogni particella al passo $t$ è un campione estratto dalla densità marginale corretta $bel(x_t)$.
 
+## Implementazione Industriale Di AMCL in ROS: Analisi Del Codice C Sorgente
+
+Nel framework robotico __ROS / ROS2 (Nav2)__, il package di localizzazione 2D per robot mobili su mappe a griglia è `amcl` (all'interno del repository `ros-planning/navigation`).
+
+L'implementazione in linguaggio C originaria fonde congiuntamente l'adattamento della cardinalità $M$ tramite __KLD-Sampling__ e il recupero dal rapimento tramite __Augmented MCL__. Analizziamo le quattro funzioni e routine cardine del sorgente di `amcl`.
+
+### 1. Calcolo Del Limite Dinamico KLD: `pf_resample_limit`
+
+La funzione `pf_resample_limit(pf_t *pf, int k)` calcola il numero di particelle necessario $n$ dato il numero $k$ di bin non vuoti nell'istogramma KD-Tree:
+
+```c
+// Compute the required number of samples, given that there are k
+// bins with samples in them. This is taken directly from Fox et al.
+int pf_resample_limit(pf_t *pf, int k)
+{
+    double a, b, c, x;
+    int n;
+    
+    if (k <= 1)
+        return pf->max_samples;
+        
+    a = 1.0;
+    b = 2.0 / (9.0 * ((double) k - 1.0));
+    c = sqrt(2.0 / (9.0 * ((double) k - 1.0))) * pf->pop_z;
+    x = a - b + c;
+    
+    n = (int) ceil((k - 1.0) / (2.0 * pf->pop_err) * x * x * x);
+    
+    if (n < pf->min_samples) 
+        return pf->min_samples;
+    if (n > pf->max_samples) 
+        return pf->max_samples;
+        
+    return n;
+}
+```
+
+- `pf->pop_err`: corrisponde al parametro $\epsilon$ (`kld_err`, default $0.05$);
+- `pf->pop_z`: quantile normale $z_{1-\delta}$ (`kld_z`, default $0.99 \implies 2.326$);
+- Il risultato viene saturato tra `min_samples` (default 500) e `max_samples` (default 5000).
+
+### 2. Aggiornamento Pesi E Filtri Esponenziali: `pf_update_sensor`
+
+All'arrivo di una nuova scansione laser, la funzione valuta il modello di verosimiglianza per ciascun campione e aggiorna le medie mobili esponenziali a lungo e breve termine ($w_{\text{slow}}$ e $w_{\text{fast}}$):
+
+```c
+void pf_update_sensor(pf_t *pf, pf_sensor_model_fn_t sensor_fn, void *sensor_data)
+{
+    int i;
+    pf_sample_set_t *set;
+    pf_sample_t *sample;
+    double total = 0.0, w_avg = 0.0;
+    
+    set = pf->sets + pf->current_set;
+    
+    // Calcolo del peso e accumulo della somma
+    for (i = 0; i < set->sample_count; i++)
+    {
+        sample = set->samples + i;
+        sample->weight = (*sensor_fn)(sensor_data, sample->pose);
+        total += sample->weight;
+    }
+    
+    // Normalizzazione dei pesi e calcolo della verosimiglianza media
+    for (i = 0; i < set->sample_count; i++)
+    {
+        sample = set->samples + i;
+        w_avg += sample->weight;
+        sample->weight /= total;
+    }
+    w_avg /= set->sample_count;
+    
+    // Aggiornamento filtri Augmented MCL (Probabilistic Robotics, p. 258)
+    if (pf->w_slow == 0.0)
+        pf->w_slow = w_avg;
+    else
+        pf->w_slow += pf->alpha_slow * (w_avg - pf->w_slow);
+        
+    if (pf->w_fast == 0.0)
+        pf->w_fast = w_avg;
+    else
+        pf->w_fast += pf->alpha_fast * (w_avg - pf->w_fast);
+}
+```
+
+### 3. Ricampionamento Con Iniezione Casuale: `pf_update_resample`
+
+La funzione genera la nuova popolazione alternando il campionamento proporzionale alla CDF all'iniezione di pose casuali:
+
+```c
+void pf_update_resample(pf_t *pf)
+{
+    pf_sample_set_t *set_a, *set_b;
+    pf_sample_t *sample_a, *sample_b;
+    double *c, r, w_diff;
+    int i;
+    
+    set_a = pf->sets + pf->current_set;
+    set_b = pf->sets + (pf->current_set + 1) % 2;
+    
+    // Costruzione della tabella di probabilità cumulativa (CDF)
+    c = (double *) malloc(sizeof(double) * (set_a->sample_count + 1));
+    c[0] = 0.0;
+    for (i = 0; i < set_a->sample_count; i++)
+        c[i + 1] = c[i] + set_a->samples[i].weight;
+        
+    // Calcolo della discrepanza tra filtro veloce e lento
+    w_diff = 1.0 - pf->w_fast / pf->w_slow;
+    if (w_diff < 0.0)
+        w_diff = 0.0;
+        
+    set_b->sample_count = 0;
+    
+    while (set_b->sample_count < pf->max_samples)
+    {
+        sample_b = set_b->samples + set_b->sample_count++;
+        
+        // Iniezione probabilistica di pose casuali nello spazio libero
+        if (drand48() < w_diff)
+        {
+            sample_b->pose = (pf->random_pose_fn)(pf->random_pose_data);
+        }
+        else
+        {
+            // Campionamento su CDF
+            r = drand48();
+            for (i = 0; i < set_a->sample_count; i++)
+            {
+                if ((c[i] <= r) && (r < c[i + 1]))
+                    break;
+            }
+            sample_a = set_a->samples + i;
+            sample_b->pose = sample_a->pose;
+        }
+        
+        sample_b->weight = 1.0;
+        // Inserimento nel KD-Tree per determinare k e il limite KLD
+        pf_kdtree_insert(set_b->kdtree, sample_b->pose, sample_b->weight);
+        
+        // Verifica del limite di campioni dinamico KLD
+        if (set_b->sample_count > pf_resample_limit(pf, set_b->kdtree->leaf_count))
+            break;
+    }
+    
+    // Reset delle medie per evitare derive divergenti
+    if (w_diff > 0.0)
+        pf->w_slow = pf->w_fast = 0.0;
+        
+    free(c);
+}
+```
+
+### 4. Configurazione Dei Parametri in ROS Launch File
+
+Nel file di configurazione (`amcl.launch` o `nav2_params.yaml`) i parametri chiave governano direttamente queste routine:
+
+```xml
+<launch>
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+    <!-- Popolazione di particelle adattiva KLD -->
+    <param name="min_particles" value="500"/>
+    <param name="max_particles" value="5000"/>
+    <param name="kld_err" value="0.05"/>
+    <param name="kld_z" value="0.99"/>
+    
+    <!-- Modello odometrico di moto -->
+    <param name="odom_model_type" value="diff"/>
+    <param name="odom_alpha1" value="0.2"/>
+    <param name="odom_alpha2" value="0.2"/>
+    <param name="odom_alpha3" value="0.8"/>
+    <param name="odom_alpha4" value="0.2"/>
+    
+    <!-- Modello sensoriale (Likelihood Field preferito) -->
+    <param name="laser_model_type" value="likelihood_field"/>
+    <param name="laser_z_hit" value="0.95"/>
+    <param name="laser_z_rand" value="0.05"/>
+    <param name="laser_sigma_hit" value="0.2"/>
+    <param name="laser_likelihood_max_dist" value="2.0"/>
+    
+    <!-- Recupero dal rapimento (Augmented MCL) -->
+    <param name="recovery_alpha_slow" value="0.001"/>
+    <param name="recovery_alpha_fast" value="0.1"/>
+  </node>
+</launch>
+```
+
+## Dettaglio Analitico Dei Modelli Di Misura Beam E Stima MLE Dei Parametri
+
+Nel [[7. Modelli di Misura per la Localizzazione#Modello a Raggio Fisico (Beam Model)|Capitolo 7]] abbiamo introdotto il modello a fascio composto da quattro distribuzioni. Esplicitiamo qui le formule di normalizzazione analitiche e l'algoritmo di stima dei parametri.
+
+### Normalizzazione Delle Componenti Del Beam Model
+
+Ciascuna densità di probabilità deve integrare a 1 sull'intervallo di misura consentito dal sensore $[0, z_{\max}]$:
+
+1. __Componente Gaussiana Locale ($p_{\text{hit}}$)__:
+
+   $$
+   \int_0^{z_{\max}} p_{\text{hit}}(z_k \mid x_t, m) \, \mathrm{d}z_k = 1 \implies \eta_{\text{hit}} = \left( \int_0^{z_{\max}} \frac{1}{\sqrt{2\pi \sigma_{\text{hit}}^2}} \exp\left( - \frac{(z_k - z_t^{k*})^2}{2\sigma_{\text{hit}}^2} \right) \mathrm{d}z_k \right)^{-1}
+   $$
+
+   In termini della funzione errore gaussiana $\text{erf}(\cdot)$:
+
+   $$
+   \eta_{\text{hit}} = \left[ \frac{1}{2} \left( \text{erf}\left(\frac{z_{\max} - z_t^{k*}}{\sqrt{2}\sigma_{\text{hit}}}\right) - \text{erf}\left(\frac{-z_t^{k*}}{\sqrt{2}\sigma_{\text{hit}}}\right) \right) \right]^{-1}
+   $$
+
+2. __Componente Esponenziale per Ostacoli Imprevisti ($p_{\text{short}}$)__:
+
+   $$
+   \int_0^{z_t^{k*}} \eta_{\text{short}} \lambda_{\text{short}} \mathrm{e}^{-\lambda_{\text{short}} z_k} \, \mathrm{d}z_k = 1 \implies \eta_{\text{short}} = \frac{1}{1 - \mathrm{e}^{-\lambda_{\text{short}} z_t^{k*}}}
+   $$
+
+### Stima Dei Parametri Tramite Algoritmo Expectation-Maximization (EM)
+
+Sia dato un dataset di calibrazione formato da $J$ misurazioni note in cui il robot si trova in pose note: $Z = \{z_j\}_{j=1}^J$ con valori ideali attesi $Z^* = \{z_j^*\}_{j=1}^J$. Vogliamo stimare i pesi $\mathbf{\alpha} = (\alpha_{\text{hit}}, \alpha_{\text{short}}, \alpha_{\text{max}}, \alpha_{\text{rand}})^T$ e i parametri $\sigma_{\text{hit}}, \lambda_{\text{short}}$.
+
+Poiché per ciascuna lettura $z_j$ non conosciamo a quale dei quattro fenomeni fisici sia imputabile, introduciamo quattro variabili indicatrici latenti binarie $\mathbf{e}_j = [e_{j,\text{hit}}, e_{j,\text{short}}, e_{j,\text{max}}, e_{j,\text{rand}}]^T \in \{0, 1\}^4$ tali che $\sum_i e_{j,i} = 1$.
+
+L'algoritmo EM itera due passi fino a convergenza:
+
+1. __Expectation Step (E-step)__: calcolo delle responsabilità a posteriori per ogni misura $j$:
+
+   $$
+   \gamma_{j,i} = \mathbb{E}[e_{j,i}] = \frac{\alpha_i \, p_i(z_j \mid z_j^*)}{\sum_{k \in \{\text{hit},\text{short},\text{max},\text{rand}\}} \alpha_k \, p_k(z_j \mid z_j^*)}
+   $$
+
+2. __Maximization Step (M-step)__: aggiornamento in forma chiusa dei parametri:
+   - Aggiornamento dei pesi di miscela:
+
+     $$
+     \alpha_i = \frac{1}{J} \sum_{j=1}^J \gamma_{j,i}
+     $$
+
+   - Aggiornamento della deviazione standard del rumore di misura:
+
+     $$
+     \sigma_{\text{hit}} = \sqrt{ \frac{\sum_{j=1}^J \gamma_{j,\text{hit}} (z_j - z_j^*)^2}{\sum_{j=1}^J \gamma_{j,\text{hit}}} }
+     $$
+
+   - Aggiornamento del parametro di decadimento esponenziale:
+
+     $$
+     \lambda_{\text{short}} = \frac{\sum_{j=1}^J \gamma_{j,\text{short}}}{\sum_{j=1}^J \gamma_{j,\text{short}} \, z_j}
+     $$
+
+Questo ciclo converge a un massimo locale della log-verosimiglianza del dataset di calibrazione, fornendo una taratura statisticamente fondata per il modello sensoriale del veicolo.
+
+## Derivazione Formale Del Filtro Di Kalman Lineare Dalla Teoria Bayesiana
+
+Nel [[8. Filtro di Kalman Lineare#Interpretazione Bayesiana del Filtro di Kalman|Capitolo 8]] abbiamo enunciato le formule di aggiornamento del Filtro di Kalman. Riportiamo qui la derivazione analitica rigorosa basata sul completamento del quadrato matriciale e sulla minimizzazione dell'errore quadratico medio.
+
+### Passo Di Correzione: Completamento Del Quadrato Matriciale
+
+Sia dato il belief a priori:
+
+$$
+\overline{bel}(x_t) = \frac{1}{(2\pi)^{n/2} |P_{t|t-1}|^{1/2}} \exp\left( -\frac{1}{2} (x_t - \hat{x}_{t|t-1})^T P_{t|t-1}^{-1} (x_t - \hat{x}_{t|t-1}) \right)
+$$
+
+e la verosimiglianza di misura lineare $y_t = C_t x_t + v_t$:
+
+$$
+p(y_t \mid x_t) = \frac{1}{(2\pi)^{p/2} |R_t|^{1/2}} \exp\left( -\frac{1}{2} (y_t - C_t x_t)^T R_t^{-1} (y_t - C_t x_t) \right)
+$$
+
+La posterior bayesiana non normalizzata ha all'esponente la forma quadratica:
+
+$$
+J(x_t) = (x_t - \hat{x}_{t|t-1})^T P_{t|t-1}^{-1} (x_t - \hat{x}_{t|t-1}) + (y_t - C_t x_t)^T R_t^{-1} (y_t - C_t x_t)
+$$
+
+Espandendo i prodotti matriciali:
+
+$$
+J(x_t) = x_t^T P_{t|t-1}^{-1} x_t - 2 x_t^T P_{t|t-1}^{-1} \hat{x}_{t|t-1} + \hat{x}_{t|t-1}^T P_{t|t-1}^{-1} \hat{x}_{t|t-1} + x_t^T C_t^T R_t^{-1} C_t x_t - 2 x_t^T C_t^T R_t^{-1} y_t + y_t^T R_t^{-1} y_t
+$$
+
+Raggruppiamo i termini quadratici e lineari in $x_t$:
+
+$$
+J(x_t) = x_t^T \underbrace{\left( P_{t|t-1}^{-1} + C_t^T R_t^{-1} C_t \right)}_{P_{t|t}^{-1}} x_t - 2 x_t^T \underbrace{\left( P_{t|t-1}^{-1} \hat{x}_{t|t-1} + C_t^T R_t^{-1} y_t \right)}_{\mathbf{b}_t} + \text{costante}
+$$
+
+Dall'algebra delle gaussiane multivariate, se l'esponente ha forma $x_t^T P_{t|t}^{-1} x_t - 2 x_t^T \mathbf{b}_t$, la matrice di covarianza a posteriori vale:
+
+$$
+P_{t|t} = \left( P_{t|t-1}^{-1} + C_t^T R_t^{-1} C_t \right)^{-1}
+$$
+
+e la media a posteriori è:
+
+$$
+\hat{x}_{t|t} = P_{t|t} \, \mathbf{b}_t = P_{t|t} \left( P_{t|t-1}^{-1} \hat{x}_{t|t-1} + C_t^T R_t^{-1} y_t \right)
+$$
+
+### Equivalenza Con Il Guadagno Di Kalman Tramite Il Lemma Di Inversione Di Woodbury
+
+Applicando l'identità matriciale di Woodbury all'inversa della covarianza:
+
+$$
+(A + B C D)^{-1} = A^{-1} - A^{-1} B (C^{-1} + D A^{-1} B)^{-1} D A^{-1}
+$$
+
+Ponendo $A = P_{t|t-1}^{-1}$, $B = C_t^T$, $C = R_t^{-1}$, $D = C_t$:
+
+$$
+P_{t|t} = P_{t|t-1} - P_{t|t-1} C_t^T \left( R_t + C_t P_{t|t-1} C_t^T \right)^{-1} C_t P_{t|t-1}
+$$
+
+Definendo la covarianza dell'innovazione $S_t = C_t P_{t|t-1} C_t^T + R_t$ e il guadagno ottimo $L_t = P_{t|t-1} C_t^T S_t^{-1}$:
+
+$$
+P_{t|t} = P_{t|t-1} - L_t C_t P_{t|t-1} = (I - L_t C_t) P_{t|t-1}
+$$
+
+Sostituendo nell'espressione della media a posteriori $\hat{x}_{t|t}$:
+
+$$
+\hat{x}_{t|t} = \hat{x}_{t|t-1} + L_t \left( y_t - C_t \hat{x}_{t|t-1} \right)
+$$
+
+Questo completa la dimostrazione analitica dell'equivalenza esatta tra il teorema di Bayes e le equazioni del filtro di Kalman.
+
+### Minimizzazione Della Varianza dell'Errore E Derivazione Di $L_t$
+
+Consideriamo uno stimatore lineare generico con guadagno $L_t$ arbitrario:
+
+$$
+\hat{x}_{t|t} = \hat{x}_{t|t-1} + L_t (y_t - C_t \hat{x}_{t|t-1})
+$$
+
+L'errore a posteriori $\tilde{x}_{t|t} = x_t - \hat{x}_{t|t}$ evolve come:
+
+$$
+\tilde{x}_{t|t} = (I - L_t C_t) \tilde{x}_{t|t-1} - L_t v_t
+$$
+
+Calcolando la covarianza d'errore (forma di Joseph, valida per qualsiasi $L_t$):
+
+$$
+P_{t|t} = (I - L_t C_t) P_{t|t-1} (I - L_t C_t)^T + L_t R_t L_t^T
+$$
+
+Vogliamo trovare la matrice $L_t$ che minimizza l'errore quadratico medio $\mathbb{E}[\|\tilde{x}_{t|t}\|^2] = \text{Tr}(P_{t|t})$.
+
+Calcoliamo la derivata matriciale rispetto a $L_t$ sfruttando le identità $\frac{\partial}{\partial X} \text{Tr}(X A X^T) = 2 X A$ e $\frac{\partial}{\partial X} \text{Tr}(A X B) = A^T B^T$:
+
+$$
+\frac{\partial \text{Tr}(P_{t|t})}{\partial L_t} = -2 P_{t|t-1} C_t^T + 2 L_t \left( C_t P_{t|t-1} C_t^T + R_t \right)
+$$
+
+Ponendo il gradiente uguale a zero:
+
+$$
+-2 P_{t|t-1} C_t^T + 2 L_t \left( C_t P_{t|t-1} C_t^T + R_t \right) = 0
+$$
+
+$$
+L_t \left( C_t P_{t|t-1} C_t^T + R_t \right) = P_{t|t-1} C_t^T
+$$
+
+Poiché $R_t > 0$ e $P_{t|t-1} \ge 0$, la matrice $S_t = C_t P_{t|t-1} C_t^T + R_t$ è simmetrica strettamente definita positiva e dunque invertibile:
+
+$$
+L_t = P_{t|t-1} C_t^T \left( C_t P_{t|t-1} C_t^T + R_t \right)^{-1}
+$$
+
+La matrice $L_t$ del filtro di Kalman è dunque dimostrabilmente il minimizzatore globale unico della varianza d'errore di stima.

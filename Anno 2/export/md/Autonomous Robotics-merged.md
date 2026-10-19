@@ -52,6 +52,29 @@
 	- [[#5. Localizzazione Con Histogram Filter#Progettazione Di Un Histogram Filter 1D|Progettazione Di Un Histogram Filter 1D]]
 	- [[#5. Localizzazione Con Histogram Filter#Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale|Analisi Di Sensibilità Rispetto Alla Risoluzione Spaziale]]
 	- [[#5. Localizzazione Con Histogram Filter#Limiti Computazionali E Transizione Verso Spazi 2D|Limiti Computazionali E Transizione Verso Spazi 2D]]
+- [[#6. Localizzazione Con Particle Filter|6. Localizzazione Con Particle Filter]]
+	- [[#6. Localizzazione Con Particle Filter#Dal Limite Dell'Histogram Filter Alla Rappresentazione A Particelle|Dal Limite Dell'Histogram Filter Alla Rappresentazione A Particelle]]
+	- [[#6. Localizzazione Con Particle Filter#Panoramica Visiva Ed Evoluzione Nel Piano 2D|Panoramica Visiva Ed Evoluzione Nel Piano 2D]]
+	- [[#6. Localizzazione Con Particle Filter#Architettura Del Filtro: Ciclo Di Predizione, Correzione E Ricampionamento|Architettura Del Filtro: Ciclo Di Predizione, Correzione E Ricampionamento]]
+	- [[#6. Localizzazione Con Particle Filter#Fondamenti Matematici Dell'Importance Sampling|Fondamenti Matematici Dell'Importance Sampling]]
+	- [[#6. Localizzazione Con Particle Filter#Algoritmi Di Ricampionamento (Resampling)|Algoritmi Di Ricampionamento (Resampling)]]
+	- [[#6. Localizzazione Con Particle Filter#Algoritmo Formale Del Particle Filter|Algoritmo Formale Del Particle Filter]]
+	- [[#6. Localizzazione Con Particle Filter#Progettazione Di Un Particle Filter 1D|Progettazione Di Un Particle Filter 1D]]
+	- [[#6. Localizzazione Con Particle Filter#Criticità Ingegneristiche E Compromessi Real-World|Criticità Ingegneristiche E Compromessi Real-World]]
+	- [[#6. Localizzazione Con Particle Filter#Adaptive MCL Tramite KLD-Sampling|Adaptive MCL Tramite KLD-Sampling]]
+- [[#7. Modelli Di Misura per la Localizzazione|7. Modelli Di Misura per la Localizzazione]]
+	- [[#7. Modelli Di Misura per la Localizzazione#Il Ruolo Del Modello Di Misura Nel Ciclo Di Stima Bayesiano|Il Ruolo Del Modello Di Misura Nel Ciclo Di Stima Bayesiano]]
+	- [[#7. Modelli Di Misura per la Localizzazione#Cinematica Dei Sistemi Di Riferimento Del Sensore Laser 2D|Cinematica Dei Sistemi Di Riferimento Del Sensore Laser 2D]]
+	- [[#7. Modelli Di Misura per la Localizzazione#Modello Basato Su Feature (Feature-Based Measurement Model)|Modello Basato Su Feature (Feature-Based Measurement Model)]]
+	- [[#7. Modelli Di Misura per la Localizzazione#Modello a Campo Di Verosimiglianza (Likelihood Field Model)|Modello a Campo Di Verosimiglianza (Likelihood Field Model)]]
+	- [[#7. Modelli Di Misura per la Localizzazione#Modello a Raggio Fisico (Beam Model)|Modello a Raggio Fisico (Beam Model)]]
+- [[#8. Filtro Di Kalman Lineare|8. Filtro Di Kalman Lineare]]
+	- [[#8. Filtro Di Kalman Lineare#Dal Filtro Di Bayes Ai Filtri Gaussiani Analitici|Dal Filtro Di Bayes Ai Filtri Gaussiani Analitici]]
+	- [[#8. Filtro Di Kalman Lineare#Modellazione Dei Sistemi Dinamici Lineari Stocastici|Modellazione Dei Sistemi Dinamici Lineari Stocastici]]
+	- [[#8. Filtro Di Kalman Lineare#Il Ponte Con I Controlli Automatici: L'Osservatore Di Luenberger|Il Ponte Con I Controlli Automatici: L'Osservatore Di Luenberger]]
+	- [[#8. Filtro Di Kalman Lineare#Il Filtro Di Kalman Lineare Time-Varying|Il Filtro Di Kalman Lineare Time-Varying]]
+	- [[#8. Filtro Di Kalman Lineare#Interpretazione Bayesiana Del Filtro Di Kalman|Interpretazione Bayesiana Del Filtro Di Kalman]]
+	- [[#8. Filtro Di Kalman Lineare#Proprietà Di Ottimalità E Considerazioni Sulla Stabilità|Proprietà Di Ottimalità E Considerazioni Sulla Stabilità]]
 - [[#Zz. Argomenti Extra|Zz. Argomenti Extra]]
 	- [[#Zz. Argomenti Extra#Metodi Di Integrazione ODE (Eulero, RK2, RK4)|Metodi Di Integrazione ODE (Eulero, RK2, RK4)]]
 	- [[#Zz. Argomenti Extra#Derivazione Analitica Del Drift Quadratico Nelle IMU|Derivazione Analitica Del Drift Quadratico Nelle IMU]]
@@ -60,6 +83,10 @@
 	- [[#Zz. Argomenti Extra#Parametri Metrologici Avanzati E Fisica Dei Sensori|Parametri Metrologici Avanzati E Fisica Dei Sensori]]
 	- [[#Zz. Argomenti Extra#Derivazione Analitica Del Line Fitting (OLS E WLS) in Coordinate Polari|Derivazione Analitica Del Line Fitting (OLS E WLS) in Coordinate Polari]]
 	- [[#Zz. Argomenti Extra#Formulazione Matriciale Dell'Histogram Filter Come Catena Di Markov|Formulazione Matriciale Dell'Histogram Filter Come Catena Di Markov]]
+	- [[#Zz. Argomenti Extra#Derivazione Formale Della Traiettoria Completa Nel Particle Filter|Derivazione Formale Della Traiettoria Completa Nel Particle Filter]]
+	- [[#Zz. Argomenti Extra#Implementazione Industriale Di AMCL in ROS: Analisi Del Codice C Sorgente|Implementazione Industriale Di AMCL in ROS: Analisi Del Codice C Sorgente]]
+	- [[#Zz. Argomenti Extra#Dettaglio Analitico Dei Modelli Di Misura Beam E Stima MLE Dei Parametri|Dettaglio Analitico Dei Modelli Di Misura Beam E Stima MLE Dei Parametri]]
+	- [[#Zz. Argomenti Extra#Derivazione Formale Del Filtro Di Kalman Lineare Dalla Teoria Bayesiana|Derivazione Formale Del Filtro Di Kalman Lineare Dalla Teoria Bayesiana]]
 
 # 0. Modelli Cinematici E Di Movimento
 
@@ -2477,6 +2504,1179 @@ Nei prossimi capitoli estenderemo il modello al piano 2D e introdurremo la tratt
 
 
 
+# 6. Localizzazione Con Particle Filter
+
+Nel capitolo precedente abbiamo affrontato la prima discretizzazione computazionale del filtro di Bayes: l'[[5. Localizzazione con Histogram Filter|Histogram Filter]]. Sebbene la decomposizione dello spazio in una griglia fissa permetta di superare l'intrattenibilità dell'integrale continuo, presenta limiti severi quando passiamo da scenari monodimensionali giocattolo alla reale cinematica nel piano $SE(2) = \mathbb{R}^2 \times S^1$.
+
+In questo capitolo introduciamo il __Particle Filter__ (noto in robotica come __Monte Carlo Localization__ o __MCL__), che abbandona la tassellazione rigida dello spazio continuo per rappresentare la densità di probabilità tramite un insieme discreto di campioni casuali.
+
+## Dal Limite Dell'Histogram Filter Alla Rappresentazione A Particelle
+
+L'approccio su griglia discreta richiede di allocare in memoria e aggiornare a ogni passo temporale tutte le possibili celle dello spazio di stato.
+
+In uno spazio 1D con segmento $L = 20\text{ m}$ e risoluzione $\Delta x = 0.1\text{ m}$, dobbiamo gestire $K = 200$ celle. Tuttavia, per un robot mobile con posa $\mathbf{x} = [x, y, \theta]^T$ in un'arena di $20\text{ m} \times 20\text{ m}$ discretizzata a $0.05\text{ m}$ e risoluzione angolare di $1^\circ$ (360 bin), il numero totale di celle esplode a:
+
+$$
+K = \left( \frac{20}{0.05} \right) \times \left( \frac{20}{0.05} \right) \times 360 = 400 \times 400 \times 360 \approx 5.76 \times 10^7 \text{ celle}
+$$
+
+Calcolare la convoluzione cinematica $O(K^2)$ su quasi 60 milioni di stati a frequenze di controllo ordinarie ($10\text{--}50\text{ Hz}$) è impensabile. Inoltre, la stragrande maggioranza di queste celle possiede probabilità identicamente nulla, costringendo la CPU a sprecare potenza di calcolo su porzioni di spazio in cui il robot non potrà mai trovarsi.
+
+Richiamiamo la struttura a tre blocchi concettuali del filtro di Bayes evidenziata dal docente:
+1. Un ciclo computazionale che scorre le possibili pose ipotizzate nello spazio;
+2. Il calcolo del belief a priori (fase di predizione basata su sensori __propriocettivi__, come encoder di ruota, odometria e giroscopi/IMU);
+3. Il calcolo del belief a posteriori (passo di correzione basato su sensori esterocettivi, come laser scanner, telecamere o beacon).
+
+Questa architettura predizione-correzione è lo standard universale della robotica mobile e della sensor fusion per stimare lo stato a partire dalla combinazione di informazioni __propriocettive__ (moto interno del veicolo) ed __esterocettive__ (misura dell'ambiente esterno).
+
+Rivediamo le simulazioni 1D dell'Histogram Filter: con prior uniforme il filtro impiega svariati passi di misura per collassare, mentre con prior gaussiano l'incertezza iniziale viene rapidamente ridotta ma rimane vincolata alla risoluzione della griglia $\Delta x$.
+
+![[slide_10_histogram_results_k1_uniform.png|center small]] ![[slide_10_histogram_results_k3_uniform.png|center small]]
+
+![[slide_10_histogram_results_k1_gaussian.png|center small]] ![[slide_10_histogram_results_k3_gaussian.png|center small]]
+
+Se invece di integrare analiticamente la griglia campionassimo la curva bidentata di verosimiglianza generata dal beacon (la curva rossa nei grafici di misura), i campioni stocastici formerebbero naturalmente due distinte nuvolette di punti concentrate attorno ai due massimi simmetrici locali.
+
+L'idea alla base del Particle Filter è capovolgere la prospettiva: invece di campionare rigidamente lo spazio geometrico, campioniamo direttamente la distribuzione di probabilità. Il Particle Filter riesce infatti nell'intento fondamentale di generare campioni di una variabile aleatoria pur non conoscendo in forma analitica chiusa la distribuzione a posteriori di arrivo.
+
+Rappresentiamo la funzione di belief continuo $bel(x_t)$ tramite una nube finita di $M$ ipotesi stocastiche, dette __particelle__, raggruppate nell'insieme indicato con $\mathcal{X}_t$ ($X$ calligrafico):
+
+$$
+\mathcal{X}_t = \left\{ x_t^{[1]}, x_t^{[2]}, \dots, x_t^{[M]} \right\}
+$$
+
+Ciascuna particella $x_t^{[m]} \in \mathcal{X}_t$ rappresenta una posa concreta e puntiforme del robot nello spazio continuo di configurazione:
+
+$$
+x_t^{[m]} = \begin{bmatrix} x_t^{[m]} \\ y_t^{[m]} \\ \theta_t^{[m]} \end{bmatrix} \in SE(2)
+$$
+
+La densità spaziale delle particelle approssima la densità di probabilità: nelle regioni dello spazio in cui la probabilità della posa è elevata avremo una concentrazione densa di campioni, mentre nelle regioni a probabilità trascurabile non ci sarà alcuna particella. Il consumo di memoria e il carico di calcolo scalano con la complessità dell'incertezza e con il numero di campioni $M$, non con il volume dello spazio di stato.
+
+## Panoramica Visiva Ed Evoluzione Nel Piano 2D
+
+Il video sperimentale classico di Sebastian Thrun a Stanford mostra un robot mobile dotato di LiDAR che deve localizzarsi all'interno di un vasto edificio universitario a partire da una condizione di totale incertezza iniziale.
+
+![[slide_10_particle_filter_thrun_video_stanford.png|center mid]]
+
+I raggi laser rossi intersecano le pareti dell'edificio, mentre i punti blu rappresentano le particelle distribuite nello spazio. All'inizio della missione il robot affronta il problema della __Global Localization__: non ha alcuna informazione a priori su dove si trovi, per cui le particelle vengono distribuite con densità uniforme all'interno di tutta la planimetria nota.
+
+Consideriamo l'esperimento didattico in un piano delimitato $[0, 20]\text{ m} \times [0, 20]\text{ m}$. All'istante iniziale $t = 0$ generiamo $M$ campioni uniformi:
+
+![[slide_10_particle_filter_2d_initial_distribution.png|center small]]
+
+Non appena il robot esegue un comando di movimento e acquisisce le letture dai sensori (ad esempio distanze da beacon noti), il filtro attraversa una rapida sequenza di convergenza.
+
+Allo __Step 1__, il robot si muove verso destra e misura la distanza da un beacon. A sinistra osserviamo le particelle a priori propagate dal modello di moto; a destra, il ricampionamento basato sui pesi di misura seleziona solo le particelle coerenti con la lettura sensoriale, formando un anello circolare di verosimiglianza:
+
+![[slide_10_particle_filter_2d_step1_prior_posterior.png|center mid]]
+
+Allo __Step 3__, dopo ulteriori comandi di moto e nuove misure di distanza, le particelle a priori si disperdono lungo la direzione di avanzamento, ma il passo di correzione concentra i campioni unicamente nelle regioni di intersezione tra le varie osservazioni:
+
+![[slide_10_particle_filter_2d_step3_prior_posterior.png|center mid]]
+
+Allo __Step 5__, l'ambiguità multimodale è completamente risolta. La nube di particelle collassa in un unico agglomerato compatto che segue fedelmente la vera posizione del veicolo:
+
+![[slide_10_particle_filter_2d_step5_prior_posterior.png|center mid]]
+
+Allo __Step 10__, il filtro è transitato stabilmente dalla fase di localizzazione globale al regime di __Position Tracking__: le particelle restano coese attorno alla posa reale del robot, compensando in tempo reale il drift odometrico grazie alle continue correzioni sensoriali:
+
+![[slide_10_particle_filter_2d_step10_prior_posterior.png|center mid]]
+
+## Architettura Del Filtro: Ciclo Di Predizione, Correzione E Ricampionamento
+
+La differenza concettuale tra la Markov Localization su griglia e il Particle Filter è sintetizzata nello schema di confronto presentato dal docente:
+
+![[slide_10_prior_posterior_particle_vs_histogram_comparison.png|center big]]
+
+Possiamo analizzare in dettaglio le due pipeline operative affiancate:
+
+![[slide_10_prior_posterior_particle_filter_resampling.png|center small]] ![[slide_10_prior_posterior_histogram_filter_grid.png|center small]]
+
+Nel caso dell'__Histogram Filter__ (pannello inferiore):
+1. Nel primo grafico la curva rappresenta la densità di probabilità continua calcolata dal _Velocity Motion Model_;
+2. Si valuta la likelihood della misura su ciascuna cella della mappa;
+3. Si calcola il prodotto puntuale normalizzato per ottenere la posterior su griglia discreta.
+
+Nel caso del __Particle Filter__ (pannello superiore):
+1. Nel primo grafico i campioni rappresentano tutte le possibili pose candidate ipotizzate dal robot. A parità di comando di controllo $u_t$, ogni particella si sposta in modo leggermente diverso nello spazio, perché il moto è governato da un modello stocastico che vi aggiunge rumore pseudo-casuale indipendente;
+2. Si assegna a ciascuna particella un __fattore di importanza__ (peso $w_t^{[m]}$) proporzionale alla likelihood della misura valutata su quella specifica posa;
+3. Si esegue il __ricampionamento stocastico con rimpiazzo__ (_resampling_), generando la popolazione a posteriori in cui le particelle con peso maggiore vengono duplicate e quelle con peso trascurabile eliminate, preparando la popolazione per il passo temporale successivo.
+
+>[!IMPORTANT] La Dicotomia Operativa di Ciascuna Particella: Sampling e Distribution Computation
+>Ogni singola particella vive una duplice natura operativa nel ciclo di stima:
+>1. __Sampling__: nella fase di predizione la particella si sposta nello spazio continuo campionando una realizzazione stocastica dal modello di moto;
+>2. __Distribution Computation__: nella fase di correzione la particella riceve il proprio peso calcolando deterministicamente il valore puntuale della funzione di densità di verosimiglianza del sensore (likelihood).
+>
+>Inoltre, mentre nell'Histogram Filter eravamo costretti a calcolare analiticamente la probabilità di transizione $p(x_t \mid u_t, x_{t-1})$ per ogni coppia di celle, nel Particle Filter non serve alcuna forma chiusa: basta una procedura generativa (`sample_motion_model`) capace di simulare numericamente il passo di moto.
+
+## Fondamenti Matematici Dell'Importance Sampling
+
+Il cuore teorico del Particle Filter risiede nel principio dell'__Importance Sampling__.
+
+Nel filtro di Bayes ideale vorremmo estrarre campioni direttamente dalla distribuzione a posteriori:
+
+$$
+f(x_t) = bel(x_t) = p(x_t \mid z_{1:t}, u_{1:t})
+$$
+
+Tuttavia, la distribuzione target $f(x_t)$ non è nota a priori in forma analitica e non possediamo alcun algoritmo in grado di estrarre campioni direttamente da essa.
+
+Possiamo invece generare agevolmente campioni casuali da una distribuzione ausiliaria correlata, detta __proposal distribution__ (o densità di proposta) $g(x_t)$, data dalla distribuzione di predizione del moto:
+
+$$
+g(x_t) = \overline{bel}(x_t) = p(x_t \mid z_{1:t-1}, u_{1:t})
+$$
+
+![[slide_10_importance_sampling_target_proposal_weights.png|center mid]]
+
+Come illustrato nello schema a tre livelli:
+1. Abbiamo una funzione obiettivo target $f(x)$ che vorremmo approssimare;
+2. Estraiamo $M$ campioni casuali indipendenti dalla densità proposal $g(x)$;
+3. Per correggere la discrepanza statistica tra la proposta $g$ e il target $f$, associamo a ciascun campione un fattore moltiplicativo di peso:
+
+$$
+w(x) = \frac{f(x)}{g(x)}
+$$
+
+Consideriamo il calcolo del valore atteso di una qualsiasi funzione test o indicatrice $I(x \in A)$ rispetto alla distribuzione target $f$:
+
+$$
+\mathbb{E}_f \left[ I(x \in A) \right] = \int f(x) \, I(x \in A) \, \mathrm{d}x
+$$
+
+Moltiplicando e dividendo per la densità di proposta $g(x)$ (sotto l'ipotesi di supporto comune $f(x) > 0 \implies g(x) > 0$):
+
+$$
+\mathbb{E}_f \left[ I(x \in A) \right] = \int \frac{f(x)}{g(x)} \, g(x) \, I(x \in A) \, \mathrm{d}x = \int w(x) \, g(x) \, I(x \in A) \, \mathrm{d}x = \mathbb{E}_g \left[ w(x) \, I(x \in A) \right]
+$$
+
+### Stimatore Standard Vs Self-Normalized Importance Sampling (SNIS)
+
+Distinguiamo la formulazione statistica ideale dal caso applicativo della stima bayesiana robotica:
+
+1. __Importance Sampling Standard (Densità Note e Normalizzate)__: se la distribuzione target $f(x)$ e la proposta $g(x)$ sono entrambe note in forma chiusa e integrate a 1, il peso analitico esatto $w(x) = f(x)/g(x)$ ha valore atteso unitario sotto la proposta ($\mathbb{E}_g[w(x)] = \int f(x) \, \mathrm{d}x = 1$). In questo caso lo stimatore Monte Carlo non polarizzato è la semplice media campionaria, priva di costanti moltiplicative esterne:
+
+   $$
+   \frac{1}{M} \sum_{m=1}^M w\left(x^{[m]}\right) \, I\left(x^{[m]} \in A\right) \xrightarrow{M \to \infty} \int_A f(x) \, \mathrm{d}x
+   $$
+
+2. __Stima Bayesiana e Costante di Normalizzazione Incognita__: nella localizzazione robotica la distribuzione target a posteriori è nota unicamente a meno del fattore scalare di normalizzazione $\eta = 1 / p(z_t)$:
+
+   $$
+   f(x_t) = bel(x_t) = \eta \, p(z_t \mid x_t) \, \overline{bel}(x_t)
+   $$
+
+   Non possiamo quindi calcolare il rapporto esatto $w(x_t) = f(x_t)/g(x_t)$. Scegliendo la densità di proposta pari alla predizione odometrica $g(x_t) = \overline{bel}(x_t)$, calcoliamo invece i __pesi grezzi non normalizzati__ come la sola verosimiglianza di misura:
+
+   $$
+   w_t^{[m]} = p(z_t \mid x_t^{[m]})
+   $$
+
+   Poiché la costante incognita a denominatore è il valore atteso della verosimiglianza $\eta^{-1} = \int p(z_t \mid x_t) \, \overline{bel}(x_t) \, \mathrm{d}x_t = \mathbb{E}_g[w_t]$, possiamo stimarla empiricamente tramite la media campionaria dei pesi grezzi: $\eta^{-1} \approx \frac{1}{M} \sum_{j=1}^M w_t^{[j]}$.
+
+3. __Stimatore Self-Normalized (SNIS) con Pesi Normalizzati__: sostituendo la stima della costante di normalizzazione a denominatore, otteniamo lo stimatore campionario asintoticamente corretto con i __pesi normalizzati__ $\tilde{w}_t^{[m]}$:
+
+   $$
+   \frac{\frac{1}{M} \sum_{m=1}^M w_t^{[m]} \, I\left(x_t^{[m]} \in A\right)}{\frac{1}{M} \sum_{j=1}^M w_t^{[j]}} = \sum_{m=1}^M \tilde{w}_t^{[m]} \, I\left(x_t^{[m]} \in A\right) \xrightarrow{M \to \infty} \int_A bel(x_t) \, \mathrm{d}x_t
+   $$
+
+>[!NOTE] Nota delle Lezioni: Notazione Sintetica dei Lucidi
+>Nei lucidi del docente (slide 37) la scrittura $\eta \sum_{m=1}^M w^{[m]} I(x^{[m]} \in A)$ rappresenta una contrazione notazionale che anticipa il coefficiente di scala prima della normalizzazione dei pesi: nella pratica numerica $\eta$ viene calcolato proprio come $\left( \sum_{j=1}^M w_t^{[j]} \right)^{-1}$, riconducendosi esattamente allo stimatore normalizzato SNIS.
+>
+>La dimostrazione analitica estesa sull'intera storia temporale $bel(x_{0:t})$ e la successiva marginalizzazione a $bel(x_t)$ sono riportate in [[zz. Argomenti extra#Derivazione Formale Della Traiettoria Completa Nel Particle Filter|zz. Argomenti extra: Derivazione Formale della Traiettoria Completa]].
+
+## Algoritmi Di Ricampionamento (Resampling)
+
+Una volta calcolati i pesi non normalizzati $w_t^{[m]} = p(z_t \mid x_t^{[m]})$ per tutte le $M$ particelle, dobbiamo trasformare l'insieme pesato a priori in un insieme equiprobabile a posteriori.
+
+Il primo passo consiste nella normalizzazione a somma unitaria:
+
+$$
+\tilde{w}_t^{[m]} = \frac{w_t^{[m]}}{\sum_{j=1}^M w_t^{[j]}}
+$$
+
+A partire dai pesi normalizzati costruiamo la __funzione di ripartizione discreta__ (Cumulative Distribution Function - CDF):
+
+$$
+c_k = \sum_{j=1}^k \tilde{w}_t^{[j]}, \quad k = 1, \dots, M \quad \text{con } c_0 = 0 \text{ e } c_M = 1
+$$
+
+![[slide_10_importance_sampling_weights_histogram_cdf.png|center small]] ![[slide_10_importance_sampling_roulette_wheel_cdf.png|center small]]
+
+### Roulette Wheel / Inversion Sampling
+
+Il metodo classico di campionamento da CDF consiste nell'estrarre un numero pseudo-casuale uniforme $u \sim \mathcal{U}[0, 1)$ e selezionare la particella corrispondente all'intervallo che contiene $u$:
+
+$$
+\text{seleziona particella } i \iff c_{i-1} < u \le c_i
+$$
+
+Questo meccanismo equivale a una ruota della roulette in cui ogni particella possiede un settore circolare di ampiezza angolare proporzionale a $\tilde{w}_t^{[m]}$. Le particelle con peso elevato hanno una probabilità molto maggiore di essere selezionate e duplicate, mentre le particelle con peso trascurabile vengono rapidamente scartate. Ripetendo l'estrazione $M$ volte in modo indipendente otteniamo la nuova popolazione $\mathcal{X}_t$.
+
+Se a valle del ricampionamento otteniamo particelle identiche tra loro (ad esempio 100 copie dello stesso campione ad altissima verosimiglianza), esse possiedono la stessa posa e la stessa probabilità; tuttavia, al passo temporale successivo non rimarranno bloccate: il modello di moto stocastico aggiungerà a ciascuna copia un rumore casuale indipendente, disperdendole nuovamente nello spazio ed esplorando in modo differenziato l'intorno dell'ipotesi più accreditata.
+
+- __Complessità computazionale__: per ciascuna delle $M$ estrazioni indipendenti, localizzare l'indice $i$ sulla CDF ordinata tramite ricerca dicotomica richiede $O(\log M)$ confronti, portando il costo complessivo a $O(M \log M)$;
+- __Limite statistico__: l'estrazione indipendente introduce varianza stocastica aggiuntiva (varianza di campionamento), rischiando di scartare campioni rilevanti anche se dotati di peso non trascurabile.
+
+### Low-Variance Resampling (Campionamento Sistematico)
+
+Nelle implementazioni industriali e nel framework ROS/ROS2 si adotta quasi universalmente l'algoritmo di __Low-Variance Resampling__ (introdotto da Thrun):
+1. Si estrae un unico numero casuale iniziale $r \sim \mathcal{U}[0, M^{-1})$;
+2. Si costruisce un pettine a $M$ denti equidistanziati di passo fisso $M^{-1}$:
+
+   $$
+   u_m = r + (m - 1) M^{-1}, \quad m = 1, \dots, M
+   $$
+
+3. Si scorrono congiuntamente i puntatori $u_m$ e la CDF $c_k$ con un unico ciclo lineare `while`.
+
+![[slide_12_low_variance_resampling_comb_diagram.png|center mid]]
+
+L'idea geometrica è chiara: immaginiamo le $M$ particelle disposte su un nastro in cui ciascuna occupa un intervallo proporzionale al proprio peso normalizzato $w_t^{[m]}$. Il pettine a denti fissi $M^{-1}$ trasla rigidamente di un offset casuale $r \in [0, M^{-1})$ ed estrae tutte le particelle intersecate dai suoi denti:
+
+$$
+i = \arg \min_j \sum_{m=1}^j w_t^{[m]} \ge u_k
+$$
+
+```python
+def low_variance_sampling(Xt_bar, w, M):
+    Xt = []
+    r = np.random.uniform(0.0, 1.0 / M)
+    c = w[0]
+    i = 0
+    
+    for m in range(M):
+        U = r + m * (1.0 / M)
+        while U > c:
+            i += 1
+            c += w[i]
+        Xt.append(Xt_bar[i])
+        
+    return Xt
+```
+
+Questo approccio garantisce complessità lineare deterministica $O(M)$, esplora uniformemente l'intera popolazione azzerando la varianza di estrazione tra i campioni e assicura che qualsiasi particella con peso normalizzato $\tilde{w}_t^{[m]} \ge M^{-1}$ venga selezionata con certezza almeno una volta.
+
+## Algoritmo Formale Del Particle Filter
+
+L'algoritmo standard SIR (__Sampling Importance Resampling__), noto anche come Vanilla MCL, unisce i tre blocchi in un ciclo ricorsivo compatto:
+
+```python
+def particle_filter(Xt_prev, ut, zt, M):
+    Xt_bar = []
+    w = []
+    
+    # 1. Prediction & Weighting
+    for m in range(M):
+        # Sample from motion model (Proposal)
+        x_m = sample_motion_model(ut, Xt_prev[m])
+        # Compute importance weight (Likelihood)
+        w_m = measurement_model(zt, x_m)
+        
+        Xt_bar.append(x_m)
+        w.append(w_m)
+        
+    # 2. Resampling step (with replacement)
+    Xt = resample(Xt_bar, w, M)
+    
+    return Xt
+```
+
+In termini procedurali:
+1. __Inizializzazione__: se non conosciamo la posa iniziale, estraiamo $M$ particelle con distribuzione uniforme nello spazio libero; se abbiamo una stima a priori attorno a $\mathbf{x}_0$ con matrice di covarianza $\Sigma_0$, campioniamo da una gaussiana multivariata $\mathcal{N}(\mathbf{x}_0, \Sigma_0)$;
+2. __Predizione (Motion Model)__: per ogni particella $m$, propaghiamo lo stato antecedente $x_{t-1}^{[m]}$ applicando il comando $u_t$ corrotto da rumore casuale secondo il modello odometrico o cinematico del veicolo;
+3. __Pesatura (Measurement Model)__: valutiamo la verosimiglianza delle misure osservate $z_t$ rispetto alla posa predetta $x_t^{[m]}$;
+4. __Ricampionamento__: estraiamo $M$ nuove particelle con probabilità proporzionale ai pesi $w_t^{[m]}$ con rimpiazzo, producendo campioni identicamente distribuiti che rappresentano la posterior $bel(x_t)$.
+
+## Progettazione Di Un Particle Filter 1D
+
+Per comprendere la meccanica computazionale analizziamo il modello di laboratorio proposto dal docente per un robot puntiforme vincolato a muoversi su una guida monodimensionale di lunghezza $L$.
+
+### Modello Di Moto 1D
+
+Il comando di traslazione è $u_x$. Il moto lungo la coordinata $x$ è affetto da rumore gaussiano additivo a media nulla e varianza $\sigma_x^2$:
+
+$$
+x_t = x_{t-1} + u_x + \nu, \quad \nu \sim \mathcal{N}\left(0, \sigma_x^2\right)
+$$
+
+Per ciascuna particella $m$, la funzione di campionamento estrae un numero da una distribuzione normale:
+
+$$
+x_t^{[m]} = x_{t-1}^{[m]} + u_x + \text{randn}() \cdot \sigma_x
+$$
+
+### Modello Di Misura Con Beacon 1D
+
+Il sensore calcola la distanza dal beacon di riferimento collocato nella coordinata nota $m_1$, corrotto da rumore gaussiano a deviazione standard $\sigma_z$:
+
+$$
+z_{1,t} = |x_t - m_1| + \mu, \quad \mu \sim \mathcal{N}\left(0, \sigma_z^2\right)
+$$
+
+Data una particella con posa $x_t^{[m]}$, la distanza attesa dal beacon è $\hat{z}^{[m]} = |x_t^{[m]} - m_1|$. Il residuo di misura è:
+
+$$
+e^{[m]} = z_{1,t} - |x_t^{[m]} - m_1|
+$$
+
+Il fattore di importanza (peso) associato alla particella è il valore della densità di probabilità gaussiana del residuo:
+
+$$
+w_t^{[m]} = p(z_t \mid x_t^{[m]}) = \frac{1}{\sqrt{2\pi \sigma_z^2}} \exp\left( - \frac{\left(z_{1,t} - |x_t^{[m]} - m_1|\right)^2}{2 \sigma_z^2} \right)
+$$
+
+Nel capitolo precedente abbiamo dimostrato che un singolo beacon genera una likelihood bimodale simmetrica centrata nei due punti $x = m_1 \pm z_{1,t}$.
+
+Nel Particle Filter accade esattamente lo stesso fenomeno geometrico: le particelle ricampionate si divideranno inizialmente in due raggruppamenti speculari attorno ai due picchi. Non appena il robot esegue un comando di traslazione $u_x \ne 0$ e acquisisce una seconda misura, le particelle appartenenti al picco errato non troveranno riscontro nelle nuove letture ricevendo pesi vicini allo zero, lasciando sopravvivere unicamente la nube coincidente con la posa reale.
+
+## Criticità Ingegneristiche E Compromessi Real-World
+
+Nonostante la flessibilità nel trattare distribuzioni arbitrarie e non gaussiane, l'impiego del Particle Filter in sistemi reali richiede di gestire tre problematiche fondamentali:
+
+### Degenerazione Delle Particelle (Particle Depletion)
+
+Se il robot rimane fermo sul posto ($u_t = 0$) ed esegue cicli continui di misura e ricampionamento, la varianza statistica della popolazione tende a collassare: le particelle con peso leggermente superiore generano copie multiple, eliminando tutte le altre. Dopo poche iterazioni, tutte le $M$ particelle collassano su un unico identico valore numerico, perdendo la capacità di rappresentare l'incertezza dello stato.
+
+![[slide_12_particle_deprivation_kidnapping.png|center mid]]
+
+Nel pannello (a) osserviamo la popolazione iniziale distribuita nell'atrio; nel pannello (b) il robot esegue tracking; nel pannello (c) si verifica il fenomeno di __particle deprivation__: il robot si trova nel corridoio, ma nessuna particella ha campionato quella specifica area. Poiché il ricampionamento standard può selezionare solo particelle preesistenti, il filtro non potrà mai generare campioni nella reale posa del veicolo, portando alla perdita irreversibile della traccia.
+
+Per mitigare la degenerazione ordinaria si ricampiona solo quando il numero effettivo di particelle $N_{\text{eff}}$ scende sotto una soglia critica:
+
+$$
+N_{\text{eff}} = \frac{1}{\sum_{m=1}^M \left(\tilde{w}_t^{[m]}\right)^2}
+$$
+
+Se tutti i pesi sono uniformi ($\tilde{w} = 1/M$), allora $N_{\text{eff}} = M$; se un singolo campione domina l'intera popolazione, $N_{\text{eff}} \to 1$.
+
+### Il Problema Del Kidnapped Robot Ed Augmented MCL
+
+Se un operatore sposta fisicamente il robot in un'altra stanza senza che i suoi sensori propriocettivi registrino alcun movimento (problema del robot rapito), le particelle continuano a gravitare nella stanza precedente. Poiché nessuna particella si trova in prossimità della nuova posa reale, tutte le particelle riceveranno pesi di verosimiglianza quasi nulli ($w_t^{[m]} \approx 0$).
+
+Il ricampionamento ordinario estrarrà comunque copie delle particelle preesistenti (essendo i pesi riscalati a somma unitaria), rendendo il filtro matematicamente incapace di fuggire dal minimo locale e recuperare la localizzazione corretta.
+
+Per risolvere questa criticità, Sebastian Thrun ha introdotto l'algoritmo __Augmented MCL__: il filtro monitora l'andamento della verosimiglianza media delle osservazioni:
+
+$$
+w_{\text{avg}} = \frac{1}{M} \sum_{m=1}^M w_t^{[m]} \approx p(z_t \mid z_{1:t-1}, u_{1:t}, m)
+$$
+
+Poiché $w_{\text{avg}}$ oscilla per effetto del rumore sensoriale, ne calcoliamo due stime a media mobile esponenziale con costanti di tempo differenti:
+- Un filtro lento a lungo termine ($w_{\text{slow}}$ con parametro $\alpha_{\text{slow}}$):
+
+  $$
+  w_{\text{slow}} \leftarrow w_{\text{slow}} + \alpha_{\text{slow}} (w_{\text{avg}} - w_{\text{slow}}) = (1 - \alpha_{\text{slow}}) w_{\text{slow}} + \alpha_{\text{slow}} w_{\text{avg}}
+  $$
+
+- Un filtro veloce a breve termine ($w_{\text{fast}}$ con parametro $\alpha_{\text{fast}}$):
+
+  $$
+  w_{\text{fast}} \leftarrow w_{\text{fast}} + \alpha_{\text{fast}} (w_{\text{avg}} - w_{\text{fast}}) = (1 - \alpha_{\text{fast}}) w_{\text{fast}} + \alpha_{\text{fast}} w_{\text{avg}}
+  $$
+
+con vincolo di scala $0 \le \alpha_{\text{slow}} \ll \alpha_{\text{fast}} < 1$.
+
+In condizioni nominali di tracking la verosimiglianza è stazionaria e $w_{\text{fast}} \approx w_{\text{slow}}$. Se il robot viene rapito, la verosimiglianza crolla istantaneamente: $w_{\text{fast}}$ decade rapidamente verso lo zero, mentre $w_{\text{slow}}$ conserva memoria del passato recente. Il rapporto $w_{\text{fast}} / w_{\text{slow}}$ scende bruscamente al di sotto di 1, segnalando una grave incongruenza di stima.
+
+A ogni passo di ricampionamento, iniettiamo una posa casuale uniforme nello spazio libero con probabilità:
+
+$$
+p_{\text{random}} = \max\left( 0, \, 1 - \frac{w_{\text{fast}}}{w_{\text{slow}}} \right)
+$$
+
+mentre con probabilità complementare $1 - p_{\text{random}}$ procediamo con il ricampionamento ordinario guidato da $w_t^{[m]}$.
+
+```python
+def augmented_mcl(Xt_prev, zt, ut, m, M, w_slow, w_fast, alpha_slow, alpha_fast):
+    Xt_bar = []
+    w = []
+    w_avg = 0.0
+    
+    # 1. Prediction and Weighting
+    for m_idx in range(M):
+        x_m = sample_motion_model(ut, Xt_prev[m_idx])
+        w_m = measurement_model(zt, x_m, m)
+        Xt_bar.append(x_m)
+        w.append(w_m)
+        w_avg += (1.0 / M) * w_m
+        
+    # 2. Update running averages
+    w_slow += alpha_slow * (w_avg - w_slow)
+    w_fast += alpha_fast * (w_avg - w_fast)
+    
+    # 3. Resampling with random pose injection
+    Xt = []
+    prob_rand = max(0.0, 1.0 - w_fast / w_slow)
+    
+    for m_idx in range(M):
+        if np.random.uniform(0.0, 1.0) < prob_rand:
+            Xt.append(sample_random_pose(m))
+        else:
+            Xt.append(draw_particle_proportional_to_weight(Xt_bar, w))
+            
+    return Xt, w_slow, w_fast
+```
+
+![[slide_12_augmented_mcl_global_vs_kidnapping_relocation.png|center big]]
+
+La sequenza di simulazione RoboCup illustra perfettamente il comportamento di Augmented MCL:
+- Nei pannelli (a)-(d), il robot esegue localizzazione globale: la popolazione uniforme iniziale collassa rapidamente nell'intersezione delle curve di misura dei beacon noti, convergendo verso la vera posa;
+- Nei pannelli (e)-(h), il robot viene rapito: le misure sensoriali non concordano con la stima corrente (e), determinando il crollo di $w_{\text{fast}}$. Il filtro inietta campioni casuali (f) che intersecano i landmark corretti (g), fino a ricatturare stabilmente la nuova posa del robot (h).
+
+>[!NOTE] Disambiguazione dell'Acronimo AMCL: Augmented vs Adaptive
+>È importante chiarire la duplice accezione dell'acronimo AMCL tra teoria e middleware robotici:
+>1. __Augmented MCL__: è la denominazione introdotta da Thrun per l'algoritmo di recupero dal rapimento basato su iniezione probabilistica guidata dai filtri $w_{\text{slow}}$ e $w_{\text{fast}}$;
+>2. __Adaptive Monte Carlo Localization (AMCL)__: è la denominazione ufficiale del package di localizzazione 2D nel framework __ROS / ROS2 (Nav2)__. Il package prende originariamente il nome di _Adaptive_ perché implementa la tecnica del __KLD-Sampling__ (Fox, 2001) per variare dinamicamente la dimensione della popolazione $M$;
+>3. __L'implementazione industriale reale__: il nodo `amcl` di ROS/ROS2 fonde entrambi i contributi: adatta la cardinalità $M$ tramite KLD-Sampling e gestisce il rapimento tramite i parametri `recovery_alpha_slow` e `recovery_alpha_fast` di Augmented MCL.
+>
+>L'analisi del codice C sorgente di ROS (`pf_update_sensor`, `pf_update_resample`, `pf_resample_limit`) è consultabile in [[zz. Argomenti extra#Implementazione Industriale di AMCL in ROS: Analisi del Codice C Sorgente|zz. Argomenti extra: Implementazione Industriale di AMCL in ROS]].
+
+## Adaptive MCL Tramite KLD-Sampling
+
+Il dimensionamento statico del numero di campioni $M$ impone un rigido compromesso ingegneristico:
+- Durante la __Global Localization__, l'incertezza è estesa a tutta la mappa e richiede decine di migliaia di campioni ($10^4\text{--}10^5$) per garantire una copertura sufficiente dello spazio;
+- Durante il __Position Tracking__, la densità di probabilità collassa in un lobo unimodale concentrato e poche centinaia di particelle ($10^2\text{--}10^3$) sono più che sufficienti.
+
+Mantenere $M$ costantemente elevato saturerebbe la CPU del robot, mentre ridurlo staticamente provocherebbe divergenza e fallimento nella localizzazione globale.
+
+La soluzione ottima è il __KLD-Sampling__ (Kullback-Leibler Divergence Sampling), introdotto da Dieter Fox (2001/2003): la dimensione della popolazione $M$ viene calcolata dinamicamente a ogni ciclo di stima in modo da garantire che, con probabilità $1 - \delta$, la distanza statistica di Kullback-Leibler tra la vera posterior continua e l'approssimazione campionaria non superi una soglia di errore $\epsilon$:
+
+$$
+D_{KL}(p \parallel \hat{p}) \le \epsilon \quad \text{con probabilità } 1 - \delta
+$$
+
+Approssimando lo spazio continuo tramite un istogramma a celle discrete, Fox dimostra che la soglia minima di campioni necessari $M_X$ dipende unicamente dal numero $k$ di bin non vuoti (ossia bin contenenti almeno una particella generata):
+
+$$
+M_X = \frac{k - 1}{2\epsilon} \left( 1 - \frac{2}{9(k-1)} + \sqrt{\frac{2}{9(k-1)}} \, z_{1-\delta} \right)^3
+$$
+
+dove:
+- $k$: numero di celle dell'istogramma occupate da almeno una particella estratta ($k > 1$);
+- $\epsilon$: errore massimo tollerato sulla divergenza KL (parametro `kld_err` in ROS, tipicamente $0.05$);
+- $z_{1-\delta}$: quantile superiore della distribuzione normale standard per il livello di confidenza desiderato (parametro `kld_z` in ROS; per un'accuratezza al $99\%$ con $\delta = 0.01$, si ha $z_{0.99} \approx 2.326$).
+
+### Algoritmo KLD-Sampling MCL
+
+L'algoritmo integra la predizione, la pesatura e l'adattamento dinamico di $M$ all'interno di un unico ciclo incrementale:
+
+```python
+def kld_sampling_mcl(Xt_prev, zt, ut, m, epsilon, delta, M_min, M_max):
+    Xt = []
+    M = 0
+    MX = M_max
+    k = 0
+    # Tabella hash o KD-Tree per tracciare i bin occupati
+    bins_occupied = set()
+    
+    while (M < MX or M < M_min) and M < M_max:
+        # Estrai indice proporzionalmente al peso antecedente
+        i = draw_particle_with_probability(Xt_prev)
+        # Propaga con modello di moto
+        x_m = sample_motion_model(ut, Xt_prev[i].pose)
+        # Calcola peso di verosimiglianza
+        w_m = measurement_model(zt, x_m, m)
+        Xt.append(Particle(x_m, w_m))
+        
+        # Identifica il bin geometrico della posa x_m
+        b = get_bin_index(x_m)
+        if b not in bins_occupied:
+            bins_occupied.add(b)
+            k += 1
+            if k > 1:
+                term = 2.0 / (9.0 * (k - 1))
+                z = scipy.stats.norm.ppf(1.0 - delta)
+                val = 1.0 - term + np.sqrt(term) * z
+                MX = ((k - 1) / (2.0 * epsilon)) * (val ** 3)
+                
+        M += 1
+        
+    return Xt
+```
+
+![[slide_12_kld_sampling_number_of_particles_evolution.png|center mid]]
+
+Il grafico sperimentale evidenzia il risparmio computazionale del KLD-Sampling:
+- All'inizio della missione ($t < 200\text{ s}$), il robot esplora l'ambiente in regime di localizzazione globale: le particelle occupano un gran numero di bin spaziali ($k$ elevato) e il filtro alloca il tetto massimo di $100.000$ campioni;
+- Non appena le letture sensoriali (Laser o Sonar) delimitano la posa, le particelle collassano in poche celle contigue: $k$ crolla e il numero di campioni richiesti precipita di __2-3 ordini di grandezza__, stabilizzandosi tra 100 e 1000 campioni per il laser e tra 500 e 2000 per il sonar.
+
+Il filtro modula autonomamente il proprio fabbisogno computazionale: spende risorse solo quando serve (incertezza multimodale o rapimento) e le riduce al minimo indispensabile durante la navigazione nominale.
+
+### Propagazione Non-Lineare Dell'Incertezza E Linearizzazione
+
+Il vantaggio intrinseco dei metodi a particelle rispetto ai filtri analitici gaussiani (come il filtro di Kalman esteso / EKF) emerge con chiarezza analizzando la propagazione dell'incertezza attraverso trasformazioni non-lineari.
+
+![[slide_10_uncertainty_propagation_scalar_linearization.png|center mid]]
+
+Nel filtro EKF una variabile gaussiana $x$ viene trasformata mediante una funzione non-lineare $g(x)$ linearizzata al primo ordine tramite sviluppo in serie di Taylor nell'intorno della media $\mu$:
+
+$$
+g(x) \approx g(\mu) + g'(\mu) \, (x - \mu)
+$$
+
+L'approssimazione forza la densità trasformata a rimanere una gaussiana unimodale, commettendo gravi errori di distorsione se la non-linearità è accentuata o se la distribuzione reale si divide in lobi multipli. Il Particle Filter, campionando direttamente la funzione non-lineare senza alcuna linearizzazione analitica, riproduce con esattezza qualsiasi forma asimmetrica o multimodale.
+
+
+
+# 7. Modelli Di Misura per la Localizzazione
+
+Nei capitoli precedenti abbiamo visto come il filtro di Bayes ([[4. Localizzazione e Filtri di Bayes|Filtri di Bayes]]) e le sue realizzazioni computazionali ([[5. Localizzazione con Histogram Filter|Histogram Filter]] e [[6. Localizzazione con Particle Filter|Particle Filter]]) integrino ricorsivamente due sorgenti di informazione complementari: la predizione basata sul moto e la correzione guidata dalle osservazioni sensoriali esterocettive.
+
+In questo capitolo affrontiamo il __Measurement Model__ (o modello di osservazione): la formulazione analitica che descrive la verosimiglianza statistica di ottenere una lettura sensoriale data una posa ipotizzata del veicolo e una mappa nota dell'ambiente.
+
+## Il Ruolo Del Modello Di Misura Nel Ciclo Di Stima Bayesiano
+
+Nel passo di correzione bayesiana calcoliamo la distribuzione a posteriori:
+
+$$
+bel(x_t) = \eta \, p(z_t \mid x_t, m) \, \overline{bel}(x_t)
+$$
+
+Il termine cruciale è la funzione di verosimiglianza $p(z_t \mid x_t, m)$. Questa probabilità condizionata risponde a una domanda specifica: _"Se il robot si trovasse esattamente nella posa ipotizzata $x_t$ all'interno della mappa $m$, qual è la densità di probabilità di misurare il vettore di letture $z_t$?"_.
+
+Nel Particle Filter ogni particella riceve il proprio peso di importanza $w_t^{[m]}$ valutando puntualmente questa funzione.
+
+Distinguiamo due grandi categorie di modelli di misura per robotica mobile:
+1. __Modelli Basati su Feature (Feature-Based)__: la scansione sensoriale grezza viene filtrata per estrarre landmark geometrici compatti (linee, spigoli, beacon);
+2. __Modelli Raw-Data (Scan-Based)__: l'intero pacchetto di letture del telemetro laser o LiDAR (centinaia di raggi angolari) viene processato direttamente senza estrazione preventiva di primitive. Tra questi analizzeremo il __Likelihood Field Model__ (lo standard industriale per efficienza) e il __Beam Model__ (fondato sulla simulazione ottica del raggio).
+
+## Cinematica Dei Sistemi Di Riferimento Del Sensore Laser 2D
+
+Per calcolare la verosimiglianza di una scansione laser dobbiamo prima ricondurre ogni singolo punto misurato in coordinate polari locali al sistema di coordinate cartesiane globali della mappa.
+
+Assumiamo che il robot operi su una superficie orizzontale piana, con configurazione nello spazio speciale euclideo $SE(2)$:
+
+$$
+\mathbf{x} = \begin{bmatrix} x \\ y \\ \theta \end{bmatrix} \in \mathbb{R}^2 \times S^1
+$$
+
+L'architettura geometrica del robot mobile equipaggiato con un LiDAR 2D o telemetro laser (Laser Range Finder - LRF) coinvolge quattro distinti sistemi di riferimento correlati tra loro:
+1. __Sistema Mondo $W$ (World / Map Frame)__: terna fissa globale $O_W - (x_W, y_W)$ in cui è definita la mappa dell'ambiente circostante;
+2. __Sistema Robot $R$ (Robot Body Frame)__: terna mobile $O_R - (x_R, y_R)$ solidale al telaio del robot, con baricentro in $(x, y)$ e orientamento $\theta$ rispetto all'asse $x_W$;
+3. __Sistema Sensore $S$ (Sensor Frame)__: terna mobile $O_S - (x_S, y_S)$ solidale al dispositivo laser, fissato sul telaio con un offset geometrico $(x_{\text{sens}}, y_{\text{sens}})$ e disallineamento angolare $\theta_{\text{sens}}$ rispetto alla terna del robot;
+4. __Fascio Laser $k$-esimo__: direzione fisica di propagazione del singolo impulso luminoso, individuato in coordinate polari locali dal raggio di scansione $r_k$ (distanza misurata dal Time-of-Flight) e dall'angolo di scansione $\alpha_k$ rispetto all'asse $x_S$.
+
+![[slide_13_lidar_4_reference_frames_transformation.png|center big]]
+
+### Catena Cinematica Di Rototraslazione Nel Piano
+
+Vogliamo calcolare le coordinate globali del punto di impatto dell'ostacolo $\mathbf{p}_k^W = [x_k^W, y_k^W]^T$.
+
+Richiamiamo la matrice di rotazione planare $R(\phi) \in SO(2)$:
+
+$$
+R(\phi) = \begin{bmatrix} \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi \end{bmatrix}
+$$
+
+Procediamo componendo le trasformazioni rigide passo dopo passo:
+
+1. __Dal Fascio al Sensore__: il raggio $k$-esimo rileva un punto alle coordinate polari $(r_k, \alpha_k)$ nel piano del sensore:
+
+   $$
+   \mathbf{p}_k^S = \begin{bmatrix} x_k^S \\ y_k^S \end{bmatrix} = \begin{bmatrix} r_k \cos\alpha_k \\ r_k \sin\alpha_k \end{bmatrix}
+   $$
+
+2. __Dal Sensore al Robot__: ruotiamo di $\theta_{\text{sens}}$ e trasliamo dell'offset di montaggio $\mathbf{p}_{\text{sens}} = [x_{\text{sens}}, y_{\text{sens}}]^T$:
+
+   $$
+   \mathbf{p}_k^R = \begin{bmatrix} x_{\text{sens}} \\ y_{\text{sens}} \end{bmatrix} + R(\theta_{\text{sens}}) \begin{bmatrix} r_k \cos\alpha_k \\ r_k \sin\alpha_k \end{bmatrix}
+   $$
+
+3. __Dal Robot al Mondo__: ruotiamo dell'orientamento del robot $\theta$ e sommiamo la posizione globale $[x, y]^T$:
+
+   $$
+   \mathbf{p}_k^W = \begin{bmatrix} x \\ y \end{bmatrix} + R(\theta) \mathbf{p}_k^R
+   $$
+
+Sostituendo l'espressione di $\mathbf{p}_k^R$, sfruttando la proprietà di composizione delle rotazioni $R(\theta) R(\theta_{\text{sens}}) = R(\theta + \theta_{\text{sens}})$ otteniamo la formula rototraslatoria completa:
+
+$$
+\begin{bmatrix} x_k^W \\ y_k^W \end{bmatrix} = \begin{bmatrix} x \\ y \end{bmatrix} + R(\theta) \begin{bmatrix} x_{\text{sens}} \\ y_{\text{sens}} \end{bmatrix} + R(\theta + \theta_{\text{sens}}) \begin{bmatrix} r_k \cos\alpha_k \\ r_k \sin\alpha_k \end{bmatrix}
+$$
+
+Esplicitando in forma scalare riga per riga:
+
+$$
+\begin{cases}
+x_k^W = x + x_{\text{sens}} \cos\theta - y_{\text{sens}} \sin\theta + r_k \cos(\theta + \theta_{\text{sens}} + \alpha_k) \\
+y_k^W = y + x_{\text{sens}} \sin\theta + y_{\text{sens}} \cos\theta + r_k \sin(\theta + \theta_{\text{sens}} + \alpha_k)
+\end{cases}
+$$
+
+Questa trasformazione proietta istantaneamente ogni raggio laser nel sistema di riferimento globale della mappa conoscendo l'ipotesi di posa $(x, y, \theta)$ del veicolo.
+
+## Modello Basato Su Feature (Feature-Based Measurement Model)
+
+L'approccio basato su feature (FB-MM) riduce la complessa nuvola di punti raw a un insieme compatto di landmark geometrici salienti estratti tramite algoritmi di segmentazione (come visto in [[3. Rappresentazione dell'Ambiente ed Estrazione di Feature|Estrazione di Feature]]):
+
+$$
+z_{f,i} = \begin{bmatrix} r_i \\ \alpha_i \\ s_i \end{bmatrix}
+$$
+
+dove $r_i$ è la distanza stimata dal landmark, $\alpha_i$ è l'angolo di vista rispetto alla prora del robot (bearing) e $s_i$ è una segnatura descrittiva (colore, etichetta identificativa o riflettanza del beacon).
+
+Data la posa ipotizzata $x_t$ e la posizione nota del landmark sulla mappa $m_j = [m_{j,x}, m_{j,y}]^T$, la misura ideale attesa priva di rumore è:
+
+$$
+\hat{z}_i = \begin{bmatrix} \sqrt{(m_{j,x} - x)^2 + (m_{j,y} - y)^2} \\ \text{atan2}(m_{j,y} - y, \, m_{j,x} - x) - \theta \end{bmatrix}
+$$
+
+### Generalizzazione Probabilistica: Dalla Gaussiana a Funzioni Arbitrarie
+
+Nel modello scalare ideale si assume un rumore additivo gaussiano a media nulla con varianza $\sigma^2$:
+
+$$
+z_f = z_f^* + \epsilon_{\sigma^2}, \quad \epsilon_{\sigma^2} \sim \mathcal{N}\left(0, \sigma^2\right)
+$$
+
+Tuttavia, come evidenziato dal docente a lezione (aggiornamento di `013_1` rispetto alla versione preliminare `012_2`), imporre rigidamente una campana gaussiana è spesso inadeguato nei contesti operativi reali per via di riflessioni anomale, code pesanti e saturazioni.
+
+Si adotta quindi una formulazione probabilistica più generale:
+
+$$
+p(z_f \mid x_t, m) = \text{prob}\left(z_f - z_f^*, \, \sigma\right)
+$$
+
+dove $\text{prob}(\Delta, \sigma)$ rappresenta una funzione di densità arbitraria (gaussiana, triangolare, o miscela con code uniformi per modellare falsi allarmi).
+
+Per un insieme di feature indipendenti condizionatamente alla posa del robot, la verosimiglianza complessiva è il prodotto delle singole componenti:
+
+$$
+p(z_t \mid x_t, m) = \prod_{i=1}^{N_f} p(z_{f,i} \mid x_t, m)
+$$
+
+>[!IMPORTANT] La Criticità della Corrispondenza Dati (Data Association)
+>Il limite fondamentale dei modelli basati su feature risiede nel problema della corrispondenza (_data association_): per calcolare la verosimiglianza dobbiamo sapere a quale landmark della mappa $m_j$ corrisponde la lettura $z_{f,i}$. Se i landmark non possiedono una segnatura univoca, un'associazione errata produce gravissimi picchi spuri di verosimiglianza che possono far divergere la stima.
+
+## Modello a Campo Di Verosimiglianza (Likelihood Field Model)
+
+Per superare la fragilità della data association e l'onere computazionale dell'estrazione di primitive, nella moderna navigazione robotica (incluso il package `amcl` di ROS/ROS2) si adotta prevalentemente il __Likelihood Field Model__.
+
+L'idea cardine è semplice ed elegante: invece di cercare corrispondenze discrete o simulare la traiettoria ottica del raggio nello spazio, ogni singolo punto misurato dal laser viene proiettato direttamente nella mappa globale tramite la trasformazione cinematica $\mathbf{p}_k^W$. La sua verosimiglianza viene quindi calcolata in funzione della __distanza minima dall'ostacolo più vicino__.
+
+### Formulazione Geometrica E Campo Di Distanza
+
+Sia $\mathbf{p}_k^W = [x_k^W, y_k^W]^T$ il punto globale calcolato per il raggio $k$-esimo. Definiamo la distanza euclidea minima tra $\mathbf{p}_k^W$ e qualsiasi cella occupata nella mappa $m$:
+
+$$
+dist = \min_{x', y'} \left\{ \sqrt{(x_k^W - x')^2 + (y_k^W - y')^2} \;\middle|\; \langle x', y' \rangle \text{ occupato in } m \right\}
+$$
+
+![[slide_13_likelihood_field_grid_map.png|center small]] ![[slide_13_likelihood_field_sensor_response_curve.png|center small]]
+
+Nel pannello di sinistra osserviamo l'ambiente reale con ostacoli e il corrispondente __Likelihood Field__ generato attorno alle pareti e agli oggetti: l'intensità luminosa rappresenta la densità di verosimiglianza, massima in corrispondenza del bordo dell'ostacolo ($dist = 0$) e via via decrescente man mano che ci si allontana.
+
+Nel pannello di destra è tracciata la curva di risposta del sensore al variare della distanza misurata rispetto agli ostacoli $o_1, o_2, o_3$ e al fondoscala $z_{\max}$.
+
+### Modello Di Rumore a Miscela a Tre Componenti
+
+Il modello reale combina tre distinte sorgenti di incertezza:
+1. __Rumore di Misura Gaussiano ($p_{\text{hit}}$)__: modella l'incertezza intrinseca del telemetro laser tramite una gaussiana a media nulla calcolata sulla distanza minima $dist$:
+
+   $$
+   p_{\text{hit}}(z_k \mid x_t, m) = \frac{1}{\sqrt{2\pi \sigma_{\text{hit}}^2}} \exp\left( - \frac{dist^2}{2 \sigma_{\text{hit}}^2} \right)
+   $$
+
+2. __Falsi Allarmi e Rumore Casuale ($p_{\text{rand}}$)__: modella riflessioni diffuse anomale e interferenze elettroniche tramite una distribuzione uniforme sull'intero campo di misura del sensore $[0, z_{\max}]$:
+
+   $$
+   p_{\text{rand}}(z_k \mid x_t, m) = \frac{1}{z_{\max}}
+   $$
+
+3. __Fondo Scala e Scarto Letture Spurie ($z_{\max}$)__: se il sensore restituisce la lettura massima $r_k = z_{\max}$, significa che il raggio non ha intersecato alcun ostacolo entro la portata massima (ad esempio fasci sparati lungo un lungo corridoio aperto o finestre trasparenti). Come rimarcato dal docente a lezione (slide 14 di `013_1`), la lettura a fondoscala __è spuria e priva di informazione geometrica localizzante__ e va scartata dal prodotto di calcolo.
+
+La densità di verosimiglianza per il singolo raggio valido ($r_k \ne z_{\max}$) è data dalla combinazione convessa pesata:
+
+$$
+p(z_k \mid x_t, m) = \alpha_{\text{hit}} \, p_{\text{hit}}(z_k \mid x_t, m) + \alpha_{\text{rand}} \, \frac{1}{z_{\max}}
+$$
+
+con $\alpha_{\text{hit}} + \alpha_{\text{rand}} = 1$.
+
+Assumendo che i singoli raggi laser siano statisticamente indipendenti condizionatamente alla posa $x_t$ e alla mappa $m$, la verosimiglianza complessiva dell'intera scansione $z_t = \{z_1, \dots, z_{N_z}\}$ è il prodotto cumulativo:
+
+$$
+q = \prod_{k=1, \, r_k \ne z_{\max}}^{N_z} p(z_k \mid x_t, m)
+$$
+
+### Algoritmo Del Likelihood Field
+
+L'implementazione algoritmica standard unisce la rototraslazione cinematica, la ricerca della distanza minima e la combinazione a miscela:
+
+```python
+def likelihood_field_range_finder_model(zt, xt, m, params):
+    # xt = (x, y, theta) posa del robot
+    # zt = array di raggi [(r_1, alpha_1), ..., (r_K, alpha_K)]
+    q = 1.0
+    
+    for r_k, alpha_k in zt:
+        # 1. Scarta le letture a fondo scala (spurie)
+        if r_k >= params.z_max:
+            continue
+            
+        # 2. Rototraslazione del punto di impatto nel frame Mondo
+        x_w = (xt.x + params.x_sens * np.cos(xt.theta) 
+               - params.y_sens * np.sin(xt.theta) 
+               + r_k * np.cos(xt.theta + params.theta_sens + alpha_k))
+               
+        y_w = (xt.y + params.x_sens * np.sin(xt.theta) 
+               + params.y_sens * np.cos(xt.theta) 
+               + r_k * np.sin(xt.theta + params.theta_sens + alpha_k))
+               
+        # 3. Lookup O(1) della distanza minima sulla griglia precalcolata
+        dist = get_distance_to_nearest_obstacle(m, x_w, y_w)
+        
+        # 4. Modello a miscela (Gaussiana + Uniforme)
+        p_hit = (1.0 / np.sqrt(2.0 * np.pi * params.sigma_hit**2)) * np.exp(-0.5 * (dist**2) / (params.sigma_hit**2))
+        p_rand = 1.0 / params.z_max
+        
+        p = params.alpha_hit * p_hit + params.alpha_rand * p_rand
+        q *= p
+        
+    return q
+```
+
+>[!IMPORTANT] Compromessi Ingegneristici e Limiti del Likelihood Field
+>Il Likelihood Field domina le applicazioni industriali per una serie di motivi operativi, ma presenta compromessi teorici precisi:
+>1. __Debole Fondamento Fisico (_No Physical Ground_)__: il modello valuta solo gli endpoint finali del raggio e ignora completamente la traiettoria del fascio. Se un raggio interseca una parete e l'endpoint cade su una stanza successiva a distanza compatibile, riceverà comunque un peso elevato; il modello "vede attraverso i muri", ignorando le occlusioni fisiche;
+>2. __Impossibilità di Modellare Ostacoli Dinamici__: persone che camminano o arredi spostati non compaiono nella mappa statica precalcolata; la lettura riceverà semplicemente la probabilità residua $\alpha_{\text{rand}} / z_{\max}$;
+>3. __Vantaggio Computazionale Decisivo ($O(1)$ a Runtime)__: il calcolo di $dist$ non richiede ray-tracing costosi: la mappa dell'ambiente viene elaborata __una sola volta offline__ calcolando la _Distance Transform_ su griglia 2D. A runtime la valutazione di ogni raggio si riduce a un banale accesso in memoria (look-up $O(1)$ in una tabella matriciale).
+
+## Modello a Raggio Fisico (Beam Model)
+
+A differenza del Likelihood Field, il __Beam Model__ (noto anche come _Beam Range Finder Model_) ricostruisce fedelmente la fisica di propagazione del singolo fascio laser nell'ambiente.
+
+![[slide_13_beam_model_ray_casting_specular_reflection.png|center small]] ![[slide_13_laser_reading_office_space_scans.png|center small]]
+
+Nel pannello (a) di sinistra osserviamo il processo di __Ray Casting__: per ogni raggio emesso dal laser a un dato angolo, il filtro proietta una linea virtuale nello spazio fino a intersecare il primo ostacolo opaco presente nella mappa, ricavando la distanza teorica ideale attesa $z_t^{k*}$.
+
+Nel pannello (b) sono illustrati i fenomeni fisici non ideali che degradano la misura: riflessioni speculari su superfici inclinate lisce in cui il fascio devia senza tornare al ricevitore, aperture angolari finite del fascio cono (_beam cone_) e assorbimenti. A destra vediamo una reale scansione laser 2D in un ambiente d'ufficio con corridoi e uffici.
+
+### I Quattro Modelli Di Errore Fisico
+
+Il Beam Model decompone l'errore del sensore in quattro sorgenti statistiche fisicamente motivate:
+
+![[slide_13_beam_model_four_error_components.png|center small]] ![[slide_13_beam_model_mixture_distribution.png|center small]]
+
+1. __Errore Locale di Misura ($p_{\text{hit}}$)__: rumore gaussiano centrato sulla vera distanza geometrica $z_t^{k*}$ calcolata per ray-casting:
+
+   $$
+   p_{\text{hit}}(z_k \mid x_t, m) = \begin{cases} \eta_{\text{hit}} \, \frac{1}{\sqrt{2\pi \sigma_{\text{hit}}^2}} \exp\left( - \frac{\left(z_k - z_t^{k*}\right)^2}{2\sigma_{\text{hit}}^2} \right) & \text{se } 0 \le z_k \le z_{\max} \\ 0 & \text{altrimenti} \end{cases}
+   $$
+
+2. __Ostacoli Inattesi ($p_{\text{short}}$)__: persone che camminano, porte temporaneamente chiuse o arredi mobili non presenti sulla mappa provocano una lettura _più corta_ del raggio ideale. Questo fenomeno è modellato da una densità esponenziale decrescente troncata a $z_t^{k*}$:
+
+   $$
+   p_{\text{short}}(z_k \mid x_t, m) = \begin{cases} \eta_{\text{short}} \, \lambda_{\text{short}} \, \mathrm{e}^{-\lambda_{\text{short}} z_k} & \text{se } 0 \le z_k \le z_t^{k*} \\ 0 & \text{altrimenti} \end{cases}
+   $$
+
+3. __Mancata Lettura / Errore di Fondo Scala ($p_{\text{max}}$)__: superfici opache nere che assorbono la luce, riflessioni speculari estreme o bersagli oltre il range utile provocano il timeout del ricevitore ToF, restituendo il valore di saturazione $z_{\max}$. È modellato da un impulso a gradino nell'intorno ristretto di $z_{\max}$:
+
+   $$
+   p_{\text{max}}(z_k \mid x_t, m) = I(z_k = z_{\max})
+   $$
+
+4. __Rumore Casuale Inspiegabile ($p_{\text{rand}}$)__: fenomeni non prevedibili o multipath generano un rumore uniforme piatto su tutto l'intervallo $[0, z_{\max}]$:
+
+   $$
+   p_{\text{rand}}(z_k \mid x_t, m) = \begin{cases} \frac{1}{z_{\max}} & \text{se } 0 \le z_k \le z_{\max} \\ 0 & \text{altrimenti} \end{cases}
+   $$
+
+La distribuzione complessiva è la combinazione convessa delle quattro componenti (pannello di destra):
+
+$$
+p(z_k \mid x_t, m) = \alpha_{\text{hit}} p_{\text{hit}} + \alpha_{\text{short}} p_{\text{short}} + \alpha_{\text{max}} p_{\text{max}} + \alpha_{\text{rand}} p_{\text{rand}}
+$$
+
+con vincolo di normalizzazione $\alpha_{\text{hit}} + \alpha_{\text{short}} + \alpha_{\text{max}} + \alpha_{\text{rand}} = 1$.
+
+I pesi $\alpha$ e i parametri $\sigma_{\text{hit}}, \lambda_{\text{short}}$ vengono tarati a partire da dataset reali di calibrazione tramite stimatori di massima verosimiglianza ([[zz. Argomenti extra#Dettaglio Analitico dei Modelli di Misura Beam e Stima MLE dei Parametri|zz. Argomenti extra: Stima MLE dei Parametri del Beam Model]]).
+
+### Algoritmo Del Beam Model E Complessità Del Ray Casting
+
+```python
+def beam_range_finder_model(zt, xt, m, params):
+    q = 1.0
+    
+    for k, (r_k, alpha_k) in enumerate(zt):
+        # 1. Calcolo del raggio virtuale atteso tramite ray-casting
+        z_star = ray_casting(xt, alpha_k, m)
+        
+        # 2. Valutazione delle quattro componenti
+        p_hit = compute_p_hit(r_k, z_star, params.sigma_hit, params.z_max)
+        p_short = compute_p_short(r_k, z_star, params.lambda_short)
+        p_max = compute_p_max(r_k, params.z_max)
+        p_rand = compute_p_rand(r_k, params.z_max)
+        
+        # 3. Combinazione convessa
+        p = (params.alpha_hit * p_hit + 
+             params.alpha_short * p_short + 
+             params.alpha_max * p_max + 
+             params.alpha_rand * p_rand)
+             
+        q *= p
+        
+    return q
+```
+
+Sebbene il Beam Model sia teoricamente più rigoroso del Likelihood Field, in contesti real-time presenta una grave controindicazione: per ciascun raggio laser di ciascuna delle $M$ particelle occorre calcolare un'operazione di ray-casting nella mappa. Con $M = 1000$ particelle e $N_z = 360$ raggi, servirebbero $360.000$ ray-cast per ogni singolo frame del sensore (decine di volte al secondo), un carico proibitivo su hardware embedded.
+
+Per questa ragione, nei sistemi industriali e in ROS il Beam Model viene confinato a casi specifici o rimpiazzato dal Likelihood Field con precalcolo della griglia di distanza.
+
+
+
+# 8. Filtro Di Kalman Lineare
+
+Nei capitoli precedenti abbiamo esplorato le approssimazioni computazionali non-parametriche del filtro di Bayes: l'[[5. Localizzazione con Histogram Filter|Histogram Filter]] su griglia discreta e il [[6. Localizzazione con Particle Filter|Particle Filter]] stocastico. Entrambi i metodi eccellono nel rappresentare distribuzioni arbitrarie e multimodali (come le ambiguità speculari generate da beacon e pareti), ma richiedono un pesante carico computazionale legato alla granularità delle celle o al numero di campioni $M$.
+
+In questo capitolo introduciamo il __Filtro di Kalman (Kalman Filter - KF)__, che affronta la stima bayesiana da una prospettiva analitica esatta: assumendo dinamiche di moto e di misura lineari corrotte da rumori gaussiani, il filtro di Bayes ammette una soluzione analitica chiusa ed estremamente efficiente in cui l'intero belief è parametrizzato unicamente dal vettore di media e dalla matrice di covarianza.
+
+Trattiamo qui l'architettura teorica fondamentale per sistemi lineari discreti variabili nel tempo, che costituisce il presupposto metodologico irrinunciabile per la successiva estensione non-lineare ([[zz. Argomenti extra#Extended Kalman Filter|Extended Kalman Filter - EKF]]) applicata alla localizzazione robotica.
+
+## Dal Filtro Di Bayes Ai Filtri Gaussiani Analitici
+
+Richiamiamo la forma continua ricorsiva del filtro di Bayes:
+
+$$
+\overline{bel}(x_t) = \int p(x_t \mid x_{t-1}, u_t) \, bel(x_{t-1}) \, \mathrm{d}x_{t-1}
+$$
+
+$$
+bel(x_t) = \eta \, p(y_t \mid x_t) \, \overline{bel}(x_t)
+$$
+
+Nel caso generale il calcolo analitico dell'integrale di predizione (integrale di Chapman-Kolmogorov) è intrattabile. Tuttavia, se imponiamo due vincoli strutturali:
+1. __Linearità delle trasformazioni__: le equazioni che governano l'evoluzione dello stato e la generazione delle uscite sono combinazioni lineari delle variabili;
+2. __Gaussianità dei segnali aleatori__: lo stato iniziale e tutte le perturbazioni esterne sono variabili aleatorie gaussiane a media nulla.
+
+accade una proprietà matematica formidabile: la famiglia delle densità normali è una _famiglia coniugata_ rispetto a trasformazioni lineari. La convoluzione di due gaussiane è ancora una gaussiana, e il prodotto normalizzato di due gaussiane è ancora rigorosamente una gaussiana.
+
+Non occorre quindi approssimare numericamente lo spazio continuo: basta calcolare analiticamente le equazioni ricorsive di aggiornamento dei soli parametri della distribuzione (valore atteso $\hat{x}$ e matrice di covarianza $P$).
+
+## Modellazione Dei Sistemi Dinamici Lineari Stocastici
+
+Consideriamo un processo dinamico a tempo discreto $t \in \mathbb{Z}$ descritto in uno schema di Hidden Markov Model (HMM) continuo:
+- Vettore di stato nascosto da stimare: $x_t \in \mathbb{R}^n$;
+- Vettore degli ingressi di controllo noti: $u_t \in \mathbb{R}^m$;
+- Vettore delle uscite / osservazioni misurate dai sensori: $y_t \in \mathbb{R}^p$.
+
+Il sistema è governato dalle equazioni lineari stocastiche:
+
+$$
+x_t = A_t x_{t-1} + B_t u_t + w_t
+$$
+
+$$
+y_t = C_t x_t + v_t
+$$
+
+dove:
+- $A_t \in \mathbb{R}^{n \times n}$ è la matrice dinamica di transizione di stato;
+- $B_t \in \mathbb{R}^{n \times m}$ è la matrice degli ingressi di controllo;
+- $C_t \in \mathbb{R}^{p \times n}$ è la matrice di osservazione o di uscita sensoriale.
+
+>[!NOTE] Il Ruolo del Modello Dinamico nella Stima
+>Come evidenziato dal docente a lezione, modellare la dinamica dello stato non significa necessariamente possedere le equazioni fisiche esatte delle forze o della meccanica del veicolo. Se dobbiamo stimare la traiettoria di un punto nello spazio, possiamo semplicemente ipotizzare un modello cinematico a velocità costante ($\dot{x} = v$) o ad accelerazione costante ($\ddot{x} = a$): _"quel punto si muove a velocità costante, perché ci risulta così fisicamente non ci interessa"_. La discrepanza tra il modello semplificato e la complessa realtà fisica viene assorbita statisticamente dal rumore di processo $w_t$.
+
+### Ipotesi Statistiche Sui Rumori
+
+Le sequenze stocastiche che corrompono il sistema soddisfano le seguenti proprietà fondamentali:
+1. __Rumore di Processo / Stato ($w_t$)__: sequenza bianca gaussiana a media nulla con matrice di covarianza simmetrica semidefinita (o definita) positiva $Q_t \ge 0$:
+
+   $$
+   w_t \sim \mathcal{N}\left(0, Q_t\right), \quad \mathbb{E}[w_t] = 0, \quad \mathbb{E}\left[w_t w_\tau^T\right] = Q_t \, \delta_{t,\tau}
+   $$
+
+2. __Rumore di Misura ($v_t$)__: sequenza bianca gaussiana a media nulla con matrice di covarianza definita positiva $R_t > 0$:
+
+   $$
+   v_t \sim \mathcal{N}\left(0, R_t\right), \quad \mathbb{E}[v_t] = 0, \quad \mathbb{E}\left[v_t v_\tau^T\right] = R_t \, \delta_{t,\tau}
+   $$
+
+3. __Scorrelazione Mutua__: i rumori di processo e di misura sono reciprocamente indipendenti a qualsiasi istante:
+
+   $$
+   \mathbb{E}\left[w_t v_\tau^T\right] = 0 \quad \forall t, \tau
+   $$
+
+4. __Condizione Iniziale Incerta__: lo stato iniziale $x_0$ è una variabile gaussiana con media $\bar{x}_0$ e covarianza $P_0$, indipendente dai rumori per ogni $t \ge 0$:
+
+   $$
+   x_0 \sim \mathcal{N}\left(\bar{x}_0, P_0\right), \quad \mathbb{E}\left[x_0 w_t^T\right] = 0, \quad \mathbb{E}\left[x_0 v_t^T\right] = 0
+   $$
+
+>[!WARNING] Convenzione Fondamentale del Corso: Notazione delle Covarianze $Q$ ed $R$
+>Prestare la massima attenzione alla notazione utilizzata dal docente a lezione:
+>- $Q_t$: matrice di covarianza del rumore di stato/processo $w_t$;
+>- $R_t$: matrice di covarianza del rumore di misura $v_t$.
+>
+>Questa notazione è lo standard universale della __Teoria dei Controlli e del Filtraggio Ottimo__. Si segnala che alcuni testi di robotica (incluso talvolta il testo di Thrun _Probabilistic Robotics_) e librerie software invertono i simboli utilizzando $R$ per il processo e $Q$ per le misure. Nel corso e in questi appunti si adotta rigorosamente la convenzione dei controlli ($Q$ per il processo, $R$ per le misure).
+
+## Il Ponte Con I Controlli Automatici: L'Osservatore Di Luenberger
+
+Per comprendere l'architettura interna del filtro di Kalman consideriamo anzitutto il caso deterministico privo di rumore ($w_t = 0, v_t = 0$):
+
+$$
+x_{t+1} = A x_t + B u_t, \quad y_t = C x_t
+$$
+
+Poiché lo stato interno $x_t$ non è accessibile per la misura diretta (ad esempio la velocità reale del robot o la corrente di armatura), costruiamo un sistema dinamico ausiliario in grado di ricostruirlo asintoticamente conoscendo solo gli ingressi applicati $u_t$ e le uscite misurate $y_t$. Questo sistema è l'__Osservatore di Stato di Luenberger__:
+
+$$
+\hat{x}_{t+1} = A \hat{x}_t + B u_t + L \left( y_t - C \hat{x}_t \right)
+$$
+
+```mermaid
+flowchart LR
+    subgraph Processo_Reale["Sistema Reale"]
+        u["u(t)"] --> B["B"]
+        B --> sum_x((+))
+        sum_x --> delay_x["Z^-1"]
+        delay_x --> x["x(t)"]
+        x --> A["A"]
+        A --> sum_x
+        x --> C["C"]
+        C --> y["y(t)"]
+    end
+    
+    subgraph Osservatore["Osservatore di Luenberger"]
+        u --> B_hat["B"]
+        B_hat --> sum_hat((+))
+        sum_hat --> delay_hat["Z^-1"]
+        delay_hat --> x_hat["x_hat(t)"]
+        x_hat --> A_hat["A"]
+        A_hat --> sum_hat
+        x_hat --> C_hat["C"]
+        C_hat --> sum_err(("-"))
+        y --> sum_err
+        sum_err -- "Innovazione: y - C x_hat" --> L["Guadagno L"]
+        L --> sum_hat
+    end
+```
+
+L'osservatore si articola in due componenti concettuali:
+1. __Replica del Modello ($A \hat{x}_t + B u_t$)__: simula in catena aperta l'evoluzione nominale del sistema sfruttando la conoscenza della dinamica e degli ingressi;
+2. __Termine di Correzione in Feedback ($L (y_t - C \hat{x}_t)$)__: calcola l'__innovazione__ (o residuo) $e_t = y_t - C \hat{x}_t$, ossia lo scostamento tra la misura reale $y_t$ e la misura attesa calcolata sulla stima $C \hat{x}_t$, pesandola attraverso la matrice di guadagno $L$.
+
+### Dinamica dell'Errore Di Stima
+
+Definiamo l'errore di stima $\tilde{x}_t = x_t - \hat{x}_t$. Sottraendo l'equazione dell'osservatore da quella del sistema deterministico:
+
+$$
+\tilde{x}_{t+1} = x_{t+1} - \hat{x}_{t+1} = \left( A x_t + B u_t \right) - \left( A \hat{x}_t + B u_t + L C (x_t - \hat{x}_t) \right)
+$$
+
+$$
+\tilde{x}_{t+1} = (A - LC) \tilde{x}_t
+$$
+
+L'evoluzione dell'errore è un sistema lineare autonomo governato dalla matrice dinamica $(A - LC)$. Se la coppia $(A, C)$ è __osservabile__, possiamo scegliere ad arbitrio gli autovalori di $(A - LC)$ posizionandoli all'interno del disco unitario del piano complesso ($|\lambda_i| < 1$), garantendo che l'errore converga esponenzialmente a zero indipendentemente dall'errore iniziale:
+
+$$
+\lim_{t \to \infty} \tilde{x}_t = 0 \implies \lim_{t \to \infty} \hat{x}_t = x_t
+$$
+
+Nel contesto stocastico, tuttavia, la presenza simultanea del rumore di processo $w_t$ e del rumore di misura $v_t$ impedisce una convergenza deterministica a zero. Il __Filtro di Kalman__ risolve esattamente questo trade-off calcolando il guadagno $L_t$ ottimale che bilancia istante per istante la fiducia nella dinamica interna rispetto alla fiducia nei sensori.
+
+## Il Filtro Di Kalman Lineare Time-Varying
+
+Nel caso generale non stazionario le matrici del modello $A_t, B_t, C_t, Q_t, R_t$ possono variare nel tempo.
+
+Adottiamo la notazione standard di filtraggio ottimo a tempo discreto:
+- $\hat{x}_{t|t-1}$: stima dello stato all'istante $t$ basata sulle misure disponibili fino all'istante antecedente $t-1$ (__stima a priori__ o predizione);
+- $P_{t|t-1}$: matrice di covarianza dell'errore a priori: $\mathbb{E}[ (x_t - \hat{x}_{t|t-1})(x_t - \hat{x}_{t|t-1})^T ]$;
+- $\hat{x}_{t|t}$: stima dello stato all'istante $t$ aggiornata con l'osservazione corrente $y_t$ (__stima a posteriori__);
+- $P_{t|t}$: matrice di covarianza dell'errore a posteriori: $\mathbb{E}[ (x_t - \hat{x}_{t|t})(x_t - \hat{x}_{t|t})^T ]$.
+
+L'algoritmo opera ciclicamente in due macro-fasi:
+
+```mermaid
+flowchart TD
+    A["Stima a Posteriori Precedente: x_hat(t-1|t-1), P(t-1|t-1)"] --> B["1. PREDIZIONE A PRIORI (Time Update)"]
+    B --> C["x_hat(t|t-1) = A_t * x_hat(t-1|t-1) + B_t * u_t"]
+    B --> D["P(t|t-1) = A_t * P(t-1|t-1) * A_t^T + Q_t (Covarianza Aumenta)"]
+    
+    C --> E["2. CORREZIONE A POSTERIORI (Measurement Update)"]
+    D --> E
+    y_in["Nuova Misura y(t)"] --> E
+    
+    E --> F["Innovazione: y_tilde(t) = y(t) - C_t * x_hat(t|t-1)"]
+    E --> G["Covarianza Innovazione: S_t = C_t * P(t|t-1) * C_t^T + R_t"]
+    E --> H["Guadagno Ottimo: L_t = P(t|t-1) * C_t^T * S_t^-1"]
+    
+    F --> I["Aggiornamento Stato: x_hat(t|t) = x_hat(t|t-1) + L_t * y_tilde(t)"]
+    H --> I
+    G --> L_P["Aggiornamento Covarianza: P(t|t) = (I - L_t * C_t) * P(t|t-1) (Covarianza Decresce)"]
+    H --> L_P
+    D --> L_P
+    
+    I --> M["Stima Corrente a Posteriori"]
+    L_P --> M
+    M -- "Passo Successivo t -> t+1" --> A
+```
+
+### 1. Fase Di Predizione a Priori (Time Update)
+
+Conoscendo la stima passata $\hat{x}_{t-1|t-1}$ e il comando di controllo $u_t$, propaghiamo lo stato nel tempo applicando il modello nominale:
+
+$$
+\hat{x}_{t|t-1} = A_t \hat{x}_{t-1|t-1} + B_t u_t
+$$
+
+La covarianza dell'errore associata alla predizione è data da:
+
+$$
+P_{t|t-1} = A_t P_{t-1|t-1} A_t^T + Q_t
+$$
+
+>[!IMPORTANT] La Covarianza Aumenta nella Predizione
+>La trasformazione cinematica disperde l'incertezza ($A_t P A_t^T$) e vi somma la covarianza del rumore di processo $Q_t \ge 0$. In assenza di misure sensoriali esterne, l'incertezza cresce a ogni passo temporale: il robot perde progressivamente accuratezza per via del drift odometrico.
+
+### 2. Fase Di Correzione a Posteriori (Measurement Update)
+
+All'istante $t$ acquisiamo la lettura sensoriale $y_t$. Valutiamo lo scostamento rispetto alla misura attesa:
+
+$$
+\tilde{y}_t = y_t - C_t \hat{x}_{t|t-1}
+$$
+
+Il termine $\tilde{y}_t$ è il processo di __innovazione__: rappresenta la frazione di informazione contenuta nella misura sensoriale che non era già prevedibile a partire dalla storia passata.
+
+La matrice di covarianza dell'innovazione vale:
+
+$$
+S_t = C_t P_{t|t-1} C_t^T + R_t
+$$
+
+Il __Guadagno Ottimo di Kalman__ (o _Kalman Gain_) $L_t \in \mathbb{R}^{n \times p}$ è calcolato come:
+
+$$
+L_t = P_{t|t-1} C_t^T S_t^{-1} = P_{t|t-1} C_t^T \left( C_t P_{t|t-1} C_t^T + R_t \right)^{-1}
+$$
+
+Aggiorniamo la stima dello stato correggendo la predizione con l'innovazione pesata da $L_t$:
+
+$$
+\hat{x}_{t|t} = \hat{x}_{t|t-1} + L_t \tilde{y}_t
+$$
+
+Infine, aggiorniamo la matrice di covarianza dell'errore a posteriori:
+
+$$
+P_{t|t} = \left( I - L_t C_t \right) P_{t|t-1}
+$$
+
+oppure nella forma esplicita simmetrica Joseph:
+
+$$
+P_{t|t} = P_{t|t-1} - L_t S_t L_t^T
+$$
+
+>[!IMPORTANT] La Covarianza Decresce nella Correzione
+>Poiché $L_t S_t L_t^T$ è una matrice semidefinita positiva, la covarianza a posteriori soddisfa la disuguaglianza matriciale $P_{t|t} \le P_{t|t-1}$. L'incorporazione della misura esterocettiva riduce rigorosamente l'incertezza della stima.
+
+### Corrispondenza Delle Notazioni
+
+| Grandezza Fisica / Concettuale | Notazione Controlli Ottimi (Prof. Valigi) | Notazione Robotica Probabilistica (Thrun) |
+| :--- | :---: | :---: |
+| Stato stimato a priori (predizione) | $\hat{x}_{t\|t-1}$ | $\bar{\mu}_t$ |
+| Covarianza a priori | $P_{t\|t-1}$ | $\bar{\Sigma}_t$ |
+| Stato stimato a posteriori | $\hat{x}_{t\|t}$ | $\mu_t$ |
+| Covarianza a posteriori | $P_{t\|t}$ | $\Sigma_t$ |
+| Matrice dinamica di transizione | $A_t$ | $A_t$ |
+| Matrice degli ingressi di controllo | $B_t$ | $B_t$ |
+| Matrice di osservazione / misura | $C_t$ | $C_t$ |
+| Covarianza rumore di stato / processo | $Q_t$ | $R_t$ _(simbolo invertito!)_ |
+| Covarianza rumore di misura | $R_t$ | $Q_t$ _(simbolo invertito!)_ |
+| Guadagno di Kalman | $L_t$ | $K_t$ |
+| Innovazione / Residuo | $\tilde{y}_t$ | $z_t - C_t \bar{\mu}_t$ |
+| Covarianza dell'innovazione | $S_t$ | $C_t \bar{\Sigma}_t C_t^T + Q_t$ |
+
+## Interpretazione Bayesiana Del Filtro Di Kalman
+
+Come evidenziato dal docente (slide 21-22 di `013_2`), le equazioni del filtro di Kalman discendono in modo naturale dall'applicazione del teorema di Bayes a variabili aleatorie gaussiane.
+
+### La Predizione come Convoluzione
+
+Nel filtro di Bayes la predizione è data dall'integrale:
+
+$$
+\overline{bel}(x_t) = \int_{\mathbb{R}^n} p(x_t \mid x_{t-1}, u_t) \, bel(x_{t-1}) \, \mathrm{d}x_{t-1}
+$$
+
+Dato il modello dinamico lineare $x_t = A_t x_{t-1} + B_t u_t + w_t$, la probabilità di transizione condizionata è una gaussiana traslata:
+
+$$
+p(x_t \mid x_{t-1}, u_t) = p_{w_t}(x_t - A_t x_{t-1} - B_t u_t) \sim \mathcal{N}\left(A_t x_{t-1} + B_t u_t, \, Q_t\right)
+$$
+
+Poiché sia $bel(x_{t-1}) \sim \mathcal{N}(\hat{x}_{t-1|t-1}, P_{t-1|t-1})$ sia $p_{w_t}$ sono gaussiane, l'integrale è una __convoluzione di funzioni di densità gaussiane__.
+
+La convoluzione di gaussiane genera una densità identicamente gaussiana. Ne calcoliamo valore atteso e varianza applicando l'operatore speranza matematica:
+
+$$
+\mathbb{E}[x_t] = \mathbb{E}[A_t x_{t-1} + B_t u_t + w_t] = A_t \hat{x}_{t-1|t-1} + B_t u_t = \hat{x}_{t|t-1}
+$$
+
+$$
+\text{Cov}(x_t) = \mathbb{E}\left[ (A_t \tilde{x}_{t-1|t-1} + w_t)(A_t \tilde{x}_{t-1|t-1} + w_t)^T \right] = A_t P_{t-1|t-1} A_t^T + Q_t = P_{t|t-1}
+$$
+
+Ritroviamo esattamente le equazioni del passo di Time Update.
+
+### La Correzione come Prodotto Bayesiano
+
+Il passo di correzione bayesiana combina la prior e la verosimiglianza:
+
+$$
+bel(x_t) = \eta \, p(y_t \mid x_t) \, \overline{bel}(x_t) = \eta \, p_{v_t}(y_t - C_t x_t) \, \overline{bel}(x_t)
+$$
+
+Sia la prior $\overline{bel}(x_t) \sim \mathcal{N}(\hat{x}_{t|t-1}, P_{t|t-1})$ sia la verosimiglianza sensoriale $p(y_t \mid x_t) \sim \mathcal{N}(C_t x_t, R_t)$ sono gaussiane.
+
+Il loro prodotto produce all'esponente la somma di due forme quadratiche nelle variabili di stato:
+
+$$
+bel(x_t) \propto \exp\left( -\frac{1}{2} \left[ (x_t - \hat{x}_{t|t-1})^T P_{t|t-1}^{-1} (x_t - \hat{x}_{t|t-1}) + (y_t - C_t x_t)^T R_t^{-1} (y_t - C_t x_t) \right] \right)
+$$
+
+Espandendo i termini e completando il quadrato matriciale ([[zz. Argomenti extra#Derivazione Formale del Filtro di Kalman Lineare dalla Teoria Bayesiana|zz. Argomenti extra: Derivazione del Prodotto di Gaussiane]]), la distribuzione a posteriori $bel(x_t)$ si ricompone come una singola gaussiana:
+
+$$
+bel(x_t) \sim \mathcal{N}\left(\hat{x}_{t|t}, P_{t|t}\right)
+$$
+
+con $\hat{x}_{t|t} = \hat{x}_{t|t-1} + L_t (y_t - C_t \hat{x}_{t|t-1})$ e $P_{t|t} = (I - L_t C_t) P_{t|t-1}$.
+
+L'equivalenza tra il Filtro di Bayes ideale e il Filtro di Kalman è perfetta e priva di approssimazioni.
+
+## Proprietà Di Ottimalità E Considerazioni Sulla Stabilità
+
+Il filtro di Kalman gode di formidabili proprietà teoriche che ne spiegano il successo universale nell'ingegneria aerospaziale, robotica e industriale:
+
+1. __BLUE (Best Linear Unbiased Estimator)__:
+   - Se i rumori sono rigorosamente gaussiani, il filtro di Kalman è lo __stimatore ottimo assoluto__: minimizza l'errore quadratico medio per qualsiasi combinazione lineare dello stato, massimizza la verosimiglianza e coincide con la stima di massimo a posteriori (MAP);
+   - Se i rumori non sono gaussiani ma hanno media nulla e covarianze $Q, R$ note, il filtro di Kalman non è più l'ottimo assoluto tra tutti gli stimatori possibili, ma rimane dimostrabilmente il __miglior stimatore lineare__ a minima varianza.
+
+2. __Stabilità nei Sistemi Variabili nel Tempo (Time-Varying)__:
+   - Come sottolineato dal docente a lezione (slide 20 di `013_2`), nel caso a guadagno variabile $L_t$ non possiamo dare per scontata a priori la stabilità esponenziale incondizionata dell'errore di stima: se la matrice $(A_t - L_t C_t)$ perde temporaneamente proprietà di contrazione, la covarianza d'errore può crescere;
+   - In robotica mobile, quando il robot attraversa aree povere di feature geometriche (ad esempio un lungo corridoio uniforme privo di ostacoli longitudinali), la matrice $C_t$ non garantisce la completa osservabilità di tutte le componenti di stato; tuttavia, il filtro rimane stabile dal punto di vista operativo e ripristina la convergenza non appena il veicolo interseca nuovi riferimenti sensoriali.
+
+3. __Estensione Stazionaria (Steady-State Kalman Filter)__:
+   - Se le matrici del modello sono invarianti nel tempo ($A_t = A, B_t = B, C_t = C, Q_t = Q, R_t = R$), sotto le condizioni di __rilevabilità__ della coppia $(A, C)$ e di __stabilizzabilità__ della coppia $(A, Q^{1/2})$, la matrice di covarianza $P_{t|t-1}$ converge asintoticamente alla matrice costante $P_\infty$, soluzione unica semidefinita positiva dell'__Equazione Algebrica Discreta di Riccati (DARE)__:
+
+     $$
+     P_\infty = A P_\infty A^T + Q - A P_\infty C^T \left( C P_\infty C^T + R \right)^{-1} C P_\infty A^T
+     $$
+
+   - Di conseguenza, il guadagno di Kalman converge a una matrice statica $L_\infty = P_\infty C^T (C P_\infty C^T + R)^{-1}$, trasformando il filtro in un osservatore asintotico a guadagno costante estremamente leggero da eseguire.
+
+I passaggi algebrici completi della DARE e le dimostrazioni formali della convergenza sono riportati in [[zz. Argomenti extra#Filtro di Kalman Lineare Stazionario ed Equazione Algebrica di Riccati|zz. Argomenti extra: Filtro di Kalman Stazionario]].
+
+
+
 # Zz. Argomenti Extra
 
 Questo documento raccoglie dimostrazioni, approfondimenti matematici e argomenti collaterali utili alla comprensione completa degli argomenti del corso di _Autonomous Robotics_, ma non strettamente richiesti come parte teorica principale d'esame.
@@ -3137,3 +4337,489 @@ $$
 
 Nel caso di rumore di traslazione simmetrico con pareti riflettenti o periodiche, tale stato asintotico corrisponde alla __distribuzione uniforme__ $\mathbf{p}_\infty = [1/K, \dots, 1/K]^T$: in assenza di retroazione sensoriale, l'accumulo ininterrotto dell'incertezza odometrica cancella ogni informazione pregressa conducendo alla totale perdita di localizzazione.
 
+## Derivazione Formale Della Traiettoria Completa Nel Particle Filter
+
+Nella trattazione standard della localizzazione robotica (Monte Carlo Localization), il filtro a particelle calcola ricorsivamente la distribuzione di probabilità a posteriori della sola posa istantanea:
+
+$$
+bel(x_t) = p(x_t \mid z_{1:t}, u_{1:t})
+$$
+
+Tuttavia, dal punto di vista dell'analisi teorica dei processi stocastici (come illustrato nelle lezioni avanzate del Prof. Valigi, slide 38–39), il Particle Filter trova la sua giustificazione analitica più rigorosa estendendo lo stato all'intera sequenza storica delle pose attraversate dal robot:
+
+$$
+x_{0:t} = \{ x_0, x_1, \dots, x_t \}
+$$
+
+Il belief della traiettoria completa è definito come la densità congiunta condizionata a tutte le osservazioni e azioni passate:
+
+$$
+bel(x_{0:t}) = p(x_{0:t} \mid z_{1:t}, u_{1:t})
+$$
+
+### Espansione Ricorsiva Tramite Regola Di Bayes E Proprietà Di Markov
+
+Isoliamo l'osservazione più recente $z_t$ dal set di tutte le misure sensoriali $z_{1:t} = \{ z_t, z_{1:t-1} \}$:
+
+$$
+bel(x_{0:t}) = p(x_{0:t} \mid z_t, z_{1:t-1}, u_{1:t})
+$$
+
+Applicando la regola di Bayes considerando $z_t$ come l'evidenza osservata condizionata alla traiettoria $x_{0:t}$, alla storia delle misure passate $z_{1:t-1}$ e ai comandi $u_{1:t}$:
+
+$$
+bel(x_{0:t}) = \frac{p(z_t \mid x_{0:t}, z_{1:t-1}, u_{1:t}) \, p(x_{0:t} \mid z_{1:t-1}, u_{1:t})}{p(z_t \mid z_{1:t-1}, u_{1:t})} = \eta \, p(z_t \mid x_{0:t}, z_{1:t-1}, u_{1:t}) \, p(x_{0:t} \mid z_{1:t-1}, u_{1:t})
+$$
+
+Sfruttiamo l'__assunzione markoviana del modello di misura__: la lettura del sensore $z_t$ all'istante $t$ è condizionatamente indipendente da tutte le pose passate $x_{0:t-1}$, dalle misure pregresse $z_{1:t-1}$ e dai comandi di controllo $u_{1:t}$, una volta nota la posa istantanea attuale $x_t$:
+
+$$
+p(z_t \mid x_{0:t}, z_{1:t-1}, u_{1:t}) = p(z_t \mid x_t)
+$$
+
+Sostituendo nella formulazione del belief:
+
+$$
+bel(x_{0:t}) = \eta \, p(z_t \mid x_t) \, p(x_{0:t} \mid z_{1:t-1}, u_{1:t})
+$$
+
+Scomponiamo ora il termine congiunto $p(x_{0:t} \mid z_{1:t-1}, u_{1:t})$ applicando la definizione di probabilità condizionata per isolare l'ultimo stato $x_t$ rispetto alla storia $x_{0:t-1}$:
+
+$$
+p(x_{0:t} \mid z_{1:t-1}, u_{1:t}) = p(x_t \mid x_{0:t-1}, z_{1:t-1}, u_{1:t}) \, p(x_{0:t-1} \mid z_{1:t-1}, u_{1:t})
+$$
+
+Applichiamo nuovamente l'__assunzione markoviana del modello di moto__:
+1. Lo stato attuale $x_t$ dipende unicamente dalla posa immediatamente precedente $x_{t-1}$ e dal comando di attuazione corrente $u_t$:
+
+   $$
+   p(x_t \mid x_{0:t-1}, z_{1:t-1}, u_{1:t}) = p(x_t \mid x_{t-1}, u_t)
+   $$
+
+2. La storia passata delle pose $x_{0:t-1}$ è indipendente dall'azione futura $u_t$:
+
+   $$
+   p(x_{0:t-1} \mid z_{1:t-1}, u_{1:t}) = p(x_{0:t-1} \mid z_{1:t-1}, u_{1:t-1}) = bel(x_{0:t-1})
+   $$
+
+Ricongiungendo tutti i termini, otteniamo l'equazione ricorsiva fondamentale per il belief della traiettoria:
+
+$$
+bel(x_{0:t}) = \eta \, p(z_t \mid x_t) \, p(x_t \mid x_{t-1}, u_t) \, bel(x_{0:t-1})
+$$
+
+Definendo il belief a priori della traiettoria (dopo il comando di moto ma prima della misura) come:
+
+$$
+\overline{bel}(x_{0:t}) = p(x_t \mid x_{t-1}, u_t) \, bel(x_{0:t-1})
+$$
+
+L'espressione si compatta nella forma canonica:
+
+$$
+bel(x_{0:t}) = \eta \, p(z_t \mid x_t) \, \overline{bel}(x_{0:t})
+$$
+
+### Corrispondenza Tra Target, Proposal E Pesi Di Importanza
+
+Questa derivazione analitica mostra esattamente la convergenza matematica con la teoria dell'__Importance Sampling__:
+- La __distribuzione target__ (quella reale da cui vorremmo campionare) è la posterior congiunta $f(x_{0:t}) = bel(x_{0:t})$;
+- La __distribuzione proposal__ (quella operativa da cui siamo capaci di campionare ricorsivamente per propagazione stocastica) è la prior congiunta $g(x_{0:t}) = \overline{bel}(x_{0:t})$;
+- Il __fattore di importanza analitico__ è il rapporto puntuale tra le due distribuzioni:
+
+$$
+w(x_{0:t}) = \frac{f(x_{0:t})}{g(x_{0:t})} = \frac{bel(x_{0:t})}{\overline{bel}(x_{0:t})} = \frac{\eta \, p(z_t \mid x_t) \, \overline{bel}(x_{0:t})}{\overline{bel}(x_{0:t})} = \eta \, p(z_t \mid x_t)
+$$
+
+Poiché nelle applicazioni pratiche il fattore di normalizzazione $\eta$ viene calcolato a valle tramite somma empirica sui pesi estratti:
+
+$$
+\eta = \left( \sum_{m=1}^M w_t^{[m]} \right)^{-1}
+$$
+
+Il peso non normalizzato assegnato a ciascuna particella $m$-esima al passo $t$ coincide esattamente con la verosimiglianza di misura valutata sulla posa corrente:
+
+$$
+w_t^{[m]} = p(z_t \mid x_t^{[m]})
+$$
+
+### Marginalizzazione E Riduzione Al Filtro Sulla Posa Istantanea
+
+Nelle applicazioni di localizzazione robotica ordinaria, memorizzare l'intera traiettoria $x_{0:t}$ per ciascuna delle $M$ particelle comporterebbe un consumo lineare di memoria $O(M \cdot t)$ che divergerebbe nel tempo.
+
+Poiché il robot necessita esclusivamente di conoscere dove si trova all'istante corrente $t$ per pianificare il controllo, la distribuzione di interesse $bel(x_t)$ si ottiene __marginalizzando__ il belief congiunto rispetto a tutte le pose passate $x_{0:t-1}$:
+
+$$
+bel(x_t) = \int \dots \int bel(x_{0:t}) \, \mathrm{d}x_0 \dots \mathrm{d}x_{t-1}
+$$
+
+Nell'approssimazione a particelle, questa marginalizzazione corrisponde a un'operazione computazionale a costo zero: è sufficiente __dimenticare la storia passata__ delle particelle e memorizzare unicamente il vettore dello stato corrente $x_t^{[m]}$ per $m = 1, \dots, M$. Ogni particella al passo $t$ è un campione estratto dalla densità marginale corretta $bel(x_t)$.
+
+## Implementazione Industriale Di AMCL in ROS: Analisi Del Codice C Sorgente
+
+Nel framework robotico __ROS / ROS2 (Nav2)__, il package di localizzazione 2D per robot mobili su mappe a griglia è `amcl` (all'interno del repository `ros-planning/navigation`).
+
+L'implementazione in linguaggio C originaria fonde congiuntamente l'adattamento della cardinalità $M$ tramite __KLD-Sampling__ e il recupero dal rapimento tramite __Augmented MCL__. Analizziamo le quattro funzioni e routine cardine del sorgente di `amcl`.
+
+### 1. Calcolo Del Limite Dinamico KLD: `pf_resample_limit`
+
+La funzione `pf_resample_limit(pf_t *pf, int k)` calcola il numero di particelle necessario $n$ dato il numero $k$ di bin non vuoti nell'istogramma KD-Tree:
+
+```c
+// Compute the required number of samples, given that there are k
+// bins with samples in them. This is taken directly from Fox et al.
+int pf_resample_limit(pf_t *pf, int k)
+{
+    double a, b, c, x;
+    int n;
+    
+    if (k <= 1)
+        return pf->max_samples;
+        
+    a = 1.0;
+    b = 2.0 / (9.0 * ((double) k - 1.0));
+    c = sqrt(2.0 / (9.0 * ((double) k - 1.0))) * pf->pop_z;
+    x = a - b + c;
+    
+    n = (int) ceil((k - 1.0) / (2.0 * pf->pop_err) * x * x * x);
+    
+    if (n < pf->min_samples) 
+        return pf->min_samples;
+    if (n > pf->max_samples) 
+        return pf->max_samples;
+        
+    return n;
+}
+```
+
+- `pf->pop_err`: corrisponde al parametro $\epsilon$ (`kld_err`, default $0.05$);
+- `pf->pop_z`: quantile normale $z_{1-\delta}$ (`kld_z`, default $0.99 \implies 2.326$);
+- Il risultato viene saturato tra `min_samples` (default 500) e `max_samples` (default 5000).
+
+### 2. Aggiornamento Pesi E Filtri Esponenziali: `pf_update_sensor`
+
+All'arrivo di una nuova scansione laser, la funzione valuta il modello di verosimiglianza per ciascun campione e aggiorna le medie mobili esponenziali a lungo e breve termine ($w_{\text{slow}}$ e $w_{\text{fast}}$):
+
+```c
+void pf_update_sensor(pf_t *pf, pf_sensor_model_fn_t sensor_fn, void *sensor_data)
+{
+    int i;
+    pf_sample_set_t *set;
+    pf_sample_t *sample;
+    double total = 0.0, w_avg = 0.0;
+    
+    set = pf->sets + pf->current_set;
+    
+    // Calcolo del peso e accumulo della somma
+    for (i = 0; i < set->sample_count; i++)
+    {
+        sample = set->samples + i;
+        sample->weight = (*sensor_fn)(sensor_data, sample->pose);
+        total += sample->weight;
+    }
+    
+    // Normalizzazione dei pesi e calcolo della verosimiglianza media
+    for (i = 0; i < set->sample_count; i++)
+    {
+        sample = set->samples + i;
+        w_avg += sample->weight;
+        sample->weight /= total;
+    }
+    w_avg /= set->sample_count;
+    
+    // Aggiornamento filtri Augmented MCL (Probabilistic Robotics, p. 258)
+    if (pf->w_slow == 0.0)
+        pf->w_slow = w_avg;
+    else
+        pf->w_slow += pf->alpha_slow * (w_avg - pf->w_slow);
+        
+    if (pf->w_fast == 0.0)
+        pf->w_fast = w_avg;
+    else
+        pf->w_fast += pf->alpha_fast * (w_avg - pf->w_fast);
+}
+```
+
+### 3. Ricampionamento Con Iniezione Casuale: `pf_update_resample`
+
+La funzione genera la nuova popolazione alternando il campionamento proporzionale alla CDF all'iniezione di pose casuali:
+
+```c
+void pf_update_resample(pf_t *pf)
+{
+    pf_sample_set_t *set_a, *set_b;
+    pf_sample_t *sample_a, *sample_b;
+    double *c, r, w_diff;
+    int i;
+    
+    set_a = pf->sets + pf->current_set;
+    set_b = pf->sets + (pf->current_set + 1) % 2;
+    
+    // Costruzione della tabella di probabilità cumulativa (CDF)
+    c = (double *) malloc(sizeof(double) * (set_a->sample_count + 1));
+    c[0] = 0.0;
+    for (i = 0; i < set_a->sample_count; i++)
+        c[i + 1] = c[i] + set_a->samples[i].weight;
+        
+    // Calcolo della discrepanza tra filtro veloce e lento
+    w_diff = 1.0 - pf->w_fast / pf->w_slow;
+    if (w_diff < 0.0)
+        w_diff = 0.0;
+        
+    set_b->sample_count = 0;
+    
+    while (set_b->sample_count < pf->max_samples)
+    {
+        sample_b = set_b->samples + set_b->sample_count++;
+        
+        // Iniezione probabilistica di pose casuali nello spazio libero
+        if (drand48() < w_diff)
+        {
+            sample_b->pose = (pf->random_pose_fn)(pf->random_pose_data);
+        }
+        else
+        {
+            // Campionamento su CDF
+            r = drand48();
+            for (i = 0; i < set_a->sample_count; i++)
+            {
+                if ((c[i] <= r) && (r < c[i + 1]))
+                    break;
+            }
+            sample_a = set_a->samples + i;
+            sample_b->pose = sample_a->pose;
+        }
+        
+        sample_b->weight = 1.0;
+        // Inserimento nel KD-Tree per determinare k e il limite KLD
+        pf_kdtree_insert(set_b->kdtree, sample_b->pose, sample_b->weight);
+        
+        // Verifica del limite di campioni dinamico KLD
+        if (set_b->sample_count > pf_resample_limit(pf, set_b->kdtree->leaf_count))
+            break;
+    }
+    
+    // Reset delle medie per evitare derive divergenti
+    if (w_diff > 0.0)
+        pf->w_slow = pf->w_fast = 0.0;
+        
+    free(c);
+}
+```
+
+### 4. Configurazione Dei Parametri in ROS Launch File
+
+Nel file di configurazione (`amcl.launch` o `nav2_params.yaml`) i parametri chiave governano direttamente queste routine:
+
+```xml
+<launch>
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+    <!-- Popolazione di particelle adattiva KLD -->
+    <param name="min_particles" value="500"/>
+    <param name="max_particles" value="5000"/>
+    <param name="kld_err" value="0.05"/>
+    <param name="kld_z" value="0.99"/>
+    
+    <!-- Modello odometrico di moto -->
+    <param name="odom_model_type" value="diff"/>
+    <param name="odom_alpha1" value="0.2"/>
+    <param name="odom_alpha2" value="0.2"/>
+    <param name="odom_alpha3" value="0.8"/>
+    <param name="odom_alpha4" value="0.2"/>
+    
+    <!-- Modello sensoriale (Likelihood Field preferito) -->
+    <param name="laser_model_type" value="likelihood_field"/>
+    <param name="laser_z_hit" value="0.95"/>
+    <param name="laser_z_rand" value="0.05"/>
+    <param name="laser_sigma_hit" value="0.2"/>
+    <param name="laser_likelihood_max_dist" value="2.0"/>
+    
+    <!-- Recupero dal rapimento (Augmented MCL) -->
+    <param name="recovery_alpha_slow" value="0.001"/>
+    <param name="recovery_alpha_fast" value="0.1"/>
+  </node>
+</launch>
+```
+
+## Dettaglio Analitico Dei Modelli Di Misura Beam E Stima MLE Dei Parametri
+
+Nel [[7. Modelli di Misura per la Localizzazione#Modello a Raggio Fisico (Beam Model)|Capitolo 7]] abbiamo introdotto il modello a fascio composto da quattro distribuzioni. Esplicitiamo qui le formule di normalizzazione analitiche e l'algoritmo di stima dei parametri.
+
+### Normalizzazione Delle Componenti Del Beam Model
+
+Ciascuna densità di probabilità deve integrare a 1 sull'intervallo di misura consentito dal sensore $[0, z_{\max}]$:
+
+1. __Componente Gaussiana Locale ($p_{\text{hit}}$)__:
+
+   $$
+   \int_0^{z_{\max}} p_{\text{hit}}(z_k \mid x_t, m) \, \mathrm{d}z_k = 1 \implies \eta_{\text{hit}} = \left( \int_0^{z_{\max}} \frac{1}{\sqrt{2\pi \sigma_{\text{hit}}^2}} \exp\left( - \frac{(z_k - z_t^{k*})^2}{2\sigma_{\text{hit}}^2} \right) \mathrm{d}z_k \right)^{-1}
+   $$
+
+   In termini della funzione errore gaussiana $\text{erf}(\cdot)$:
+
+   $$
+   \eta_{\text{hit}} = \left[ \frac{1}{2} \left( \text{erf}\left(\frac{z_{\max} - z_t^{k*}}{\sqrt{2}\sigma_{\text{hit}}}\right) - \text{erf}\left(\frac{-z_t^{k*}}{\sqrt{2}\sigma_{\text{hit}}}\right) \right) \right]^{-1}
+   $$
+
+2. __Componente Esponenziale per Ostacoli Imprevisti ($p_{\text{short}}$)__:
+
+   $$
+   \int_0^{z_t^{k*}} \eta_{\text{short}} \lambda_{\text{short}} \mathrm{e}^{-\lambda_{\text{short}} z_k} \, \mathrm{d}z_k = 1 \implies \eta_{\text{short}} = \frac{1}{1 - \mathrm{e}^{-\lambda_{\text{short}} z_t^{k*}}}
+   $$
+
+### Stima Dei Parametri Tramite Algoritmo Expectation-Maximization (EM)
+
+Sia dato un dataset di calibrazione formato da $J$ misurazioni note in cui il robot si trova in pose note: $Z = \{z_j\}_{j=1}^J$ con valori ideali attesi $Z^* = \{z_j^*\}_{j=1}^J$. Vogliamo stimare i pesi $\mathbf{\alpha} = (\alpha_{\text{hit}}, \alpha_{\text{short}}, \alpha_{\text{max}}, \alpha_{\text{rand}})^T$ e i parametri $\sigma_{\text{hit}}, \lambda_{\text{short}}$.
+
+Poiché per ciascuna lettura $z_j$ non conosciamo a quale dei quattro fenomeni fisici sia imputabile, introduciamo quattro variabili indicatrici latenti binarie $\mathbf{e}_j = [e_{j,\text{hit}}, e_{j,\text{short}}, e_{j,\text{max}}, e_{j,\text{rand}}]^T \in \{0, 1\}^4$ tali che $\sum_i e_{j,i} = 1$.
+
+L'algoritmo EM itera due passi fino a convergenza:
+
+1. __Expectation Step (E-step)__: calcolo delle responsabilità a posteriori per ogni misura $j$:
+
+   $$
+   \gamma_{j,i} = \mathbb{E}[e_{j,i}] = \frac{\alpha_i \, p_i(z_j \mid z_j^*)}{\sum_{k \in \{\text{hit},\text{short},\text{max},\text{rand}\}} \alpha_k \, p_k(z_j \mid z_j^*)}
+   $$
+
+2. __Maximization Step (M-step)__: aggiornamento in forma chiusa dei parametri:
+   - Aggiornamento dei pesi di miscela:
+
+     $$
+     \alpha_i = \frac{1}{J} \sum_{j=1}^J \gamma_{j,i}
+     $$
+
+   - Aggiornamento della deviazione standard del rumore di misura:
+
+     $$
+     \sigma_{\text{hit}} = \sqrt{ \frac{\sum_{j=1}^J \gamma_{j,\text{hit}} (z_j - z_j^*)^2}{\sum_{j=1}^J \gamma_{j,\text{hit}}} }
+     $$
+
+   - Aggiornamento del parametro di decadimento esponenziale:
+
+     $$
+     \lambda_{\text{short}} = \frac{\sum_{j=1}^J \gamma_{j,\text{short}}}{\sum_{j=1}^J \gamma_{j,\text{short}} \, z_j}
+     $$
+
+Questo ciclo converge a un massimo locale della log-verosimiglianza del dataset di calibrazione, fornendo una taratura statisticamente fondata per il modello sensoriale del veicolo.
+
+## Derivazione Formale Del Filtro Di Kalman Lineare Dalla Teoria Bayesiana
+
+Nel [[8. Filtro di Kalman Lineare#Interpretazione Bayesiana del Filtro di Kalman|Capitolo 8]] abbiamo enunciato le formule di aggiornamento del Filtro di Kalman. Riportiamo qui la derivazione analitica rigorosa basata sul completamento del quadrato matriciale e sulla minimizzazione dell'errore quadratico medio.
+
+### Passo Di Correzione: Completamento Del Quadrato Matriciale
+
+Sia dato il belief a priori:
+
+$$
+\overline{bel}(x_t) = \frac{1}{(2\pi)^{n/2} |P_{t|t-1}|^{1/2}} \exp\left( -\frac{1}{2} (x_t - \hat{x}_{t|t-1})^T P_{t|t-1}^{-1} (x_t - \hat{x}_{t|t-1}) \right)
+$$
+
+e la verosimiglianza di misura lineare $y_t = C_t x_t + v_t$:
+
+$$
+p(y_t \mid x_t) = \frac{1}{(2\pi)^{p/2} |R_t|^{1/2}} \exp\left( -\frac{1}{2} (y_t - C_t x_t)^T R_t^{-1} (y_t - C_t x_t) \right)
+$$
+
+La posterior bayesiana non normalizzata ha all'esponente la forma quadratica:
+
+$$
+J(x_t) = (x_t - \hat{x}_{t|t-1})^T P_{t|t-1}^{-1} (x_t - \hat{x}_{t|t-1}) + (y_t - C_t x_t)^T R_t^{-1} (y_t - C_t x_t)
+$$
+
+Espandendo i prodotti matriciali:
+
+$$
+J(x_t) = x_t^T P_{t|t-1}^{-1} x_t - 2 x_t^T P_{t|t-1}^{-1} \hat{x}_{t|t-1} + \hat{x}_{t|t-1}^T P_{t|t-1}^{-1} \hat{x}_{t|t-1} + x_t^T C_t^T R_t^{-1} C_t x_t - 2 x_t^T C_t^T R_t^{-1} y_t + y_t^T R_t^{-1} y_t
+$$
+
+Raggruppiamo i termini quadratici e lineari in $x_t$:
+
+$$
+J(x_t) = x_t^T \underbrace{\left( P_{t|t-1}^{-1} + C_t^T R_t^{-1} C_t \right)}_{P_{t|t}^{-1}} x_t - 2 x_t^T \underbrace{\left( P_{t|t-1}^{-1} \hat{x}_{t|t-1} + C_t^T R_t^{-1} y_t \right)}_{\mathbf{b}_t} + \text{costante}
+$$
+
+Dall'algebra delle gaussiane multivariate, se l'esponente ha forma $x_t^T P_{t|t}^{-1} x_t - 2 x_t^T \mathbf{b}_t$, la matrice di covarianza a posteriori vale:
+
+$$
+P_{t|t} = \left( P_{t|t-1}^{-1} + C_t^T R_t^{-1} C_t \right)^{-1}
+$$
+
+e la media a posteriori è:
+
+$$
+\hat{x}_{t|t} = P_{t|t} \, \mathbf{b}_t = P_{t|t} \left( P_{t|t-1}^{-1} \hat{x}_{t|t-1} + C_t^T R_t^{-1} y_t \right)
+$$
+
+### Equivalenza Con Il Guadagno Di Kalman Tramite Il Lemma Di Inversione Di Woodbury
+
+Applicando l'identità matriciale di Woodbury all'inversa della covarianza:
+
+$$
+(A + B C D)^{-1} = A^{-1} - A^{-1} B (C^{-1} + D A^{-1} B)^{-1} D A^{-1}
+$$
+
+Ponendo $A = P_{t|t-1}^{-1}$, $B = C_t^T$, $C = R_t^{-1}$, $D = C_t$:
+
+$$
+P_{t|t} = P_{t|t-1} - P_{t|t-1} C_t^T \left( R_t + C_t P_{t|t-1} C_t^T \right)^{-1} C_t P_{t|t-1}
+$$
+
+Definendo la covarianza dell'innovazione $S_t = C_t P_{t|t-1} C_t^T + R_t$ e il guadagno ottimo $L_t = P_{t|t-1} C_t^T S_t^{-1}$:
+
+$$
+P_{t|t} = P_{t|t-1} - L_t C_t P_{t|t-1} = (I - L_t C_t) P_{t|t-1}
+$$
+
+Sostituendo nell'espressione della media a posteriori $\hat{x}_{t|t}$:
+
+$$
+\hat{x}_{t|t} = \hat{x}_{t|t-1} + L_t \left( y_t - C_t \hat{x}_{t|t-1} \right)
+$$
+
+Questo completa la dimostrazione analitica dell'equivalenza esatta tra il teorema di Bayes e le equazioni del filtro di Kalman.
+
+### Minimizzazione Della Varianza dell'Errore E Derivazione Di $L_t$
+
+Consideriamo uno stimatore lineare generico con guadagno $L_t$ arbitrario:
+
+$$
+\hat{x}_{t|t} = \hat{x}_{t|t-1} + L_t (y_t - C_t \hat{x}_{t|t-1})
+$$
+
+L'errore a posteriori $\tilde{x}_{t|t} = x_t - \hat{x}_{t|t}$ evolve come:
+
+$$
+\tilde{x}_{t|t} = (I - L_t C_t) \tilde{x}_{t|t-1} - L_t v_t
+$$
+
+Calcolando la covarianza d'errore (forma di Joseph, valida per qualsiasi $L_t$):
+
+$$
+P_{t|t} = (I - L_t C_t) P_{t|t-1} (I - L_t C_t)^T + L_t R_t L_t^T
+$$
+
+Vogliamo trovare la matrice $L_t$ che minimizza l'errore quadratico medio $\mathbb{E}[\|\tilde{x}_{t|t}\|^2] = \text{Tr}(P_{t|t})$.
+
+Calcoliamo la derivata matriciale rispetto a $L_t$ sfruttando le identità $\frac{\partial}{\partial X} \text{Tr}(X A X^T) = 2 X A$ e $\frac{\partial}{\partial X} \text{Tr}(A X B) = A^T B^T$:
+
+$$
+\frac{\partial \text{Tr}(P_{t|t})}{\partial L_t} = -2 P_{t|t-1} C_t^T + 2 L_t \left( C_t P_{t|t-1} C_t^T + R_t \right)
+$$
+
+Ponendo il gradiente uguale a zero:
+
+$$
+-2 P_{t|t-1} C_t^T + 2 L_t \left( C_t P_{t|t-1} C_t^T + R_t \right) = 0
+$$
+
+$$
+L_t \left( C_t P_{t|t-1} C_t^T + R_t \right) = P_{t|t-1} C_t^T
+$$
+
+Poiché $R_t > 0$ e $P_{t|t-1} \ge 0$, la matrice $S_t = C_t P_{t|t-1} C_t^T + R_t$ è simmetrica strettamente definita positiva e dunque invertibile:
+
+$$
+L_t = P_{t|t-1} C_t^T \left( C_t P_{t|t-1} C_t^T + R_t \right)^{-1}
+$$
+
+La matrice $L_t$ del filtro di Kalman è dunque dimostrabilmente il minimizzatore globale unico della varianza d'errore di stima.

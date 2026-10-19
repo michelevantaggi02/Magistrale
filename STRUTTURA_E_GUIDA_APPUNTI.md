@@ -43,7 +43,7 @@ Magistrale/
 │       ├── md/                          # File Markdown uniti (Advanced Merger)
 │       └── pdf/                         # PDF finali impaginati (Better Export PDF)
 ├── Anno 2/
-│   ├── Autonomous Robotics/             # [IN CORSO] Modelli cinematici, stocastici, sensori, feature, Bayes, Histogram Filter, Particle Filter
+│   ├── Autonomous Robotics/             # [IN CORSO] Modelli cinematici, stocastici, sensori, feature, Bayes, Histogram/Particle Filter, AMCL, Modelli di Misura, Filtro di Kalman
 │   │   ├── 0. Modelli Cinematici e di Movimento.md
 │   │   ├── 1. Modelli di Movimento Stocastici.md
 │   │   ├── 2. Sensori per la Robotica Mobile.md
@@ -51,10 +51,14 @@ Magistrale/
 │   │   ├── 4. Localizzazione e Filtri di Bayes.md
 │   │   ├── 5. Localizzazione con Histogram Filter.md
 │   │   ├── 6. Localizzazione con Particle Filter.md
+│   │   ├── 7. Modelli di Misura per la Localizzazione.md
+│   │   ├── 8. Filtro di Kalman Lineare.md
 │   │   ├── zz. Argomenti extra.md
-│   │   ├── immagini/                    # 87 figure estratte e generate ad alta risoluzione
-│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..10)
+│   │   ├── immagini/                    # 98 figure estratte e generate ad alta risoluzione
+│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..13)
 │   │   └── scripts_python/
+│   │       ├── Histogram_gemini_lecture_v10.py
+│   │       ├── particle_filter_1d_simulation.py
 │   │       └── motion_models_todo.py
 │   └── Deep Learning And Robot Perception/ # [IN CORSO] Note approfondite di Computer Vision
 │       ├── 0. Immagini, filtri e gradienti.md
@@ -72,7 +76,7 @@ Magistrale/
 | **Anno 1** | **Electronic Embedded Systems** | Bozza | `0. Introduzione.md` | Da espandere: programmazione FPGA, sintesi VHDL, toolchain Xilinx Vivado/Vitis, sistemi Real-Time. |
 | **Anno 1** | **Machine Learning** | Iniziato | `GUIDA_APPUNTI_MACHINE_LEARNING.md`, `dispense/ML_Notes.pdf`, `immagini/` | Guida specifica attiva in `Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md`. 13 capitoli d'esame (`0.`..`C.`) basati sulla dispensa del Prof. Costante (225 pp). Esclusi argomenti con `*` (Capitolo 6 GLMs). Pipeline per dispense LaTeX con figure originali ed esempi grafici ad-hoc. Stesura incrementale un capitolo alla volta. |
 | **Anno 2** | **Deep Learning And Robot Perception** | In corso | `0. Immagini, filtri e gradienti.md`, `immagini/` | Primo capitolo corposo già redatto (450+ righe) corredato da 53 figure. Da proseguire con CNN, feature detection, object detection, segmentation, 3D perception. |
-| **Anno 2** | **Autonomous Robotics** | In corso | 7 file (`0.` - `6.`), `zz. Argomenti extra.md`, `immagini/` (87 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8, 10 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, Monte Carlo Localization (Particle Filter) con Importance Sampling, ricampionamento CDF/Roulette wheel e Low-Variance, e simulazioni in Python. |
+| **Anno 2** | **Autonomous Robotics** | In corso | 9 file (`0.` - `8.`), `zz. Argomenti extra.md`, `immagini/` (98 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8, 10, 12, 13 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, Monte Carlo Localization (Particle Filter) con Importance Sampling, Low-Variance Resampling, Augmented MCL, KLD-Sampling, modelli di misura LiDAR (catena 4 frame, Feature-Based, Likelihood Field con distance transform precalcolata O(1), Beam Model a 4 componenti), e fondamenti del Filtro di Kalman lineare time-varying (osservatore di Luenberger, convenzione Q/R, derivazione bayesiana). |
 
 ---
 
@@ -418,8 +422,10 @@ flowchart TD
   - `3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md` (Lezione 6): mappe continue (line-map, geometriche) vs discrete (griglie di occupazione, quadtree, octomap), estrazione feature di linea da scansioni laser 2D (Hesse-normal form), algoritmi Split-and-Merge, RANSAC ed estrazione globale con trasformata di Hough a quattro quadranti.
   - `4. Localizzazione e Filtri di Bayes.md` (Lezione 7): problema della localizzazione e sorgenti di incertezza, rappresentazione del belief (tassonomia unimodale, multimodale, griglia, topologica), HMM e rete bayesiana dinamica, algoritmo del Filtro di Bayes continuo, derivazione induttiva predizione/correzione, esempio della porta ed introduzione ai filtri gaussiani.
   - `5. Localizzazione con Histogram Filter.md` (Lezione 8): Markov Localization non-parametrica su griglia discreta, superamento del limite computazionale dell'integrale continuo, formulazione discreta con mappa $M$, algoritmo Histogram Filter (predizione per convoluzione discreta e correzione bayesiana normalizzata), dicotomia distribution computation vs sampling stocastico, modello 1D con sensore range su beacon (ambiguità bimodale speculare a singolo beacon e risoluzione unimodale con beacon multipli), analisi di sensibilità della risoluzione spaziale $\Delta x$ e della maledizione della dimensionalità in SE(2).
-  - `6. Localizzazione con Particle Filter.md` (Lezione 10): Monte Carlo Localization (MCL) non-parametrica a campioni stocastici, superamento della maledizione della dimensionalità dell'Histogram Filter, evoluzione e convergenza 2D nel piano (video Thrun a Stanford), fondamenti matematici dell'Importance Sampling ($w(x) = f(x)/g(x) \propto p(z_t \mid x_t)$), algoritmi di ricampionamento (Roulette Wheel vs Low-Variance Resampling a complessità lineare $O(M)$), modello 1D di moto e misura con beacon, degenerazione delle particelle ($N_{\text{eff}}$), dimensionamento di $M$, introduzione ad AMCL per il problema del robot rapito e propagazione non-lineare dell'incertezza rispetto alla linearizzazione EKF.
-- **Materiale Grafico**: La cartella `immagini/` contiene tutte le figure vettoriali e raster estratte a 300 DPI dalle slide con padding 12px bianco e conformità anti-crop.
+  - `6. Localizzazione con Particle Filter.md` (Lezione 10 e 12): Monte Carlo Localization (MCL) non-parametrica a campioni stocastici, superamento della maledizione della dimensionalità dell'Histogram Filter, evoluzione e convergenza 2D nel piano (video Thrun a Stanford), fondamenti matematici dell'Importance Sampling ($w(x) = f(x)/g(x) \propto p(z_t \mid x_t)$), algoritmi di ricampionamento (Roulette Wheel vs Low-Variance Resampling a complessità lineare $O(M)$ con diagramma a pettine), modello 1D di moto e misura con beacon, degenerazione delle particelle ($N_{\text{eff}}$), Augmented MCL con filtri a media mobile esponenziale $w_{\text{slow}}$ e $w_{\text{fast}}$ per il recupero dal robot rapito, Adaptive MCL con KLD-Sampling per dimensionamento dinamico della popolazione $M$, e confronto di linearizzazione rispetto a EKF.
+  - `7. Modelli di Misura per la Localizzazione.md` (Lezione 12 e 13): ruolo della funzione di verosimiglianza nel filtro di Bayes, cinematica dei 4 sistemi di riferimento per telemetri laser 2D (mondo, robot, sensore, fascio) e formule di rototraslazione cartesiana, modello basato su feature (FB-MM) con generalizzazione probabilistica $\text{prob}(\cdot)$, modello a campo di verosimiglianza (__Likelihood Field Model__) su griglia con trasformata di distanza precalcolata ($O(1)$ a runtime) e miscela a tre componenti (gaussiana $z_{\text{hit}}$, uniforme $z_{\text{rand}}$, fondo scala $z_{\max}$ con scarto letture spurie), e modello fisico a fascio (__Beam Model__) a 4 componenti di errore con simulazione ottica per ray-casting.
+  - `8. Filtro di Kalman Lineare.md` (Lezione 13): dal filtro bayesiano non-parametrico al filtro gaussiano analitico esatto, modello stocastico discreto a spazio di stato (HMM), convenzione notazionale del corso sulle matrici di covarianza ($Q_t$ per il processo/stato, $R_t$ per la misura), connessione con la teoria dei controlli e l'osservatore asintotico di Luenberger deterministico, equazioni ricorsive del Filtro di Kalman time-varying (predizione a priori, innovazione, guadagno ottimo $L_t$, correzione a posteriori), interpretazione bayesiana (predizione come convoluzione $\to$ covarianza cresce; correzione come prodotto $\to$ covarianza decresce), proprietà BLUE e stabilità.
+- **Materiale Grafico**: La cartella `immagini/` contiene tutte le 98 figure vettoriali e raster estratte a 300 DPI dalle slide con padding 12px bianco e conformità anti-crop.
 - **Punto di Partenza**: Integrare le formule teoriche con il codice già strutturato in `scripts_python/motion_models_todo.py`:
   - Modello differenziale continuo: $\dot{x} = v \cos\theta$, $\dot{y} = v \sin\theta$, $\dot{\theta} = \omega$.
   - Discretizzazione ad arco (Exact velocity model) vs approssimazioni tangenziali (Euler, Runge-Kutta di secondo ordine).
