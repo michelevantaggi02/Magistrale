@@ -11,14 +11,15 @@
             "id": "76a1b95e21a0f884",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
-                "mode": "source",
-                "source": false
+                "aFile": "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
+                "bFile": "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
+                "aRef": "HEAD",
+                "bRef": ""
               },
-              "icon": "lucide-file",
-              "title": "0. Modelli Cinematici e di Movimento"
+              "icon": "diff",
+              "title": "Diff: 9. Filtri IIR - Infinite impulse response  (Index)"
             }
           }
         ]
@@ -197,6 +198,13 @@
   },
   "active": "76a1b95e21a0f884",
   "lastOpenFiles": [
+    "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
+    "Anno 1/Digital Signal Processing/B. Sistemi Multi-Rate.md",
+    "Anno 1/Digital Signal Processing/A. Filtri IIR - Risposta e Progettazione.md",
+    "Anno 1/Digital Signal Processing/9. Filtri IIR - Fondamenti e Trasformata Z.md",
+    "Anno 1/Digital Signal Processing/immagini/roc_multipolo_anticausale.svg",
+    "Anno 1/Digital Signal Processing/immagini/roc_multipolo_anulare.svg",
+    "Anno 1/Digital Signal Processing/immagini/roc_multipolo_causale.svg",
     "Anno 1/Digital Signal Processing/immagini/roc_anticausale.svg",
     "Anno 1/Digital Signal Processing/immagini/roc_causale.svg",
     "Anno 2/Autonomous Robotics/3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md",
@@ -215,10 +223,6 @@
     "Anno 2/Autonomous Robotics/immagini/slide_13_lidar_4_reference_frames_transformation.png",
     "Anno 2/Autonomous Robotics/immagini/slide_13_laser_reading_office_space_scans.png",
     "Anno 2/Autonomous Robotics/immagini/slide_13_beam_model_ray_casting_specular_reflection.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_13_beam_model_mixture_distribution.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_13_beam_model_four_error_components.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_12_particle_deprivation_kidnapping.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_12_low_variance_resampling_comb_diagram.png",
     "Anno 2/Autonomous Robotics/note/lezione_12.md",
     "Anno 2/Autonomous Robotics/note/lezione_13.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
@@ -230,15 +234,12 @@
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 1/Machine Learning-merged.md",
     "Anno 1/Machine Learning/2. Teoria della Probabilita.md",
-    "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
     "scratch/make_bayes_schema.py",
     "Anno 2/Autonomous Robotics/scripts_python/__pycache__/ParticleFilter_gemini_lecture_v1.cpython-314.pyc",
     "Anno 2/Autonomous Robotics/scripts_python/ParticleFilter_gemini_lecture_v1.py",
     "Anno 2/Autonomous Robotics/scripts_python/Histogram_gemini_lecture_v10.py",
     "Senza nome.base",
     "Senza nome.canvas",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_9.md",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_7.md",
     "Anno 1/Machine Learning/dispense/ML_Notes.pdf",
     "scratch/make_split_schema.py",
     "scratch/make_schema.py",

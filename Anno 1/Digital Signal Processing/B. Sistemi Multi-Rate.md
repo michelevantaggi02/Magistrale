@@ -1,4 +1,4 @@
-# A. Sistemi Multi-Rate
+# B. Sistemi Multi-Rate
 
 Questi sistemi si basano sui filtri FIR per effettuare __interpolazione, decimazione e rate conversion__.
 
