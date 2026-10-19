@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" width="100%" height="100%">
+  <defs>
+    <style>
+      .axis { stroke: #64748b; stroke-width: 1.5; }
+      .stem-zero { stroke: #94a3b8; stroke-width: 1.5; fill: #f8fafc; }
+      .stem-active { stroke: #dc2626; stroke-width: 2.5; stroke-linecap: round; }
+      .marker-active { fill: #dc2626; stroke: #b91c1c; stroke-width: 1.5; }
+      .marker-zero { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+      .text-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
+      .text-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; font-weight: 600; fill: #dc2626; text-anchor: middle; }
+      .text-axis { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #475569; }
+      .text-tick { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 10px; fill: #64748b; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Titolo -->
+  <text x="170" y="24" class="text-title">Sequenza Anticausale</text>
+  <text x="170" y="42" class="text-sub">h(n) = 0 per n &gt; 0</text>
+
+  <!-- Asse Orizzontale (n) -->
+  <line x1="20" y1="140" x2="315" y2="140" class="axis" />
+  <polyline points="308,136 315,140 308,144" fill="none" class="axis" />
+  <text x="320" y="144" class="text-axis">n</text>
+
+  <!-- Asse Verticale (h(n)) at n = 0 (x = 200) -->
+  <line x1="200" y1="180" x2="200" y2="60" class="axis" />
+  <polyline points="196,67 200,60 204,67" fill="none" class="axis" />
+  <text x="200" y="52" class="text-axis" text-anchor="middle">h(n)</text>
+
+  <!-- n = -6 (x = 56), h(-6) = 0.1 (h = 7 px -> y = 133) -->
+  <line x1="56" y1="140" x2="56" y2="133" class="stem-active" />
+  <circle cx="56" cy="133" r="3" class="marker-active" />
+  <text x="56" y="156" class="text-tick">-6</text>
+
+  <!-- n = -5 (x = 80), h(-5) = 0.18 (h = 13 px -> y = 127) -->
+  <line x1="80" y1="140" x2="80" y2="127" class="stem-active" />
+  <circle cx="80" cy="127" r="3.5" class="marker-active" />
+  <text x="80" y="156" class="text-tick">-5</text>
+
+  <!-- n = -4 (x = 104), h(-4) = 0.3 (h = 21 px -> y = 119) -->
+  <line x1="104" y1="140" x2="104" y2="119" class="stem-active" />
+  <circle cx="104" cy="119" r="3.5" class="marker-active" />
+  <text x="104" y="156" class="text-tick">-4</text>
+
+  <!-- n = -3 (x = 128), h(-3) = 0.45 (h = 31 px -> y = 109) -->
+  <line x1="128" y1="140" x2="128" y2="109" class="stem-active" />
+  <circle cx="128" cy="109" r="4" class="marker-active" />
+  <text x="128" y="156" class="text-tick">-3</text>
+
+  <!-- n = -2 (x = 152), h(-2) = 0.62 (h = 43 px -> y = 97) -->
+  <line x1="152" y1="140" x2="152" y2="97" class="stem-active" />
+  <circle cx="152" cy="97" r="4" class="marker-active" />
+  <text x="152" y="156" class="text-tick">-2</text>
+
+  <!-- n = -1 (x = 176), h(-1) = 0.8 (h = 56 px -> y = 84) -->
+  <line x1="176" y1="140" x2="176" y2="84" class="stem-active" />
+  <circle cx="176" cy="84" r="4" class="marker-active" />
+  <text x="176" y="156" class="text-tick">-1</text>
+
+  <!-- n = 0 (x = 200), h(0) = 1.0 (h = 70 px -> y = 70) -->
+  <line x1="200" y1="140" x2="200" y2="70" class="stem-active" />
+  <circle cx="200" cy="70" r="4.5" class="marker-active" />
+  <text x="200" y="156" class="text-tick" font-weight="bold">0</text>
+
+  <!-- Campioni nulli per n > 0 (n = 1, 2, 3, 4) -->
+  <!-- n = 1 (x = 224) -->
+  <circle cx="224" cy="140" r="3.5" class="marker-zero" />
+  <text x="224" y="156" class="text-tick">1</text>
+
+  <!-- n = 2 (x = 248) -->
+  <circle cx="248" cy="140" r="3.5" class="marker-zero" />
+  <text x="248" y="156" class="text-tick">2</text>
+
+  <!-- n = 3 (x = 272) -->
+  <circle cx="272" cy="140" r="3.5" class="marker-zero" />
+  <text x="272" y="156" class="text-tick">3</text>
+
+  <!-- n = 4 (x = 296) -->
+  <circle cx="296" cy="140" r="3.5" class="marker-zero" />
+  <text x="296" y="156" class="text-tick">4</text>
+
+  <!-- Indicatore zona anticausale -->
+  <rect x="48" y="172" width="160" height="22" rx="4" fill="#dc2626" fill-opacity="0.1" />
+  <text x="128" y="187" class="text-sub">Supporto Anticausale (n ≤ 0)</text>
+</svg>
