@@ -101,10 +101,60 @@ GeLU viene utilizzato nelle reti transformer e si è rilevato abbastanza utile p
 
 nella maggior parte dei casi utilizzeremo ReLU base, GeLU per le reti transformer, le altre non si vedono molto spesso.
 
-slide 61-62-63: nelle reti neurali non possiamo impostare tutto a 0, perché al primo passo la loss sarebbe enorme avendo come primo risultato sempre 0 e l'aggiornamento aggiornerà tutti i neuroni allo stesso modo. per rompere la simmetria l'inizializzazione della rete neurale deve essere random.
+slide 66-67-68: nelle reti neurali non possiamo impostare tutto a 0, perché al primo passo la loss sarebbe enorme avendo come primo risultato sempre 0 e l'aggiornamento aggiornerà tutti i neuroni allo stesso modo. per rompere la simmetria l'inizializzazione della rete neurale deve essere random.
 
-slide 64: bisogna compensare per la varianza impostando sigma quadro. in questo modo la varianza resta la stessa.
+slide 69: bisogna compensare per la varianza impostando sigma quadro. in questo modo la varianza resta la stessa.
 
-slide 66: spread compensation
+slide 71: spread compensation
 
-slide 69: calcoliamo la media e la deviazione standard, centriamo sullo 0 e normalizziamo. la batch normalization ci da due parametri, gamme e beta, che possono essere addestrati. 
+slide 75: calcoliamo la media e la deviazione standard, centriamo sullo 0 e normalizziamo. la batch normalization ci da due parametri, gamme e beta, che possono essere addestrati. 
+
+slide 88: non è possibile avere grossi batch in reti transformer, per questo si usa la layer normalization.
+
+slide 91-92: aggiungiamo una penalità quando i pesi diventano troppo grandi.
+
+slide 93: in pytorch la L2 si chiama weight decay perché se osserviamo la derivata della penalità (calcoliamo il gradiente della data loss che dipende dai dati ) e possiamo esporlo come un gradiente in 2 parti: parte dati e parte penalty. non ho capito dove sta andando a parare.
+i pesi decadono mentre il gradient descent viene calcolato, per cercare di tenere i parametri vicini allo 0.
+
+slide 94: la L1 la utilizziamo per disconnettere alcune connessione nella rete, così da diminuire il numero di parametri.
+
+slide 95: se dopo il controllo siamo oltre la threshold possiamo normalizzare per rendere la freccia al di sotto.
+
+slide 96: il dropout è specifico per le reti neurali, perché è strettamente collegato al fatto che abbiamo neuroni collegati tra loro. l'idea è di eliminare casualmente delle connessioni tra gli hidden layer.
+Ad ogni iterazione prende una distribuzione uniforme di tutte le connessioni di un hidden layer, e ne droppa una certa percentuale.
+
+slide 97: questo comportamento ha un comportamento da regolarizzazione perché così la rete è obbligata a non guardare la configurazione degli hidden layer.
+Forza quindi la rete a concentrarsi sul vero pattern che stiamo cercando, piuttosto che al rumore, perché rimuovendo informazioni a caso viene obbligata a concentrarsi non sui dettagli ma sul trovare il pattern.
+Nel test il dropout è disattivato così da usare tutta la rete.
+
+slide 98: l'unica cosa di cui dobbiamo interessarci è che ad ogni iterazione solo il 50% delle connessioni sono disponibili per avere l'attivazione di un neurone.
+/// inserire immagine di esempio di neurone con 4 connessioni da 4 neuroni precedenti, di cui 2 tratteggiati disattivati.
+se due connessioni sono disattivate in questa iterazione  non saranno presenti nel calcolo di z, e magari nella successiva saranno altre 2, quindi dobbiamo compensare l'assenza di 2 somme che dovrebbero essere presenti.
+questo viene implementato tramite l'inverted dropout, per aumentare l'output e rendere la simulazione utilizzabile al passo dei test.
+in pytorch questo si imposta usando .train() per addestrare e .eval() per i test.
+
+slide 101: più step ci sono, meno applico la regolarizzazione.
+
+slide 102: data augmentation è una tecnica di regolarizzazione che non affligge la rete stessa, ma i dati.
+Applica trasformazioni random all'immagine per aumentare la dimensione del training set.
+in pytorch è presente il transformation layer, inserito prima dell'input layer, che si occupa esattamente di questo.
+
+slide 103: in genere early stopping si usa sempre.
+dropout si usa per le reti dense, non le cnn.
+weight decay si usa sempre, con valori di lambda bassi.
+
+slide 107: in generale possiamo applicare loss function diverse in parti diverse della rete.
+
+/// inserire immagine di esempio rete neurale densa con 4 hidden layer con 5 neuroni ciascuno e 2 neurone di output con CE loss e L2 loss. un altro output inserito dal secondo layer sotto, con un altro L2 loss.
+
+possiamo inserire una loss function presto per aiutare i layer iniziali a comprendere meglio i dati.
+
+slide 109: la regressione di solito è più complessa da addestrare rispetto alla classificazione, dobbiamo quindi sempre ragionare prima se è il caso di addestrare una regressione o di convertire il problema in classificazione
+
+slide 122: se vediamo una grossa differenza tra train e validation dobbiamo fermarci e aumentare la regolarizzazione.
+
+slide 134: ci sono 2 classi di ottimizzazioni: lo stochastic gradient descente e il bohhhhhhh.
+
+slide 137: beta_1 controlla il momentum, beta_2 controlla la cache e epsilon controlla ???
+
+slide 140: se aggiungiamo il weight decay la parte di gradiente associata con la regolarizzazione va a finire nel momentum, questo significa che i pesi dei gradienti molto grandi non decadono.

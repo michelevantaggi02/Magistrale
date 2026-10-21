@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "2f7a152f05311945",
+        "id": "1c7aacd0a614a8e2",
         "type": "tabs",
         "children": [
           {
-            "id": "76a1b95e21a0f884",
+            "id": "6221538ddf240b1b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Anno 1/Digital Signal Processing/9. Filtri IIR - Fondamenti e Trasformata Z.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "9. Filtri IIR - Fondamenti e Trasformata Z"
+              "title": "Nuova scheda"
             }
           }
         ]
@@ -195,16 +191,18 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "76a1b95e21a0f884",
+  "active": "6221538ddf240b1b",
   "lastOpenFiles": [
-    "Anno 1/Digital Signal Processing-merged.md",
+    "Anno 2/Deep Learning And Robot Perception/note/piano_implementazione_lezione_9.md",
+    "Anno 2/Deep Learning And Robot Perception/note/lezione_9.md",
+    "Anno 2/Deep Learning And Robot Perception/note/lezione_12.md",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Fondamenti e Trasformata Z.md",
+    "Anno 1/Digital Signal Processing-merged.md",
     "Anno 1/export/pdf/Digital Signal Processing-merged.pdf",
     "Anno 1/Digital Signal Processing/A. Filtri IIR - Risposta e Progettazione.md",
     "Anno 1/Digital Signal Processing/B. Sistemi Multi-Rate.md",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
     "Anno 1/Digital Signal Processing/immagini/banco_filtri_sottobanda.svg",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_9.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_7.md",
     "Anno 1/Digital Signal Processing/immagini/segnale_non_causale.svg",
     "Anno 1/Digital Signal Processing/immagini/segnale_anticausale.svg",
@@ -232,8 +230,6 @@
     "Anno 2/Autonomous Robotics/note/lezione_12.md",
     "Anno 2/Autonomous Robotics/note/lezione_13.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
-    "Anno 1/Digital Signal Processing/5. Trasformata discreta di Fourier (DFT).md",
-    "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
     "scratch/make_bayes_schema.py",
     "Anno 2/Autonomous Robotics/scripts_python/__pycache__/ParticleFilter_gemini_lecture_v1.cpython-314.pyc",
     "Anno 2/Autonomous Robotics/scripts_python/ParticleFilter_gemini_lecture_v1.py",

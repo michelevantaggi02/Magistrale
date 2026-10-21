@@ -398,7 +398,17 @@ flowchart TD
 5. **Fase 5 - Composizione e Integrazione Figure**: Redigere il documento alternando spiegazioni teoriche, formule KaTeX rigorose ed esempi visivi basati sulle immagini estratte, formattate tassativamente con centratura e classe di dimensione appropriata (es. `![[immagine.png|center mid]]` o `![[immagine.png|center big]]`).
 6. **Fase 6 - Segnalazione Finale delle Correzioni all'Utente**: Al termine della stesura, descrivere esplicitamente all'utente le incongruenze concettuali rilevate nelle note e le correzioni applicate, così da permettergli di visionare le modifiche e verificare la teoria.
 
-### 4.2 Aggiornamento ed Esportazione
+### 4.2 Pipeline Estesa per Trascrizioni Audio e Lezioni Dense
+> [!IMPORTANT] Regola Workspace Dedicata
+> Per le lezioni che integrano una registrazione audio trascritta e tradotta da modelli AI, o che coprono volumi elevati di slide (100+ lucidi), fare riferimento alla regola workspace:
+> `[[.agents/rules/pipeline_trascrizioni_audio_e_macro_argomenti.md|Pipeline di Redazione con Trascrizione Audio, Note e Decomposizione in Macro-Argomenti]]`.
+> 
+> **Punti chiave della pipeline estesa**:
+> 1. **Validazione Triangolare Note ↔ Trascrizione AI ↔ Slide**: filtraggio sistematico di refusi fonetici, allucinazioni e fraintendimenti di formule della trascrizione audio incrociandola con le slide (verità geometrica/matematica) e le note dello studente (focus didattico).
+> 2. **Mappatura Spazio-Temporale**: associazione esplicita tra ciascun blocco di trascrizione/note e gli intervalli di slide corrispondenti.
+> 3. **Decomposizione in Macro-Argomenti ($N$ Piani di Implementazione)**: suddivisione preventiva della lezione in capitoli tematici omogenei e autosufficienti, con formulazione di $N$ piani operativi (slide coperte, immagini e schemi custom richiesti dalle note) sottoposti ad approvazione prima della stesura.
+
+### 4.3 Aggiornamento ed Esportazione
 1. **Aggregazione**: Tramite il plugin `advanced-merger` di Obsidian (oppure script dedicato), unire in ordine logico i capitoli in `Anno X/export/md/<Materia>-merged.md`.
 2. **Indice dei contenuti**: Aggiungere o rigenerare la TOC in cima al file unificato usando la sintassi dei wikilink ancorati `[[#Capitolo#Sezione|Sezione]]`.
 3. **Esportazione in PDF**: Utilizzare il plugin `better-export-pdf` con impostazioni A4, margini 10mm e downscale conforme per generare `Anno X/export/pdf/<Materia>-merged.pdf`.
