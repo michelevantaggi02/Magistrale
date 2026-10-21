@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 560" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 19px; fill: #0f172a; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #64748b; }
+      .box-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 13px; fill: #1e293b; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11px; fill: #334155; }
+      .math { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+      .bold { font-weight: 600; }
+      
+      .layer-box { fill: #f8fafc; stroke: #94a3b8; stroke-width: 1.5; rx: 6; }
+      .neuron { fill: #3b82f6; stroke: #1d4ed8; stroke-width: 1.5; }
+      .neuron-aux { fill: #d97706; stroke: #b45309; stroke-width: 1.5; }
+      .edge { stroke: #cbd5e1; stroke-width: 1; }
+      
+      .arrow { stroke: #475569; stroke-width: 2; marker-end: url(#arr-dark); fill: none; }
+      .arrow-blue { stroke: #2563eb; stroke-width: 2.5; marker-end: url(#arr-blue); fill: none; }
+      .arrow-amber { stroke: #d97706; stroke-width: 2.5; marker-end: url(#arr-amber); fill: none; }
+      .arrow-red { stroke: #dc2626; stroke-width: 2; stroke-dasharray: 4,3; marker-end: url(#arr-red); fill: none; }
+      
+      .loss-box { fill: #fef2f2; stroke: #ef4444; stroke-width: 2; rx: 6; }
+      .loss-aux-box { fill: #fffbeb; stroke: #f59e0b; stroke-width: 2; rx: 6; }
+      .card { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 8; }
+    </style>
+    <marker id="arr-dark" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#475569" />
+    </marker>
+    <marker id="arr-blue" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#2563eb" />
+    </marker>
+    <marker id="arr-amber" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#d97706" />
+    </marker>
+    <marker id="arr-red" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#dc2626" />
+    </marker>
+  </defs>
+
+  <rect width="1050" height="560" class="bg" />
+
+  <!-- Header -->
+  <text x="35" y="34" class="title">Architettura Multi-Loss con Uscite Ausiliarie Intermedie</text>
+  <text x="35" y="54" class="subtitle">Rete profonda a 4 hidden layer (5 neuroni ciascuno): classificazione (CE), regressione (L2) e branch ausiliario per gradiente precoce</text>
+
+  <!-- Input x (x=40, y=140) -->
+  <g transform="translate(35, 140)">
+    <rect width="65" height="160" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" rx="6" />
+    <text x="32" y="75" text-anchor="middle" class="box-title" font-size="14">Input</text>
+    <text x="32" y="95" text-anchor="middle" class="text math bold" font-size="16">x</text>
+  </g>
+  <line x1="100" y1="220" x2="140" y2="220" class="arrow" />
+
+  <!-- 4 HIDDEN LAYERS (5 neuroni ciascuno) -->
+  <!-- Layer 1: x in [140, 200] -->
+  <g transform="translate(140, 110)">
+    <rect width="70" height="220" class="layer-box" />
+    <text x="35" y="-10" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">Layer 1</text>
+    <circle cx="35" cy="30" r="10" class="neuron" />
+    <circle cx="35" cy="70" r="10" class="neuron" />
+    <circle cx="35" cy="110" r="10" class="neuron" />
+    <circle cx="35" cy="150" r="10" class="neuron" />
+    <circle cx="35" cy="190" r="10" class="neuron" />
+  </g>
+  <line x1="210" y1="220" x2="250" y2="220" class="arrow" />
+
+  <!-- Layer 2: x in [250, 310] -->
+  <g transform="translate(250, 110)">
+    <rect width="70" height="220" class="layer-box" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+    <text x="35" y="-10" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d4ed8">Layer 2 (Tap)</text>
+    <circle cx="35" cy="30" r="10" class="neuron" />
+    <circle cx="35" cy="70" r="10" class="neuron" />
+    <circle cx="35" cy="110" r="10" class="neuron" />
+    <circle cx="35" cy="150" r="10" class="neuron" />
+    <circle cx="35" cy="190" r="10" class="neuron" />
+  </g>
+  <line x1="320" y1="220" x2="360" y2="220" class="arrow" />
+
+  <!-- Layer 3: x in [360, 420] -->
+  <g transform="translate(360, 110)">
+    <rect width="70" height="220" class="layer-box" />
+    <text x="35" y="-10" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">Layer 3</text>
+    <circle cx="35" cy="30" r="10" class="neuron" />
+    <circle cx="35" cy="70" r="10" class="neuron" />
+    <circle cx="35" cy="110" r="10" class="neuron" />
+    <circle cx="35" cy="150" r="10" class="neuron" />
+    <circle cx="35" cy="190" r="10" class="neuron" />
+  </g>
+  <line x1="430" y1="220" x2="470" y2="220" class="arrow" />
+
+  <!-- Layer 4: x in [470, 530] -->
+  <g transform="translate(470, 110)">
+    <rect width="70" height="220" class="layer-box" />
+    <text x="35" y="-10" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">Layer 4</text>
+    <circle cx="35" cy="30" r="10" class="neuron" />
+    <circle cx="35" cy="70" r="10" class="neuron" />
+    <circle cx="35" cy="110" r="10" class="neuron" />
+    <circle cx="35" cy="150" r="10" class="neuron" />
+    <circle cx="35" cy="190" r="10" class="neuron" />
+  </g>
+
+  <!-- BIVIO TERMINALE DAL LAYER 4 -->
+  <!-- Ramo verso Output 1 (Classificazione, in alto) -->
+  <path d="M 540 180 C 580 180, 580 135, 620 135" class="arrow-blue" />
+  <!-- Ramo verso Output 2 (Regressione, al centro) -->
+  <path d="M 540 260 C 580 260, 580 305, 620 305" class="arrow-blue" />
+
+  <!-- OUTPUT 1: CLASSIFICAZIONE (CE Loss) -->
+  <g transform="translate(625, 100)">
+    <rect width="180" height="70" fill="#f8fafc" stroke="#2563eb" stroke-width="2" rx="6" />
+    <text x="90" y="24" text-anchor="middle" class="box-title" fill="#1d4ed8">Head 1: Classificazione</text>
+    <text x="90" y="42" text-anchor="middle" class="text">Logits s → Softmax (2 classi)</text>
+    <circle cx="65" cy="55" r="7" fill="#2563eb" />
+    <circle cx="115" cy="55" r="7" fill="#2563eb" />
+  </g>
+  <line x1="805" y1="135" x2="845" y2="135" class="arrow" />
+  
+  <g transform="translate(850, 105)">
+    <rect width="165" height="60" class="loss-box" />
+    <text x="82" y="24" text-anchor="middle" class="box-title" fill="#dc2626">Loss 1: Cross-Entropy</text>
+    <text x="82" y="45" text-anchor="middle" class="text math bold" font-size="13" fill="#b91c1c">ℒ_CE = -log(p_y)</text>
+  </g>
+
+  <!-- OUTPUT 2: REGRESSIONE FINALE (L2 Loss) -->
+  <g transform="translate(625, 270)">
+    <rect width="180" height="70" fill="#f8fafc" stroke="#2563eb" stroke-width="2" rx="6" />
+    <text x="90" y="24" text-anchor="middle" class="box-title" fill="#1d4ed8">Head 2: Regressione</text>
+    <text x="90" y="42" text-anchor="middle" class="text">Stima continua ŷ ∈ ℝ²</text>
+    <circle cx="65" cy="55" r="7" fill="#2563eb" />
+    <circle cx="115" cy="55" r="7" fill="#2563eb" />
+  </g>
+  <line x1="805" y1="305" x2="845" y2="305" class="arrow" />
+
+  <g transform="translate(850, 275)">
+    <rect width="165" height="60" class="loss-box" />
+    <text x="82" y="24" text-anchor="middle" class="box-title" fill="#dc2626">Loss 2: MSE / L2</text>
+    <text x="82" y="45" text-anchor="middle" class="text math bold" font-size="13" fill="#b91c1c">ℒ_L2 = ‖ŷ - y‖²</text>
+  </g>
+
+  <!-- BRANCH AUSILIARIO DAL LAYER 2 (Verso il basso) -->
+  <path d="M 285 330 L 285 410 C 285 440, 320 440, 360 440" class="arrow-amber" />
+  <text x="300" y="380" font-size="10.5" font-weight="bold" fill="#d97706">Tap Intermedio</text>
+
+  <!-- Head Ausiliaria Layer 2 -->
+  <g transform="translate(365, 410)">
+    <rect width="195" height="60" fill="#fffbeb" stroke="#d97706" stroke-width="2" rx="6" />
+    <text x="97" y="22" text-anchor="middle" class="box-title" fill="#b45309">Head Ausiliaria (Aux Head)</text>
+    <text x="97" y="40" text-anchor="middle" class="text">Output precoce intermedio</text>
+    <circle cx="75" cy="48" r="6" class="neuron-aux" />
+    <circle cx="120" cy="48" r="6" class="neuron-aux" />
+  </g>
+  <line x1="560" y1="440" x2="600" y2="440" class="arrow-amber" />
+
+  <!-- Loss Ausiliaria L2 -->
+  <g transform="translate(605, 410)">
+    <rect width="180" height="60" class="loss-aux-box" />
+    <text x="90" y="24" text-anchor="middle" class="box-title" fill="#b45309">Loss Ausiliaria ℒ_aux</text>
+    <text x="90" y="45" text-anchor="middle" class="text math bold" font-size="13" fill="#92400e">ℒ_aux = ‖ŷ_aux - y_aux‖²</text>
+  </g>
+
+  <!-- Freccia di Gradiente Precoce dal Branch Ausiliario indietro a Layer 2 e 1 -->
+  <path d="M 605 455 C 500 480, 220 480, 180 340" class="arrow-red" />
+  <text x="370" y="495" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">Iniezione Diretta di Gradiente Precoce ∇ℒ_aux</text>
+  <text x="370" y="510" text-anchor="middle" font-size="9.5" fill="#b91c1c">(Rimedio anti-Vanishing Gradient per i primi strati)</text>
+
+  <!-- Box Formula Totale in basso a destra -->
+  <g transform="translate(800, 395)">
+    <rect width="215" height="85" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" rx="6" />
+    <text x="12" y="20" class="box-title" font-size="11" fill="#0f172a">Funzione di Costo Globale:</text>
+    <text x="12" y="42" class="text math bold" font-size="12" fill="#1e40af">ℒ_tot = ℒ_CE + λ_1 ℒ_L2 + λ_aux ℒ_aux</text>
+    <text x="12" y="62" class="text" font-size="10" fill="#64748b">Iperparametri di bilanciamento λ ≥ 0</text>
+    <text x="12" y="76" class="text" font-size="9.5" fill="#475569">Backprop simultanea end-to-end</text>
+  </g>
+</svg>

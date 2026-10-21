@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 20px; fill: #1e293b; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #64748b; }
+      .box-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 15px; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #334155; }
+      .math { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+      .bold { font-weight: 600; }
+      .frozen-box { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2.5; rx: 8; }
+      .frozen-badge { fill: #1d4ed8; rx: 4; }
+      .old-box { fill: #f8fafc; stroke: #94a3b8; stroke-width: 1.5; stroke-dasharray: 5,5; rx: 8; opacity: 0.65; }
+      .new-box { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 8; }
+      .arrow { stroke: #475569; stroke-width: 2; marker-end: url(#arrowhead); fill: none; }
+      .arrow-new { stroke: #16a34a; stroke-width: 2.5; marker-end: url(#arrowhead-green); fill: none; }
+      .arrow-grad { stroke: #dc2626; stroke-width: 2; stroke-dasharray: 4,3; marker-end: url(#arrowhead-red); fill: none; }
+      .cross-line { stroke: #dc2626; stroke-width: 3.5; stroke-linecap: round; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#475569" />
+    </marker>
+    <marker id="arrowhead-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#16a34a" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#dc2626" />
+    </marker>
+  </defs>
+
+  <rect width="1000" height="480" class="bg" />
+
+  <text x="40" y="38" class="title">Architettura di Transfer Learning: Backbone Congelata e Nuovo Classificatore</text>
+  <text x="40" y="58" class="subtitle">Riutilizzo di feature apprese su dataset massivi (ImageNet): F ≡ φ_θ* congelata (frozen) e adattamento del layer lineare</text>
+
+  <!-- Input Image x -->
+  <g transform="translate(40, 185)">
+    <rect width="90" height="90" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" rx="6" />
+    <rect x="15" y="15" width="60" height="60" fill="#e2e8f0" stroke="#94a3b8" rx="4" />
+    <polygon points="25,60 40,40 55,55 65,45 75,65 25,65" fill="#64748b" />
+    <circle cx="35" cy="30" r="5" fill="#f59e0b" />
+    <text x="45" y="115" text-anchor="middle" class="box-title" fill="#0f172a">Input x</text>
+    <text x="45" y="132" text-anchor="middle" class="text" fill="#64748b">Nuovo Dataset</text>
+  </g>
+
+  <!-- Freccia x -> Backbone -->
+  <line x1="135" y1="230" x2="195" y2="230" class="arrow" />
+
+  <!-- Blocco Feature Extractor FROZEN -->
+  <g transform="translate(200, 120)">
+    <rect width="250" height="220" class="frozen-box" />
+    
+    <rect x="75" y="15" width="100" height="26" class="frozen-badge" />
+    <text x="125" y="32" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">❄️ FROZEN</text>
+
+    <text x="125" y="70" text-anchor="middle" class="box-title" fill="#1e3a8a">Feature Extractor</text>
+    <text x="125" y="92" text-anchor="middle" class="text math" font-size="15" font-weight="bold" fill="#1d4ed8">F ≡ φ_θ*(x)</text>
+
+    <rect x="20" y="110" width="210" height="95" fill="#ffffff" stroke="#bfdbfe" rx="6" />
+    <text x="30" y="130" class="text bold" fill="#1e40af">Pre-addestrato su ImageNet:</text>
+    <text x="30" y="148" class="text">• 1.2M immagini, 1000 classi</text>
+    <text x="30" y="166" class="text">• Pesi θ* bloccati (requires_grad=F)</text>
+    <text x="30" y="184" class="text bold" fill="#dc2626">Nessun gradiente propaga qui!</text>
+  </g>
+
+  <!-- Vettore Feature h -->
+  <g transform="translate(455, 205)">
+    <line x1="0" y1="25" x2="65" y2="25" class="arrow" />
+    <rect x="70" y="5" width="60" height="40" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" rx="4" />
+    <text x="100" y="24" text-anchor="middle" class="text bold" fill="#1e40af">h = φ_θ*(x)</text>
+    <text x="100" y="38" text-anchor="middle" font-size="10" fill="#64748b">2048-D</text>
+  </g>
+
+  <!-- Bivio delle frecce: verso Vecchio e verso Nuovo Classificatore -->
+  <path d="M 590 230 C 625 230, 625 150, 660 150" class="arrow" stroke-dasharray="3,3" />
+  <path d="M 590 230 C 625 230, 625 310, 660 310" class="arrow-new" />
+
+  <!-- RAMO 1: Vecchio Classificatore (CANCELLATO / DEPETTATO) -->
+  <g transform="translate(665, 80)">
+    <rect width="260" height="135" class="old-box" />
+    <text x="130" y="30" text-anchor="middle" class="box-title" fill="#64748b">Vecchio Classificatore (W_old, b_old)</text>
+    <text x="130" y="50" text-anchor="middle" class="text" fill="#94a3b8">Task Sorgente (ImageNet 1000 classi)</text>
+    
+    <rect x="20" y="70" width="100" height="25" fill="#e2e8f0" rx="3" />
+    <text x="70" y="87" text-anchor="middle" font-size="11" fill="#64748b">Classe: Tigre (T)</text>
+    <rect x="140" y="70" width="100" height="25" fill="#e2e8f0" rx="3" />
+    <text x="190" y="87" text-anchor="middle" font-size="11" fill="#64748b">Classe: Squalo (S)</text>
+
+    <!-- Grande Croce Rossa di Rimozione -->
+    <line x1="15" y1="15" x2="245" y2="120" class="cross-line" />
+    <line x1="245" y1="15" x2="15" y2="120" class="cross-line" />
+    <rect x="75" y="105" width="110" height="22" fill="#fee2e2" stroke="#ef4444" rx="4" />
+    <text x="130" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">SCARTATO / DISMESSO</text>
+  </g>
+
+  <!-- RAMO 2: Nuovo Classificatore (ADDESTRABILE) -->
+  <g transform="translate(665, 245)">
+    <rect width="260" height="155" class="new-box" />
+    <text x="130" y="30" text-anchor="middle" class="box-title" fill="#15803d">Nuovo Classificatore (W, b)</text>
+    <text x="130" y="50" text-anchor="middle" class="text bold" fill="#16a34a">Task Target (Addestrato da zero)</text>
+
+    <rect x="20" y="65" width="105" height="28" fill="#dcfce7" stroke="#22c55e" rx="4" />
+    <text x="72" y="83" text-anchor="middle" font-size="12" font-weight="bold" fill="#14532d">Classe: Cane (C)</text>
+
+    <rect x="135" y="65" width="105" height="28" fill="#dcfce7" stroke="#22c55e" rx="4" />
+    <text x="187" y="83" text-anchor="middle" font-size="12" font-weight="bold" fill="#14532d">Classe: Barca (B)</text>
+
+    <g transform="translate(15, 105)">
+      <rect width="230" height="38" fill="#f0fdf4" stroke="#86efac" rx="4" />
+      <text x="10" y="17" class="text bold" fill="#166534">Aggiornamento Gradienti:</text>
+      <text x="10" y="30" class="text">Solo W e b ricevono ∇J; θ* resta fisso!</text>
+    </g>
+  </g>
+
+  <!-- Freccia di ritorno Gradiente solo sul nuovo classificatore -->
+  <path d="M 660 380 C 600 380, 600 380, 580 340" class="arrow-grad" />
+  <text x="590" y="415" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">∇_W J, ∇_b J</text>
+  <text x="590" y="430" text-anchor="middle" font-size="10" fill="#dc2626">(Stop su h)</text>
+</svg>

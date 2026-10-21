@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 520" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 19px; fill: #0f172a; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #64748b; }
+      .box-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 13px; fill: #1e293b; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #334155; }
+      .math { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+      .bold { font-weight: 600; }
+      
+      .active-node { fill: #eff6ff; stroke: #2563eb; stroke-width: 2; rx: 6; }
+      .dropped-node { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.5; stroke-dasharray: 4,4; rx: 6; opacity: 0.6; }
+      
+      .active-edge { stroke: #2563eb; stroke-width: 2.5; marker-end: url(#arr-blue); fill: none; }
+      .dropped-edge { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 5,4; marker-end: url(#arr-gray); fill: none; }
+      
+      .target-node { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 8; }
+      .card { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 8; }
+      .badge-train { fill: #eff6ff; stroke: #bfdbfe; rx: 4; }
+      .badge-eval { fill: #f0fdf4; stroke: #bbf7d0; rx: 4; }
+    </style>
+    <marker id="arr-blue" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#2563eb" />
+    </marker>
+    <marker id="arr-gray" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <rect width="980" height="520" class="bg" />
+
+  <!-- Header -->
+  <text x="35" y="34" class="title">Architettura di Dropout e Meccanismo dell&#39;Inverted Dropout</text>
+  <text x="35" y="54" class="subtitle">Disattivazione stocastica (p = 0.5): 2 connessioni attive e 2 spente ad ogni passo, riscalamento 1/(1-p) in training</text>
+
+  <!-- SEZIONE SINISTRA: GRAFO DEL SINGOLO NEURONE -->
+  <g transform="translate(35, 75)">
+    <rect width="520" height="415" class="card" />
+    <text x="20" y="28" class="box-title">Dinamica Sinaptica al Passo Corrente t</text>
+    <text x="20" y="44" class="text" fill="#64748b">Strato precedente l - 1 → Neurone bersaglio dello strato l</text>
+
+    <!-- 4 Neuroni Precedenti -->
+    <!-- N1 (Attivo) -->
+    <g transform="translate(30, 70)">
+      <rect width="90" height="45" class="active-node" />
+      <text x="45" y="27" text-anchor="middle" class="text math bold" fill="#1d4ed8">h_(l-1, 1)</text>
+      <rect x="70" y="-8" width="28" height="16" fill="#22c55e" rx="3" />
+      <text x="84" y="4" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">ON</text>
+    </g>
+
+    <!-- N2 (Spento / Dropped) -->
+    <g transform="translate(30, 145)">
+      <rect width="90" height="45" class="dropped-node" />
+      <text x="45" y="27" text-anchor="middle" class="text math" fill="#64748b">h_(l-1, 2)</text>
+      <rect x="70" y="-8" width="28" height="16" fill="#ef4444" rx="3" />
+      <text x="84" y="4" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">OFF</text>
+    </g>
+
+    <!-- N3 (Attivo) -->
+    <g transform="translate(30, 220)">
+      <rect width="90" height="45" class="active-node" />
+      <text x="45" y="27" text-anchor="middle" class="text math bold" fill="#1d4ed8">h_(l-1, 3)</text>
+      <rect x="70" y="-8" width="28" height="16" fill="#22c55e" rx="3" />
+      <text x="84" y="4" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">ON</text>
+    </g>
+
+    <!-- N4 (Spento / Dropped) -->
+    <g transform="translate(30, 295)">
+      <rect width="90" height="45" class="dropped-node" />
+      <text x="45" y="27" text-anchor="middle" class="text math" fill="#64748b">h_(l-1, 4)</text>
+      <rect x="70" y="-8" width="28" height="16" fill="#ef4444" rx="3" />
+      <text x="84" y="4" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">OFF</text>
+    </g>
+
+    <!-- Frecce verso il neurone bersaglio (Centro bersaglio: x=360, y=200) -->
+    <!-- Edge 1 (Active) -->
+    <path d="M 120 92 L 350 185" class="active-edge" />
+    <rect x="210" y="115" width="45" height="20" fill="#ffffff" stroke="#2563eb" rx="3" />
+    <text x="232" y="129" text-anchor="middle" class="text math bold" font-size="10" fill="#1d4ed8">w_1</text>
+
+    <!-- Edge 2 (Dropped) -->
+    <path d="M 120 167 L 350 195" class="dropped-edge" />
+    <text x="232" y="188" text-anchor="middle" font-size="10" fill="#94a3b8">w_2 (× 0)</text>
+
+    <!-- Edge 3 (Active) -->
+    <path d="M 120 242 L 350 205" class="active-edge" />
+    <rect x="210" y="210" width="45" height="20" fill="#ffffff" stroke="#2563eb" rx="3" />
+    <text x="232" y="224" text-anchor="middle" class="text math bold" font-size="10" fill="#1d4ed8">w_3</text>
+
+    <!-- Edge 4 (Dropped) -->
+    <path d="M 120 317 L 350 215" class="dropped-edge" />
+    <text x="232" y="275" text-anchor="middle" font-size="10" fill="#94a3b8">w_4 (× 0)</text>
+
+    <!-- Neurone Bersaglio (Layer l) -->
+    <g transform="translate(360, 155)">
+      <rect width="135" height="95" class="target-node" />
+      <text x="67" y="25" text-anchor="middle" class="box-title" fill="#166534">Neurone Bersaglio</text>
+      <text x="67" y="45" text-anchor="middle" class="text math bold" font-size="13" fill="#15803d">z = ∑ r_j w_j ĥ_j + b</text>
+      <line x1="15" y1="55" x2="120" y2="55" stroke="#bbf7d0" />
+      <text x="67" y="72" text-anchor="middle" font-size="10" fill="#166534">2 connessioni attive</text>
+      <text x="67" y="85" text-anchor="middle" font-size="9" fill="#15803d">(50% del segnale)</text>
+    </g>
+
+    <!-- Box chiarimento inferiore -->
+    <g transform="translate(20, 360)">
+      <rect width="480" height="42" fill="#f8fafc" stroke="#e2e8f0" rx="4" />
+      <text x="12" y="17" font-size="10.5" font-weight="bold" fill="#0f172a">Maschera di Bernoulli r ~ Ber(1 - p):</text>
+      <text x="12" y="32" font-size="10" fill="#475569">Ad ogni forward pass la combinazione di unità attive cambia casualmente.</text>
+    </g>
+  </g>
+
+  <!-- SEZIONE DESTRA: INVERTED DROPOUT E PYTORCH -->
+  <g transform="translate(575, 75)">
+    <rect width="370" height="415" class="card" />
+    <text x="20" y="28" class="box-title">Meccanismo di Compensazione (Inverted Dropout)</text>
+
+    <!-- Box Training -->
+    <g transform="translate(15, 45)">
+      <rect width="340" height="125" class="badge-train" />
+      <rect x="12" y="10" width="135" height="20" fill="#2563eb" rx="3" />
+      <text x="79" y="24" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">Fase di Training (.train())</text>
+      
+      <text x="12" y="48" font-size="10.5" class="text">Le unità mantenute vengono <tspan font-weight="bold">moltiplicate per 1/(1-p)</tspan>:</text>
+      <rect x="12" y="56" width="316" height="30" fill="#ffffff" stroke="#bfdbfe" rx="3" />
+      <text x="170" y="76" text-anchor="middle" class="text math bold" font-size="13" fill="#1d4ed8">ĥ_j = h_j / (1 - p)  (con p_drop = 0.5 → × 2.0)</text>
+      
+      <text x="12" y="102" font-size="9.5" fill="#1e40af">Esempio slide: se h = 2 e p = 0.2, in training vale 2 / 0.8 = 2.5.</text>
+      <text x="12" y="115" font-size="9.5" fill="#1e40af">Valore atteso conservato: E[ĥ] = (1 - p) · (h / (1 - p)) = h.</text>
+    </g>
+
+    <!-- Box Test / Inference -->
+    <g transform="translate(15, 185)">
+      <rect width="340" height="95" class="badge-eval" />
+      <rect x="12" y="10" width="135" height="20" fill="#16a34a" rx="3" />
+      <text x="79" y="24" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">Fase di Test (.eval())</text>
+
+      <text x="12" y="48" font-size="10.5" class="text"><tspan font-weight="bold">Dropout disattivato</tspan>: tutte le connessioni sono attive.</text>
+      <rect x="12" y="56" width="316" height="30" fill="#ffffff" stroke="#bbf7d0" rx="3" />
+      <text x="170" y="76" text-anchor="middle" class="text math bold" font-size="13" fill="#15803d">ĥ_j = h_j  (nessuna riscalatura necessaria!)</text>
+    </g>
+
+    <!-- Box Vantaggio Inverted Dropout -->
+    <g transform="translate(15, 295)">
+      <rect width="340" height="105" fill="#f8fafc" stroke="#cbd5e1" rx="6" />
+      <text x="12" y="20" class="box-title" font-size="11" fill="#0f172a">Perché "Inverted" Dropout?</text>
+      <text x="12" y="38" font-size="10" fill="#334155">• <tspan font-weight="bold">Dropout originario (Srivastava 2014)</tspan>: manteneva h a training</text>
+      <text x="12" y="52" font-size="10" fill="#334155">  e riscalava per (1 - p) a test time (rallentava l&#39;inferenza).</text>
+      <text x="12" y="70" font-size="10" fill="#334155">• <tspan font-weight="bold">Inverted Dropout</tspan>: anticipa il fattore 1/(1 - p) a training,</text>
+      <text x="12" y="84" font-size="10" fill="#334155">  rendendo il test time a costo zero e identico al forward.</text>
+      <text x="12" y="98" font-size="10" font-weight="bold" fill="#166534">In PyTorch: gestito automaticamente da model.train() e model.eval().</text>
+    </g>
+  </g>
+</svg>

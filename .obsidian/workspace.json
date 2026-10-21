@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "1c7aacd0a614a8e2",
+        "id": "7db852e550a79c1a",
         "type": "tabs",
         "children": [
           {
-            "id": "6221538ddf240b1b",
+            "id": "a7d52272d18670ce",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Anno 2/Deep Learning And Robot Perception/6. Rappresentazione Visiva e Reti Neurali Profonde.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "Nuova scheda"
+              "title": "6. Rappresentazione Visiva e Reti Neurali Profonde"
             }
           }
         ]
@@ -191,9 +195,25 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6221538ddf240b1b",
+  "active": "a7d52272d18670ce",
   "lastOpenFiles": [
     "Anno 2/Deep Learning And Robot Perception/note/piano_implementazione_lezione_9.md",
+    "Anno 2/Deep Learning And Robot Perception/7. Addestramento di Reti Profonde: Preprocessing, Attivazioni, Inizializzazione e Normalizzazione.md",
+    "Anno 2/Deep Learning And Robot Perception/8. Regolarizzazione, Loss e Ottimizzazione Avanzata per Deep Learning.md",
+    "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
+    "Anno 2/Deep Learning And Robot Perception/immagini/multi_loss_deep_network.svg",
+    "Anno 2/Deep Learning And Robot Perception/immagini/dropout_node_architecture.svg",
+    "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_random_vs_grid_search_hyperparameters.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_learning_rate_schedules_comparison.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_adam_adamw_weight_decay_decoupling.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_sgd_momentum_vs_vanilla_ravine.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_loss_curves_diagnostics.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_early_stopping_validation_loss.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_data_augmentation_examples.png",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_dropout_training_vs_test.png",
+    "Anno 2/Deep Learning And Robot Perception/6. Rappresentazione Visiva e Reti Neurali Profonde.md",
+    "Anno 2/Deep Learning And Robot Perception/immagini/slide_09_relu_concentric_rings_animation.mp4",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_9.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_12.md",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Fondamenti e Trasformata Z.md",
@@ -202,22 +222,13 @@
     "Anno 1/Digital Signal Processing/A. Filtri IIR - Risposta e Progettazione.md",
     "Anno 1/Digital Signal Processing/B. Sistemi Multi-Rate.md",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
-    "Anno 1/Digital Signal Processing/immagini/banco_filtri_sottobanda.svg",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_7.md",
-    "Anno 1/Digital Signal Processing/immagini/segnale_non_causale.svg",
-    "Anno 1/Digital Signal Processing/immagini/segnale_anticausale.svg",
-    "Anno 1/Digital Signal Processing/immagini/segnale_causale.svg",
     "Anno 2/Autonomous Robotics/zz. Argomenti extra.md",
     "Anno 2/Autonomous Robotics/note/lezione_2.md",
     "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
     "Anno 2/Autonomous Robotics/3. Rappresentazione dell'Ambiente ed Estrazione di Feature.md",
     "Anno 2/Autonomous Robotics/2. Sensori per la Robotica Mobile.md",
     "Anno 2/Autonomous Robotics/1. Modelli di Movimento Stocastici.md",
-    "Anno 1/Digital Signal Processing/immagini/roc_multipolo_anticausale.svg",
-    "Anno 1/Digital Signal Processing/immagini/roc_multipolo_anulare.svg",
-    "Anno 1/Digital Signal Processing/immagini/roc_multipolo_causale.svg",
-    "Anno 1/Digital Signal Processing/immagini/roc_anticausale.svg",
-    "Anno 1/Digital Signal Processing/immagini/roc_causale.svg",
     "Anno 2/Autonomous Robotics/4. Localizzazione e Filtri di Bayes.md",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Infinite impulse response.md",
     "Anno 2/export/md/Autonomous Robotics-merged.md",
@@ -225,11 +236,6 @@
     "Anno 2/Autonomous Robotics/7. Modelli di Misura per la Localizzazione.md",
     "Anno 2/Autonomous Robotics/6. Localizzazione con Particle Filter.md",
     "Anno 2/Autonomous Robotics/5. Localizzazione con Histogram Filter.md",
-    "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
-    "Anno 2/Autonomous Robotics/immagini/slide_13_likelihood_field_sensor_response_curve.png",
-    "Anno 2/Autonomous Robotics/note/lezione_12.md",
-    "Anno 2/Autonomous Robotics/note/lezione_13.md",
-    "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "scratch/make_bayes_schema.py",
     "Anno 2/Autonomous Robotics/scripts_python/__pycache__/ParticleFilter_gemini_lecture_v1.cpython-314.pyc",
     "Anno 2/Autonomous Robotics/scripts_python/ParticleFilter_gemini_lecture_v1.py",
@@ -239,8 +245,6 @@
     "Anno 1/Machine Learning/dispense/ML_Notes.pdf",
     "scratch/make_split_schema.py",
     "scratch/make_schema.py",
-    "scratch",
-    "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"
   ]
 }

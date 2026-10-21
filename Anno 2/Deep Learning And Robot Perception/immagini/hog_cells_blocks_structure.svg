@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 20px; fill: #1e293b; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #64748b; }
+      .box-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 600; font-size: 14px; fill: #0f172a; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #334155; }
+      .math { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+      .bold { font-weight: 600; }
+      .grid-line { stroke: #cbd5e1; stroke-width: 1; }
+      .cell-highlight { fill: #e0f2fe; stroke: #0284c7; stroke-width: 2; }
+      .block-highlight { fill: #fef3c7; fill-opacity: 0.45; stroke: #d97706; stroke-width: 2.5; stroke-dasharray: 4,4; }
+      .block2-highlight { fill: #dcfce7; fill-opacity: 0.45; stroke: #16a34a; stroke-width: 2.5; stroke-dasharray: 4,4; }
+      .arrow { stroke: #475569; stroke-width: 2; marker-end: url(#arrowhead); fill: none; }
+      .arrow-accent { stroke: #2563eb; stroke-width: 2; marker-end: url(#arrowhead-accent); fill: none; }
+      .badge { fill: #f1f5f9; stroke: #cbd5e1; stroke-width: 1; rx: 6; }
+      .card { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1.5; rx: 8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.04)); }
+      .bar { fill: #3b82f6; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#475569" />
+    </marker>
+    <marker id="arrowhead-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2563eb" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="620" class="bg" />
+
+  <!-- Header -->
+  <text x="40" y="38" class="title">Gerarchia Strutturale del Descrittore HOG (Histogram of Oriented Gradients)</text>
+  <text x="40" y="58" class="subtitle">Dettaglio analitico: pixel → cella spaziale → istogramma orientato a 9 bin → blocco normalizzato 2×2 con overlap → vettore 1764-D</text>
+
+  <!-- PANEL 1: Immagine & Griglia Celle -->
+  <g transform="translate(40, 80)">
+    <rect width="230" height="500" class="card" />
+    <text x="115" y="30" text-anchor="middle" class="box-title">1. Griglia di Celle</text>
+    <text x="115" y="48" text-anchor="middle" class="text" fill="#64748b">Immagine 32×32 (CIFAR-10)</text>
+
+    <!-- Griglia 8x8 celle -->
+    <g transform="translate(25, 70)">
+      <rect width="180" height="180" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+      <line x1="0" y1="22.5" x2="180" y2="22.5" class="grid-line" />
+      <line x1="0" y1="45" x2="180" y2="45" class="grid-line" />
+      <line x1="0" y1="67.5" x2="180" y2="67.5" class="grid-line" />
+      <line x1="0" y1="90" x2="180" y2="90" class="grid-line" />
+      <line x1="0" y1="112.5" x2="180" y2="112.5" class="grid-line" />
+      <line x1="0" y1="135" x2="180" y2="135" class="grid-line" />
+      <line x1="0" y1="157.5" x2="180" y2="157.5" class="grid-line" />
+      <line x1="22.5" y1="0" x2="22.5" y2="180" class="grid-line" />
+      <line x1="45" y1="0" x2="45" y2="180" class="grid-line" />
+      <line x1="67.5" y1="0" x2="67.5" y2="180" class="grid-line" />
+      <line x1="90" y1="0" x2="90" y2="180" class="grid-line" />
+      <line x1="112.5" y1="0" x2="112.5" y2="180" class="grid-line" />
+      <line x1="135" y1="0" x2="135" y2="180" class="grid-line" />
+      <line x1="157.5" y1="0" x2="157.5" y2="180" class="grid-line" />
+
+      <!-- Singola Cella Evidenziata -->
+      <rect x="45" y="45" width="22.5" height="22.5" class="cell-highlight" />
+
+      <!-- Blocco 1 (2x2 celle) in giallo -->
+      <rect x="22.5" y="22.5" width="45" height="45" class="block-highlight" />
+      <!-- Blocco 2 (overlap 1 cella) in verde -->
+      <rect x="45" y="22.5" width="45" height="45" class="block2-highlight" />
+    </g>
+
+    <!-- Legenda Panel 1 -->
+    <g transform="translate(20, 275)">
+      <rect x="0" y="0" width="14" height="14" class="cell-highlight" rx="2" />
+      <text x="22" y="12" class="text">Singola cella (4×4 px)</text>
+
+      <rect x="0" y="24" width="14" height="14" class="block-highlight" rx="2" />
+      <text x="22" y="36" class="text">Blocco 1 (2×2 celle = 8×8 px)</text>
+
+      <rect x="0" y="48" width="14" height="14" class="block2-highlight" rx="2" />
+      <text x="22" y="60" class="text">Blocco 2 (overlap 50%)</text>
+    </g>
+
+    <!-- Note numeriche Panel 1 -->
+    <g transform="translate(15, 365)">
+      <rect width="200" height="115" class="badge" />
+      <text x="10" y="22" class="text bold" fill="#0284c7">Celle totali:</text>
+      <text x="10" y="40" class="text">32 / 4 = 8 celle per lato</text>
+      <text x="10" y="58" class="text bold">Totale: 8 × 8 = 64 celle</text>
+      <text x="10" y="80" class="text bold" fill="#d97706">Blocchi totali (stride 1):</text>
+      <text x="10" y="98" class="text">(8 - 2 + 1)² = 7 × 7 = 49</text>
+    </g>
+  </g>
+
+  <!-- Freccia da Panel 1 a Panel 2 -->
+  <path d="M 270 200 L 315 200" class="arrow-accent" />
+
+  <!-- PANEL 2: Zoom Singola Cella & Gradienti Pixel -->
+  <g transform="translate(320, 80)">
+    <rect width="240" height="500" class="card" />
+    <text x="120" y="30" text-anchor="middle" class="box-title">2. Pixel e Gradienti Locali</text>
+    <text x="120" y="48" text-anchor="middle" class="text" fill="#64748b">Zoom cella C (4×4 pixel)</text>
+
+    <!-- Zoom 4x4 pixel con vettori gradiente -->
+    <g transform="translate(30, 70)">
+      <rect width="180" height="180" fill="#f0f9ff" stroke="#0284c7" stroke-width="2" />
+      <line x1="0" y1="45" x2="180" y2="45" stroke="#bae6fd" stroke-width="1.5" />
+      <line x1="0" y1="90" x2="180" y2="90" stroke="#bae6fd" stroke-width="1.5" />
+      <line x1="0" y1="135" x2="180" y2="135" stroke="#bae6fd" stroke-width="1.5" />
+      <line x1="45" y1="0" x2="45" y2="180" stroke="#bae6fd" stroke-width="1.5" />
+      <line x1="90" y1="0" x2="90" y2="180" stroke="#bae6fd" stroke-width="1.5" />
+      <line x1="135" y1="0" x2="135" y2="180" stroke="#bae6fd" stroke-width="1.5" />
+
+      <!-- Vettori freccia gradienti nei pixel -->
+      <line x1="22.5" y1="22.5" x2="35" y2="15" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="67.5" y1="22.5" x2="82" y2="16" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="112.5" y1="22.5" x2="128" y2="28" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="157.5" y1="22.5" x2="170" y2="35" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="22.5" y1="67.5" x2="38" y2="60" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="67.5" y1="67.5" x2="85" y2="62" stroke="#0369a1" stroke-width="2.5" marker-end="url(#arrowhead)" />
+      <line x1="112.5" y1="67.5" x2="130" y2="75" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="157.5" y1="67.5" x2="168" y2="82" stroke="#0369a1" stroke-width="1.5" marker-end="url(#arrowhead)" />
+      <line x1="22.5" y1="112.5" x2="36" y2="115" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="67.5" y1="112.5" x2="84" y2="118" stroke="#0369a1" stroke-width="2.5" marker-end="url(#arrowhead)" />
+      <line x1="112.5" y1="112.5" x2="126" y2="126" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="157.5" y1="112.5" x2="165" y2="130" stroke="#0369a1" stroke-width="1.5" marker-end="url(#arrowhead)" />
+      <line x1="22.5" y1="157.5" x2="38" y2="155" stroke="#0369a1" stroke-width="1.5" marker-end="url(#arrowhead)" />
+      <line x1="67.5" y1="157.5" x2="82" y2="162" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="112.5" y1="157.5" x2="125" y2="170" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowhead)" />
+      <line x1="157.5" y1="157.5" x2="165" y2="172" stroke="#0369a1" stroke-width="1.5" marker-end="url(#arrowhead)" />
+    </g>
+
+    <!-- Formule Gradiente -->
+    <g transform="translate(15, 275)">
+      <rect width="210" height="205" class="badge" />
+      <text x="10" y="22" class="text bold">Per ogni pixel u = (x,y):</text>
+      <text x="10" y="44" class="text">1. Filtro centrale [-1, 0, 1]:</text>
+      <text x="20" y="62" class="text math">G_x = I(x+1, y) - I(x-1, y)</text>
+      <text x="20" y="80" class="text math">G_y = I(x, y+1) - I(x, y-1)</text>
+      <text x="10" y="104" class="text">2. Magnitudo e Direzione:</text>
+      <text x="20" y="122" class="text math">|G(u)| = √(G_x² + G_y²)</text>
+      <text x="20" y="140" class="text math">θ(u) = arctan(G_y / G_x) mod 180°</text>
+      <text x="10" y="165" class="text bold" fill="#0369a1">Canale colore:</text>
+      <text x="10" y="182" class="text">Si seleziona il canale con</text>
+      <text x="10" y="197" class="text">magnitudo massima |G|.</text>
+    </g>
+  </g>
+
+  <!-- Freccia da Panel 2 a Panel 3 -->
+  <path d="M 560 200 L 605 200" class="arrow-accent" />
+
+  <!-- PANEL 3: Istogramma a 9 Bin della Cella -->
+  <g transform="translate(610, 80)">
+    <rect width="220" height="500" class="card" />
+    <text x="110" y="30" text-anchor="middle" class="box-title">3. Istogramma a 9 Bin</text>
+    <text x="110" y="48" text-anchor="middle" class="text" fill="#64748b">Accumulo orientazioni cella</text>
+
+    <!-- Grafico a barre istogramma 9 bin -->
+    <g transform="translate(20, 75)">
+      <line x1="10" y1="160" x2="185" y2="160" stroke="#64748b" stroke-width="1.5" />
+      <line x1="10" y1="20" x2="10" y2="160" stroke="#64748b" stroke-width="1.5" />
+
+      <rect x="18" y="120" width="12" height="40" class="bar" />
+      <rect x="36" y="80" width="12" height="80" class="bar" />
+      <rect x="54" y="40" width="12" height="120" class="bar" fill="#2563eb" />
+      <rect x="72" y="70" width="12" height="90" class="bar" />
+      <rect x="90" y="110" width="12" height="50" class="bar" />
+      <rect x="108" y="135" width="12" height="25" class="bar" />
+      <rect x="126" y="100" width="12" height="60" class="bar" />
+      <rect x="144" y="90" width="12" height="70" class="bar" />
+      <rect x="162" y="130" width="12" height="30" class="bar" />
+
+      <text x="24" y="174" text-anchor="middle" font-size="9" fill="#64748b">0°</text>
+      <text x="60" y="174" text-anchor="middle" font-size="9" fill="#2563eb" font-weight="bold">40°</text>
+      <text x="102" y="174" text-anchor="middle" font-size="9" fill="#64748b">80°</text>
+      <text x="140" y="174" text-anchor="middle" font-size="9" fill="#64748b">120°</text>
+      <text x="168" y="174" text-anchor="middle" font-size="9" fill="#64748b">160°</text>
+    </g>
+
+    <!-- Dettagli Matematici Panel 3 -->
+    <g transform="translate(15, 275)">
+      <rect width="190" height="205" class="badge" />
+      <text x="10" y="22" class="text bold">Voto dell&#39;Istogramma:</text>
+      <text x="10" y="42" class="text">9 bin non orientati [0°, 180°)</text>
+      <text x="10" y="58" class="text">Ampiezza bin: 20° per bin</text>
+      <text x="10" y="80" class="text bold">Voto pesato su |G|:</text>
+      <text x="10" y="98" class="text">Ogni pixel vota proporzionalmente</text>
+      <text x="10" y="114" class="text">alla magnitudo del suo gradiente:</text>
+      <text x="15" y="135" class="text math bold">H_C(b) = ∑ |G(u)|</text>
+      <text x="20" y="152" class="text math">con u: θ(u) ∈ Bin(b)</text>
+      <text x="10" y="178" class="text bold" fill="#2563eb">Dimensione Cella:</text>
+      <text x="10" y="196" class="text">Vettore 1D di 9 elementi</text>
+    </g>
+  </g>
+
+  <!-- Freccia da Panel 3 a Panel 4 -->
+  <path d="M 830 200 L 865 200" class="arrow-accent" />
+
+  <!-- PANEL 4: Blocco 2x2, Normalizzazione & Vettore Finale -->
+  <g transform="translate(870, 80)">
+    <rect width="190" height="500" class="card" />
+    <text x="95" y="30" text-anchor="middle" class="box-title">4. Blocco &amp; Vettore</text>
+    <text x="95" y="48" text-anchor="middle" class="text" fill="#64748b">Blocco 2×2 &amp; h finale</text>
+
+    <!-- Schema Blocco 2x2 celle -->
+    <g transform="translate(25, 75)">
+      <rect width="140" height="140" fill="#fffbeb" stroke="#d97706" stroke-width="2" rx="4" />
+      <line x1="70" y1="0" x2="70" y2="140" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3" />
+      <line x1="0" y1="70" x2="140" y2="70" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3" />
+
+      <text x="35" y="38" text-anchor="middle" font-size="11" font-weight="bold" fill="#b45309">Cella 1</text>
+      <text x="35" y="52" text-anchor="middle" font-size="9" fill="#78350f">(9 bin)</text>
+
+      <text x="105" y="38" text-anchor="middle" font-size="11" font-weight="bold" fill="#b45309">Cella 2</text>
+      <text x="105" y="52" text-anchor="middle" font-size="9" fill="#78350f">(9 bin)</text>
+
+      <text x="35" y="108" text-anchor="middle" font-size="11" font-weight="bold" fill="#b45309">Cella 3</text>
+      <text x="35" y="122" text-anchor="middle" font-size="9" fill="#78350f">(9 bin)</text>
+
+      <text x="105" y="108" text-anchor="middle" font-size="11" font-weight="bold" fill="#b45309">Cella 4</text>
+      <text x="105" y="122" text-anchor="middle" font-size="9" fill="#78350f">(9 bin)</text>
+    </g>
+
+    <!-- Formula Blocco e Vettore -->
+    <g transform="translate(10, 240)">
+      <rect width="170" height="240" class="badge" />
+      <text x="8" y="20" class="text bold" fill="#b45309">Valori per Blocco:</text>
+      <text x="8" y="36" class="text">4 celle × 9 bin = 36 float</text>
+
+      <text x="8" y="60" class="text bold">Normalizzazione L2-Hys:</text>
+      <text x="8" y="78" class="text math">v ← v / √(||v||₂² + ε²)</text>
+      <text x="8" y="96" class="text math">v ← clip(v, max=0.2)</text>
+      <text x="8" y="114" class="text math">v ← v / √(||v||₂² + ε²)</text>
+      <text x="8" y="132" class="text" fill="#64748b">Immunità al contrasto!</text>
+
+      <line x1="8" y1="145" x2="162" y2="145" stroke="#cbd5e1" stroke-width="1" />
+
+      <text x="8" y="165" class="text bold" fill="#0f172a">Vettore Feature h:</text>
+      <text x="8" y="183" class="text">Concatena tutti i blocchi:</text>
+      <text x="8" y="202" class="text bold">49 blocchi × 36 valori</text>
+      <rect x="8" y="212" width="154" height="22" fill="#1e293b" rx="4" />
+      <text x="85" y="227" text-anchor="middle" font-size="11" font-weight="bold" fill="#38bdf8">dim(h) = 1764 float</text>
+    </g>
+  </g>
+</svg>
