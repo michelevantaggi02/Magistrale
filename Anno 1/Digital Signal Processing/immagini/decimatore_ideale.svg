@@ -1,1 +1,116 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="255.19230769230768px" width="375.19230769230757px" viewBox="-10 -10 395.19230769230757 275.1923076923077" content="&lt;mxGraphModel dx=&quot;241&quot; dy=&quot;585&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; guides=&quot;1&quot; tooltips=&quot;1&quot; connect=&quot;1&quot; arrows=&quot;1&quot; fold=&quot;1&quot; page=&quot;0&quot; pageScale=&quot;1&quot; pageWidth=&quot;827&quot; pageHeight=&quot;1169&quot; math=&quot;0&quot; shadow=&quot;0&quot;&gt;&lt;root&gt;&lt;mxCell id=&quot;0&quot;/&gt;&lt;mxCell id=&quot;1&quot; parent=&quot;0&quot;/&gt;&lt;mxCell id=&quot;29&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;600&quot; y=&quot;200&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;560&quot; y=&quot;80&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;2&quot; value=&quot;&quot; style=&quot;endArrow=classic;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;320&quot; y=&quot;240&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;320&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;3&quot; value=&quot;&quot; style=&quot;endArrow=classic;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;280&quot; y=&quot;200&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;640&quot; y=&quot;200&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;4&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;320&quot; y=&quot;80&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;360&quot; y=&quot;80&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;5&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;360&quot; y=&quot;80&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;400&quot; y=&quot;200&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;6&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;480&quot; y=&quot;80&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;440&quot; y=&quot;200&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;7&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;560&quot; y=&quot;80&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;480&quot; y=&quot;80&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;11&quot; value=&quot;f&amp;lt;sub&amp;gt;s&amp;lt;/sub&amp;gt;''/2&quot; style=&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;350&quot; y=&quot;208&quot; width=&quot;50&quot; height=&quot;30&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;12&quot; value=&quot;f&amp;lt;sub&amp;gt;s&amp;lt;/sub&amp;gt;'/2&quot; style=&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;400&quot; y=&quot;208&quot; width=&quot;40&quot; height=&quot;30&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;13&quot; value=&quot;f&amp;lt;sub&amp;gt;s&amp;lt;/sub&amp;gt;'&quot; style=&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;505&quot; y=&quot;208&quot; width=&quot;30&quot; height=&quot;30&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;14&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;320&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;370&quot; y=&quot;40&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;15&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;370&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;370&quot; y=&quot;200&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;10&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;370&quot; y=&quot;208&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;370&quot; y=&quot;188&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;21&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;420&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;420&quot; y=&quot;200&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;22&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;370&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;420&quot; y=&quot;40&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;23&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;470&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;470&quot; y=&quot;200&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;24&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;420&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;470&quot; y=&quot;40&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;25&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;520&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;520&quot; y=&quot;200&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;26&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;470&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;520&quot; y=&quot;40&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;27&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;570&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;570&quot; y=&quot;200&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;28&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;strokeWidth=2;strokeColor=#990000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;520&quot; y=&quot;40&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;570&quot; y=&quot;40&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;8&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;420&quot; y=&quot;210&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;420&quot; y=&quot;190&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;9&quot; value=&quot;&quot; style=&quot;endArrow=none;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry width=&quot;50&quot; height=&quot;50&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;520&quot; y=&quot;210&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;520&quot; y=&quot;190&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;"><style type="text/css"></style><path d="M 327.5 207.5 L 287.5 87.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 47.5 247.5 L 47.5 13.87" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 47.5 8.62 L 51 15.62 L 47.5 13.87 L 44 15.62 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 7.5 207.5 L 361.13 207.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 366.38 207.5 L 359.38 211 L 361.13 207.5 L 359.38 204 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 47.5 87.5 L 87.5 87.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 87.5 87.5 L 127.5 207.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 207.5 87.5 L 167.5 207.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 287.5 87.5 L 207.5 87.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><g><foreignObject pointer-events="none" width="100%" height="100%" style="overflow: visible; text-align: left;"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 231px; margin-left: 103px;"><div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;"><div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: nowrap;">f<sub>s</sub>''/2</div></div></div></foreignObject></g><g><foreignObject pointer-events="none" width="100%" height="100%" style="overflow: visible; text-align: left;"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 231px; margin-left: 148px;"><div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;"><div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: nowrap;">f<sub>s</sub>'/2</div></div></div></foreignObject></g><g><foreignObject pointer-events="none" width="100%" height="100%" style="overflow: visible; text-align: left;"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 231px; margin-left: 248px;"><div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;"><div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: nowrap;">f<sub>s</sub>'</div></div></div></foreignObject></g><path d="M 47.5 47.5 L 97.5 47.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 97.5 47.5 L 97.5 207.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 97.5 215.5 L 97.5 195.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 147.5 47.5 L 147.5 207.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 97.5 47.5 L 147.5 47.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 197.5 47.5 L 197.5 207.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 147.5 47.5 L 197.5 47.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 247.5 47.5 L 247.5 207.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 197.5 47.5 L 247.5 47.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 297.5 47.5 L 297.5 207.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 247.5 47.5 L 297.5 47.5" fill="none" stroke="#990000" stroke-width="2" stroke-miterlimit="10" pointer-events="none"/><path d="M 147.5 217.5 L 147.5 197.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/><path d="M 247.5 217.5 L 247.5 197.5" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 380" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 12px; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11.5px; fill: #64748b; }
+      .axis { stroke: #475569; stroke-width: 1.5; }
+      .axis-label { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; font-style: italic; font-weight: 600; fill: #334155; }
+      
+      .spec-kept { fill: #0284c7; fill-opacity: 0.25; stroke: #0284c7; stroke-width: 2; }
+      .spec-lost { fill: #94a3b8; fill-opacity: 0.25; stroke: #64748b; stroke-width: 1.8; stroke-dasharray: 4,3; }
+      .spec-replica { fill: #cbd5e1; fill-opacity: 0.2; stroke: #94a3b8; stroke-width: 1.4; stroke-dasharray: 3,3; }
+      
+      .filter-ideal { stroke: #dc2626; stroke-width: 2.5; fill: none; }
+      .filter-fill { fill: #ef4444; fill-opacity: 0.12; }
+      
+      .grid-line { stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 3,3; }
+      .tick-line { stroke: #475569; stroke-width: 1.5; }
+      .tick-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #334155; text-anchor: middle; }
+      .tick-sub { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 9.5px; fill: #64748b; text-anchor: middle; }
+      
+      .legend-box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.2; rx: 8px; }
+      .legend-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10.5px; fill: #334155; }
+    </style>
+    <marker id="arrow-x" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M 0 1.5 L 6 4 L 0 6.5 z" fill="#475569" />
+    </marker>
+    <marker id="arrow-y" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M 0 1.5 L 6 4 L 0 6.5 z" fill="#475569" />
+    </marker>
+    <marker id="callout-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 1 1 L 5 3 L 1 5 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <!-- Card Background -->
+  <rect x="10" y="10" width="840" height="360" class="bg" />
+
+  <!-- Header -->
+  <text x="28" y="38" class="title">Filtraggio Anti-Aliasing nel Decimatore Ideale</text>
+  <text x="28" y="58" class="subtitle">Filtro passa-basso con taglio f<tspan baseline-shift="sub" font-size="75%">s</tspan>''/2 = f<tspan baseline-shift="sub" font-size="75%">s</tspan>'/(2M) prima della riduzione di frequenza</text>
+
+  <!-- Legend Box -->
+  <g transform="translate(520, 20)">
+    <rect x="0" y="0" width="315" height="62" class="legend-box" />
+    <!-- Item 1 -->
+    <line x1="12" y1="15" x2="32" y2="15" stroke="#dc2626" stroke-width="2.5" />
+    <text x="40" y="18.5" class="legend-text"><tspan font-weight="bold" fill="#dc2626">Filtro ideale</tspan> H(f) (taglio a f<tspan baseline-shift="sub" font-size="75%">s</tspan>''/2)</text>
+    <!-- Item 2 -->
+    <rect x="12" y="26" width="20" height="12" fill="#0284c7" fill-opacity="0.3" stroke="#0284c7" stroke-width="1.5" />
+    <text x="40" y="35.5" class="legend-text"><tspan font-weight="bold" fill="#0284c7">Spettro preservato</tspan> (banda base utile)</text>
+    <!-- Item 3 -->
+    <rect x="12" y="43" width="20" height="12" fill="#94a3b8" fill-opacity="0.3" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,2" />
+    <text x="40" y="52.5" class="legend-text"><tspan font-weight="bold" fill="#475569">Spettro eliminato</tspan> (rimosso per evitare aliasing)</text>
+  </g>
+
+  <!-- Vertical guideline at fs''/2 -->
+  <line x1="280" y1="270" x2="280" y2="105" class="grid-line" stroke="#dc2626" stroke-opacity="0.6" />
+  <!-- Vertical guideline at fs'/2 -->
+  <line x1="460" y1="270" x2="460" y2="145" class="grid-line" />
+  <!-- Vertical guideline at fs' -->
+  <line x1="680" y1="270" x2="680" y2="145" class="grid-line" />
+
+  <!-- Preserved Spectrum -->
+  <polygon points="120,270 120,160 220,160 280,193.0 280,270" class="spec-kept" />
+
+  <!-- Eliminated Spectrum (anti-aliasing) -->
+  <polygon points="280,270 280,193.0 420,270" class="spec-lost" />
+
+  <!-- Periodic Replica around fs' -->
+  <polygon points="480,270 580,160 740,160 800,230 800,270" class="spec-replica" />
+
+  <!-- Ideal Lowpass Filter H(f) -->
+  <rect x="120" y="130" width="160" height="140" class="filter-fill" />
+  <polyline points="120,130 280,130 280,270" class="filter-ideal" />
+
+  <!-- Frequency Axis f -->
+  <line x1="80" y1="270" x2="810" y2="270" class="axis" marker-end="url(#arrow-x)" />
+  <text x="818" y="274" class="axis-label">f</text>
+
+  <!-- Amplitude Axis -->
+  <line x1="120" y1="290" x2="120" y2="100" class="axis" marker-end="url(#arrow-y)" />
+  <text x="112" y="95" class="axis-label" text-anchor="end">|X(f)|, |H(f)|</text>
+
+  <!-- Origin 0 -->
+  <text x="108" y="288" class="tick-text">0</text>
+
+  <!-- Tick at fs''/2 -->
+  <line x1="280" y1="266" x2="280" y2="274" class="tick-line" stroke="#dc2626" stroke-width="2" />
+  <text x="280" y="290" class="tick-text" font-weight="bold" fill="#dc2626">f<tspan baseline-shift="sub" font-size="75%">s</tspan>''/2</text>
+  <text x="280" y="304" class="tick-sub">= f<tspan baseline-shift="sub" font-size="75%">s</tspan>' / (2M)</text>
+
+  <!-- Tick at fs'/2 -->
+  <line x1="460" y1="266" x2="460" y2="274" class="tick-line" />
+  <text x="460" y="290" class="tick-text">f<tspan baseline-shift="sub" font-size="75%">s</tspan>'/2</text>
+  <text x="460" y="304" class="tick-sub">(Nyquist originario)</text>
+
+  <!-- Tick at fs' -->
+  <line x1="680" y1="266" x2="680" y2="274" class="tick-line" />
+  <text x="680" y="290" class="tick-text">f<tspan baseline-shift="sub" font-size="75%">s</tspan>'</text>
+  <text x="680" y="304" class="tick-sub">(frequenza iniziale)</text>
+
+  <!-- Annotation on Filter Cutoff -->
+  <g transform="translate(210, 105)">
+    <rect x="-5" y="-15" width="145" height="24" rx="4" fill="#ffffff" fill-opacity="0.95" stroke="#fca5a5" stroke-width="1" />
+    <text x="68" y="1" font-family="sans-serif" font-size="11" font-weight="bold" fill="#dc2626" text-anchor="middle">Filtro passa-basso: f<tspan baseline-shift="sub" font-size="75%">c</tspan> = f<tspan baseline-shift="sub" font-size="75%">s</tspan>''/2</text>
+  </g>
+
+  <!-- Callout for eliminated frequencies -->
+  <g transform="translate(315, 145)">
+    <rect x="0" y="0" width="180" height="36" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+    <text x="90" y="15" font-family="sans-serif" font-size="10" font-weight="600" fill="#475569" text-anchor="middle">Componenti eliminate</text>
+    <text x="90" y="28" font-family="sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Perdita irreversibile anti-aliasing</text>
+    <line x1="50" y1="36" x2="45" y2="60" stroke="#64748b" stroke-width="1.2" marker-end="url(#callout-arrow)" />
+  </g>
+</svg>

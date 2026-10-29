@@ -2,299 +2,314 @@
 
 Questi sistemi si basano sui filtri FIR per effettuare __interpolazione, decimazione e rate conversion__.
 
-Fino ad ora abbiamo soltanto sistemi single-rate, dove la frequenza di campionamento $f_s$ non cambia tra input e output.
+Fino ad ora abbiamo analizzato soltanto sistemi single-rate, dove la frequenza di campionamento $f_s$ non cambia tra input e output.
 
-I sistemi multi-rate lavorano __cambiando le frequenze__ di uscita. Sono utili ad esempio quando bisogna convertire da uno standard ad un altro.
+I sistemi multi-rate lavorano __cambiando la frequenza di campionamento__ del segnale. Sono fondamentali, ad esempio, per convertire flussi digitali tra standard con frequenze diverse (come il passaggio da audio CD a $44.1\text{ kHz}$ ad audio DAT o broadcast a $48\text{ kHz}$).
 
-![[esempi_multirate.png]]
+![[immagini/esempi_multirate.png|center mid]]
 
-Un sistema digitale multi-rate produce la frequenza di campionamento scalata di un valore intero o di un rapporto tra valori interi.
+Un sistema digitale multi-rate produce una frequenza di campionamento in uscita scalata di un fattore intero oppure di un rapporto razionale tra interi.
 
 ## Interpolazione
 
-![[blocchi_interp.png]]
+![[immagini/blocchi_interp.png|center mid]]
 
-Nell'interpolazione andremo ad utilizzare una frequenza di campionamento più grande di un certo fattore rispetto a quella del teorema di Nyquist.
+Nell'interpolazione aumentiamo la frequenza di campionamento di un fattore intero $L$ rispetto a quella iniziale $f_s$.
 
-Non ha matematicamente senso utilizzare un sovracampionamento del genere, questo procedimento può essere fatto interamente in digitale con una serie di passaggi.
+Invece di ricampionare fisicamente il segnale analogico ad altissima frequenza con un convertitore A/D, questo processo viene svolto __interamente nel dominio digitale__ mediante una sequenza di operazioni matematiche equivalenti.
 
-![[ex_interp.svg]]
+![[immagini/ex_interp.svg|center big]]
 
-Si possono calcolare in maniera ideale in digitale perché $f_{s1}$ rispetta il teorema del campionamento, ed ho quindi un segnale campionato matematicamente equivalente.
+Dato che la sequenza originaria a frequenza $f_{s1}$ rispetta pienamente il teorema del campionamento di Nyquist-Shannon, essa contiene già tutta l'informazione del segnale continuo; i nuovi campioni intermedi ad alta frequenza $f_{s2} = L f_{s1}$ possono quindi essere calcolati in modo esatto in digitale.
 
-![[schema_upsampler.png]]
+![[immagini/schema_upsampler.png|center mid]]
 
-Quando effettuo il campionamento il segnale diventa periodico nelle frequenze, se devo ricostruire il segnale devo costruire un filtro passa basso che ammette solo le frequenze iniziali.
+Nel campionamento discreto lo spettro del segnale diventa periodico nelle frequenze con periodo pari alla frequenza di campionamento. Per ricostruire o interpolare il segnale alla nuova frequenza, occorre un __filtro passa-basso digitale__ che isoli la banda base originaria eliminando le repliche periodiche.
 
-![[filtro_interpolatore.png]]
+![[immagini/filtro_interpolatore.png|center mid]]
 
-La frequenza di campionamento $f_s$ è più alta del necessario perché dobbiamo evitare che il filtro FIR prenda le repliche delle frequenze in un altro intervallo.
+La frequenza di campionamento $f_s'$ è più alta del necessario proprio per distanziare le repliche spettrali ed evitare che il filtro prenda componenti indesiderate appartenenti agli intervalli adiacenti.
 
-### Tipi Di Impulsi per L'interpolazione
+### Tipi di Impulso per l'Interpolazione
 
-Per ogni campione $y[n]$, viene emesso un impulso $p(t - nT_s)$ con ampiezza proporzionale al valore dell'impulso.
+Nel processo di conversione digitale-analogica (D/A) e di ricostruzione continua, una sequenza discreta di campioni numerici $y[n]$ deve essere trasformata in una forma d'onda continua nel tempo $y(t)$.
 
-Il segnale ricavato è la __superposizione__ di tutti gli impulsi:
+Dal punto di vista fisico e sistemistico, ogni campione $y[n]$ viene trasformato nell'emissione di un __impulso elementare continuo__ $p(t - nT_s)$, centrato all'istante di campionamento $nT_s$ e con ampiezza scalata dal valore numerico del campione.
+
+Il segnale analogico continuo risultante è la __superposizione__ (somma pesata) di tutti gli impulsi traslati nel tempo:
 
 $$
 y(t) = \sum_{n=-\infty}^\infty y[n] p(t - nT_s) \iff p(t) = \frac{\sin(\frac\pi{T_s}t)}{\frac\pi{T_s}t}, \quad -\infty < t < \infty
 $$
 
-Gli __impulsi ideali__ non sono realizzabili, dato che hanno durata infinita. Per questo si ricorre a impulsi non ottimali, ma che possono essere effettivamente utilizzati.
+- __Impulso ideale (Sinc)__: rappresenta l'interpolatore perfetto secondo il teorema di Nyquist-Shannon. Nel dominio delle frequenze la sua trasformata di Fourier è un filtro passa-basso a gradino netto (__brick-wall__) con banda rigorosamente limitata a $[-f_s/2, f_s/2]$.
+  Tuttavia, l'impulso ideale __non è fisicamente realizzabile__:
+  1. Ha durata temporale infinita ($-\infty < t < \infty$), quindi per calcolare $y(t)$ in un dato istante richiederebbe tutti i campioni infiniti passati e futuri (sistema non causale a ritardo infinito).
+  2. Richiederebbe un filtro analogico di ordine infinito con transizione istantanea a $f_s/2$, impossibile da costruire con componenti fisici reali (resistenze, condensatori, amplificatori operazionali).
 
-Come vedremo successivamente, il problema principale sarà l'__oversampling__.
+Per questo motivo, nei convertitori reali si ricorre a forme di impulso elementari $p(t)$ a __durata finita e causali__, facilmente generabili dall'hardware analogico del DAC.
 
-![[tipi_impulso.png]]
+![[immagini/tipi_impulso.png|center mid]]
 
-### Zero-order Hold Interpolation (Impulso rettangolare)
+### Zero-Order Hold Interpolation (Impulso Rettangolare)
 
-![[zero-hold.png]]
+![[immagini/zero-hold.png|center mid]]
 
-Lo zero-order hold è la forma di impulso più semplice, è piatta per tutta la durata dei singoli campioni.
+- __A cosa serve__: È la forma di impulso più semplice in assoluto ed è quella implementata nativamente da tutti i DAC standard a scala (__Zero-Order Hold__ o circuito sample-and-hold). Il convertitore mantiene costante la tensione in uscita al valore $y[n]$ per l'intera durata del periodo di campionamento $T_s$, aggiornandola a gradino solo all'arrivo del campione successivo.
+- __Comportamento e limiti__: È immediato ed economico da costruire in hardware. Tuttavia:
+  - Nel dominio del tempo genera una forma d'onda a scalini discontinua.
+  - Nel dominio della frequenza ha uno spettro di tipo $\text{sinc}$ che decade lentamente (come $1/f$), lasciando passare consistenti repliche spettrali ad alta frequenza (immagini dello spettro).
+  - Introduce una sensibile attenuazione progressiva in banda utile (__droop__ di Nyquist), che raggiunge circa $-3.92\text{ dB}$ (circa $4\text{ dB}$) in prossimità di $f_s/2$.
 
-Può avere bassi risultati a meno che non si abbia una frequenza di campionamento abbastanza alta.
+A meno di non operare a frequenze di campionamento molto elevate (sovracampionamento), la ricostruzione con solo impulso rettangolare produce un'accuratezza modesta.
 
-### Interpolazione Lineare (Impulso triangolare)
+### Interpolazione Lineare (Impulso Triangolare)
 
-![[linear_interp.png]]
+![[immagini/linear_interp.png|center mid]]
 
-Un impulso triangolare effettua l'interpolazione lineare tra due campioni adiacenti, la sua durata è il doppio di quella dell'impulso rettangolare.
+- __A cosa serve__: Collega i campioni adiacenti a coppie mediante segmenti rettilinei continui (First-Order Hold), eliminando i salti bruschi a gradino. La durata complessiva dell'impulso è pari al doppio del periodo di campionamento ($2T_s$).
+- __Comportamento__: Nel dominio della frequenza corrisponde a una funzione $\text{sinc}^2$, con un decadimento asintotico proporzionale a $1/f^2$.
+- Rispetto all'impulso rettangolare, il decadimento quadratico abbatte in maniera decisamente più rapida le repliche ad alta frequenza, migliorando l'approssimazione del segnale. Tuttavia, la sua generazione richiede circuiti analogici integratori di rampa più complessi, oppure calcoli numerici dedicati per determinare la pendenza tra campioni consecutivi.
 
-Questo impulso produce un'approssimazione migliore della forma d'onda originale, ma è ancora presente un sostanziale errore.
+### Interpolazione Parabolica (Impulso Parabolico)
 
-### Interpolazione Parabolica (Impulso parabolico)
+![[immagini/interp_parab.png|center mid]]
 
-![[interp_parab.png]]
+- __A cosa serve__: Realizza un raccordo polinomiale del secondo ordine (spline quadratica) continuo sia nei valori sia nella derivata prima. La sua durata temporale è pari a quattro volte quella rettangolare ($4T_s$, ovvero il doppio di quella triangolare).
+- __Comportamento__: Ha zeri di campionamento a $0$, $\pm T_s$, $\pm 2 T_s$, eliminando gli spigoli vivi dell'interpolazione lineare. Nel dominio della frequenza decade come $1/f^3$, offrendo una soppressione eccellente delle repliche spettrali ad alta frequenza.
+- La generazione analogica diretta di impulsi parabolici precisi è tuttavia circuitalmente onerosa e raramente impiegata nei convertitori fisici.
 
-L'interpolazione parabolica ha la durata del doppio di quella triangolare, quindi quattro volte quella rettangolare.
+### Sovracampionamento per l'Interpolazione
 
-Ha gli zeri a $0$, $\pm T_s$, $\pm 2 T_s , e genera risultati migliori.
+Se il segnale originale non varia sensibilmente nell'arco della durata dell'impulso, la ricostruzione analogica risulta fedele anche con impulsi elementari.
 
-### Sovracampionamento per L'interpolazione
+Invece di costruire complessi circuiti analogici per generare impulsi triangolari o parabolici, la tecnologia moderna risolve il problema __spostando la complessità nel dominio digitale tramite il sovracampionamento (oversampling)__.
 
-Se il segnale originale non varia di molto nella durata dell'impulso è facile ottenere una buona ricostruzione.
+Un DAC a scala (ZOH), la cui risposta in frequenza normalizzata segue l'andamento $\frac{\sin x}{x}$, attenua parzialmente le repliche spettrali, mentre il filtro passa-basso analogico successivo ha il compito di rimuoverle completamente. La combinazione del DAC a scala con il filtro simula la ricostruzione ideale.
 
-Il sovracampionamento è una pratica comune per ottenere un segnale ricostruito accurato, utilizzando un DAC semplice.
+Il ricostruttore analogico ideale sarebbe un filtro passa-basso a gradino con frequenza di taglio a $f_s /2$, dotato di una transizione ripida tra banda passante e banda di arresto.
 
-Un DAC, che ha tipicamente una risposta $\frac{\sin x}{x}$, rimuove parzialmente le repliche spettrali, mentre il filtro successivo le rimuove completamente. La combinazione di un DAC a scala e del filtro simula la ricostruzione ideale di un filtro analogico.
+![[immagini/filtro_ricor.png|center mid]]
 
-Il ricostruttore ideale è un filtro passa basso con frequenza di taglio a $f_s /2$. Ha una transizione netta tra la banda passante e quella di arresto.
+Nelle applicazioni audio ad alta fedeltà, per garantire una qualità eccellente con campionamento a frequenza di Nyquist ($f_s = 44.1\text{ kHz}$), si dovrebbe utilizzare un filtro analogico ad altissimo ordine, estremamente costoso, sensibile alle tolleranze dei componenti e suscettibile di distorsione di fase.
 
-![[filtro_ricor.png]]
+Un modo efficace per alleggerire i requisiti del filtro analogico consiste nell'__aumentare la frequenza di campionamento__. Questo allontana sensibilmente lo spazio tra le repliche spettrali adiacenti, consentendo di impiegare un filtro analogico passa-basso con banda di transizione molto ampia, semplice ed economico (del 1° o 2° ordine).
 
-Nelle applicazioni audio, per mantenere un alta qualità del segnale analogico ricostruito, si deve utilizzare un filtro analogico di alta qualità, che potrebbe essere troppo costoso.
+![[immagini/fir_oversampled.png|center mid]]
 
-Un modo per alleggerire i requisiti per il filtro è quello di aumentare la frequenza di campionamento. Questo causa l'aumento dello spazio tra le repliche e, di conseguenza, richiede requisiti meno stringenti per il filtro passa basso.
+La medesima conclusione si riscontra nel dominio del tempo: all'aumentare della frequenza di campionamento i gradini del DAC a scala diventano talmente fitti e ravvicinati da approssimare visivamente e fisicamente la curva continua originale.
 
-![[fir_oversampled.png]]
+![[immagini/oversampling_id.png|center mid]]
 
+Questo approccio risulterebbe però impratico se richiedesse di convertire fisicamente in analogico e ricampionare dall'inizio a frequenza più alta.
 
-La stessa conclusione si può raggiungere nel dominio del tempo, dove a frequenze di campionamento diverse si avrà un grafico più o meno simile al segnale originale.
+La soluzione consiste nell'eseguire il sovracampionamento interamente in digitale mediante un __filtro interpolatore digitale__, che riceve i campioni alla frequenza di base $f_s$ e genera campioni intermedi alla frequenza moltiplicata $f_s' = L f_s$.
 
-![[oversampling_id.png]]
-
-Questo approccio è però impratico, perché richiede di ricampionare il segnale ad una frequenza più alta.
-
-Per risolvere questo problema si può ricorrere all'utilizzo di un filtro interpolatore, che lavora alla frequenza di campionamento più bassa, per poi filtrarlo.
-
-Rispetto alla nuova frequenza di campionamento data dall'interpolatore, lo spettro dei campioni a bassa rate sarà mostrato come in figura.
+Rispetto alla nuova frequenza di campionamento $f_s'$, lo spettro dei campioni a bassa rate si presenta come una serie di repliche periodiche all'interno dell'intervallo esteso.
 
 >[!note]
->Da notare che il nuovo intervallo di Nyquist è dato dalla nuova frequenza:
+>Il nuovo intervallo di Nyquist è definito rispetto alla frequenza sovracampionata:
 >
 >$$\left[-\frac{f_s'}{2}, \frac{f_s'}{2}\right]$$
 >
->E che quindi all'interno sono presenti delle repliche del vecchio intervallo
+>Al suo interno compaiono quindi $L-1$ repliche indesiderate dello spettro di base (immagini spettrali).
 
-![[oversampling_interpolatore.png]]
+![[immagini/oversampling_interpolatore.png|center mid]]
 
-Questo è anche lo spettro del segnale scalato alla frequenza più alta all'uscita del rate expander.
+Questo è esattamente lo spettro del segnale all'uscita del blocchetto upsampler (rate expander).
 
-Si può mettere un filtro passa basso digitale con frequenza di taglio a $f_s' /8$ (nell'esempio dove $L=4$) che opera alla nuova frequenza $f_s'$ così da poter __eliminare le repliche in eccesso__, con risultato uno spettro identico al segnale sovracampionato direttamente alla frequenza più alta.
+Applicando un filtro digitale passa-basso con frequenza di taglio $f_c = f_s / 2 = f_s' / (2L)$ (nell'esempio con $L=4$, taglio a $f_s' / 8$) operante alla nuova frequenza $f_s'$, è possibile __eliminare tutte le repliche spettrali interne in eccesso__. Lo spettro risultante coincide perfettamente con quello di un segnale campionato fin dall'origine alla frequenza più alta.
 
-Il filtro digitale, essendo periodico in $f$ con periodo $f_s'$, non può rimuovere le repliche centrate ai multipli di $f_s'$. Queste verranno poi rimosse dal ricostruttore DA e dal filtro anti repliche quando si effettuerà di nuovo la conversione in analogico.
+Il filtro digitale, essendo periodico in $f$ con periodo $f_s'$, non può eliminare le repliche centrate ai multipli di $f_s'$. Queste ultime, trovandosi ora a frequenze molto elevate e ben distanziate dalla banda base, vengono rimosse senza difficoltà dal semplice filtro analogico di ricostruzione posto all'uscita del DAC.
 
 ### Forma Diretta
 
-![[blocchi_interpolatore.png]]
+![[immagini/blocchi_interpolatore.png|center mid]]
 
-Dati i campioni a bassa rate $x(n)$, i campioni della sequenza interpolata $x_{\text{up}}(n)$ sono dati come:
+Dati i campioni a frequenza base $x(n)$, la sequenza espansa nel tempo $x_{\text{up}}(n')$ all'uscita dell'upsampler è definita come:
 
 $$x_{\text{up}}(nL) = x(n)$$
 
-$$x_{\text{up}}(nL + i) = 0, \quad i=1,…,L-1$$
+$$x_{\text{up}}(nL + i) = 0, \quad i=1,\dots,L-1$$
 
-I campioni ai multipli di $L$ rappresentano i campioni iniziali, l'upsampler aggiunge $L-1$ campioni impostati inizialmente a $0$ negli spazi tra i campioni iniziali.
+I campioni ai multipli interi di $L$ mantengono il valore dei campioni originari, mentre l'upsampler inserisce $L-1$ zeri tra ciascuna coppia di campioni consecutivi.
 
-![[campioni_upsampler.png]]
+![[immagini/campioni_upsampler.png|center mid]]
 
-Normalmente posso vedere la periodicità nell'intervallo di Nyquist, ma grazie all'upsampler l'intervallo si allarga e riesco a vedere anche le altre repliche (Come spiegato nella sezione precedente), permettendomi ora di filtrare l'intervallo centrale.
+Normalmente l'analisi è confinata nell'intervallo di Nyquist di base, ma l'espansione temporale allarga l'intervallo di osservazione a $[-f_s'/2, f_s'/2]$, rendendo visibili le repliche spettrali che devono essere eliminate dal filtro passa-basso digitale.
 
-Per calcolare la frequenza di taglio adeguata alla nuova rate, si usano le formule:
+I parametri di taglio del filtro interpolatore alla nuova frequenza di campionamento sono:
 
 $$f_c = \frac{f_s}2 = \frac{f_s'}{2L}, \quad \omega_c' = \frac{2\pi f_c}{f_s'} = \frac \pi L$$
 
-Il filtro interpolatore passa basso deve avere un __guadagno__ di $L$ perché così compensa la presenza dei campioni impostati a 0.
+Il filtro FIR interpolatore deve avere un __guadagno in continua pari a $L$__ per compensare la perdita di energia introdotta dall'inserimento degli $L-1$ zeri intermedi.
 
-### Tecnica Di Progettazione Polifase
+### Tecnica di Progettazione Polifase
 
-Partendo dal filtro interpolatore progettato, possiamo scrivere l'espressione della sequenza interpolata come:
+Partendo dal filtro interpolatore FIR, la convoluzione per determinare la sequenza interpolata ad alta frequenza si scrive come:
 
 $$y_{\text{up}}(n') = \sum_{k'=-LM}^{LM} d(k') x_{\text{up}}(n'-k') \quad \text{somma convoluzionale non causale}$$
 
-dove $N=ML$ è la lunghezza del filtro.
+dove la lunghezza del filtro simmetrico è $N = 2LM + 1$.
 
-Posso risparmiare un fattore pari ad $L$ di costo computazionale costruendo $L$ filtri FIR che lavorano in parallelo invece di un unico filtro interpolatore.
+Calcolare direttamente questa convoluzione alla frequenza elevata $f_s'$ comporterebbe un elevato spreco di risorse, poiché la maggior parte dei campioni di $x_{\text{up}}$ ha valore nullo. Scomponendo il filtro in __$L$ sottofiltri polifase operanti in parallelo alla frequenza di base $f_s$__, si ottiene un risparmio computazionale pari a un fattore $L$.
 
-Andiamo a considerare i campioni intermedi tra i campioni a bassa rate $x_{\text{up}}(nL)$ e $x_{\text{up}}(nL + L)$, ovvero i campioni con attualmente valore 0, indicizzandoli con $n'=nL+i, \quad i=0,…,L-1$:
+Indicizzando i campioni di uscita intermedi tra $nL$ e $(n+1)L$ con $n' = nL + i$ (con $i = 0, \dots, L-1$):
 
-$$y_{\text{up}}(nL+i) = \sum_{k'=-LM}^{LM} d(k') x_{\text{up}}(nL+i-k'), \quad i=0,…,L-1$$
+$$y_{\text{up}}(nL+i) = \sum_{k'=-LM}^{LM} d(k') x_{\text{up}}(nL+i-k'), \quad i=0,\dots,L-1$$
 
-Abbiamo scomposto la singola equazione in $L$ equazioni.
+Scomponendo anche l'indice dei coefficienti $k'$ nella base $L$ con $k' = kL + j$:
 
-Possiamo fare lo stesso ragionamento con $d(k')$, in quanto ha dimensione $N=2LM + 1$ e posso indicizzarlo con $k' = kL+j$:
+$$y_{\text{up}}(nL+i) = \sum_{k=-M}^{M-1}\sum_{j=0}^{L-1} d(kL+j) x_{\text{up}}(nL+i-kL-j), \quad i=0,\dots,L-1$$
 
-$$y_{\text{up}}(nL+i) = \sum_{k'=-M}^{M-1}\sum_{j=0}^{L-1} d(kL+j) x_{\text{up}}(nL+i-kL-j), \quad i=0,…,L-1$$
-
-Possiamo quindi definire $L$ filtri polifase come:
+Si definiscono quindi gli $L$ filtri polifase $d_i(k)$ come:
 
 $$d_i(k) = d(kL+i), \quad -M\leq k\leq M-1$$
 
-Il filtro di ordine 0 $d_0(k)$ si comporta come un filtro passa tutto, avrà quindi tutti i valori a 0, tranne per il campione a passo $L$ che avrà il valore esatto dell'equivalente a bassa rate, in formule:
+Il ramo di ordine $0$, $d_0(k)$, agisce come un semplice filtro passa-tutto (ritardo puro), preservando inalterati i campioni originali della sequenza a frequenza base.
 
-$$\begin{align} x_{\text{up}}(nL) &= x(n) \\ x_{\text{up}}(nL + i) &= 0\end{align}\quad\quad i\neq j$$
+Tenendo conto che i campioni $x_{\text{up}}$ sono non nulli solo quando l'argomento è multiplo di $L$ (cioè per $i = j$):
 
-Possiamo quindi semplificare la formula mantenendo solo la parte dove $i=j$, ottenendo:
+$$\begin{align} x_{\text{up}}(nL) &= x(n) \\ x_{\text{up}}(nL + i) &= 0 \quad (i \neq 0)\end{align}$$
 
-$$\begin{align} y_{\text{up}}(nL+i) &= \sum_{k'=-M}^{M-1}\sum_{j=0}^{L-1} d_j(k) \underbracket {x_{\text{up}}(nL+i-kL-j)}_{\text{0 per } i \neq j}\\ &= \sum_{k=-M}^{M-1}d_i(k)x(nL-kL) \\ y_i(n) &= \sum_{k=-M}^{M-1}d_i(k)x(n-k) \end{align} \quad ,i=0,…,L-1$$
+La doppia sommatoria collassa al solo termine con $j = i$:
 
-![[filtro_polifase.png]]
+$$\begin{align} y_{\text{up}}(nL+i) &= \sum_{k=-M}^{M-1}\sum_{j=0}^{L-1} d_j(k) \underbrace{x_{\text{up}}(nL+i-kL-j)}_{0 \text{ per } i \neq j}\\ &= \sum_{k=-M}^{M-1}d_i(k)x(nL-kL) \\ y_i(n) &= \sum_{k=-M}^{M-1}d_i(k)x(n-k) \end{align} \quad, i=0,\dots,L-1$$
+
+Ciascun filtro polifase $d_i(k)$ calcola direttamente l'$i$-esimo campione interpolato lavorando unicamente sui campioni originari a frequenza $f_s$.
+
+![[immagini/filtro_polifase.png|center mid]]
 
 ## Decimazione
 
-La decimazione è l'operazione inversa dell'interpolazione, ovvero l'operazione di convertire il segnale da una frequenza di campionamento più alta ad una più bassa.
+La decimazione è l'operazione duale dell'interpolazione, ovvero la riduzione controllata della frequenza di campionamento da un valore più alto $f_s'$ a uno più basso $f_s'' = f_s' / M$.
 
->[!attention]
->Non dobbiamo confondere il _sottocampionamento_ con la __decimazione__, in quanto con la decimazione dobbiamo essere sicuri di __rispettare l'intervallo di Nyquist__.
+>[!warning]
+>Non bisogna confondere il semplice __sottocampionamento__ (scarto puro di campioni nel tempo) con la __decimazione__.
+>Il sottocampionamento da solo provocherebbe inevitabilmente __aliasing__ se il segnale di partenza contiene frequenze superiori alla nuova frequenza di Nyquist $f_s''/2$.
+>La decimazione corretta include sempre un __filtraggio passa-basso preventivo (anti-aliasing)__ prima dello scarto dei campioni.
 >
->Nel caso in cui voglio decimare un segnale interpolato in precedenza con lo stesso ordine, allora decimazione e sottocampionamento coincidono.
+>Soltanto nell'ipotesi in cui si decimi un segnale precedentemente interpolato con il medesimo fattore, decimazione e sottocampionamento possono coincidere.
 
 ### Decimatore Ideale
 
-![[decimatore_ideale.svg]]
+![[immagini/decimatore_ideale.svg|center big]]
 
-Devo garantire che il mio segnale abbia spettro fino a $\frac{f_s''}{2}$, creo quindi un filtro passa basso.
+Prima di sottocampionare di un fattore $M$, è indispensabile garantire che lo spettro del segnale sia confinato entro l'intervallo $[0, f_s''/2]$, inserendo un filtro passa-basso digitale con frequenza di taglio $f_c = f_s''/2 = f_s' / (2M)$.
 
-Ho una perdita di informazioni irreversibile, ma necessaria per poter rappresentare il segnale alla nuova frequenza di campionamento.
+L'eliminazione delle componenti spettrali comprese tra $f_s''/2$ e $f_s'/2$ rappresenta una perdita di informazione irreversibile, ma matematicamente obbligatoria per prevenire distorsioni da ripiegamento spettrale (aliasing).
 
-![[blocchi_ideal_decim.png]]
+![[immagini/blocchi_ideal_decim.png|center mid]]
 
 >[!note]
->Ovviamente non possiamo utilizzare i filtri ideali, tipicamente si usano filtri FIR con Kaiser:
+>Poiché i filtri ideali brick-wall non sono realizzabili, si impiegano filtri FIR progettati ad esempio con finestra di Kaiser, fissando:
 >
 >$$f_{\text{stop}} < \frac{f_s''}{2}$$
 >
->$$\Delta f = 2(\frac{f_s''}{2} - f_{\text{stop}})$$
+>$$\Delta f = 2\left(\frac{f_s''}{2} - f_{\text{stop}}\right)$$
 
-Il costo computazionale sarebbe $N=2ML$, solo che dovendo scartare i campioni intermedi posso effettuare il calcolo ogni $L$ campioni, portando il costo computazionale equivalente a quello di un filtro polifase $N=2M$.
+Il costo computazionale nominale sarebbe $N = 2ML$. Tuttavia, poiché il decimatore finale scarta $M-1$ campioni intermedi su $M$, i calcoli possono essere eseguiti solo sui campioni effettivamente trattenuti in uscita, riducendo l'onere computazionale a quello equivalente di una struttura polifase con $N = 2M$.
 
-### ADC Basati Sulla Decimazione
+### ADC Basati sulla Decimazione
 
-![[adc_decim.png]]
+![[immagini/adc_decim.png|center mid]]
 
-Con il decimatore ho 2 vantaggi principali:
-- Il filtro Anti-aliasing è semplificato
-- L'ADC veloce può usare meno bit, o a parità di bit ha un rapporto segnale-rumore migliore
+L'architettura con decimazione offre due vantaggi determinanti nella progettazione degli stadi di conversione analogico-digitale (ADC):
+- __Semplificazione del filtro analogico anti-aliasing__: campionando inizialmente ad altissima frequenza $f_s'$, il filtro analogico preliminare può avere una pendenza molto blanda e componenti a bassa precisione.
+- __Miglioramento della risoluzione effettiva (SNR)__: l'ADC rapido a monte può operare con un numero inferiore di bit; il filtraggio passa-basso digitale e la successiva decimazione mediano il rumore di quantizzazione distribuito su una banda molto ampia, incrementando il rapporto segnale-rumore (guadagno di processo).
 
 ## Sample Rate Converter
 
 $$f_s'' = \frac LM f_s'$$
 
-Si implementa concatenando un interpolatore con un decimatore.
+Un convertitore di frequenza di campionamento arbitrario a rapporto razionale si realizza mediante la cascata di un __interpolatore per $L$__ seguito da un __decimatore per $M$__.
 
 >[!important]
->Si potrebbe pensare che l'ordine non conti, ma bisogna ricordare che la decimazione è un'operazione distruttiva (con perdita di dati), bisogna quindi sempre fare __prima l'interpolazione__ e poi la decimazione.
+>L'ordine della cascata non è commutabile: la decimazione è un'operazione irreversibile e distruttiva di informazione spettrale. Occorre sempre eseguire __prima l'interpolazione__ per $L$ e successivamente la decimazione per $M$. Invertendo l'ordine, il decimatore eliminerebbe frequenze che l'interpolatore non potrebbe più recuperare.
 
-C'è inoltre un vantaggio applicabile all'architettura del rate converter:
+L'architettura a cascata presenta un notevole vantaggio di semplificazione:
 
+![[immagini/blocchi_rate_conv.svg|center big]]
 
-![[blocchi_rate_conv.svg]]
+Entrambi i filtri (filtro anti-imaging dell'interpolatore e filtro anti-aliasing del decimatore) si trovano interposti tra l'upsampler e il downsampler, e operano quindi alla __medesima frequenza intermedia__ $f_s' = L f_s$.
 
-Posso quindi implementare un solo filtro con:
+Essendo due sistemi LTI in serie, la loro risposta complessiva è data dal prodotto delle singole risposte in frequenza:
 
-$$\omega_c'' = \frac{2\pi f_c}{f_s''} = \min(\frac \pi L, \frac \pi M) = \frac \pi{\max(L,M)}$$
+$$H(\omega') = H_1(\omega') \cdot H_2(\omega')$$
 
-I 2 filtri sono però molto diversi tra loro, quindi in base a quale è più grande dovrò progettare un filtro interpolatore o decimatore.
+Trattandosi di due filtri ideali passa-basso con tagli rispettivamente pari a $\pi / L$ e $\pi / M$, il loro prodotto coincide con il filtro avente la __banda passante più stretta__. È quindi sufficiente implementare un __singolo filtro FIR digitale__ con frequenza di taglio:
 
-## Filtri Multi Stadio
+$$\omega_c' = \frac{2\pi f_c}{f_s'} = \min\left(\frac \pi L, \frac \pi M\right) = \frac \pi{\max(L,M)}$$
 
-Per interpolatori e decimatori con coefficienti molto grandi il filtro rischia di diventare eccessivamente costoso.
+A seconda che risulti $L > M$ (conversione verso l'alto o up-sampling netto) oppure $L < M$ (conversione verso il basso o down-sampling netto), il filtro unico assume le caratteristiche rispettivamente del filtro interpolatore o del filtro decimatore.
 
-Per risolvere il problema si possono implementare più interpolatori in serie, con coefficienti molto più piccoli (si tende a restare sotto il 10).
+## Filtri Multi-Stadio
 
-Nei rate converter si scompone soltanto il componente di cui si deve progettare il filtro.
+Quando i fattori di conversione $L$ o $M$ sono molto grandi, la transizione richiesta al filtro digitale diventa estremamente stretta, determinando un ordine del filtro $N$ eccessivamente alto e un costo computazionale proibitivo.
 
-L'ordine con cui mettere in serie i filtri più piccoli dipende dal convertitore:
+Per ottimizzare le risorse, la conversione viene scomposta in __più stadi in cascata__ con fattori intermedi molto più piccoli (tipicamente mantenuti sotto 10).
 
-- Dal più grande al più piccolo per gli interpolatori
-- Dal più piccolo al più grande per i decimatori
+Nei convertitori sample-rate a rapporto razionale viene scomposto soltanto lo stadio che impone il vincolo di filtraggio più severo.
 
-![[multi_stato.jpg]]
+L'ordine di allocazione dei fattori intermedi segue una regola precisa:
+- __Dal fattore più grande al più piccolo__ per gli interpolatori (in modo che i filtri a pendenza più ripida operino alle frequenze di campionamento più basse).
+- __Dal fattore più piccolo al più grande__ per i decimatori (per massimizzare la reiezione prima di ridurre ulteriormente la frequenza).
+
+![[immagini/multi_stato.jpg|center mid]]
 
 ## Equalizzazione DAC
 
-![[dac_eq_blocchi.png]]
+![[immagini/dac_eq_blocchi.png|center mid]]
 
-In genere la risposta impulsiva di un DAC è rettangolare con durata il tempo di stazionamento.
+La risposta impulsiva fisica di un DAC standard a ritenuta di ordine zero è un impulso rettangolare di durata pari al periodo di campionamento.
 
-In un sistema con oversampling l'uscita dell'interpolatore viene ricostruita da un DAC a scala, che opera alla frequenza interpolata.
+In un sistema con oversampling, l'uscita dell'interpolatore numerico viene inviata al DAC a scala operante alla frequenza sovracampionata $f_s'$.
 
-In questo caso la sua risposta in frequenza (normalizzata al gain) è:
+In questo caso la sua risposta in frequenza normalizzata (al guadagno) è data da:
 
-$$H_{\text{dac}}(f) = \frac{\sin(\pi f / f_s')}{\pi f / f_s'}e^{j \pi f / f_s'}$$
+$$H_{\text{dac}}(f) = \frac{\sin(\pi f / f_s')}{\pi f / f_s'}e^{-j \pi f / f_s'}$$
 
-Che causa dell'attenuazione nell'intervallo di Nyquist per un massimo di 4dB.
+Tale risposta introduce un'attenuazione progressiva (droop) all'interno dell'intervallo di Nyquist fino a circa $4\text{ dB}$.
 
-Per un filtro interpolatore con coefficiente $L$, che ha la frequenza di taglio $f_c = \frac{f_s}2 = \frac{f_s'}{2L}$, la massima attenuazione in banda passante sarà:
+Per un filtro interpolatore con fattore $L$ e frequenza di taglio $f_c = \frac{f_s}2 = \frac{f_s'}{2L}$, la massima attenuazione al bordo della banda passante utile risulta:
 
 $$|H_{\text{dac}}(f)| =\left| \frac{\sin(\pi f / f_s')}{\pi f / f_s'}\right | = \frac{\sin(\pi / 2L)}{\pi / 2L}$$
 
-Per valori molto grandi di $L$ l'attenuazione è insignificante e tendente a 0dB.
+- Per valori elevati di $L$ ($L \geq 16$), l'attenuazione al bordo banda diventa trascurabile (inferiore a frazioni di decibel) e tende a $0\text{ dB}$.
+- Per valori moderati di $L$ (ad esempio per $L \leq 8$), l'attenuazione di diversi decibel è avvertibile; è quindi opportuno compensarla sagomando il filtro interpolatore con una __risposta inversa__ rispetto a quella del DAC nella banda passante.
 
-Per valori piccoli di $L$ (Ad esempio per $L \leq 8$) è desiderabile compensare questa attenuazione progettando il filtro interpolatore in modo che abbia una __forma inversa__ rispetto alla risposta del DAC nella banda passante.
+![[immagini/disegno_eq_dac.png|center mid]]
 
-![[disegno_eq_dac.png]]
-
-Il filtro _equalizzato_ desiderato avrà quindi la formula:
+Il filtro equalizzato ideale desiderato ha risposta in frequenza:
 
 $$D(f) = \begin{cases} 
 LD_{\text{eq}}(f), & \text{se } |f| \leq \frac{f_s}2\\
 0,& \text{se } \frac{f_s}2 < |f| \leq \frac{f_s'}2
 \end{cases}$$
-dove $D_{\text{eq}}(f)$ è l'inversa della risposta $H_{\text{dac}}(f)$ con la sua fase rimossa per lavorare solo con la parte reale.
 
-In digitale avremo:
+dove $D_{\text{eq}}(f)$ rappresenta l'inversa dell'ampiezza di $H_{\text{dac}}(f)$, privata della fase per operare a valori reali.
+
+Nel dominio delle frequenze discrete normalizzate:
 
 $$D(\omega') = \begin{cases}
 L\frac{\omega'/2}{\sin(\omega'/2)}, & \text{se } |\omega'| \leq \frac \pi L\\
 0,& \text{se } \frac\pi L < |\omega'| \leq \pi
 \end{cases} $$
 
-Tale filtro può essere progettato utilizzando il [[8. Filtri FIR - Finite Impulse Response#^14b2ae|Metodo del campionamento in frequenza]].
+Tale filtro FIR può essere progettato agevolmente mediante il [[8. Filtri FIR - Finite Impulse Response#^14b2ae|Metodo del campionamento in frequenza]].
 
-Se l'ordine del filtro da progettare è infatti conosciuto (come nel nostro caso dove $N=  2LM + 1$), possiamo calcolare i pesi attraverso la IDFT a N punti:
+Noti la lunghezza $N$ del filtro desiderato (con $N = 2LM + 1$) e i campioni di frequenza, i coefficienti impulsivi simmetrici si determinano mediante IDFT a $N$ punti:
 
 $$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')e^{j\omega_i'k'}, \quad -LM \leq k' \leq LM $$
 
-Il filtro finestrato causale risulta come:
+Il filtro causale finestrato si ottiene applicando una finestra simmetrica centrata $w(n')$:
 
 $$h(n') = \tilde d(n'-LM)w(n'), \quad 0 \leq n' \leq N-1$$
 
-Dato che il filtro è progettato per salire gradualmente nella banda passante, per ottenere una vera attenuazione con kaiser dobbiamo progettare la finestra con un livello di attenuazione più alto.
+Dato che la risposta desiderata cresce verso l'alto ai bordi della banda passante per compensare la caduta del DAC, per garantire il livello di attenuazione desiderato nella banda di arresto con una finestra di Kaiser è necessario specificare un'attenuazione di progetto leggermente più severa.
 
-Inoltre, dato che l'impulso deve essere a valori reali, dobbiamo rimpiazzare l'equazione scrivendola nella forma del coseno:
+Inoltre, per assicurare coefficienti a valori puramente reali e simmetrici, l'espressione della IDFT si semplifica nella forma a soli coseni:
 
-$$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i)\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
+$$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
 
-![[freq_sampling.png]]
-
+![[immagini/freq_sampling.png|center mid]]
