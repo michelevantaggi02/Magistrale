@@ -11,14 +11,12 @@
             "id": "3a210a63c173f84b",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "pdf",
               "state": {
-                "aFile": "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-                "bFile": "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-                "aRef": ""
+                "file": "Anno 1/export/pdf/Digital Signal Processing-merged.pdf"
               },
-              "icon": "diff",
-              "title": "Diff: 1. Quantizzazione  (Working Tree)"
+              "icon": "lucide-file-text",
+              "title": "Digital Signal Processing-merged"
             }
           }
         ]
@@ -180,7 +178,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 508.5
+    "width": 521.29931640625
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -195,8 +193,11 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "3a210a63c173f84b",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
+    "Anno 1/export/md/Digital Signal Processing-merged.md",
+    "Anno 1/export/pdf/Digital Signal Processing-merged-1.pdf",
+    "Anno 1/export/pdf/Digital Signal Processing-merged.pdf",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Fondamenti e Trasformata Z.md",
     "Anno 1/Digital Signal Processing/A. Filtri IIR - Risposta e Progettazione.md",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
@@ -205,7 +206,6 @@
     "Anno 1/Digital Signal Processing/immagini/multi_stato.svg",
     "Anno 1/Digital Signal Processing/immagini/multi_stadio.svg",
     "STRUTTURA_E_GUIDA_APPUNTI.md",
-    "Anno 1/export/pdf/Digital Signal Processing-merged.pdf",
     "Anno 1/Digital Signal Processing/immagini/poli_zeri.png",
     "Anno 1/Digital Signal Processing/immagini/poli_zeri.svg",
     "Anno 1/Machine Learning/2. Teoria della Probabilita.md",
@@ -233,7 +233,6 @@
     "simulazione_passo_2.png",
     "simulazione_passo_1.png",
     "Anno 2/Autonomous Robotics/scripts_python/Particle_gemini_lecture_v4.py.bak",
-    "Anno 2/Autonomous Robotics/scripts_python/__MACOSX",
     "lezione 9-merged.md",
     "lezione 9/8. Regolarizzazione, Loss e Ottimizzazione Avanzata per Deep Learning.md",
     "lezione 9/7. Addestramento di Reti Profonde: Preprocessing, Attivazioni, Inizializzazione e Normalizzazione.md",
@@ -241,9 +240,7 @@
     "Anno 2/Deep Learning And Robot Perception/7. Addestramento di Reti Profonde: Preprocessing, Attivazioni, Inizializzazione e Normalizzazione.md",
     "Anno 2/Deep Learning And Robot Perception/6. Rappresentazione Visiva e Reti Neurali Profonde.md",
     "6. Rappresentazione Visiva e Reti Neurali Profonde.md",
-    "Anno 2/Deep Learning And Robot Perception/0. Immagini, filtri e gradienti.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_9.md",
     "Senza nome.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"
   ]
