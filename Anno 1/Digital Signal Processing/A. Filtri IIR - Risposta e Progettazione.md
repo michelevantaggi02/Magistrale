@@ -33,7 +33,7 @@ Lo sfasamento introdotto dal filtro si traduce in un ritardo temporale:
 - Il __ritardo di gruppo__ $d_g(\omega)$ misura il ritardo temporale subito dall'inviluppo di modulazione di un pacchetto d'onda a banda stretta:
   $$d_g(\omega) = -\frac{\mathrm{d}}{\mathrm{d}\omega} \arg H(\omega)$$
 
-Nei filtri FIR simmetrici il ritardo è rigorosamente indipendente dalla frequenza ($d(\omega) = d_g(\omega) = D = \frac{N-1}{2}$), garantendo perfetta linearità della fase:
+Nei filtri FIR simmetrici di lunghezza $N$ campioni (ordine del filtro pari a $N-1$), limitatamente alle frequenze in cui la risposta in ampiezza è positiva, il ritardo è rigorosamente indipendente dalla frequenza ($d(\omega) = d_g(\omega) = D = \frac{N-1}{2}$), garantendo perfetta linearità della fase:
 
 $$
 \mathrm{e}^{j\omega n} \xrightarrow{\mathcal{H}} |H(\omega)| \mathrm{e}^{j\omega (n - D)}
@@ -111,7 +111,7 @@ $$
 H(z) = \frac{G(1 + b z^{-1})}{1 - a z^{-1}}
 $$
 
-dove $a$ è la posizione del polo ($0 < a < 1$ per stabilità causale) e $b$ è la posizione dello zero.
+dove $a$ è la coordinata del polo sul semiasse reale positivo ($z = a$, con $0 < a < 1$ per stabilità causale) e lo zero del filtro è collocato in $z = -b$ (con $0 < b \le 1$ per posizionarlo sul semiasse reale negativo vicino a $\omega = \pi$).
 
 Valutando la risposta in frequenza alle pulsazioni estreme dell'intervallo di Nyquist ($z = \mathrm{e}^{j0} = 1$ e $z = \mathrm{e}^{j\pi} = -1$):
 
@@ -140,28 +140,34 @@ $$
 > a = \varepsilon^{1/n_{\text{eff}}} = (0.01)^{1/20} \approx 0.8
 > $$
 > 
-> Calcolo dello zero $b$:
+> Calcolo del parametro $b$ (zero in $z = -b = -0.4$):
 > 
 > $$
 > \frac{(1 - b)(1 - 0.8)}{(1 + b)(1 + 0.8)} = \frac{1}{21} \implies \frac{0.2(1 - b)}{1.8(1 + b)} = \frac{1}{21} \implies b = 0.4
 > $$
 > 
+> Calcolo del guadagno di normalizzazione a frequenza continua ($H(0) = 1$):
+> 
+> $$
+> H(0) = \frac{G(1 + 0.4)}{1 - 0.8} = \frac{1.4}{0.2} G = 7 G = 1 \implies G = \frac{1}{7} \approx 0.1429
+> $$
+> 
 > La funzione di trasferimento risultante è:
 > 
 > $$
-> H(z) = \frac{G(1 + 0.4z^{-1})}{1 - 0.8z^{-1}}
+> H(z) = \frac{\frac{1}{7}(1 + 0.4z^{-1})}{1 - 0.8z^{-1}} \approx \frac{0.1429(1 + 0.4z^{-1})}{1 - 0.8z^{-1}}
 > $$
 > 
 > Esplicitando la relazione tra le trasformate $Y(z) = H(z) X(z)$:
 > 
 > $$
-> (1 - 0.8z^{-1}) Y(z) = G(1 + 0.4z^{-1}) X(z)
+> (1 - 0.8z^{-1}) Y(z) = 0.1429(1 + 0.4z^{-1}) X(z)
 > $$
 > 
 > Antitrasformando nel dominio temporale si ottiene l'equazione alle differenze:
 > 
 > $$
-> y(n) = 0.8y(n-1) + G\left(x(n) + 0.4x(n-1)\right)
+> y(n) = 0.8y(n-1) + 0.1429\left(x(n) + 0.4x(n-1)\right)
 > $$
 > 
 > Questa struttura richiede solo 3 moltiplicazioni e accumuli (__MACS__) per ciascun campione elaborato.
@@ -341,33 +347,48 @@ $$
 N(z) = 1 - 2\cos\omega_0 z^{-1} + z^{-2} = (1 - \mathrm{e}^{j\omega_0} z^{-1})(1 - \mathrm{e}^{-j\omega_0} z^{-1})
 $$
 
+> [!NOTE] Guadagno in Banda Passante
+> Per normalizzare esattamente a guadagno unitario a frequenza continua ($H(0) = 1$, $0\text{ dB}$), la funzione di trasferimento può essere moltiplicata per il fattore di scala:
+>
+> $$
+> G_0 = \frac{1 + a_1 + a_2}{1 + b_1 + b_2} = \frac{1 - 2R\cos\omega_0 + R^2}{2(1 - \cos\omega_0)}
+> $$
+
 ### Filtro a Pettine (Comb)
 
-Il filtro a pettine estende il principio del notch a un insieme di $M$ frequenze armoniche multiple $\omega_i$:
+Il filtro a pettine estende il principio del notch all'annullamento simultaneo di un insieme di frequenze armoniche multiple. Per elaborare segnali reali a coefficienti reali, ogni polo o zero a frequenza $\omega_i$ deve essere accompagnato dal suo complesso coniugato $-\omega_i$.
+
+Nel caso fondamentale in cui le $M$ frequenze siano armonicamente equispaziate sull'intera circonferenza ($\omega_k = \frac{2\pi k}{M}$ per $k = 0, \dots, M-1$), per la proprietà delle radici $M$-esime dell'unità ($\prod_{k=0}^{M-1} (1 - \mathrm{e}^{j \frac{2\pi k}{M}} z^{-1}) = 1 - z^{-M}$), il polinomio al numeratore collassa nella forma sparsa:
 
 $$
-N(z) = \prod_{i=1}^{M} (1 - \mathrm{e}^{j\omega_i} z^{-1})
+N(z) = 1 - z^{-M}
 $$
 
 Il denominatore introduce poli collocati sulle stesse direzioni radiali degli zeri, ma ritirati all'interno del cerchio unitario al raggio $\rho$ ($0 < \rho < 1$):
 
 $$
-D(z) = N(\rho^{-1} z) = \prod_{i=1}^{M} (1 - \mathrm{e}^{j\omega_i} \rho z^{-1})
+D(z) = N(\rho^{-1} z) = 1 - \rho^M z^{-M}
 $$
 
-La funzione di trasferimento espansa è:
+La funzione di trasferimento del __filtro a pettine canonico__ assume così la forma computazionalmente ottimizzata:
 
 $$
-H(z) = \frac{N(z)}{N(\rho^{-1} z)} = \frac{1 + b_1 z^{-1} + \dots + b_M z^{-M}}{1 + \rho b_1 z^{-1} + \dots + \rho^M b_M z^{-M}}
+H(z) = \frac{1 - z^{-M}}{1 - \rho^M z^{-M}}
 $$
 
-I coefficienti del denominatore sono versioni scalate dei coefficienti del numeratore:
+implementabile in tempo reale mediante una singola linea di ritardo di lunghezza $M$ e una sola moltiplicazione per campione:
 
 $$
-a_i = \rho^i b_i, \quad i = 1, \dots, M
+y(n) = \rho^M y(n-M) + x(n) - x(n-M)
 $$
 
-Se $\rho \lesssim 1$, le coppie polo-zero si stringono e le tacche di attenuazione diventano estremamente strette e selettive:
+Nel caso più generale di frequenze arbitrarie, la funzione di trasferimento espansa resta:
+
+$$
+H(z) = \frac{N(z)}{N(\rho^{-1} z)} = \frac{1 + b_1 z^{-1} + \dots + b_P z^{-P}}{1 + \rho b_1 z^{-1} + \dots + \rho^P b_P z^{-P}}
+$$
+
+dove $a_i = \rho^i b_i$. Se $\rho \lesssim 1$, le coppie polo-zero si stringono e le tacche di attenuazione diventano estremamente strette e selettive:
 
 ![[immagini/comb.png|center mid]]
 

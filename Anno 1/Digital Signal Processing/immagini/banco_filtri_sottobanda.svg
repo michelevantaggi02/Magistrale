@@ -57,17 +57,17 @@
   <text x="230" y="150" font-size="16" fill="#64748b" text-anchor="middle" font-weight="bold">⋮</text>
   <text x="375" y="148" font-size="16" fill="#64748b" text-anchor="middle" font-weight="bold">⋮</text>
 
-  <!-- Ramo M: Filtro Passa-Alto hM(n) -->
+  <!-- Ramo K: Filtro Passa-Alto hK(n) -->
   <line x1="110" y1="170" x2="150" y2="170" class="wire" />
   <polyline points="144,166 150,170 144,174" fill="none" class="wire" />
   <rect x="150" y="145" width="160" height="50" class="box-filter" />
-  <text x="230" y="166" class="text-filter">Filtro h_M(n)</text>
-  <text x="230" y="182" class="text-filter-sub">Passa-Alto (Banda M)</text>
+  <text x="230" y="166" class="text-filter">Filtro h_K(n)</text>
+  <text x="230" y="182" class="text-filter-sub">Passa-Alto (Banda K)</text>
 
-  <!-- Segnale sottobanda xM(n) -->
+  <!-- Segnale sottobanda xK(n) -->
   <line x1="310" y1="170" x2="470" y2="170" class="wire" />
   <polyline points="464,166 470,170 464,174" fill="none" class="wire" />
-  <text x="375" y="162" class="text-signal" text-anchor="middle">x_M(n)</text>
+  <text x="375" y="162" class="text-signal" text-anchor="middle">x_K(n)</text>
 
   <!-- Bus di raccolta al Sommatore -->
   <line x1="470" y1="50" x2="470" y2="170" class="wire" />

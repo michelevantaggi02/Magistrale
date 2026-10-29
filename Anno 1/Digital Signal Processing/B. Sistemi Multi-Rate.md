@@ -39,10 +39,16 @@ Dal punto di vista fisico e sistemistico, ogni campione $y[n]$ viene trasformato
 Il segnale analogico continuo risultante è la __superposizione__ (somma pesata) di tutti gli impulsi traslati nel tempo:
 
 $$
-y(t) = \sum_{n=-\infty}^\infty y[n] p(t - nT_s) \iff p(t) = \frac{\sin(\frac\pi{T_s}t)}{\frac\pi{T_s}t}, \quad -\infty < t < \infty
+y(t) = \sum_{n=-\infty}^\infty y[n] p(t - nT_s)
 $$
 
-- __Impulso ideale (Sinc)__: rappresenta l'interpolatore perfetto secondo il teorema di Nyquist-Shannon. Nel dominio delle frequenze la sua trasformata di Fourier è un filtro passa-basso a gradino netto (__brick-wall__) con banda rigorosamente limitata a $[-f_s/2, f_s/2]$.
+- __Impulso ideale (Sinc)__: rappresenta l'interpolatore perfetto secondo il teorema di Nyquist-Shannon:
+
+  $$
+  p(t) = \frac{\sin(\frac\pi{T_s}t)}{\frac\pi{T_s}t} = \text{sinc}\left(\frac{t}{T_s}\right), \quad -\infty < t < \infty
+  $$
+
+  Nel dominio delle frequenze la sua trasformata di Fourier è un filtro passa-basso a gradino netto (__brick-wall__) con banda rigorosamente limitata a $[-f_s/2, f_s/2]$.
   Tuttavia, l'impulso ideale __non è fisicamente realizzabile__:
   1. Ha durata temporale infinita ($-\infty < t < \infty$), quindi per calcolare $y(t)$ in un dato istante richiederebbe tutti i campioni infiniti passati e futuri (sistema non causale a ritardo infinito).
   2. Richiederebbe un filtro analogico di ordine infinito con transizione istantanea a $f_s/2$, impossibile da costruire con componenti fisici reali (resistenze, condensatori, amplificatori operazionali).
@@ -76,7 +82,7 @@ A meno di non operare a frequenze di campionamento molto elevate (sovracampionam
 ![[immagini/interp_parab.png|center mid]]
 
 - __A cosa serve__: Realizza un raccordo polinomiale del secondo ordine (spline quadratica) continuo sia nei valori sia nella derivata prima. La sua durata temporale è pari a quattro volte quella rettangolare ($4T_s$, ovvero il doppio di quella triangolare).
-- __Comportamento__: Ha zeri di campionamento a $0$, $\pm T_s$, $\pm 2 T_s$, eliminando gli spigoli vivi dell'interpolazione lineare. Nel dominio della frequenza decade come $1/f^3$, offrendo una soppressione eccellente delle repliche spettrali ad alta frequenza.
+- __Comportamento__: Assume valore unitario in $t=0$ ($p(0)=1$) e presenta zeri di campionamento a $\pm T_s$ e $\pm 2 T_s$, eliminando gli spigoli vivi dell'interpolazione lineare. Nel dominio della frequenza decade come $1/f^3$, offrendo una soppressione eccellente delle repliche spettrali ad alta frequenza.
 - La generazione analogica diretta di impulsi parabolici precisi è tuttavia circuitalmente onerosa e raramente impiegata nei convertitori fisici.
 
 ### Sovracampionamento per l'Interpolazione
@@ -142,7 +148,7 @@ I parametri di taglio del filtro interpolatore alla nuova frequenza di campionam
 
 $$f_c = \frac{f_s}2 = \frac{f_s'}{2L}, \quad \omega_c' = \frac{2\pi f_c}{f_s'} = \frac \pi L$$
 
-Il filtro FIR interpolatore deve avere un __guadagno in continua pari a $L$__ per compensare la perdita di energia introdotta dall'inserimento degli $L-1$ zeri intermedi.
+Il filtro FIR interpolatore deve avere un __guadagno in continua pari a $L$__ per preservare l'ampiezza nominale dei campioni originari ($y_{\text{up}}(nL) = x(n)$) e compensare la scalatura spettrale introdotta dall'espansione del rate.
 
 ### Tecnica di Progettazione Polifase
 
@@ -160,7 +166,9 @@ $$y_{\text{up}}(nL+i) = \sum_{k'=-LM}^{LM} d(k') x_{\text{up}}(nL+i-k'), \quad i
 
 Scomponendo anche l'indice dei coefficienti $k'$ nella base $L$ con $k' = kL + j$:
 
-$$y_{\text{up}}(nL+i) = \sum_{k=-M}^{M-1}\sum_{j=0}^{L-1} d(kL+j) x_{\text{up}}(nL+i-kL-j), \quad i=0,\dots,L-1$$
+$$y_{\text{up}}(nL+i) = \sum_{k=-M}^{M-1}\sum_{j=0}^{L-1} d(kL+j) x_{\text{up}}((n-k)L + i - j), \quad i=0,\dots,L-1$$
+
+Si noti che l'estremo superiore $k' = LM$ della sommatoria non compare esplicitamente poiché per il filtro interpolatore ideale a banda $\pi/L$ vale $d(LM) = 0$ (proprietà di annullamento della sinc nei multipli di $L$), per cui ciascun sottofiltro polifase ha esattamente $2M$ coefficienti non nulli.
 
 Si definiscono quindi gli $L$ filtri polifase $d_i(k)$ come:
 
@@ -168,13 +176,13 @@ $$d_i(k) = d(kL+i), \quad -M\leq k\leq M-1$$
 
 Il ramo di ordine $0$, $d_0(k)$, agisce come un semplice filtro passa-tutto (ritardo puro), preservando inalterati i campioni originali della sequenza a frequenza base.
 
-Tenendo conto che i campioni $x_{\text{up}}$ sono non nulli solo quando l'argomento è multiplo di $L$ (cioè per $i = j$):
+Tenendo conto che i campioni $x_{\text{up}}$ sono non nulli solo quando l'argomento è multiplo di $L$ (cioè per $j = i$):
 
-$$\begin{align} x_{\text{up}}(nL) &= x(n) \\ x_{\text{up}}(nL + i) &= 0 \quad (i \neq 0)\end{align}$$
+$$\begin{align} x_{\text{up}}((n-k)L) &= x(n-k) \\ x_{\text{up}}((n-k)L + i - j) &= 0 \quad (j \neq i)\end{align}$$
 
 La doppia sommatoria collassa al solo termine con $j = i$:
 
-$$\begin{align} y_{\text{up}}(nL+i) &= \sum_{k=-M}^{M-1}\sum_{j=0}^{L-1} d_j(k) \underbrace{x_{\text{up}}(nL+i-kL-j)}_{0 \text{ per } i \neq j}\\ &= \sum_{k=-M}^{M-1}d_i(k)x(nL-kL) \\ y_i(n) &= \sum_{k=-M}^{M-1}d_i(k)x(n-k) \end{align} \quad, i=0,\dots,L-1$$
+$$\begin{align} y_{\text{up}}(nL+i) &= \sum_{k=-M}^{M-1} d_i(k) x_{\text{up}}((n-k)L) \\ &= \sum_{k=-M}^{M-1} d_i(k) x(n-k) = y_i(n), \quad i=0,\dots,L-1 \end{align}$$
 
 Ciascun filtro polifase $d_i(k)$ calcola direttamente l'$i$-esimo campione interpolato lavorando unicamente sui campioni originari a frequenza $f_s$.
 
@@ -204,11 +212,13 @@ L'eliminazione delle componenti spettrali comprese tra $f_s''/2$ e $f_s'/2$ rapp
 >[!note]
 >Poiché i filtri ideali brick-wall non sono realizzabili, si impiegano filtri FIR progettati ad esempio con finestra di Kaiser, fissando:
 >
->$$f_{\text{stop}} < \frac{f_s''}{2}$$
+>$$f_{\text{pass}} < \frac{f_s''}{2}$$
 >
->$$\Delta f = 2\left(\frac{f_s''}{2} - f_{\text{stop}}\right)$$
+>$$\Delta f = 2\left(\frac{f_s''}{2} - f_{\text{pass}}\right)$$
+>
+>dove $f_{\text{stop}} = f_s'' - f_{\text{pass}} > \frac{f_s''}{2}$.
 
-Il costo computazionale nominale sarebbe $N = 2ML$. Tuttavia, poiché il decimatore finale scarta $M-1$ campioni intermedi su $M$, i calcoli possono essere eseguiti solo sui campioni effettivamente trattenuti in uscita, riducendo l'onere computazionale a quello equivalente di una struttura polifase con $N = 2M$.
+Il costo computazionale nominale diretto richiederebbe $N$ moltiplicazioni per ciascun campione ad alta frequenza. Tuttavia, poiché il decimatore trattiene solo 1 campione su $M$ (scartandone $M-1$), implementando la struttura polifase i calcoli vengono eseguiti solo per i campioni in uscita, riducendo l'onere computazionale medio a $N/M$ operazioni per campione d'ingresso.
 
 ### ADC Basati sulla Decimazione
 
@@ -220,7 +230,7 @@ L'architettura con decimazione offre due vantaggi determinanti nella progettazio
 
 ## Sample Rate Converter
 
-$$f_s'' = \frac LM f_s'$$
+$$f_s'' = \frac{L}{M} f_s = \frac{f_s'}{M}$$
 
 Un convertitore di frequenza di campionamento arbitrario a rapporto razionale si realizza mediante la cascata di un __interpolatore per $L$__ seguito da un __decimatore per $M$__.
 
@@ -273,7 +283,7 @@ Tale risposta introduce un'attenuazione progressiva (droop) all'interno dell'int
 
 Per un filtro interpolatore con fattore $L$ e frequenza di taglio $f_c = \frac{f_s}2 = \frac{f_s'}{2L}$, la massima attenuazione al bordo della banda passante utile risulta:
 
-$$|H_{\text{dac}}(f)| =\left| \frac{\sin(\pi f / f_s')}{\pi f / f_s'}\right | = \frac{\sin(\pi / 2L)}{\pi / 2L}$$
+$$|H_{\text{dac}}(f_c)| = \left| \frac{\sin(\pi f / f_s')}{\pi f / f_s'}\right |_{f = \frac{f_s'}{2L}} = \frac{\sin(\pi / 2L)}{\pi / 2L}$$
 
 - Per valori elevati di $L$ ($L \geq 16$), l'attenuazione al bordo banda diventa trascurabile (inferiore a frazioni di decibel) e tende a $0\text{ dB}$.
 - Per valori moderati di $L$ (ad esempio per $L \leq 8$), l'attenuazione di diversi decibel è avvertibile; è quindi opportuno compensarla sagomando il filtro interpolatore con una __risposta inversa__ rispetto a quella del DAC nella banda passante.
