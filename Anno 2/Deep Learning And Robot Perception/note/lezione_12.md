@@ -51,3 +51,18 @@ slide 36: decidiamo separatamente per ogni layer il numero di feature. ogni laye
 //// inserisci immagine di esempio, immagine casetta, primo layer convoluzionale identifica i 4 angoli di un quadrato, il secondo layer individua il quadrato che corrisponde alle mura della casetta. per ogni layer inserisci sia la forma da individuare di esempio che la feature map associata, quindi il corner in alto a destra avrà un punto della feature map in alto a destra e così via anche per il quadrato.
 
 slide 45: ReLU è sempre presente. 
+
+slide 73: la differenza rispetto alla convoluzione standard è che la dilation invece di considerare nel filtro tutti gli elementi vicini tra loro, considera un vicinato più ampio saltando alcuni pixel.
+L'effetto non è quello del downsampling, perché ho comunque il controllo di tutti i pixel, ma controllo punti diversi dell'immagine usando gli stessi parametri.
+Senza dilation se volessi controllare un'area 5x5 avrei 25 parametri, mentre con dilation possso usare sempre un kernel 3x3 e avere 9 parametri, ovviamente ignorando per quel neurone molte informazioni.
+
+slide 75: Nella depthwise convolution sostituiamo il filtro singolo in filtri separabili, ogni mappa ha il proprio filtro a 2 dimensioni che è responsabile di controllare solo la propria mappa.
+Abbiamo un grosso guadagno in efficienza, con il lato negativo che stiamo osservando le mappe separatamente, senza guardare tutto l'insieme.
+Le mobilenets sono pensate per essere rilasciate su smartphone o processori onboard per renderle più veloci.
+
+slide 82: più muoviamo l'immagine più cambia la predizione, quindi l'invarianza allo shift è contenuta in una certa quantità di shift.
+Il pooling layer riesce fino a un certo punto a essere robusto allo shift.
+
+slide 83: se ruoto l'immagine la feature map cambia completamente, perché non è invariante a questa trasformazione.
+Se vogliamo costruire un'invarianza a queste trasformazioni dobbiamo forzare la rete a esserla.
+

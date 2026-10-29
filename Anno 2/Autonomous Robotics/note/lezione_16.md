@@ -1,0 +1,2 @@
+slide 5: se assumiamo di sapere la corrispondenza tra la quantità misurata e la quantità misurata, allora le formule generano la risposta esatta.
+nei problemi di localizzazione la corrispondenza non è nota, bisogna quindi fare un problema di matching.

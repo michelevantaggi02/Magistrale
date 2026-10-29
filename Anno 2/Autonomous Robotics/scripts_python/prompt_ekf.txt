@@ -1,0 +1,29 @@
+Write a complete Python class named ExtendedKalmanFilter1D for 1D robot localization using numpy and math.
+
+System & Models:
+- State: 1D position x in [0, L]. The error variance P is a scalar float.
+- Motion: x_t = x_{t-1} + u_t + w_t, w_t ~ N(0, sigma_x_loc^2).
+  Prediction: x = x + u, P = P + sigma_x_loc^2.
+- Measurement: Range to M landmarks: z_j = |x - m_j| + v_j, v_j ~ N(0, sigma_z_loc^2).
+  Expected measurement: z_hat_j = |x - m_j|.
+  Jacobian: H_j = 1.0 if (x - m_j) >= 0 else -1.0.
+  Innovation: y = z - z_hat (M x 1 vector).
+  Measurement noise matrix: R = np.eye(M) * sigma_z_loc^2.
+  Innovation covariance: S = P * (H @ H.T) + R (P is a scalar float, use *).
+  Kalman gain: K = P * (H.T @ np.linalg.inv(S)) (1 x M vector).
+  State update: x = np.clip(x + (K @ y).item(), 0.0, L).
+  Covariance update (Joseph form): P = (1 - (K @ H).item())**2 * P + (K @ R @ K.T).item().
+  Mahalanobis distance: mu_j = y_j^2 / S_jj.
+
+Required Methods:
+1. __init__(self, L=100.0, u_x=0.8, landmarks=[30.0, 70.0], sigma_x_loc=0.5, sigma_z_loc=1.5, tipo_prior="gaussiana", sigma_prior=1.0, x0_prior=0.0, x0=None, P0=None):
+   stores parameters, sets Q = sigma_x_loc**2, R_val = sigma_z_loc**2, calls inizializza_stato().
+2. inizializza_stato(self): sets self.x and self.P according to x0/P0 if given, or tipo_prior ("gaussiana" -> x0_prior, sigma_prior**2; "uniforme" -> L/2, L**2/12).
+3. passo_predizione(self, u=None) -> tuple: returns (self.x, self.P).
+4. passo_correzione(self, z_misure) -> tuple: returns (self.x, self.P, z_hat.flatten(), y.flatten(), K.flatten(), S, np.array(mahalanobis)).
+5. calcola_stima_media(self) -> float: returns self.x.
+6. calcola_stima_moda(self) -> float: returns self.x.
+7. calcola_deviazione_standard(self) -> float: returns math.sqrt(self.P).
+8. valuta_pdf_gaussiana(self, x_grid, mu=None, P=None, come_massa_bin=True) -> np.ndarray: evaluates normal PDF N(mu, P) over x_grid (if come_massa_bin=True and len(x_grid)>1, multiply by dx).
+
+Return ONLY raw executable Python code. Do not include markdown code block backticks (no ```), do not add comments or explanations.

@@ -1144,3 +1144,148 @@ L_t = P_{t|t-1} C_t^T \left( C_t P_{t|t-1} C_t^T + R_t \right)^{-1}
 $$
 
 La matrice $L_t$ del filtro di Kalman è dunque dimostrabilmente il minimizzatore globale unico della varianza d'errore di stima.
+
+## Esempio Didattico Di Localizzazione 1D Con Extended Kalman Filter
+
+Nelle lezioni 14 e 15 (lucidi 41–43) viene introdotto un modello di benchmark unidimensionale che permette di comprendere l'impatto della linearizzazione dell'EKF nel caso più semplice possibile, isolando la non-linearità della misura senza le complessità trigonometriche dello spazio $SE(2)$.
+
+Questo modello costituisce il riferimento teorico diretto per la classe software `ExtendedKalmanFilter1D` implementata in `scripts_python/Particle_gemini_lecture_v4.py`.
+
+### Cinematica Scalare E Modello Di Misura Range-Only
+
+Consideriamo un robot vincolato a muoversi lungo un binario rettilineo o un corridoio 1D coordinato da $x \in [0, L]$.
+
+Il comando di controllo è una traslazione $u = u_x$. Il moto reale è corrotto da un disturbo gaussiano additivo a media nulla con varianza $\sigma_x^2$:
+
+$$
+x_t = x_{t-1} + u_x + \nu_t, \quad \nu_t \sim \mathcal{N}\left(0, \sigma_x^2\right)
+$$
+
+Poiché la cinematica è strettamente lineare, le derivate del moto rispetto allo stato e al controllo sono banali:
+
+$$
+F_x = \frac{\partial f}{\partial x} = 1, \qquad F_u = \frac{\partial f}{\partial u} = 1
+$$
+
+Il passo di predizione propaga quindi la media e la varianza in forma esatta:
+
+$$
+\hat{x}_{t|t-1} = \hat{x}_{t-1|t-1} + u_x
+$$
+
+$$
+P_{t|t-1} = P_{t-1|t-1} + \sigma_x^2
+$$
+
+L'ambiente contiene un insieme di beacon puntiformi noti situati a coordinate fisse $m_j$ ($j = 1, \dots, M$). Il robot dispone di un sensore di distanza (telemetro o ricevitore ToF) che misura la distanza euclidea assoluta dal beacon $m_1$:
+
+$$
+z_{1,t} = \|x_{r,t} - m_1\| + \mu_t = |x_{r,t} - m_1| + \mu_t = \sqrt{(x_{r,t} - m_1)^2} + \mu_t
+$$
+
+con $\mu_t \sim \mathcal{N}(0, \sigma_z^2)$.
+
+### Linearizzazione Del Modulo E Gestione Della Singolarità
+
+La funzione di misura è $h(x) = |x - m_1|$. Questa funzione è continua ovunque ma presenta un punto angoloso (non derivabile nel senso classico) in $x = m_1$.
+
+Per applicare l'Extended Kalman Filter calcoliamo lo Jacobiano di misura valutato nella stima a priori $\hat{x}_{t|t-1}$:
+
+$$
+H_x = \left.\frac{\partial h}{\partial x}\right|_{x = \hat{x}_{t|t-1}} = \left.\frac{\partial |x - m_1|}{\partial x}\right|_{x = \hat{x}_{t|t-1}} = \operatorname{sgn}\left(\hat{x}_{t|t-1} - m_1\right) = \frac{\hat{x}_{t|t-1} - m_1}{|\hat{x}_{t|t-1} - m_1|}
+$$
+
+Si presentano due regimi operativi distinti:
+1. __Robot a destra del beacon__ ($\hat{x}_{t|t-1} > m_1$):
+   $$H_x = +1$$
+   All'aumentare di $x$, la distanza dal beacon aumenta;
+2. __Robot a sinistra del beacon__ ($\hat{x}_{t|t-1} < m_1$):
+   $$H_x = -1$$
+   All'aumentare di $x$, la distanza dal beacon diminuisce.
+
+Nel punto esatto di coincidenza $\hat{x}_{t|t-1} = m_1$, la derivata classica non esiste. Nel calcolo numerico si adotta la convenzione del subgradiente scegliendo un valore all'interno dell'intervallo $[-1, +1]$:
+
+$$
+\partial |x - m_1| \Big|_{x=m_1} \in [-1, +1]
+$$
+
+Nel software si imposta una soglia di tolleranza $|\hat{x} - m_1| < 10^{-6}$ associando convenzionalmente il gradiente destro $H_x = +1.0$ per evitare divisioni per zero o instabilità computazionali.
+
+### Equazioni Di Correzione Scalare E Forma Di Joseph
+
+Calcoliamo l'innovazione scalare della misura:
+
+$$
+\tilde{y}_t = z_{1,t} - h\left(\hat{x}_{t|t-1}\right) = z_{1,t} - |\hat{x}_{t|t-1} - m_1|
+$$
+
+La varianza dell'innovazione $S_t$ vale:
+
+$$
+S_t = H_x P_{t|t-1} H_x^T + \sigma_z^2 = H_x^2 P_{t|t-1} + \sigma_z^2
+$$
+
+Poiché $H_x = \pm 1$, abbiamo $H_x^2 = 1$ indipendentemente da quale lato del beacon si trovi il robot:
+
+$$
+S_t = P_{t|t-1} + \sigma_z^2
+$$
+
+Il guadagno di Kalman scalare $K_t$ assume l'espressione:
+
+$$
+K_t = P_{t|t-1} H_x S_t^{-1} = \frac{P_{t|t-1} \operatorname{sgn}\left(\hat{x}_{t|t-1} - m_1\right)}{P_{t|t-1} + \sigma_z^2}
+$$
+
+Osserviamo il comportamento fisico del segno del guadagno $K_t$:
+- Se il robot è a destra del beacon ($H_x = +1$) e misura una distanza superiore all'attesa ($\tilde{y}_t > 0$), il robot è più a destra di quanto stimato: $K_t > 0$ e la stima viene incrementata verso destra ($\hat{x} \uparrow$);
+- Se il robot è a sinistra del beacon ($H_x = -1$) e misura una distanza superiore all'attesa ($\tilde{y}_t > 0$), il robot si trova in realtà più a sinistra: $K_t < 0$, dunque $K_t \tilde{y}_t < 0$ e la stima viene decrementata verso sinistra ($\hat{x} \downarrow$).
+
+L'aggiornamento dello stato a posteriori è:
+
+$$
+\hat{x}_{t|t} = \hat{x}_{t|t-1} + K_t \tilde{y}_t
+$$
+
+L'aggiornamento della varianza d'errore (forma standard):
+
+$$
+P_{t|t} = (1 - K_t H_x) P_{t|t-1} = \left( 1 - \frac{P_{t|t-1} H_x^2}{P_{t|t-1} + \sigma_z^2} \right) P_{t|t-1} = \frac{P_{t|t-1} \sigma_z^2}{P_{t|t-1} + \sigma_z^2}
+$$
+
+Notiamo che la riduzione di incertezza $P_{t|t} < P_{t|t-1}$ è identica su entrambi i lati del beacon, riflettendo la simmetria geometrica dell'informazione sensoriale.
+
+Per garantire incondizionatamente la semidefinita positività numerica nei calcoli a virgola mobile, si impiega la forma simmetrica stabilizzata di Joseph:
+
+$$
+P_{t|t} = (1 - K_t H_x)^2 P_{t|t-1} + K_t^2 \sigma_z^2
+$$
+
+### Estensione A Più Beacon E Connessione Al Codice Python
+
+Quando sono visibili simultaneamente $M$ beacon $m = [m_1, \dots, m_M]^T$, le misure compongono un vettore $z_t \in \mathbb{R}^M$.
+
+Il modello di misura vettoriale diviene:
+
+$$
+h(x) = \begin{bmatrix} |x - m_1| \\ \vdots \\ |x - m_M| \end{bmatrix}, \qquad H_x = \begin{bmatrix} \operatorname{sgn}(x - m_1) \\ \vdots \\ \operatorname{sgn}(x - m_M) \end{bmatrix} \in \mathbb{R}^{M \times 1}
+$$
+
+La matrice di covarianza d'innovazione $S_t \in \mathbb{R}^{M \times M}$ e il vettore di guadagno $K_t \in \mathbb{R}^{1 \times M}$ valgono:
+
+$$
+S_t = P_{t|t-1} (H_x H_x^T) + \operatorname{diag}\left(\sigma_{z,1}^2, \dots, \sigma_{z,M}^2\right)
+$$
+
+$$
+K_t = P_{t|t-1} H_x^T S_t^{-1}
+$$
+
+La distanza di Mahalanobis quadratica associata a ciascun beacon $j$ corrisponde alla componente normalizzata:
+
+$$
+\mu_j = \frac{\tilde{y}_j^2}{S_{jj}} = \frac{\left(z_{j,t} - |\hat{x}_{t|t-1} - m_j|\right)^2}{P_{t|t-1} + \sigma_{z,j}^2}
+$$
+
+Questa formulazione matriciale scalare-vettore è implementata integralmente nel metodo `passo_correzione` della classe `ExtendedKalmanFilter1D` in `scripts_python/Particle_gemini_lecture_v4.py`, garantendo perfetta consistenza teorica ed efficienza computazionale $O(M^3)$ (con $M$ pari al numero di beacon, tipicamente $M=2$, dunque istantaneo).
+
