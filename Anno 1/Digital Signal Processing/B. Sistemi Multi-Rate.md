@@ -30,7 +30,7 @@ Nel campionamento discreto lo spettro del segnale diventa periodico nelle freque
 
 La frequenza di campionamento $f_s'$ è più alta del necessario proprio per distanziare le repliche spettrali ed evitare che il filtro prenda componenti indesiderate appartenenti agli intervalli adiacenti.
 
-### Tipi di Impulso per l'Interpolazione
+### Tipi Di Impulso per l'Interpolazione
 
 Nel processo di conversione digitale-analogica (D/A) e di ricostruzione continua, una sequenza discreta di campioni numerici $y[n]$ deve essere trasformata in una forma d'onda continua nel tempo $y(t)$.
 
@@ -150,7 +150,7 @@ $$f_c = \frac{f_s}2 = \frac{f_s'}{2L}, \quad \omega_c' = \frac{2\pi f_c}{f_s'} =
 
 Il filtro FIR interpolatore deve avere un __guadagno in continua pari a $L$__ per preservare l'ampiezza nominale dei campioni originari ($y_{\text{up}}(nL) = x(n)$) e compensare la scalatura spettrale introdotta dall'espansione del rate.
 
-### Tecnica di Progettazione Polifase
+### Tecnica Di Progettazione Polifase
 
 Partendo dal filtro interpolatore FIR, la convoluzione per determinare la sequenza interpolata ad alta frequenza si scrive come:
 
@@ -220,7 +220,7 @@ L'eliminazione delle componenti spettrali comprese tra $f_s''/2$ e $f_s'/2$ rapp
 
 Il costo computazionale nominale diretto richiederebbe $N$ moltiplicazioni per ciascun campione ad alta frequenza. Tuttavia, poiché il decimatore trattiene solo 1 campione su $M$ (scartandone $M-1$), implementando la struttura polifase i calcoli vengono eseguiti solo per i campioni in uscita, riducendo l'onere computazionale medio a $N/M$ operazioni per campione d'ingresso.
 
-### ADC Basati sulla Decimazione
+### ADC Basati Sulla Decimazione
 
 ![[immagini/adc_decim.png|center mid]]
 

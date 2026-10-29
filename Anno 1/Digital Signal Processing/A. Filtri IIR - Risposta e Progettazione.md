@@ -1,4 +1,4 @@
-# A. Filtri IIR - Risposta e Progettazione
+# A. Filtri IIR - Risposta E Progettazione
 
 Questo capitolo analizza la risposta dinamica dei filtri IIR nel dominio del tempo e della frequenza, approfondendo le metodologie di progettazione basate sul posizionamento geometrico di poli e zeri sul piano complesso Z per filtri del primo ordine (smoother), risuonatori del secondo ordine, equalizzatori parametrici, filtri notch e filtri a pettine.
 
@@ -25,12 +25,15 @@ $$
 y(n) = |H(\omega_0)| \mathrm{e}^{j\left(\omega_0 n + \arg H(\omega_0)\right)}
 $$
 
-### Ritardo di Fase e Ritardo di Gruppo
+### Ritardo Di Fase E Ritardo Di Gruppo
 
 Lo sfasamento introdotto dal filtro si traduce in un ritardo temporale:
 - Il __ritardo di fase__ $d(\omega)$ misura il ritardo temporale subito dalla portante sinusoidale a frequenza $\omega$:
+
   $$d(\omega) = -\frac{\arg H(\omega)}{\omega} \iff \arg H(\omega) = -\omega d(\omega)$$
+
 - Il __ritardo di gruppo__ $d_g(\omega)$ misura il ritardo temporale subito dall'inviluppo di modulazione di un pacchetto d'onda a banda stretta:
+
   $$d_g(\omega) = -\frac{\mathrm{d}}{\mathrm{d}\omega} \arg H(\omega)$$
 
 Nei filtri FIR simmetrici di lunghezza $N$ campioni (ordine del filtro pari a $N-1$), limitatamente alle frequenze in cui la risposta in ampiezza è positiva, il ritardo è rigorosamente indipendente dalla frequenza ($d(\omega) = d_g(\omega) = D = \frac{N-1}{2}$), garantendo perfetta linearità della fase:
@@ -41,7 +44,7 @@ $$
 
 Nel caso dei filtri IIR, non è matematicamente possibile ottenere una fase perfettamente lineare sull'intero intervallo di Nyquist $[-\pi, \pi]$. È tuttavia possibile progettare filtri IIR che approssimino una fase lineare limitatamente alla banda passante (come i filtri a ritardo massimamente piatto di Bessel).
 
-## Risposta al Transitorio e Stabilità
+## Risposta Al Transitorio E Stabilità
 
 Nel mondo reale ogni segnale viene applicato a partire da un istante iniziale ($n = 0$). L'ingresso sinusoidale è quindi causale:
 
@@ -103,7 +106,7 @@ $$
 
 Più il polo dominante si avvicina alla circonferenza unitaria ($\rho \to 1$), più la costante temporale cresce e più lungo sarà il tempo di assestamento del filtro.
 
-## Filtri di Primo Ordine (Smoother)
+## Filtri Di Primo Ordine (Smoother)
 
 I filtri di primo ordine (smoother) costituiscono i blocchi passa-basso o passa-alto elementari con un singolo polo e un singolo zero a valori reali:
 
@@ -135,44 +138,44 @@ $$
 > 2. Rapporto di attenuazione: $\frac{H(\pi)}{H(0)} = \frac{1}{21}$.
 > 
 > Calcolo del polo $a$:
-> 
+>
 > $$
 > a = \varepsilon^{1/n_{\text{eff}}} = (0.01)^{1/20} \approx 0.8
 > $$
-> 
+>
 > Calcolo del parametro $b$ (zero in $z = -b = -0.4$):
-> 
+>
 > $$
 > \frac{(1 - b)(1 - 0.8)}{(1 + b)(1 + 0.8)} = \frac{1}{21} \implies \frac{0.2(1 - b)}{1.8(1 + b)} = \frac{1}{21} \implies b = 0.4
 > $$
-> 
+>
 > Calcolo del guadagno di normalizzazione a frequenza continua ($H(0) = 1$):
-> 
+>
 > $$
 > H(0) = \frac{G(1 + 0.4)}{1 - 0.8} = \frac{1.4}{0.2} G = 7 G = 1 \implies G = \frac{1}{7} \approx 0.1429
 > $$
-> 
+>
 > La funzione di trasferimento risultante è:
-> 
+>
 > $$
 > H(z) = \frac{\frac{1}{7}(1 + 0.4z^{-1})}{1 - 0.8z^{-1}} \approx \frac{0.1429(1 + 0.4z^{-1})}{1 - 0.8z^{-1}}
 > $$
-> 
+>
 > Esplicitando la relazione tra le trasformate $Y(z) = H(z) X(z)$:
-> 
+>
 > $$
 > (1 - 0.8z^{-1}) Y(z) = 0.1429(1 + 0.4z^{-1}) X(z)
 > $$
-> 
+>
 > Antitrasformando nel dominio temporale si ottiene l'equazione alle differenze:
-> 
+>
 > $$
 > y(n) = 0.8y(n-1) + 0.1429\left(x(n) + 0.4x(n-1)\right)
 > $$
-> 
+>
 > Questa struttura richiede solo 3 moltiplicazioni e accumuli (__MACS__) per ciascun campione elaborato.
 
-## Filtri di Secondo Ordine (Resonator)
+## Filtri Di Secondo Ordine (Resonator)
 
 I filtri __resonator__ di secondo ordine presentano una risposta in frequenza dominata da un picco risonante a una specifica frequenza nominale $\omega_0$:
 
@@ -196,7 +199,7 @@ $$
 a_1 = -2R \cos\omega_0, \quad a_2 = R^2
 $$
 
-### Calcolo del Guadagno di Normalizzazione $G$
+### Calcolo Del Guadagno Di Normalizzazione $G$
 
 Per normalizzare il picco di risonanza al guadagno unitario ($|H(\omega_0)| = 1$, corrispondente a $0\text{ dB}$):
 
@@ -210,7 +213,7 @@ $$
 G = (1 - R) \sqrt{1 - 2R \cos(2\omega_0) + R^2}
 $$
 
-### Risposta in Modulo e Larghezza di Banda a 3 dB
+### Risposta in Modulo E Larghezza Di Banda a 3 dB
 
 Il modulo quadro della risposta in frequenza è espresso da:
 
@@ -235,7 +238,7 @@ $$
 > - Più la larghezza di banda $\Delta\omega$ si restringe, rendendo il picco risonante selettivo;
 > - Più la costante temporale del transitorio $n_{\text{eff}}$ aumenta, rendendo lenta la risposta a variazioni dell'ingresso.
 
-### Risposta Impulsiva ed Equazione alle Differenze
+### Risposta Impulsiva Ed Equazione Alle Differenze
 
 La risposta impulsiva causale analitica del risuonatore è:
 
@@ -251,39 +254,39 @@ $$
 
 > [!EXAMPLE] Progetto Numerico di un Risuonatore
 > Dati di specifica: frequenza di risonanza $f_0 = 500\text{ Hz}$, larghezza di banda $\Delta f = 32\text{ Hz}$, frequenza di campionamento $f_s = 10\text{ kHz}$.
-> 
+>
 > Calcolo delle frequenze normalizzate:
-> 
+>
 > $$
 > \omega_0 = \frac{2\pi f_0}{f_s} = \frac{2\pi \cdot 500}{10000} = 0.1\pi
 > $$
-> 
+>
 > $$
 > \Delta\omega = \frac{2\pi \Delta f}{f_s} = \frac{2\pi \cdot 32}{10000} = 0.0064\pi \approx 0.02
 > $$
-> 
+>
 > Determinazione del raggio $R$:
-> 
+>
 > $$
 > 2(1 - R) = 0.02 \implies R = 0.99
 > $$
-> 
+>
 > Calcolo dei coefficienti del filtro:
-> 
+>
 > $$
 > a_1 = -2(0.99) \cos(0.1\pi) = -1.8831
 > $$
-> 
+>
 > $$
 > a_2 = (0.99)^2 = 0.9801
 > $$
-> 
+>
 > $$
 > G = (1 - 0.99) \sqrt{1 - 2(0.99)\cos(0.2\pi) + (0.99)^2} = 0.0062
 > $$
-> 
+>
 > Funzione di trasferimento:
-> 
+>
 > $$
 > H(z) = \frac{0.0062}{1 - 1.8831z^{-1} + 0.9801z^{-2}}
 > $$
@@ -394,5 +397,5 @@ dove $a_i = \rho^i b_i$. Se $\rho \lesssim 1$, le coppie polo-zero si stringono 
 
 > [!NOTE] Filtro a Pettine Inverso (Inverted Comb)
 > Invertendo la posizione reciproca di poli e zeri (spingendo gli zeri all'interno rispetto ai poli), la funzione si capovolge trasformando le valli di soppressione in picchi di risonanza periodica:
-> 
+>
 > ![[immagini/comb_inverso.png|center mid]]
