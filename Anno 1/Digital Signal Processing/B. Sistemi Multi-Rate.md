@@ -255,7 +255,7 @@ L'ordine di allocazione dei fattori intermedi segue una regola precisa:
 - __Dal fattore più grande al più piccolo__ per gli interpolatori (in modo che i filtri a pendenza più ripida operino alle frequenze di campionamento più basse).
 - __Dal fattore più piccolo al più grande__ per i decimatori (per massimizzare la reiezione prima di ridurre ulteriormente la frequenza).
 
-![[immagini/multi_stato.jpg|center mid]]
+![[immagini/multi_stadio.svg|center big]]
 
 ## Equalizzazione DAC
 
