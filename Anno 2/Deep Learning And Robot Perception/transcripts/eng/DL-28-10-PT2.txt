@@ -1,0 +1,626 @@
+architecture which we have designed as a simplification of the ResNet, ResNext and so on
+in order to make them compatible with, let's say, onboard processors, smartphones and so on.
+Of course, you cannot bring networks with millions of parameters inside a smartphone or inside a robot
+because there are requirements regarding the real-time constraints
+so the network should be fast during the inference time in order to provide predictions
+which are compatible with the time constraint of the application
+and also you have a limited memory in your smartphone, in your onboard processor or whatever.
+So there is a line of research in deep learning which deals with the reduction and the optimization of networks
+in order to make them less computationally intensive, requiring less memory
+but trying to guarantee the same amount of accuracy.
+Of course, you cannot reach the same accuracy you get with the bigger networks
+by definition but you aim to at least not lose too much accuracy.
+The idea behind MobileNet 2017
+the first version of ResNet for mobile applications
+was basically the application of the substitution of the convolutional layer
+with a depth-wide, cloud-side seperate convolutional layer.
+The layers we saw in the previous slides.
+So there is nothing new here, just know that the
+substituting convolutional layer with this depthwise layer which of course makes them
+lose some information but it gains a lot of parameter less in particular the multiplier
+adds to the number of operations required you can compare them between the depthwise plus the
+pointwise combination the pointwise is the one by one convolution it's another way of naming the
+depth so that quite separable convolution are composed of a depthwise convolutional layer which
+as we saw before a special case of the group convolution in which the number of groups is
+equal to the number of input channels and then you have one by one convolution in order to
+mix the channels and create a number of output channels which is arbitrary
+so in this case
+the input and the output is the same which is 130 channels as the input and as the output now if you
+compute the ratio between the number of multiplying knots from the depthwise separable and the standard
+convolution you have that in the first case the depthwise part cost h times w which is the
+output height and width resolution
+times k times k which is the kernel size and times the number of input channels
+you don't
+multiply by the number of output channels because you have one filter for each input
+channel. So you don't have one filter that spreads through all the input channels. Plus
+the pointwise part, the pointwise, if you don't have the k by k because it's one by
+one, you have h times w, c in times c out. And over the standard convolutional layer,
+the cost of the standard convolutional layer is h by w, k by k times c in times c out. So
+if you do the math there, you end up that the ratio difference between the cost of the
+depthwise plus pointwise over the standard is one over c out plus one over k squared.
+That means that if you want 128 output channels and you have a kernel size of three, the
+number of operation of the depthwise plus pointwise is zero pointwise.
+So you have a gain of, it's like eight times fewer multiplier nuts with respect to the
+standard convolution. So it's a lot. And this number increases, so the ratio, the gain percentage
+increases as you have more output channel because c out is on the denominator. And the
+same if you increase the current size. So that means that
+in practice, mobile net was able to reach an accuracy of 70% compared to the 71 of the standard
+ResNet. So it lost one point percentage of accuracy, but it gained a huge number of multiplied
+nuts. So we went from five billions multiplied nuts more or less to just 0.5 billions. So way more efficient and way more
+adapt to be brought into our onboard.
+Like mobile net version two used of course still depthwise several convolution, but also it changes the way
+which the ResNet bottleneck is organized. So they introduced the inverted residual block, where inversion means
+that the residual block, the standard residual block has a wide, narrow, wide structure in which
+you enter into the block with a lot of feature maps. Then you reduce the number of feature maps by the one by
+using the one by one convolution so you have this bottleneck. Then you process the feature
+maps with a three by three convolution then you have you expand them back with the final one by one convolution.
+So basically you make the feature map less inside the block and then you expand them back.
+The inverted residuals is the reverse. So the feature map input are few feature maps. And the
+appear instead of these three why there are a lot of avoidance so just imagine if we Aut 몵想用一ord бли flush
+So they are expanded with the first one by one block.
+Then you have a depth wise separable convolution
+for the three by three convolutional block.
+And then again, a one by one compressed and back.
+So it's narrow wide now, it's different.
+It's the revert to the organization
+of the number of feature norms.
+And this is because the number of operation is in this way,
+you condense the highest number of operation
+on the depth wise part.
+The depth wise part is more convenient.
+We saw it on the previous slide.
+So it's better to have more feature maps
+that are processed by the depth wise part
+with respect to having more feature maps processed
+by a standard convolution like the one by one.
+So in this way, in practice, you say 51 times,
+you have 51 times fewer multiplying nuts
+with respect to the previous version.
+And you still get a reasonable accuracy.
+Okay.
+So it's even more convenient.
+The other difference you can notice here
+is the fact that there is no activation
+after the residual connection.
+That's something we'll spend a couple of words later.
+That's another thing that changed.
+This is the summary with the multiplying nuts
+that you get for these three stages.
+And that there's some consideration
+on how much you get, how much you gain with this.
+Yeah.
+This is a visualization of this vertical residual block.
+Nothing important to add here.
+So you have less channels than the channel that expanded.
+Depth wise, then you are brought back
+to a fewer number channels.
+Another thing that maybe you might want to ask,
+is that you can see that the number of channels
+that are in the vertical block, the number of channels that are in the vertical block,
+are not in the vertical block.
+So what you're asking is why there is a value of six.
+What is a value of six?
+A value of six is ReLU, but with a saturation on the value of six.
+Which means that in the positive part of the function,
+the output cannot go to infinity, but it's saturated at six.
+That's ReLU six.
+Saturated.
+So standard ReLU.
+ReLU will go up, and it has a saturation here.
+The reason is because in onboard processor,
+usually numbers are encoded in eight bits for convenience.
+So if you let the output spread to the entire set of real number,
+then you have to quantize the output.
+The discretization step is very coarse,
+because we have only 256 level with eight bits.
+You have to spread them on the entire axis of the real number,
+so you have very far away points.
+So the quantization is very coarse.
+In this case, since you limit the output to just this part,
+then in this segment, you can have finer, more finer quantization,
+so they are more precise.
+And also because most of the time, the output doesn't go above six.
+So you don't really need to encode things more than six.
+So that's why in this implementation, they use a lot of quantization.
+So that's why in this implementation, they use a lot of quantization.
+So that's why in this implementation, they use a lot of quantization.
+It's a smart idea to use better, exploit better the quantization,
+the coding into the smart points.
+Where you don't have float 32 or float 64 encoding,
+because you don't have the memory for them,
+but you use the eight bits encoding.
+The last layer has no ReLU,
+because experimentally, it was found that if you add a ReLU,
+and you have few Fisher maps, you risk of losing too much information.
+In the standard bottleneck, since the output Fisher maps are many,
+so you have 256 Fisher maps, if you apply a ReLU after them,
+you don't lose much, much information,
+because the ReLU basically turns off all the values that are negative.
+So you might end up losing a lot of information.
+But if the Fisher maps are many, these in fact, these can be experimental,
+and also theoretically proven to be not that much, this losing effect.
+But since now we use an inverted Dupratropout, sorry, inverted residual,
+the Fisher maps that are output by this block are very few,
+because we reverted them in order to keep the computational cost reduced.
+So in this case, if you apply a ReLU after the 24 Fisher maps,
+you risk of losing too much information.
+For this reason, the inverted residual block,
+the ReLU is much more important.
+So, in this case, if you apply a ReLU after the 24 Fisher maps, you risk of losing too much information.
+For this reason, the inverted residual block, the ReLU is much more important.
+But since now we use an inverted ReLU after the 24 Fisher maps,
+you risk of losing too much information.
+So if you apply a ReLU after the 24 Fisher maps,
+so our trend in not hunt this 마스� imprint,
+we can still present a
+irreplaceable
+if the
+Definitely called forward
+times,
+model after
+so
+it will
+That's why they decided to avoid adding the reload after the restore connection.
+Then after mobile net, the community basically introduced efficient net.
+Efficient net is mobile net but parameterized with respect to the depth, the width and the input resolution.
+So basically efficient net, you can tune its complexity based on what you want to achieve, based on the trade-off between computational complexity and performance.
+So basically the study that was made for efficient net is should I increase the depth of the network, so should I add more blocks and more layers?
+Should I increase the width of the network, so should I add more channels to the layer?
+Or should I increase the resolution of the input image?
+Now it was found out that actually these three hyperparameters are linked together.
+Because if you increase the input resolution, you need to extract more features, so you need more feature maps, more channels.
+But you also need more depth because you need more receptive field, because more resolution means more pixels.
+In order to look at all the pixels, you need to go more into the depth of the network.
+So actually there is one single parameter that you might choose.
+And you can tune this parameter as a direct input on these three elements.
+So the width, the depth and the resolution.
+Basically you have just one single parameter, phi, which zero is the start.
+So the start depth, the start width and the start resolution.
+One set of phi augments the depth, the width and the resolution and doubles the number of multiplied lines.
+So you know that when you increase this parameter, this complexity parameter,
+you make the network more flexible.
+You make it more powerful, but you also double the number of multiplied lines operation.
+So that's something you can control in order to increase the accuracy up to the point in which the network can be fit into your processor.
+Or more microcontroller or whatever.
+So that's basically the fission net which has eight layers of increased complexity.
+In which you tune these three parameters and every time you increase it,
+that's the way in which the network augments.
+So you can see that the fission net is the number of multiplied lines.
+And you can see that on the g column is the number of billions of multiplied lines.
+And of course it increases as you increase the complexity of the network.
+But you also gain more accuracy.
+So the fission net is something you can tune depending on what you need.
+That's the fission net.
+B0, B7.
+And that's the plot of the multiplying nuts versus the accuracy.
+And you have the multiplying nuts on the x-axis and the accuracy on the y-axis.
+You see that B7 fission net is actually better than all the rest of the architecture.
+Not as good as the rest next and the other.
+But we close the net.
+And here you also have the multiplying nuts compared with the execution time and inference.
+So you see mobile net is very efficient.
+The fission net B0 is here.
+So it takes more time to process one image because it has more multiplying nuts.
+But BGG-RS152 is way more expensive.
+So you have both the multiplying nuts and the time required to process one image.
+Of course these are benchmarked on the same CPU.
+Which is there.
+That's CPU, not GPU.
+GPUs are way faster than the idea.
+It's the same scale.
+Okay, now to conclude this part.
+It's interesting to analyze.
+CompNext.
+CompNext is the final, let's say, architecture that was, one of the final architectures that was proposed in 2020.
+Which basically tries to bring together all these concepts we saw before into one final architecture.
+The idea behind CompNext was because in 2017 they introduced the tension layer block.
+Which we are going to see in the next lecture.
+Which is the block behind the transformer network.
+Which are the networks behind the chatbots.
+Basically.
+And it turned out that basically it was proposed a transformer architecture which was SwinT.
+Which overcome all the performance of all the ResNet architectures so far.
+So people started to argue, okay, can we, should we just drop completely the standard convolutional network in place of transformer networks?
+And they started to ask themselves, the fact that the transformer network is achieving better performance is because of the transformer itself?
+Or because we have to tune better the standard convolutional network?
+That's the idea that was behind the study of CompNext.
+They asked themselves, can I improve and add all the things we discovered in one single architecture to see if I can beat the performance of the transformer?
+The answer was yes.
+I mean, there's also another reason why you should do that.
+There's also another reason why you should always keep in consideration the convolutional network.
+Because transformer architectures are way more expensive.
+They occupy a lot of memory.
+They are very slow.
+Because they have a lot of operation inside.
+So in many applications it's impossible to use transformers.
+In particular in robotics applications, in applications where you have real time constraints.
+Where the predictions should be fast.
+Transformer networks are problematic.
+In chatbots that's not the case.
+Because in chatbots it's okay if you want to use it.
+You can wait for 20 minutes for the answer.
+Because you just want to know something.
+You don't want an immediate answer.
+But in real time applications that's not the case.
+You cannot wait 20 minutes to compute the steering action for a robot.
+So convolutional network has still used state of the art as an alternative to transformers.
+In addition, they also found out that by adding some of the technicalities,
+some of the things we discovered before,
+and if we tune better the optimization of these architectures,
+we can actually beat the performance of the transformer network.
+Of this wind team in particular, which was the state of the art at the time.
+This is basically a comparison of the top accuracy of these architectures.
+Without the right data.
+The transformer one.
+Just to show you that the original recipe to train ResNet achieved 76% of accuracy.
+While Compnext, which we'll see now, went up to 78.
+Then with additional things we were able to reach 89, 81% of accuracy.
+Of top one accuracy.
+While consider that Swin T, which is the transformer architecture, achieved 78.8.
+So in practice with the standard convolutional network we were able to beat by 2% the transformer architecture at the time.
+Which was the state of the art.
+So this is just to show what happened.
+76.1 is the original ResNet 50.
+Then as you go down, those are all the patches that were applied to ResNet in order to improve it.
+The dashed grey line is the performance of Swin T.
+Which were surpassed here by Compnext.
+And now Compnext achieved 88.2 over the 78.8 of Swin T.
+What was done is basically they applied all the ideas we saw before in one single architecture.
+In order to take the benefits of all these other things.
+So the first steps were to change the stages.
+So the original ResNet had block with 3 convolutional layers, 4 convolutional layers, 6 convolutional layers and 3 convolutional layers.
+Swin T had that kind of organization.
+Compnext basically changed this organization.
+By just changing the organization of the layers we were able to improve the performance from 76 to 79.4.
+So just different ways of organizing the layer through the networks.
+Then they also changed the way in which the first layer processed the input image.
+To bring down the image to 56 times 56.
+That's the same thing the transformer did.
+Then the depth-wise separable convolution were applied.
+They were applied because in order to save parameters.
+Because by saving parameters with respect to the number of channels.
+We can then increase the depth by keeping the parameters with the same amount.
+So of course when we apply the depth-wise separable convolution.
+You see that we go back to the performance drops down a little.
+Because of course we lose some information.
+Because the depth-wise separable are not.
+They don't capture the same information as the standard convolution.
+Because you don't have.
+The kernels look at the entire number of input channels.
+But this allowed us to make the network deeper and with more channels.
+Then we went back to 80.5 accuracy.
+Without increasing too much the number of parameters.
+So we increased the depth.
+So basically the same work that we.
+So all the parameters we saved and the multiplying nuts we saved.
+10 to the depth-wise.
+Could be then.
+Reinvested into a more depth deep network.
+And a more wide network.
+This way we will stage four.
+Stage three basically.
+We're able to increase the number.
+Increase the accuracy.
+With respect to the fifth stage.
+Then we also use the inverted model neck.
+As a mobile net.
+Again to save some parameters and to invest them.
+In more depth and more width.
+So we have the inverted model that we did that twice inside.
+To save the parameters.
+So we switched back to the narrow wide narrow pattern of.
+Mobile net.
+This as you can see didn't change too much the accuracy.
+But allowed us to save all our parameters.
+And then we substituted RILO with GILO.
+GILO is a.
+Better function to be differentiable.
+Because it can.
+It's not.
+It doesn't have the problematic differentiable point in zero.
+Because it's smooth.
+So this allows the gradient to flow better.
+And also to avoid the neurons to die.
+As in RILO.
+Then we substituted the BERS normalization with the layer normalization.
+Which is the same normalization applied to transformer.
+And yeah.
+Some additional machinery like separate down sampling.
+And.
+And similarly.
+Now that's the Comvnext block.
+Compared with the standard ResNet block.
+So it has this inverted structure.
+It uses the depth wise convolution.
+It uses GILO.
+And it's.
+It has more channel and more depth.
+All this consideration.
+We're able to make Comvnext.
+Which is a ResNet based convolutional neural network architecture.
+To beat the state of the art of the transformer architecture.
+We're going to see in the next lectures.
+So the message is.
+Sometimes in order to improve performance.
+We have to tweak little things in the architectures.
+You have to reason about how to save parameters.
+And increase the depth.
+Because by increasing depth.
+You increase the representational power of the network.
+And if you exploit depth wise convolution.
+If you exploit this inverted model.
+If you exploit these things.
+You can save parameters.
+And invest them in other parts of the network.
+In order to make the network perform better.
+So that's basically the end point for our set of architectures.
+Comvnext summarizes all the concepts we saw before.
+And this should be your starting point in general.
+To reason when you want to design your architecture.
+Always take into consideration this kind of structure of Comvnext.
+Because it takes.
+All the things we saw before.
+Of Resnext.
+Of DanceNet.
+Of Resnet.
+Of VGG.
+They are all inside.
+Or brought together inside this single template architecture.
+You can use for your applications.
+Then of course you need to change this architecture.
+Depending on your needs.
+Okay.
+You might want to change the head of the network.
+Because you don't have a classification problem.
+If you have a regression problem.
+You just change the head.
+You change the final layers.
+You might want to add more layers.
+Or less layers.
+So augment the bottleneck blocks.
+Or reduce the bottleneck blocks.
+You might want to increase the number of channels.
+Inside each block.
+Those are all hyper parameters you can tune.
+But you should start from this general template.
+Because that was proven to be very effective.
+Now to conclude these lectures.
+A few words about transfer learning.
+Transfer learning by itself is a huge field in machine learning.
+And it.
+The idea of transfer learning is.
+I want to reuse knowledge.
+From models that were already trained.
+For other tasks.
+Or on other data sets.
+On new problems.
+New data sets without retraining from scratch.
+So transferring the knowledge means.
+I want to adapt my model.
+Which has already been trained.
+For a new situation.
+Transfer learning is very convenient.
+Because it saves you.
+The time of training again from scratch.
+And network which might take days.
+And also training from scratch.
+Requires that you need to collect.
+A high amount of data for the new task.
+The idea of transfer learning is.
+If I switch from a classification task.
+Where I need to classify trees.
+To a classification task.
+Where I need to classify covers.
+There are some features.
+That are common to the two tasks.
+The low level features in particular.
+The corner.
+The edges.
+The geometrical shapes.
+Are features that can be used in both tasks.
+So I don't need to retrain them.
+For the new task.
+I can exploit the features from a previous task.
+And maybe adapt them a little to the new task.
+This saves me time.
+And also saves me the need for collecting.
+Many data for the new task.
+Transfer learning is a very important discipline.
+Now.
+In our case.
+It's very simple actually.
+What we are going to do with the deep networks.
+If you don't use transfer learning.
+On the left.
+Every time.
+You start a new task.
+You have to retrain your full architecture.
+From scratch.
+So both the backbone.
+The backbone is the feature extraction part.
+The part which has most of the layers.
+With the convolutional layers.
+And the head.
+The head is the classification or regression part.
+Usually.
+It's the final fully connected layer.
+Or some fully connected layer.
+Or the global average pooling.
+And so on.
+If you exploit transfer learning.
+In practice.
+You can either do two things.
+The first thing is.
+Basically you download.
+A backbone from the internet.
+For example.
+ResNet 50.
+Trained on the ImageNet data set.
+So you download the weights.
+For the feature extraction part.
+For all the convolutional layers.
+And you just change the head.
+So you detach.
+The final fully connected layer.
+From the ResNet backbone.
+You attach a new layer.
+With the weights initialized to random values.
+Then you train.
+But when you train.
+The gradient is not propagated.
+To also the backbone.
+The gradient stops at the first.
+Layer at the head of the network.
+And you only update those parameters.
+So this is of course.
+Way faster.
+Because you don't have to propagate.
+The gradient back.
+You don't need.
+All the.
+You don't need to save.
+All the intermediate computation.
+Of the convolutional layer.
+Because you don't need them.
+For the gradient computation.
+You just need to propagate the layer.
+For one or two layers.
+On the final part of the network.
+And that's the frozen backbone plus.
+The new hand.
+Packed up.
+So here transfer learning.
+Is because you.
+Take.
+The backbone.
+The feature extraction block.
+As it is from the internet.
+You exploit all the feature extracted.
+From the internet.
+And you just.
+Change the final classifier.
+That's the image.
+Here you have.
+ResNet.
+All the convolutional block.
+In the.
+Blanket.
+After the final convolutional block.
+Then the ResNet here usually has.
+A final.
+1000.
+Classification.
+Layer.
+With 1000 neurons for the final classification.
+This is discarded.
+You detach this part.
+And you attach this to a new.
+Final layer.
+With four neurons.
+Because for your task.
+You need to classify.
+Four classes.
+And you need to classify.
+Three classes.
+And you need to classify.
+Three classes.
+So.
+The final.
+Classification.
+Is.
+The final.
+Classification.
+And you can.
+So.
+You can.
+You can.
+You can.
+And you can.
+So.
+This.
+This connection.
+Here.
+These are new.
+Of course.
+Because you.
+Are added.
+As new.
+So the parameters of this connection are random.
+At the beginning of the optimization.
+Then you compute the loss.
+Here.
+You just change the weight of this connection.
+In this case it's like training.
+A linear regression.
+Or a logistic regression.
+So you.
+You need.
+Few computational steps.
+And you need.
+Way less.
+Samples.
+You just need to.
+Find these parameters.
+The intermediate situation is the fine tuning.
+In fine tuning.
+You don't freeze.
+This part.
+You download the parameters.
+From the web.
+So this doesn't start from the web.
+This doesn't start from random values.
+They start from the values.
+But you let the gradient flow.
+So that you can adapt.
+Your feature.
+To your task.
+Your feature doesn't start from random values.
+They start from something which makes sense.
+You just slightly adapt the feature extractor from your specific task.
+For example.
+If this classifier was trained for detecting cars.
+And you want to detect trees.
+You might want to adapt some geometrical shape to the trees.
+And you can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+You can.
+But you still start from a feature extractor.
+Which already are capable of understanding.
+Squares, makes sense.
+Triangles and circles.
+So you just adapt them a little bit.
+That's fine tuning.
+Because you finely tune.
+The parameters for your task.
+Now in this case of course.
+The cost of training is the same as training from scratch.
+Because you have to propagate the gradient back.
+But the saving on the data set needed is still there.
+Because these parameters are already at a good point in the optimization.
+So.
+need many samples to find you that's why it's convenient that's usually the way in which you
+start a new project so you download the rest from the web you use the resnet or as next or come next
+as the backbone trained on image net on pascal on coco there are many thousands of which they've
+been trained you download them and then you just modified some part of the network for your specific
+task this allows you to train your very deep convolutional network even sometimes in your
+laptop without the need of one week of training on that set with millions of images
+and that's yeah this the transfer learning in practice you're going to see this on
+during the lab session you just need to download the resnet from the invite watch library and then
+to adapt it to the to your case so that concludes this set of slides uh next time
+on friday we're gonna have still theoretical

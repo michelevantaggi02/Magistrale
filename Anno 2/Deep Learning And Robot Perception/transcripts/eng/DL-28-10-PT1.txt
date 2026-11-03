@@ -1,0 +1,1134 @@
+Say three individual maps.
+A one-by-one convolution, basically.
+It's this solid cube, set of cubes,
+which slides over the input channels.
+They basically multiply each pixel of each channel,
+and then they sum up to create a new value of the convolution.
+So they slice and they combine the value of the three channels,
+the channels by mixing them.
+So they sum,
+these three values,
+they multiply by the weights of this small one-by-one block.
+So at the end, when you slice one-by-one filter,
+you get a feature map, as always.
+And in each pixel of this feature map,
+you have the result of the combination of the three pixel
+value in the input channel.
+So that's why it's a mixing convolution,
+because it combines, it mixes the value of the three channels
+to create the new value.
+Which is the result of the sum and product of these three values
+with the three kernel parameters.
+It's very useful because you can use this convolution
+to summarize the input channels into a new set of output channels,
+which usually are less.
+So it's just, it's kind of a summarization convolution.
+And so Google had to use this to reduce the number of output channels
+in order to control the complexity of the inception module.
+So starting from a high level of the feature map,
+like 256 with the one-by-one convolution,
+you can bring them down, for example, to 64.
+These 64 feature maps are the summary of the original 256.
+So of course you lose some information,
+but this information that you get at the end is the summary
+of the information of the input feature map.
+The idea is that probably the input feature map,
+there are features that are redundant.
+So in the first two years, you can get this information.
+So you can get the input feature map,
+and in this way you can combine them
+and reduce the amount of memory required.
+So it's the one-by-one convolution.
+It's very general, importantly used in many architectures.
+The other thing that inception module introduces the fact that we try
+to avoid as much as possible fully connected layers
+because fully connected layers are very expensive
+on the memory side because they, not sorry, not on the memory,
+on the parameter side because they require usually a lot
+of parameters to do fully connected connections.
+So inception module remove them
+and use basically a fully convolutional stack except
+for the last, the very last layer which outputs 1,000 neurons
+for the final class predictions.
+Then we introduce one of the most important concept
+in deep learning architecture, which is a concept
+of residual connections.
+You have a set of three layers.
+You have a set of three layers.
+The first one is a feature maps that goes
+into the residual block.
+The residual block has the first convolution which is 3 by 3,
+followed by batch norm, followed by ,
+followed by another convolution,
+that they follow a batch norm.
+And then.
+you create the result connection that you are reading
+okay
+okay
+so the important concept here is that when the gradient flows back to the back
+population the gradient has two parts
+or one part is through the branch with the convolutional layers
+and the other part is through the skip connection the shortcuts
+so the gradient that flows through this skip connection is unchanged so numerically
+we don't observe the vanishing gradient problem anymore thanks to this skip connection
+this gradient is maintained as it is then it's combined summed with the
+gradient modified by this part the idea is i don't modify the gradient the only thing that i do is i
+compute a residual gradient from the residual part of the residual block which slightly modify the
+gradient so it's not that the gradient is as a whole changed every time we go through convolutional
+networks we keep the gradient as it is and we just slightly modify it with some residual computation
+this changes completely the convolutional layer is modified and the gradient is modified by this part
+now we can see that the gradient is more robust and we can also accept a lot of layers and indeed
+starting from resnet we started to introduce a very deep network like 150 layers and so on
+so the residual connection is another very important thing that was maintained
+that was maintained
+also in transformer network.
+Transformer network also has
+a residual connection inside them.
+To allow the gradient to flow through
+the very deep transformer architecture
+which can have millions or billions of parameters.
+Now, another strategy,
+which is linked to the idea behind the rest of that,
+is the idea behind dense net.
+The idea of dense net is similar to the idea behind rest net
+in some sense, but with an addition.
+Now, here rest net,
+here there is a residual block.
+It works like this. Now, the thing is, after the sum,
+the feature map before the residual block are
+integrated into the feature map that are output by this block.
+So that means that the sequence,
+the consecutive layer,
+let's say we have another residual block.
+Only sees what the previous layer outputs.
+So the information from the layer before the previous one,
+so the layer at the top of the network,
+it's condensed by each layer and pass through the next layer.
+That means that this residual block only sees the output of the previous one,
+but has no direct access to the output of the layer previous to the previous one.
+The only access it has to that layer is by how this block summarizes the information from the previous layer.
+This might create a situation in which some features are lost or modified at the point in which they
+cannot be recognized anymore by the final layers of the network.
+The idea of dense net is,
+let's just create a new layer.
+Create an extreme concept of the residual connection.
+In the sense that let's make,
+create an architecture so that each block,
+each layer in the architecture has access to all the information produced by the previous layers.
+That means that,
+start from an image,
+which has three channels.
+This image goes through a convolutional layer.
+This convolutional layer, for example, has 64 feature maps produced.
+So it creates 64 feature maps with 64 filters.
+Now, the next convolutional layer,
+in standard architecture,
+would have access to only these 64 maps.
+With the hope that these 64 maps contains the relevant information from the input image.
+But that's not necessarily true.
+So the idea of dense net is,
+okay, since I want to be sure that the information from the image is kept after the convolution,
+in order to provide it as an input to the next layer,
+the second convolutional layer,
+I can concatenate this to the output of the previous convolutional layer.
+The concatenation is performed across the channel dimension,
+which means that now the tensor has a depth of 67.
+I have the 64 feature maps produced by the first convolutional layer,
+plus the three,
+RGB channel of the input.
+And this goes through C2.
+Let's say that C2 produces an additional 64 feature maps by design.
+So the output of C2 is still 64 feature maps.
+And again, I don't want to lose any information from the previous layers.
+So what I do is that,
+I mean, you can see this in two ways.
+You either see it as taking this,
+and this,
+and concatenating them to the 64,
+to get a 131 feature maps.
+Right there.
+Or similarly, instead of having the connection with the first and this,
+you can directly connect to this one.
+Which is the same.
+And concatenate the two of those.
+And it's the same because this has the concatenation to this,
+so it's a sequence of concatenations.
+Now,
+why does this still keep the same idea behind the rest of it?
+Because the concatenation is like a shortcut itself.
+The sense that I'm not summing,
+so I'm not summarizing the information from the input.
+Now I am concatenating the information.
+But still, the feature map,
+let's look at this.
+The three feature maps of the 67 here,
+are concatenated through this connection.
+So the gradient,
+it's not the case because the input has no parameters,
+if you don't consider this is the input image,
+but it's the feature maps from another convolutional layer,
+when the gradient comes here,
+it can access directly to the feature map
+from the previous layer through this concatenation connections.
+And that's the same here.
+The gradient can go directly to the 67 feature maps
+from this connection here.
+So,
+this still has residual life.
+In fact, on the gradient,
+so it keeps the gradient flowing
+without being reduced too much.
+With the addition that now information is not summarized
+by the addition and not propagated as it is to the network,
+but now I keep reproducing the same information
+as I go to the network.
+So I bring more information with me
+as I go into the network,
+and I still have the same residual life.
+So that's the advantage of the residual life.
+So dense net
+basically exploits the same idea of resnet,
+but by adding the concept of bringing together,
+bringing with me at every layer the information from the previous layers,
+so that every layer has access to all the features extracted
+from the previous layers,
+all the previous layers.
+And that's basically the visualization of this concept.
+Every time you add a layer,
+this layer adds a number of feature maps
+which is controlled by the growth rate of dense net.
+The growth rate R is the number of feature maps
+that each layer computes
+and that then are stacked to the previous feature map
+in order to propagate
+the tensor with all the feature maps.
+So that basically,
+if you look at that in the formula,
+you can see that a generic layer R, L,
+reads the initial feature maps C0,
+so the RGB channel for example,
+plus a number of feature maps
+which is L minus 1
+times the growth rate R.
+In dense net, every layer of one dense block,
+because dense net is divided into two,
+two blocks,
+where each block has a certain number of layers
+in which this concept of propagation is applied.
+The growth rate is fixed,
+so every convolutional layer always computes
+the same amount of feature map.
+In this example, 32.
+So that means that in this example there,
+layer number 3 produces a number of feature maps,
+or better,
+it reads the number of feature maps which is C0,
+which in this case is 64,
+plus L minus 1,
+which is 2,
+times R.
+R is 32,
+so it's 64 plus 64,
+and so it's 128.
+And that's the input to layer 3.
+Then layer 3 produces 32 additional feature maps
+that are concatenated,
+and then this creates a tensor of
+60 feature maps that are the input to layer number 4,
+and so on.
+Okay?
+Now in practice, actually...
+Just a second, because I had...
+I created an additional...
+slide to show you...
+I think I have it up here.
+Let me see.
+Yes.
+So we update this one.
+So what's...
+I wanted to explain better this concept.
+So this is another way of visualizing
+the concatenation of that sentence.
+So let's see.
+Now every layer of dense net...
+One layer of a dense block.
+So dense net is divided into dense blocks.
+Okay?
+Each block contains multiple layers,
+and each layer is usually composed
+of these four elements.
+So you have a one by one...
+Sorry.
+You have a batch norm,
+plus real number,
+plus real value,
+at the beginning of the layer.
+Then you have a one by one convolution
+that brings the number of channels
+always to 128.
+So that number of channels is fixed by the growth rate.
+So if the growth rate is 32,
+this...
+Regardless of the input channels,
+it brings them to 128.
+Then you have another batch norm,
+plus real.
+Then you have a convolution,
+a three-battery convolution,
+which outputs the growth rate,
+which is 32.
+Okay?
+That means that...
+That's the image with the three channels.
+This goes through the first dense block.
+The first dense block is composed of different layers,
+and each layer is composed of these four layers.
+So you have batch norm,
+real loop,
+then actually after the first...
+After the image,
+there is a standard convolutional layer
+before starting a dense block.
+But that's not that far.
+Then you have a one by one convolution,
+which brings the number of Kishomap
+to 14.
+So if we bring the number of Kishomap
+to four times R,
+R is a neighbor parameter.
+If we choose it to be equal to 32,
+this is 128.
+That means that we bring three up.
+In this case,
+we are expanding the number of Kishomap.
+But that's only the case for the very first layer,
+because after a while,
+the number of Kishomap will be bigger than 128.
+So the scope of one by one
+is to reduce the number of Kishomap.
+So here you have 128 Kishomap,
+but that goes into the three by three,
+whose number of output is always equal to the growth rate,
+which is 32.
+So this outputs 32 Kishomaps.
+And that's the first layer
+of the first dense block.
+Then here you concatenate
+this Kishomap with this one,
+and then you go into
+the second layer of the first dense block.
+The second layer is the same as this one.
+So here you have 35 Kishomaps as input.
+These are brought to 128
+by the one by one convolution
+of the second layer.
+Then again into the three by three,
+which outputs 32.
+These 32 are combined with the 35
+from the previous layer.
+So after this layer you have
+67 Kishomaps.
+And so on.
+How many layers in a dense block?
+I don't know, it depends.
+It's a parameter, usually six.
+So that's the visualization.
+At the end of each,
+so in green you can see the dense block.
+The dense block has,
+in this example,
+sorry,
+dense block number one has six layers.
+So six of these group of sub layers here.
+They concatenate,
+one after the other.
+At the end of each dense block
+there is a transition block.
+The transition block is the one on the right,
+which is a batch norm plus reload
+and one by one convolution
+that brings the channel down to C half.
+So it adds the number of channels.
+And then an average pooling
+to reduce the resolution.
+The transition block is simply to
+contain the number of channels
+in order to provide the explode.
+And then, so basically after each dense block
+you create a transition block
+and then you start with a sequence dense block.
+Each dense block might have a different number of layers.
+Okay.
+Six layers means six times this repetition here.
+Twelve layers means twelve times this repetition.
+It has a lot of layers actually.
+And in particular it has in the dense net 121,
+121 layers in total.
+Okay.
+At the end of dense net,
+the head of the network,
+usually in the deep learning naming convention,
+the head is the last layer of the network.
+Okay.
+The head in dense net is composed of
+a final batch norm plus reload,
+a global average pooling,
+which brings down, which summarizes
+each final feature map into
+a single number.
+So at the end you have 1000 numbers.
+Then you have a final fully connected layer
+of 1000 classes in order to compute
+the 1000 probability of image.
+Now remember,
+the final, the head of the network,
+so the final layer is,
+it depends on the task.
+So in this case we have 1000 neurons
+because we need to perform 1000 predictions
+on the categories.
+But of course if your task is different,
+so if you have to classify over 10 categories,
+then in this case the final layer
+would have 10 neurons.
+If your problem is regression,
+then the output is not 1000 neurons,
+but probably just one neuron,
+which outputs a continuous value.
+So that depends on the task.
+Okay.
+We are, here we have 1000 classes
+because we are considering the image classification
+of an image net.
+That's the challenge we are considering.
+And here you have a
+summarization of the number of weights
+for one block,
+for the dense block number one.
+Dense block number one is six layers,
+six layers like this inside.
+The number of channels,
+so just to be clear,
+that's the image in
+284 times 284 times three color channels.
+As I was saying before,
+the first block is not a dense block,
+but it's a 7 by 7 convolution,
+which is called the stem here,
+which computes 64 feature maps with stripe two.
+So it's that down sample of the image.
+Then there is another max pooling block
+with stripe two,
+which down samples the image
+further to 56 times 56.
+So that's the stem of the network.
+That's the first part of the network.
+And the idea is simply to start
+the process,
+the process by bringing down the image
+to a more convenient resolution
+and creating 64 official map to start
+low level visual maps.
+So the dense part starts from
+a 56 times 56 times 64 tensile
+number of visual maps.
+So you start from there.
+So the first layer of the first block,
+takes a 64 feature maps.
+These are the feature maps
+from the first pooling layer there.
+The one more convolution has a number of parameter,
+which is if we apply the formula,
+it's one times one.
+So one times 64 input feature maps
+times 128 output feature maps.
+So in total,
+8,000 and something parameters.
+The three by three convolution,
+this one,
+the number of parameter of this convolution
+is fixed in every layer of the dense block.
+Because thanks to the presence of the one by one,
+this one by one is the bottleneck
+which always brings the number of feature maps
+exactly to 128.
+So the number of parameter of the three by three
+doesn't grow as we go into the depth of the depth.
+It's always, as you can see,
+it's always 36,000 parameters in this excel.
+The thing that grows is the number of parameters
+of the one by one convolution.
+Because the one by one convolution,
+as we go into the depth,
+it takes as input more and more feature maps,
+because the feature maps are concatenated,
+so they grow.
+That's why the one by one number of parameter grows
+as we go into the depth.
+So in total,
+you have 300,000 parameters
+for the layers one to six.
+And then you have the transition layer,
+which is 32,000 parameters more.
+So the first block in total
+has something like 0.36 million parameters.
+So 300,000, 350,000 parameters.
+The second block has something like
+one million parameters.
+The third block is
+a little more than three million parameters and so on.
+In total,
+if you compare DenseNet 121 with ResNet 34,
+you have one third,
+almost one third of the parameters,
+but the depth is way more.
+And indeed,
+if you compare the performance of that DenseNet 121,
+it gets one point percentage more than ResNet 24
+with one third of the parameters.
+Almost one third of the parameters.
+So it's way more efficient.
+It has less parameters.
+And it basically uses in a better way
+the number of fissure maps.
+That's why it's so convenient
+to use this kind of architecture.
+Now the problem with DenseNet is the memory.
+Because since you have to propagate the fissure maps,
+the problem is basically the batch norm.
+Because the batch norm,
+I mean,
+there is a shorter connection,
+but in order to compute the batch normalization parameters,
+you have to store the computational graph of PyTorch.
+All the stacked fissure maps as you go through the network,
+this requires a lot of memory
+to compute the batch propagation.
+Now, luckily,
+there are some smart implementation in PyTorch
+which saves a lot of memory
+because they exploit some of this connection
+and concatenation
+that are,
+that happen to the network.
+I'm not going into the details of this,
+but just to say that
+it might seem more memory demanding,
+but at the end,
+we can manage it.
+So that's an additional upgrade to ResNet.
+Now we are going to see a further upgrade
+which is ResNext.
+ResNext basically exploits the group convolution.
+I did.
+We already saw what is a group convolution
+when we talked about depth-wise separable convolutions.
+The depth-wise separable convolutions
+are a special case of the group convolution.
+Group convolution in PyTorch can be implemented
+by just specifying the group number
+in the conv2D layer.
+So it's not really a new layer.
+It is just a particular configuration
+of the convolutional layer.
+So it's not really a new layer.
+So it's not really a new layer.
+So it's not really a new layer.
+Now the idea of group convolution is that
+in standard convolution,
+each filter looks at all the input channels,
+all the input feature maps.
+all the input feature maps.
+So here you have
+64 feature maps.
+Filter number 1
+has a depth of 64 elements
+because it has to look at all the 64 maps.
+It has to slice through all the maps of the input channels.
+That's the standard convolution.
+So if this is a 3x3 kernel,
+the number of parameters
+of the first filter
+is 3x3 times the depth of the input,
+which is 64.
+Then of course this is repeated
+for all the filters you are requiring
+to the convolutional layer.
+So this is the second filter and so on.
+So at the end,
+if you require 64 filters,
+64 filters,
+the number of parameters
+is 3x3 by 64 times 64.
+That's the plus devices of course,
+which is plus 64.
+Plus 1 for 1.
+And then you produce 64 feature maps.
+One feature map for each filter.
+OK?
+That's the standard convolution.
+In group convolution,
+you divide filters.
+Basically,
+you don't have access to all the channels.
+They have access to a group of the input channels.
+And they only work on that subgroup.
+So let's make an example.
+Let's say that we have...
+6 feature map as inputs.
+I have stacked them in this way
+so we can see them.
+If I select a convolution with two groups,
+with g equals 2,
+I'm dividing the input into two groups.
+The first three feature map goes into group 1.
+This is group 1.
+And the last three goes into group 2.
+Let's say that I'm asking as the output,
+let's say,
+number of output filters is 6 as well.
+So,
+see how it's 6.
+Number of output filters is also organized into two groups.
+With three filters each.
+So here I have
+three filters
+that only look at group number 1.
+So the first filter
+looks at these three feature maps.
+And the second filter looks at all the six.
+Only to the three feature map of group 1.
+That's the same for this filter
+and this one.
+And that means that each filter now,
+the depth of each filter
+is not equal
+to the number of input feature map.
+It's equal to the number of feature map in group 1.
+So the depth of this filter is 3.
+It's not 6.
+And also this one and this one.
+And then I have other additional three filters
+associated to group number 2.
+Each one of these produces
+an associated feature map.
+So at the end I still have six feature maps.
+But the difference is that
+this feature map is computed
+not by looking at all the feature map of the input
+as in the standard convolution,
+but by looking only at the three feature maps
+that fall into group 1.
+The effect is that
+the number of parameter is less.
+Because this filter now
+has 3 by 3 parameter
+times not 6 but 3.
+Okay?
+And this is repeated for
+It's k times k
+times the number of output feature map
+c out
+divided by g
+which is the group parameter.
+Because you have k by k
+times
+let's start from this here.
+You have k by k
+sorry
+k by k
+times a depth which is equal to the number of
+input
+feature map that falls into group 1
+and it is 6 divided by the group number.
+So it's c in divided by g
+times the number of output feature map
+for that group
+which is c out
+divided by g as well.
+And this is repeated for all the groups.
+So this is times g.
+This g simplifies.
+So at the end you have k by k
+times c in times c out
+divided by g.
+So in contrast to the standard convolution
+in which the number of parameter is
+k by k times c in times c out
+now you have
+the number of parameter which is reduced by a factor of g.
+So in this example you have
+half the parameter of the standard convolution.
+Of course this comes at the price
+of the fact that the output feature map
+are not looking at all the input feature map.
+You are grouping them together.
+So you only look at the features extracted
+in the first group.
+So this feature map doesn't have access
+to the feature of the second group.
+So of course you are losing some information
+in this process.
+But the advantage is that you are reducing
+the number of groups.
+So the number of parameters
+tends to the number of groups.
+So it has this advantage.
+And we saw
+I was saying at the beginning
+that this is a special case
+sorry that we already saw this kind of idea
+with the depth-wise separable convolution
+because depth-wise separable convolution
+are a special case of group convolution
+in which the number of groups
+is equal to the number of input channels.
+So when
+g is equal to c in
+you are dividing the group
+you are creating one group
+with just one feature map per group.
+So you have one filter per group
+then the number of output map
+is equal to the number of input channels.
+So g equals to
+in this example
+it's a equal to
+g equals to c in
+which is equal to c out
+it's the depth-wise separable convolution
+the one we saw yesterday.
+It's a special case.
+In the depth-wise separable convolution
+you also add the one by one convolution
+after the group convolution
+because since
+in this way you are
+bounded by having the output feature map
+equal to the number of input feature maps
+if you want to change the number of output feature maps
+you need to use a one by one convolutional layer
+to expand or reduce the feature maps.
+So basically to mix
+the feature maps computed by the
+group convolutional layer
+into a new set of feature maps.
+So if
+if
+g is equal to c in
+here the groups becomes
+six groups of one
+with one feature map each.
+One group,
+second group, third group, fourth group,
+fifth group and sixth group.
+Each group has one filter.
+The filter in this case is three by three
+by one.
+Because it only has one feature map to look at.
+They are very simple filters.
+That's the filter.
+This filter produces
+c out feature maps
+which are equal to c in.
+So if you instead don't want
+six feature maps
+as the output of the depth-wise separable convolutional layer
+then this goes into
+a one by one convolution with
+I don't know, let's say you want 64 filters.
+This convolution mixes the six channels
+and produces 64 feature maps.
+We will see that in this way
+it's more efficient than having again
+a standard convolutional
+that directly computes 64 feature maps
+by looking at all the input feature maps at the same time.
+The group convolution is a generalization of this concept.
+If the group number is set to one
+you go back to the standard convolutional layer.
+Because you only have one group
+so each filter looks at the entire input feature maps
+and that's the behavior of the standard convolutional layer.
+If the group number is equal to the input channels
+you go to the depth-wise separable convolutional case.
+In the middle you have to
+you select how many groups you want.
+The only requirement of this layer is that
+the group number should be a number
+that can be used to
+the requirement is that
+the number of feature maps in the input should be
+a multiple of the group number.
+Because of course you cannot have like
+five feature maps and then
+setting the group number to two
+because otherwise you cannot divide them
+into proper groups.
+So they have to be a multiple of the group number.
+That's the only requirement.
+I'm introducing this concept because
+this is the idea behind ResNext.
+ResNext generalizes the concept of inception
+the inception model of Google Enect.
+In the inception model we had multiple branches
+but these four branches were designed by hand.
+In ResNext they are automatically determined by
+the use of group convolution and
+by setting two basically hyper-parameters
+of this layer
+which is the depth of the layer
+basically is this number here
+and the number of branches
+which is in this case 32.
+So basically the input to this
+multi-branch path
+is in this example a tensile of 256 channels
+these channels are separated into
+32 groups of four channels each
+and are first processed by one by one convolution
+in order to bring down the number of channels
+to a total of 128 which is 32 times 4.
+Then you go through a three by three convolution
+to extract features
+and this is the group convolution basically.
+And then you use again a one by one
+convolutional layer to bring the number of channels
+back to 256.
+Then you have a dense connection
+sorry a residual connection
+to propagate the gradient
+so we exploit the idea of ResNet in this case
+and we go to the next block.
+This multi-branch structure
+it might look like it adds many parallel layers
+in implementation but in practice
+they are just three layers.
+The first layer is a one by one convolution
+which is split into four subgroups
+you can see this here.
+So they basically are just one group convolution
+and the reason is that
+the first one by one convolution
+can be viewed as a matrix multiplication
+between a matrix which is composed of
+submatrices A1 to A32.
+So let's look at this.
+You have your
+120, sorry, 256 channel input.
+Okay?
+Let's follow this pixel here.
+So the generic pixel IJ
+which is a vector containing of length 256
+because it contains all the pixels of the 256
+input channel.
+So this vector
+which is this vector here
+is multiplied in the one by one convolution.
+By the associated number of parameters.
+So in total you have
+A1 in this case
+where is the
+huh?
+Yeah.
+Yeah, sorry.
+That is the vector format.
+So you have your X,
+IJ, X, which is a vector of 128.
+So again, 256 elements.
+It's this vector here.
+Okay?
+Now to produce the
+four fissure map of the one by one convolution
+of the first part of the 32 path,
+I have to multiply this by a matrix of weights.
+Which is
+which has 256 columns
+and has four rows.
+Because I have to produce
+four numbers.
+That's Z
+of the first group,
+Z of the second,
+Z of the third,
+and Z of the fourth.
+And that's for
+the first block.
+The first block
+multiplies this set of parameters.
+So this is the matrix
+A1 of the first block.
+And produces these four numbers.
+So the resulting vector
+of the pixel
+is
+this number here.
+So the result of this convolution operation
+goes here.
+Now of course then I have to slice
+over the entire input image
+so I will create the fissure map
+associated with this first block.
+Okay?
+In total I have four of these fissure maps
+because each one of these creates
+one of the
+fissure maps.
+And here,
+so I have four of them
+so in the end I have four
+fissure maps in the first block.
+The other blocks,
+the consecutive blocks,
+this one, this one, and so on,
+are created by simply
+using the same pixel
+but stacking here
+another set of four parameters
+for the second block.
+This creates
+Z5,
+Z6,
+Z7,
+Z8.
+This creates
+four additional fissure maps.
+If you stack them together
+in practice this is just a single
+matrix multiplication
+where each four rows
+are different blocks of those
+32 branches
+but in practice can be implemented
+with just one single matrix multiplication
+which implements
+in practice the one by one convolution
+in just one single step.
+So that means that
+here
+these one by one convolution
+are visualized as different blocks
+but in practice they are implemented
+as a single convolutional layer
+which produces
+these stack of fissure maps.
+Okay?
+Where the convolutional layer is organized in this way
+in sub-blocks.
+That is.
+Then,
+thanks to the group convolution
+I can ask for
+groups of four
+basically.
+So I divide my 128 maps
+by G equals 32
+and I create
+32 groups of four
+fissure maps each.
+These four with 32 groups
+are processed by the associated filters
+which are
+which are four for each group.
+And then the final step is
+the reverted step of the first one
+in which I have to combine back
+all the 32 groups
+into just one single number
+and this is again a matrix multiplication
+in the other way around.
+So you have 32 columns
+of four columns each
+to create the associated
+266
+fissure maps.
+Then I sum it up
+and I sum them together
+in order to have
+sorry
+the final output
+which is then summed back
+with the resnet input
+with the residual input from this group.
+So the idea of resnext
+is called resnext because
+it exploits the same residual connection
+with resnet
+so the changes is
+what happens inside there
+is to a block.
+Now the block is not a sequential block
+but it's a block which exploits
+the group convolution.
+And it exploits the group convolution
+in order to reduce number of parameter
+by guaranteeing even better performance
+than the standard resnet.
+So if we look at the performance here
+resnext 50
+basically
+has
+less than one
+more than almost 2%
+gain in the error
+with respect to the
+similar resnet 50
+without this kind of strategies.
+So it's better with the same number
+of multiplying nuts operations.
+So it allows you to have more
+performance with the same computation cost.
+Another concept
+so we are seeing different concepts
+that are then applied to different architecture.
+Another concept which is
+very useful
+is the squeeze and excitation layer.
+And the idea with the squeeze and excitation layer
+is this one.
+Basically
+the Fisher-Max of the convolutional layer
+are not always useful for
+all the inputs to the neural network.
+I mean for example
+if you are processing an image of a house
+if in your network you have one filter
+which extracts
+and detects the presence of
+the eyes of a person
+that Fisher-Max
+that filter
+for that input is useless.
+Because the house doesn't have the eyes.
+So the idea of the squeeze and excitation layer
+is to dynamically
+assign importance to filters
+and Fisher-Max depending on the input.
+So basically the idea is
+I turn off or turn on filters
+in the network
+dynamically
+so after training
+this is not done during training
+this is done after training
+after training I understand
+which Fisher-Max should be used
+and which Fisher-Max should be discarded
+depending on the content
+of the image
+to make it more efficient and more precise.
+So how does it work?
+Basically
+if you add the squeeze and excitation layer
+at some point in the network
+you have one volume
+so one set of tensors
+and here you have two parts
+the upper part
+which is just a shorter connection
+and the lower part
+which is the squeeze and excitation layer.
+The first thing the squeeze and excitation layer does
+is it computes a global average average pooling
+of the input Fisher-Max.
+So it summarizes
+each of the C channels
+into one single number.
+So at the end you have C numbers
+after the global average average pooling.
+Then there are
+there is one fully connected layers
+that has a number of neurons
+which is C divided by 16
+plus array of course
+for the nonlinear activation.
+Then you have another fully connected layer
+which is a number of output neurons
+which is C
+so it brings back to C number of output neurons.
+And the activation of the second fully connected layer
+is a sigmoid
+because the idea is that
+you want to compute a weight
+a score
+for each Fisher-Max
+that was at the input of this squeeze and excitation layer.
+And this weight basically will turn off or turn on
+with a soft turn on and turn on
+in the sense that it's not 0 and 1
+but it's a number between 0 and 1.
+So it will
+I will multiply this weight
+by each of the input Fisher-Max
+each of the input channels.
+So if this branch computes
+a weight of 0
+0 for one of the Fisher-Max
+when I multiply this weight by the input Fisher-Max
+I will basically turn off that Fisher-Max.
+If instead the weight computed is 1
+that Fisher-Max will be kept as it is.
+And in the middle you will have intermediate situation.
+So after that multiplication node
+you will have the same input Fisher-Max.
+The only difference
+is that each channel of the input Fisher-Max
+will be turned off or kept as it is
+depending on the value of the weight computed by the squeeze and excitation layer.
+It's squeeze and excitation because
+first it squeezes here
+by computing the global average pooling
+so it reduces the information to just one number.
+The excitation is this part
+where it computes the importance
+of each Fisher-Max
+with respect to the input.
+This is performed after training
+so these weights, the weights EC
+are dynamically computed during the inference phase.
+They are not fixed parameters.
+The parameters are the parameters of the fully connected layers
+that computes these weights.
+But the weights itself they can be changed
+as new inputs are computed by the network.
+Are processed by the network.
+Here you have an example.
+But the idea is
+for example if you have four channels
+and you compute these four numbers
+0.95, 0.12, 0.62 and 0.50
+that means that the first channel is kept
+more or less as it is.
+The second channel is almost turned off.
+And so on.
+And this is an example
+of where each stage
+of the behavior of this
+depending on the input whether cut or tracked
+it shows that
+some of the Fisher-Maps are kept
+and some are not kept
+depending on the value of this weight.
+So in that plot 0 white is
+kind of switched off.
+So the channel is turned off.
+Dark blue is the kind of is kept basically.
+And you can see that
+the channels between
+when the image processes the cat
+or the channels when the image processes the track
+are different.
+So that means that the network understands
+that has to keep certain features
+to recognize the cat
+and that has to keep other certain features
+to recognize the track.
+So it is dynamically adapt to it.
+So now let's have a breath
+and then we will see
+the final concept
+related to the
+machine network and the condition
+and then come next
+and the concept.
+So let's talk about that.

@@ -1,0 +1,901 @@
+I just took that
+I'm talking about one image
+being with
+grayscale or
+color doesn't make a difference
+if you go through a convolutional layer
+with for example a kernel size of 3
+a number of bit of 64
+the convolutional layer will output 64 feature maps
+this 64 feature map
+will be the input to the next convolutional layer
+for example
+which you ask 32 feature maps
+something you decide separately
+for each convolutional layer
+a recompositional nature of deep networks
+in convolutional layer takes
+even more interpretable meaning
+in the sense that
+if in this case you had that
+let's consider for example
+let's make an example
+you had an image of a house
+the first convolutional layer
+let's assume it depends
+four features
+these are these
+partners
+ok
+these four partners
+so
+the feature map
+in this case will be
+this you will have a high response here
+on this position
+for this you will have a high response here
+here
+and here
+ok
+now the next convolutional layer
+this convolutional layer number one
+is the filter
+and these are the feature maps
+now this goes into the next convolutional layer
+next convolutional layer
+let's consider
+for now one filter
+this filter is responsible for detecting square
+geometrical shapes
+this filter will
+slice over this stack of map
+this map will be
+organized in a stack
+this one is
+this one is
+ok
+this stack of map
+will be processed by
+the second convolutional layer
+so this is convolutional layer number two
+this is convolutional layer number two
+which
+responds to square geometrical shapes
+and this is a square like structure
+so in this case
+it will
+slice over
+this
+structure
+this feature map
+and when it will
+see all the four corners
+it will probably respond
+to this kind of structure here
+and the feature map
+in this case
+for this filter
+will be
+the second convolutional layer
+will have a high response
+corresponding
+to this location
+of the image
+because of the receptive field
+and because of the fact that
+the second convolutional layer
+is composing the information of the previous layer
+to detect a higher level
+semantical concept
+the first layer
+detects corners
+the second layer detects geometrical shapes
+which are a combination of the corners
+the third layer
+will combine different
+so for the second layer for example
+you will have another filter which will detect circles
+another filter which will detect triangles
+and so on
+the third convolutional layer
+will combine these different geometrical shapes
+to detect even higher semantical meaning
+so more complex geometrical shapes
+and so on
+and that's the compositional nature
+of the network
+in convolutional neural network
+that means that you combine features
+of the previous layer
+to detect new more advanced features
+as you go on into the depth
+now
+padding and stride
+are two hyperparameters
+we can control in a convolutional layer
+two
+control two aspects
+the padding we already know
+what it's for
+the padding is to basically avoid
+the reduction of the
+feature map resolution
+due to the effect
+border effect of the convolution operation
+so
+if you don't want
+your output map
+to be smaller
+because of the border effect
+you can add
+a
+around the image
+you can add zeros
+so we perform basically zero padding
+or any kind of padding
+I mean it depends on which kind of padding
+you want to apply
+it can be zero padding
+it can be the mirroring of the border pixels
+and so on
+so thanks to the padding
+you can control the resolution of the output map
+so
+if you want to preserve the input resolution
+so if you want
+w out to be equal to
+w input
+for example for the width
+since w out
+is equal to
+w in
+minus k
+plus
+two times the padding
+of the platform
+plus one
+if you want
+this to be equal to
+w in
+so this becomes
+w in
+minus k
+plus two times the padding
+plus one
+so that means
+that the padding
+you have to apply
+is
+k minus one
+plus one
+divided by two
+in general
+so if you want to maintain the resolution
+the padding you need to apply
+depends on the kernel
+only
+so with a kernel of three by three
+you need to apply a padding of one
+with a five by five kernel
+the padding is two
+with a seven by seven
+then it's three and so on
+so that's the simple relationship you have to apply
+if you want to
+if you want that the output map has the same resolution of the input map
+the stride instead
+is the number of pixels you jump
+when you move the filter
+when you slice the filter of the image
+by default the stride is one
+which means that you slice one pixel at a time
+but you can change it
+you can also slice
+by jumping over two pixels
+if you stride
+if the stride is greater than one
+the output will be downsampled
+if the stride is two
+the downsampling factor is two
+that means that if your original image was
+forty by forty
+if the stride is two
+the output map will be twenty by twenty
+if the stride is four
+it will be ten by ten
+because you skipped
+a certain number of pixels
+so the output will be reduced
+so overall
+the formula to compute
+the stride
+is the following
+to compute the output resolution
+of a convolutional layer
+is that one
+it's the input resolution
+minus the kernel map
+plus two times the padding you apply
+if any
+divided by the stride
+plus one
+the stride, the kernel
+and the padding are three hyper parameters
+so these are your choice
+depending on what you want to achieve
+why would you downsample?
+why would you place the stride
+bigger than one?
+because we will see as you go deep into the network
+you might want to reduce the resolution
+of the input map
+of the map, sorry, the visual map
+in order to capture
+more global and global
+and global information
+because if you reduce the
+if you downsample the image
+the image will be bigger and bigger
+so you will be increasing the receptive field
+faster
+by increasing the stride
+so you don't need to add many layers
+in order to
+increase slightly
+because for each layer you increase the
+receptive field of two pixels
+if you have a kernel 3x3
+so to increase the receptive
+field to the entire image that would require
+a very large amount of
+layers
+if you use the stride instead
+by downsampling the image
+the receptive field will be doubled
+almost immediately
+so in that case you can increase the
+the field of view
+let's say one unit
+faster
+here you have
+an example of padding
+this explains why
+the resulting map is
+smaller
+this is the effect of the padding
+here instead you can see
+it's still padding
+here you see instead
+the effect of the stride
+if you jump
+in stride 2 you jump
+you skip one pixel
+so the output will be
+downsampled
+ok
+and then
+that's the formula I was telling you
+with some example
+for some
+famous architecture
+we are going to see in the next lecture
+this is the output map
+what about the parameters of a convolutional layer
+how many parameters
+does a convolutional layer have
+parameters
+depends on the kernel size
+because of course
+you have one parameter for each position
+of the kernel
+so if you have
+k times k
+in general the kernel
+could be also rectangular
+not necessarily square
+so in general we distinguish between
+kh and kw
+but most of the time the kernel is square
+question?
+ah
+and
+then you have
+you have to multiply
+by the number of input channels
+because as we saw
+we have a volume
+which has to go through the input channels
+let's call it
+let's call it sin
+times
+the number of filters
+you want from that layer
+which is
+f or in that slide
+cout is the same
+the number of output
+plus
+a number of biases
+which is
+you have one bias for each filter
+so plus cout
+so if
+you have a square kernel
+of 3 by 3
+and if you have
+a 3 color input image
+so if this is the first convolutional layer
+which sees the input image
+with 3 channels
+if you ask for
+I don't know 100 filters
+the number of parameters
+is
+of that convolutional layer
+is
+27 times 100
+which is
+2700
+plus
+100
+so in total you have 2800 parameters
+so in total you have 2800 parameters
+so in total you have 2800 parameters
+so in total you have 2800 parameters
+ok
+that's how you compute
+that's how you compute
+number of parameters
+here it is
+here it is
+here it is
+here it is
+ok that's
+basically all about
+convolutional layers
+ok
+we saw its
+now we are going to see some
+variance
+for example
+the 1 by 1 convolutions
+does it make sense
+to have convolutional
+layers
+only filter
+with just one pixel
+yes because convolution goes to the depth
+ok
+so they don't mix information
+locally in one channel
+but they combine information
+through the channels
+still because the convolution
+they go through the depth
+so it makes sense to have
+1 by 1 convolution
+and in general
+they are
+used to control
+to reduce the number of channels
+across the network
+but if you have for example
+at some point
+a fischer map
+with 255, 56
+channels
+and if that number is too big
+because the network memory is increasing
+so you want to control
+to reduce the number of fischer map
+you can add a 1 by 1 convolutional layer
+which will basically combine
+computerized layers
+with a linear combination
+of all those 256
+fischer map
+you can ask to have now
+64 fischer map as the output
+so that convolutional layer
+will try to combine the information
+of the 256
+to reduce them to a smaller
+number of fischer map
+so sometimes 1 by 1 convolutions
+are used to perform a bottleneck operation
+so to reduce the number of fischer map
+by trying not to lose that much
+information because they combine
+information to the channels
+so it makes sense
+in general
+and there are specific famous architecture
+which makes use of this
+strategy like for example
+google and
+or also resnet in some situations
+we'll see next time
+now I don't have to spend
+much time on the nonlinearity
+because it's always there
+even in convolutional layers
+so after the convolutional maps
+you compute it then you add the nonlinearity
+ReLU is element wise
+that means
+that on the fischer map
+it acts separately
+on each pixel
+so you have your image
+you have your
+convolutional layer
+which outputs some fischer map
+then you have ReLU
+ReLU will
+check each pixel of the
+fischer map and compare it
+against the threshold
+if it's negative it will output 0
+otherwise it will output the same value
+so the fischer map after going through
+ReLU
+they will be either 0
+or a positive value
+indeed
+these are called activation maps
+because ReLU activates
+when
+the convolutional layer outputs
+a positive value
+which means that the fischer is present
+what ReLU does is
+just to detect
+it says ok
+the convolutional layer said that
+in this position the fischer is present
+with a strength of 0.9
+that means that the fischer is present
+so let's make it pass through to the next layers
+if the
+convolutional layer outputs a negative value
+ReLU will stop it
+because it will say ok here the fischer is not present
+so let's pass to
+the next layer
+the information that in that position
+there is no fischer
+it's activation because it reacts
+where the fischer activates
+where the fischer is present
+remember that this
+nonlinearity is necessary
+because otherwise you lose
+you make the layer collapse
+because convolutional layers are linear
+so if you have a stack of
+convolutional layers without the
+nonlinearity in the middle
+they behave like a single convolutional layer
+so they don't add complexity
+you need the ReLU
+the ReLU needs to be placed after each convolutional layer
+before the next one
+and that's why I say
+now I talked about
+at some point about the pooling
+the pooling layer
+is a different layer
+from the convolutional one
+it's optional
+and it has the
+objective of pooling things
+basically summarizing
+features in a small neighborhood
+in practice
+the pooling
+usually
+there are two kinds of pooling
+in the libraries
+which are the max pooling or the average pooling
+they are implemented again as filters
+which slices
+the difference is that
+they are not learned filters
+these are deterministic filters
+so pooling layers doesn't have
+learnable parameters
+they are just layers which either
+implements the max operation or the average operation
+looking at the neighborhood
+as they slice the image
+the idea is to make the network
+invariant to little translations
+in the image
+which means that if you want the network
+to detect faces
+it might happen that the distance
+between the eyes in the face of a person
+are not exactly the same distance
+but you don't want the network
+to over fit on the distance between the eyes
+you just want the network to
+locate two eyes that are more or less close
+so in order to make the network
+invariant to this small translation
+you use the pooling
+because the pooling
+what the pooling does
+is that if at some point
+you have a feature map
+which
+detects an eye
+here
+let's say
+let's make it bigger
+reacting to an eye
+here and here
+that's for image 1
+where you have your face
+with the eyes here
+then you have image 2
+you have another face
+but the eyes are slightly
+closer to the surface
+so you have a little bit
+of a difference
+more far apart
+sorry for that
+now the feature map
+of the layer which
+detects the eye
+in this second case will be probably
+one eye here and one eye here
+so they will be one pixel apart
+on the feature map
+if you add a pooling layer afterwards
+the pooling layer will
+consider
+a 2 by 2 pooling layer
+will react with the max
+operation so it will
+retain only the pixel with the highest value
+so pooling
+the output map
+will have a
+high value here then when it
+moves here it will have
+a high value here
+and 0 and 0
+now if you apply the pooling
+on the second image below
+you will have the max operation
+which still detects the eye
+here and when you slice to this
+next position by considering
+a stride of 2 in this case
+the max is here
+so it will react
+and it will place the maximum
+value here
+so at the end the two feature maps
+will be the same after pooling
+even if the starting feature map
+were slightly different because of the
+small drift
+so pooling makes the network invariant
+to this small translation
+because you don't care whether the eyes
+are a little further apart
+or a little closer
+you just need to detect the eyes
+to understand that there is a face
+in the image and that's the job
+of the pooling layer
+in this case the max pooling
+the average pooling instead of computing
+the max computes the average in the window
+now usually pooling layers
+are
+always
+used with a stride
+greater than 1
+you can use pooling layer with stride 1
+but in general since you want to
+pool information
+to be invariant
+to small translation
+you need to jump
+one pixel every 2
+so that's why usually pooling
+has stride 2
+that means that when you apply a pooling layer
+you are down sampling the feature map
+always
+usually by 2 sometimes by 4
+so pooling layers are usually
+used by using stride 2
+or stride equals to 4
+the other important element to remember
+regarding pooling layers
+is that they are
+deterministic
+they don't have parameters to be learned
+the number of parameters for the pooling layer
+is 0
+and that's the explanation
+of this concept
+and here you have an example of this
+and here you have an example
+if you want
+of this
+this feature
+so after pooling
+it will
+basically summarize
+the local information
+so if you shift the car
+one pixel to the right
+you can see that the pooling layer
+is reduced
+and without the pooling
+before the pooling
+there is a high number of pixels
+we changed
+but we want to be invariant to this
+so if you apply the pooling
+the number of pixels that changes
+are reduced
+and we are happy with that
+because we are more invariant to this problem
+we can do this
+and also the other thing I was saying
+is that the pooling makes the receptive field
+grow faster
+and that's why we are down sampling
+that's also one of the other advantages
+of using pooling
+and
+that's the explanation
+of the receptive field in this case
+which is something
+I basically told you
+so the fact that as you go through the network
+you get an increased receptive field
+of the depth
+one thing you might ask
+is why should I use a pooling layer
+instead of a convolutional layer
+with a stride greater than one
+actually
+you can do one of the two
+the difference
+is that
+if you down sample
+with the convolutional layer
+by increasing the stride
+in that case
+you are learning how to down sample
+because the convolutional layer
+learns the filters
+in pooling layers
+you don't learn how to down sample
+because the operation is fixed
+it's either the maximum or the average
+sometimes it's better to learn
+how to down sample
+because the network learns which information
+to preserve during the down sampling
+sometimes it's not
+because sometimes it's better to
+fix the operation to the maximum
+without asking the network
+to do this
+in order to avoid overfitting
+we are sure that we want
+the maximum over a local network
+now
+at the beginning of the deep learning era
+pooling layers were used a lot
+nowadays they are less used
+because now we learn more the stride
+to do this
+the stride of convolutional layer
+to do this task
+but it's not always
+the answer is not always
+either one or the other
+sometimes you need to check
+which
+architecture gives you the highest
+the best performance
+now
+regarding the normalization layer
+again we don't need to say
+more
+many things about this
+because again we can use batch normalization
+which is very common to be used in convolutional network
+so
+the structure is
+convolutional layer
+batch normalization
+activation
+and then optional pooling layer
+batch normalization is to make
+the network
+with activation not spread
+across the network to contain them
+to have the same scale as we saw
+in the previous lecture
+the behavior is the same with the fully connected layers
+so there is
+the activation
+map are normalized with respect to the
+batch so you compute the mean
+and the standard deviation over the batch
+and you normalize the activation maps
+you learn the parameter gamma
+and beta to compensate
+and to rescale the output
+because of course
+the bias and the scale could be important
+information to be transmitted
+to be provided to the next layer
+so that's why vectorization
+learns this parameter to compensate
+the rescaling
+and that's something you usually do again
+to make the network more robust
+against that
+and to provide better convergence
+and to provide better convergence
+at test time
+you use the running average
+which you computed during the training
+during training you save
+into memory a running average
+that you update at each iteration of the gradient descent
+and then you use
+this running average at test time
+as it is
+as we were
+also anticipating during the
+last
+during the
+last Friday
+at some point in the network
+you will need to
+go back to the fully connected layer
+because usually
+deep networks
+convolutional networks
+convolutional networks
+and this type of
+network
+is a structure where you start with an image
+then you have a
+set of convolutional layers
+many convolutional layers
+and this part
+usually is the feature extractor
+block
+so it's the function phi of theta
+of this line
+which job is to extract features
+after you have extracted
+features you have to go into the
+classifier or to the digressor
+and usually this job is done
+perfectly by dense layer
+so you have to
+adapt the feature map
+from the last convolutional layer
+to a format
+which is compatible
+with fully connected layers
+fully connected layers
+are layers with
+this kind of structure
+so you need to flatten
+basically
+or to adapt somehow
+to something which makes sense
+so when you flatten
+you add a flattening layer
+which takes
+each row of each one of the feature map
+and concatenates them
+so that
+it is compatible then
+to be
+connected to
+fully connected layers
+the flattening is just a
+reshaping operation
+just organize the matrices in a vector form
+it's a vectorization
+the alternative is the global average
+pooling layer, the gap
+which replaces each map
+with just one value
+which is the average of the entire map
+of course this operation is more
+you know
+it requires
+makes you lose more information
+because you are replacing
+the entire map with just one value
+so flattening keeps all the information
+but also it is
+it is a very important
+but of course it makes the number of interactions
+with the fully connected layer bigger
+because you have a lot of connections
+so the number of parameters is huge
+in this case
+if you use the global average pooling
+if you have 128 maps for example
+in the last layer
+you have 128 values
+to be connected to the first fully connected layer
+so it's less
+so it depends
+on what you want to achieve
+now this is the global average pooling
+that's the map
+the mean is 0.5
+and the output
+is simply
+even if
+those values
+are placed on different positions
+the mean is the same
+so the global average pooling basically says
+I don't care where the
+if I don't care where the features are
+in the last map
+I just want to provide this information
+to the fully connected layer
+that's the right choice
+so you don't care about the information
+of the features
+you just keep whether the features are present
+if this is enough for you
+the global average pooling is the right answer
+if instead you want to keep
+to preserve the information
+of where the features were
+probably you need to flatten
+of course that costs you more interactions
+more parameters
+so now we stop
+now on Friday
+we'll have the lab session
+where we'll basically build
+a neural network
+which is just the stack of these
+layers we just saw
+so a combination of multiple
+convolutional layers
+then flattened and then fully connected layers
+so that's the
+a very simple
+example of how
+we will be able to
+process the image
+and let it go through
+different convolutional blocks
+and so on
+so we'll see this in particular
+in part 2
+the last part of this slide
+is just some consideration
+so we will see that next time next week
+the concept for the lab session
+are all there so we'll be able to
+do the exercise on Friday
+so see you
+Friday on the software engineering lab
+I will send an announcement
+to you soon
+bye

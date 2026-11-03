@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 500" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 20px; fill: #0f172a; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #64748b; }
+      .box-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 14px; fill: #1e293b; }
+      .layer-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 13px; fill: #334155; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #334155; }
+      .math { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+      .node-txt { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+      
+      .pyramid-area { fill: #3b82f6; fill-opacity: 0.08; stroke: #3b82f6; stroke-width: 1.5; stroke-dasharray: 4,4; }
+      
+      .node-base { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+      .node-active-l1 { fill: #dbeafe; stroke: #2563eb; stroke-width: 2.2; }
+      .node-active-l2 { fill: #dcfce7; stroke: #16a34a; stroke-width: 2.2; }
+      .node-target-l3 { fill: #fef08a; stroke: #ca8a04; stroke-width: 2.8; }
+      
+      .edge-l1-l2 { stroke: #3b82f6; stroke-width: 1.8; fill: none; opacity: 0.85; marker-end: url(#arr-blue); }
+      .edge-l2-l3 { stroke: #16a34a; stroke-width: 2.2; fill: none; marker-end: url(#arr-green); }
+      .edge-faint { stroke: #e2e8f0; stroke-width: 1; stroke-dasharray: 3,3; }
+      
+      .card { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1.5; rx: 8; }
+      .panel-card { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 8; }
+    </style>
+    <marker id="arr-blue" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+      <polygon points="0 0, 6 2, 0 4" fill="#3b82f6" />
+    </marker>
+    <marker id="arr-green" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+      <polygon points="0 0, 6 2, 0 4" fill="#16a34a" />
+    </marker>
+  </defs>
+
+  <rect width="980" height="500" class="bg" />
+
+  <!-- Intestazione -->
+  <text x="35" y="34" class="title">Piramide di Espansione del Receptive Field (k = 3)</text>
+  <text x="35" y="54" class="subtitle">Dimostrazione analitica su 3 layer da 5 neuroni: il neurone centrale al terzo strato osserva l&#39;intero volume di ingresso</text>
+
+  <!-- Pannello Sinistro: Piramide di Connessioni -->
+  <g transform="translate(35, 75)">
+    <rect width="600" height="395" class="card" />
+
+    <!-- Piramide visiva di copertura globale (da h3,3 giù fino a x1 e x5) -->
+    <!-- h3,3 = (300, 75); L2: h2,2=(200, 205), h2,4=(400, 205); L1: x1=(100, 335), x5=(500, 335) -->
+    <polygon points="300 75, 525 335, 75 335" class="pyramid-area" />
+
+    <!-- Etichette Livelli a Sinistra -->
+    <text x="20" y="55" class="layer-label">Layer 3 (Livello Profondo, l = 3)</text>
+    <text x="20" y="185" class="layer-label">Layer 2 (Livello Intermedio, l = 2)</text>
+    <text x="20" y="315" class="layer-label">Layer 1 (Ingresso Immagine, l = 1)</text>
+
+    <!-- Coordinate X per 5 neuroni: 100, 200, 300, 400, 500 -->
+
+    <!-- ==================== CONNESSIONI L1 -> L2 ==================== -->
+    <!-- h2,2 (cx=200, cy=205) riceve da x1 (100), x2 (200), x3 (300) -->
+    <path d="M 100 315 L 190 220" class="edge-l1-l2" />
+    <path d="M 200 315 L 200 225" class="edge-l1-l2" />
+    <path d="M 300 315 L 210 220" class="edge-l1-l2" />
+
+    <!-- h2,3 (cx=300, cy=205) riceve da x2 (200), x3 (300), x4 (400) -->
+    <path d="M 200 315 L 290 220" class="edge-l1-l2" />
+    <path d="M 300 315 L 300 225" class="edge-l1-l2" />
+    <path d="M 400 315 L 310 220" class="edge-l1-l2" />
+
+    <!-- h2,4 (cx=400, cy=205) riceve da x3 (300), x4 (400), x5 (500) -->
+    <path d="M 300 315 L 390 220" class="edge-l1-l2" />
+    <path d="M 400 315 L 400 225" class="edge-l1-l2" />
+    <path d="M 500 315 L 410 220" class="edge-l1-l2" />
+
+    <!-- ==================== CONNESSIONI L2 -> L3 ==================== -->
+    <!-- h3,3 (cx=300, cy=75) riceve da h2,2 (200), h2,3 (300), h2,4 (400) -->
+    <path d="M 200 185 L 290 90" class="edge-l2-l3" />
+    <path d="M 300 185 L 300 95" class="edge-l2-l3" />
+    <path d="M 400 185 L 310 90" class="edge-l2-l3" />
+
+    <!-- ==================== NODI LAYER 1 (y = 335) ==================== -->
+    <!-- x1: Attivo (estremo sinistro del RF di h3,3) -->
+    <circle cx="100" cy="335" r="20" class="node-active-l1" />
+    <text x="100" y="335" class="node-txt" fill="#1d4ed8">x₁</text>
+
+    <!-- x2: Attivo -->
+    <circle cx="200" cy="335" r="20" class="node-active-l1" />
+    <text x="200" y="335" class="node-txt" fill="#1d4ed8">x₂</text>
+
+    <!-- x3: Attivo -->
+    <circle cx="300" cy="335" r="20" class="node-active-l1" />
+    <text x="300" y="335" class="node-txt" fill="#1d4ed8">x₃</text>
+
+    <!-- x4: Attivo -->
+    <circle cx="400" cy="335" r="20" class="node-active-l1" />
+    <text x="400" y="335" class="node-txt" fill="#1d4ed8">x₄</text>
+
+    <!-- x5: Attivo (estremo destro del RF di h3,3) -->
+    <circle cx="500" cy="335" r="20" class="node-active-l1" />
+    <text x="500" y="335" class="node-txt" fill="#1d4ed8">x₅</text>
+
+    <!-- Spiegazione Ampiezza RF su Layer 1 -->
+    <line x1="80" y1="368" x2="520" y2="368" stroke="#2563eb" stroke-width="2" />
+    <line x1="80" y1="362" x2="80" y2="374" stroke="#2563eb" stroke-width="2" />
+    <line x1="520" y1="362" x2="520" y2="374" stroke="#2563eb" stroke-width="2" />
+    <text x="300" y="386" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">Receptive Field Globale di h₃,₃ = 5 neuroni (100% dell&#39;input)</text>
+
+    <!-- ==================== NODI LAYER 2 (y = 205) ==================== -->
+    <!-- h2,1: Inattivo per h3,3 -->
+    <circle cx="100" cy="205" r="18" class="node-base" />
+    <text x="100" y="205" class="node-txt" fill="#94a3b8">h₂,₁</text>
+
+    <!-- h2,2: Coinvolto -->
+    <circle cx="200" cy="205" r="20" class="node-active-l2" />
+    <text x="200" y="205" class="node-txt" fill="#15803d">h₂,₂</text>
+
+    <!-- h2,3: Coinvolto -->
+    <circle cx="300" cy="205" r="20" class="node-active-l2" />
+    <text x="300" y="205" class="node-txt" fill="#15803d">h₂,₃</text>
+
+    <!-- h2,4: Coinvolto -->
+    <circle cx="400" cy="205" r="20" class="node-active-l2" />
+    <text x="400" y="205" class="node-txt" fill="#15803d">h₂,₄</text>
+
+    <!-- h2,5: Inattivo per h3,3 -->
+    <circle cx="500" cy="205" r="18" class="node-base" />
+    <text x="500" y="205" class="node-txt" fill="#94a3b8">h₂,₅</text>
+
+    <!-- ==================== NODI LAYER 3 (y = 75) ==================== -->
+    <!-- h3,1 -->
+    <circle cx="100" cy="75" r="18" class="node-base" />
+    <text x="100" y="75" class="node-txt" fill="#94a3b8">h₃,₁</text>
+    <!-- h3,2 -->
+    <circle cx="200" cy="75" r="18" class="node-base" />
+    <text x="200" y="75" class="node-txt" fill="#94a3b8">h₃,₂</text>
+
+    <!-- h3,3: Neurone Bersaglio Centrale -->
+    <circle cx="300" cy="75" r="23" class="node-target-l3" />
+    <text x="300" y="75" class="node-txt" font-size="14" fill="#854d0e">h₃,₃</text>
+
+    <!-- h3,4 -->
+    <circle cx="400" cy="75" r="18" class="node-base" />
+    <text x="400" y="75" class="node-txt" fill="#94a3b8">h₃,₄</text>
+    <!-- h3,5 -->
+    <circle cx="500" cy="75" r="18" class="node-base" />
+    <text x="500" y="75" class="node-txt" fill="#94a3b8">h₃,₅</text>
+  </g>
+
+  <!-- Pannello Destro: Derivazione Matematica dell'Espansione -->
+  <g transform="translate(655, 75)">
+    <rect width="290" height="395" class="panel-card" />
+    
+    <text x="20" y="28" class="box-title">Dinamica di Crescita del RF</text>
+    <text x="20" y="46" class="text" fill="#64748b">Composizione a cascata di kernel locali</text>
+
+    <!-- Box Formula Generale -->
+    <g transform="translate(15, 65)">
+      <rect width="260" height="85" fill="#eff6ff" stroke="#bfdbfe" rx="6" />
+      <text x="12" y="20" font-size="12" font-weight="700" fill="#1e40af">Formula Generale (Stride = 1)</text>
+      <text x="12" y="44" class="math" font-size="14" font-weight="bold" fill="#1d4ed8">RF_L = 1 + L · (k - 1)</text>
+      <text x="12" y="62" font-size="11" fill="#334155">dove L è il numero di strati convoluzionali</text>
+      <text x="12" y="76" font-size="11" fill="#334155">e k è la dimensione spaziale del kernel.</text>
+    </g>
+
+    <!-- Box Passaggi Passo-Passo -->
+    <g transform="translate(15, 165)">
+      <rect width="260" height="115" fill="#f8fafc" stroke="#e2e8f0" rx="6" />
+      <text x="12" y="20" font-size="12" font-weight="700" fill="#1e293b">Progressione nell&#39;Esempio:</text>
+      
+      <text x="12" y="40" font-size="11" fill="#334155">• <tspan font-weight="bold">Layer 1 (Input):</tspan> RF₁ = 1 pixel</text>
+      <text x="12" y="60" font-size="11" fill="#334155">• <tspan font-weight="bold">Layer 2 (1° conv):</tspan> RF₂ = 1 + 1·(3 - 1) = <tspan font-weight="bold" fill="#16a34a">3</tspan></text>
+      <text x="24" y="74" class="math" font-size="10" fill="#64748b">RF(h₂,₃) = { x₂, x₃, x₄ }</text>
+      <text x="12" y="94" font-size="11" fill="#334155">• <tspan font-weight="bold">Layer 3 (2° conv):</tspan> RF₃ = 1 + 2·(3 - 1) = <tspan font-weight="bold" fill="#2563eb">5</tspan></text>
+      <text x="24" y="108" class="math" font-size="10" fill="#64748b">RF(h₃,₃) = { x₁, x₂, x₃, x₄, x₅ }</text>
+    </g>
+
+    <!-- Box Insight Chiave -->
+    <g transform="translate(15, 295)">
+      <rect width="260" height="85" fill="#fefce8" stroke="#fef08a" rx="6" />
+      <text x="12" y="20" font-size="12" font-weight="700" fill="#854d0e">Principio Architetturale</text>
+      <text x="12" y="38" font-size="11" fill="#713f12">2 layer convoluzionali con k = 3</text>
+      <text x="12" y="52" font-size="11" fill="#713f12">hanno lo stesso RF di 1 singolo layer k = 5,</text>
+      <text x="12" y="66" font-size="11" font-weight="700" fill="#a16207">ma con meno parametri e più non-linearità</text>
+      <text x="12" y="78" font-size="10" fill="#713f12">(2×3 = 6 pesi anziché 5 per unità 1D; 18 vs 25 in 2D).</text>
+    </g>
+  </g>
+</svg>

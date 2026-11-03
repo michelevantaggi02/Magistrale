@@ -1,0 +1,374 @@
+Quindi questo è un tipico pattern in cui, alla fine, per mappare l'output dell'ultimo layer convoluzionale — ovvero le feature estratte dall'ultimo layer convoluzionale — con il classificatore o regressore finale, è necessario utilizzare o il Global Average Pooling (GAP), in modo da avere una dimensione fissa in uscita per il collegamento con i fully connected layer, oppure il layer di flatten, che appiattisce tutto trasformandolo in un vettore.
+Naturalmente, vettorizzare con il flatten rende dipendenti dalla dimensione dell'immagine di input, mentre il Global Average Pooling rende indipendenti dalla risoluzione dell'immagine di input.
+Il rovescio della medaglia è che il GAP riassume l'informazione calcolandone la media, quindi si rischia di perdere qualche dettaglio; mentre lo svantaggio del flattening è che si rimane vincolati alla risoluzione di input. Tutto dipende, quindi, da quali informazioni si desidera preservare.
+
+Prima di andare avanti, parliamo di alcune varianti del layer convoluzionale standard.
+Una di queste varianti è rappresentata dalle convoluzioni dilatate (dilated convolutions).
+La differenza rispetto alla convoluzione standard è che la convoluzione dilatata incorpora lo stride all'interno del filtro stesso. Nel senso che, quando si applica la dilatazione, invece di considerare nel filtro i nove elementi contigui adiacenti tra loro — come avviene nella convoluzione standard con filtro 3x3 —, si prende in considerazione un intorno più ampio, saltando alcuni pixel.
+Quindi, con un fattore di dilatazione (dilation rate) pari a 2, i pixel considerati durante il calcolo della convoluzione per il filtro in quella posizione sono quelli evidenziati lì: in pratica si applica il filtro prendendo un pixel ogni due, saltando un pixel tra uno e l'altro prima di calcolare il prodotto di convoluzione.
+Con una dilatazione pari a 4, si sovrappone essenzialmente il filtro su un'area molto più estesa (ad esempio una regione 16x16 o 15x15) e si considerano soltanto quei nove elementi, che si trovano ora a una distanza considerevole l'uno dall'altro.
+
+L'effetto di questa operazione non è un sottocampionamento (downsampling), perché se non si applica uno stride (ovvero con stride pari a 1), la finestra scorre comunque di un pixel alla volta. Quindi alla fine non si riduce la risoluzione spaziale, non si fa il downsampling dell'immagine.
+La differenza sostanziale è che il filtro osserva una porzione più ampia dell'immagine a parità di parametri.
+L'alternativa senza ricorrere alla dilatazione, se si volesse osservare una porzione più grande dell'immagine, consisterebbe nell'usare un filtro di dimensioni maggiori: ad esempio, per osservare un'area 5x5 dell'immagine anziché usare una dilatazione pari a 2 su un 3x3, bisognerebbe usare un filtro 5x5, il che comporterebbe 25 parametri invece dei 9 del filtro 3x3.
+Con la dilatazione, invece, si mantiene lo stesso numero di parametri (3x3 = 9), ma si copre una porzione più ampia dell'immagine.
+Ovviamente, saltando dei pixel, un filtro denso 5x5 catturerebbe più dettagli fini all'interno di quell'area; tuttavia la convoluzione dilatata rappresenta una via di mezzo ideale tra efficienza computazionale e ampiezza della porzione di immagine osservata.
+In questo modo si mantengono gli stessi pesi per ciascun canale, pur coprendo una regione più grande nell'immagine o nella feature map di input.
+
+Questo si traduce fondamentalmente in un receptive field (campo recettivo) più ampio, come vedremo ora nel dettaglio.
+Come sapete, per receptive field si intende la porzione dell'immagine di input che influenza l'attivazione di un certo neurone: ogni volta che si impilano layer convoluzionali, il layer corrente osserva una porzione via via più grande dell'immagine di input, grazie all'effetto compositivo della gerarchia di layer sovrapposti.
+Se si impiega la dilatazione, l'incremento del receptive field per ciascun layer è notevolmente maggiore: osservando una porzione più ampia della feature map precedente, si espande il receptive field molto più rapidamente, senza dover aumentare eccessivamente la profondità della rete, proprio grazie al fattore di dilatazione.
+
+Ad esempio, se questi sulla riga in basso sono i pixel di input: al primo layer, applicando una dilatazione pari a 1 con un filtro 3x3 (o kernel di dimensione 3), il receptive field è pari a 3.
+Al secondo layer, se si imposta una dilatazione pari a 2, questo neurone osserva immediatamente 7 pixel dell'immagine di input (3 + 2*2 = 7).
+Se non avessimo applicato la dilatazione, il layer 2 avrebbe osservato 5 pixel anziché 7, per via della normale composizione di filtri 3x3 consecutivi.
+Con la dilatazione si osserva subito una porzione più grande: applicare una dilatazione pari a 2 permette al secondo layer di coprire lo stesso numero di pixel di input che, senza dilatazione, avrebbe richiesto 3 layer 3x3 sovrapposti.
+Chiaro?
+Qui il receptive field del layer 1 è 3. Al secondo layer, senza dilatazione, questo neurone avrebbe accesso a 5 pixel dell'immagine di input; con la dilatazione pari a 2, invece, guardate la slide: il secondo layer osserva ben 7 pixel di input.
+Dunque servono meno layer per raggiungere lo stesso receptive field che altrimenti avrebbe richiesto un layer aggiuntivo: sostanzialmente una dilatazione pari a 2 fa risparmiare un intero layer per raggiungere la stessa copertura spaziale.
+Quindi, se il vostro obiettivo è aumentare il receptive field risparmiando allo stesso tempo parametri, potete usare una convoluzione dilatata con dilatazione 2, che consente di risparmiare un layer: si mantengono così i parametri di 2 layer anziché 3, ottenendo però lo stesso receptive field che si sarebbe avuto con 3 layer convoluzionali sovrapposti con kernel 3x3.
+E naturalmente, se si aumenta ulteriormente la dilatazione fino a 4, il terzo layer arriverà a coprire una porzione ancora più vasta dell'input, fino a 15 pixel in questo caso.
+È quindi una modalità estremamente conveniente di utilizzare la convoluzione se si vuole risparmiare sui parametri pur garantendo un receptive field molto esteso.
+
+
+Un'altra fondamentale alternativa alla convoluzione standard è rappresentata dalle depthwise separable convolutions (convoluzioni separabili in profondità).
+Nella convoluzione standard, ogni filtro osserva l'intera profondità dell'input: abbiamo visto come un filtro convoluzionale sia essenzialmente un parallelepipedo tridimensionale che attraversa tutti i canali dell'input. Quindi, se abbiamo $C_{in}$ canali come feature map in ingresso al layer convoluzionale, il numero di parametri di ciascun filtro è dato dalla dimensione spaziale $k \times k$ moltiplicata per il numero di canali di input ($C_{in}$), e poi per il numero totale di feature map prodotte in uscita ($C_{out}$).
+Senza considerare i bias per il momento, la formula per il numero di parametri di un layer convoluzionale standard è:
+$k \times k$ (dimensione del filtro) $\times C_{in}$ (canali di input) $\times C_{out}$ (canali di output).
+
+Le depthwise separable convolutions scompongono questo filtro tridimensionale in due filtri separabili.
+Nel primo passaggio (la depthwise convolution), a ciascuna feature map di input viene associato un singolo filtro bidimensionale: non è più un filtro 3D "solido" che guarda contemporaneamente a tutte le mappe di ingresso, ma un filtro $k \times k$ che opera esclusivamente sulla singola feature map associata, senza scendere lungo la profondità.
+Avendo un filtro per ciascuna feature map di input, questo stadio produce in uscita un numero di feature map intermedie esattamente pari a quello di input ($C_{in}$).
+Successivamente, per combinare queste feature map intermedie e ottenere il tensore di output con il numero desiderato di canali, si aggiunge una convoluzione 1x1 (pointwise convolution). Questa convoluzione 1x1 combina linearmente le mappe intermedie prodotte dalla fase depthwise per generare le $C_{out}$ feature map finali in uscita.
+
+Riepilogando, l'idea è la seguente:
+1. Si crea un filtro 2D per ciascuna feature map di input, dedicato unicamente ad analizzare quella specifica mappa (depthwise). Questo produce in uscita un numero di feature map intermedie pari a $C_{in}$.
+2. Per creare il tensore di output finale con un numero arbitrario di canali ($C_{out}$), si combinano queste feature map intermedie tramite una convoluzione 1x1 (pointwise), dove $C_{out}$ è l'iperparametro stabilito dall'architettura.
+
+Perché facciamo questo? Perché, ancora una volta, ci consente di risparmiare una quantità enorme di parametri.
+A parità di canali di input ($C_{in}$) e canali di output ($C_{out}$), in un layer convoluzionale depthwise separable il numero di parametri per lo stadio depthwise è:
+$k \times k \times C_{in}$
+(avendo un filtro $k \times k$ per ciascun canale di input).
+A questi si sommano i parametri della convoluzione 1x1 (pointwise), necessaria per proiettare ed espandere le feature map a $C_{out}$.
+Dato che ciascun filtro pointwise ha dimensione $1 \times 1$ lungo i $C_{in}$ canali, i parametri del layer 1x1 sono:
+$1 \times 1 \times C_{in} \times C_{out} = C_{in} \times C_{out}$.
+Il totale complessivo dei parametri è quindi:
+$(k \times k \times C_{in}) + (C_{in} \times C_{out})$.
+
+Se confrontate i due approcci a parità di dimensioni, si passa tipicamente da circa 300.000 pesi nel caso standard a soli 33.000: si tratta di quasi nove volte meno parametri rispetto alla convoluzione classica!
+Allo stesso modo, anche le operazioni di moltiplicazione e accumulo (MAC / multiply-and-add) si riducono di un fattore circa pari a 9 o superiore.
+I layer convoluzionali separabili sono pertanto di gran lunga più efficienti dei layer convoluzionali standard.
+
+Il rovescio della medaglia è che, operando in questo modo, ciascuna feature spaziale appresa nella fase depthwise viene estratta analizzando una sola mappa di feature alla volta, senza considerare le interazioni incrociate tra canali.
+Ripensando all'esempio delle feature map in cui una mappa rileva gli angoli, un'altra i bordi e così via, per apprendere le feature successive non si considerano congiuntamente bordi, angoli o texture nello spazio 3D, ma si osserva ciascuna componente separatamente prima di fonderle. Si tralascia quindi parte delle correlazioni cross-channel durante il filtraggio spaziale.
+Di conseguenza, le convoluzioni depthwise separable sono molto più efficienti ma solitamente un po' meno accurate rispetto alla convoluzione classica.
+Dovrebbero quindi essere impiegate quando l'efficienza è il vincolo o il collo di bottiglia principale dell'applicazione.
+Vengono infatti utilizzate nelle MobileNet — una famiglia di architetture progettate per essere eseguite su smartphone, dispositivi edge o processori integrati su robot, dove l'obiettivo primario è ridurre parametri e operazioni per rendere il modello rapido e leggero.
+In questi contesti le depthwise separable rappresentano una scelta eccellente: si sacrifica una frazione minima di accuratezza, ma il guadagno sul fronte del numero di parametri e delle moltiplicazioni-somme è considerevole.
+
+Qui nella slide c'è una breve animazione che mostra i diversi stadi della convoluzione depthwise.
+Questo schema ricapitola vantaggi e svantaggi nell'uso delle depthwise separable convolutions: il numero di parametri cala drasticamente (ad esempio da quasi 400.000 o 100.000 parametri a soli 51.000), e anche le operazioni di moltiplicazione e accumulo diminuiscono moltissimo, scendendo a un quarto o meno di quelle standard.
+Lo svantaggio è una lieve perdita di accuratezza dovuta alla minore espressività, ma la perdita è minima a fronte dell'enorme guadagno in efficienza computazionale e memoria risparmiata. È, naturalmente, un compromesso che potreste voler accettare in questo caso.
+
+Qui nella slide c'è un riassunto della convoluzione 1x1, delle convoluzioni dilatate (dilated convolutions) e delle depthwise separable, con un confronto su cosa si guadagna in termini di filtri e sui casi d'uso tipici.
+Normalmente, la convoluzione 1x1 potrebbe sembrare inutile a prima vista, ma è invece diffusissima in molteplici architetture, poiché serve principalmente a fondere e combinare i layer e a modificare arbitrariamente il numero di canali lungo la rete. Rappresenta quindi un blocco fondamentale e un modo standard per gestire il channel mixing (la miscelazione dei canali) all'interno delle architetture.
+Le convoluzioni dilatate e le depthwise separable, invece, sono varianti introdotte essenzialmente per ragioni di efficienza.
+Entrambe servono a ottimizzare le risorse: la convoluzione dilatata consente di mantenere lo stesso receptive field (campo recettivo) richiedendo meno layer, risparmiando parametri a parità di contesto spaziale; le convoluzioni depthwise separable sono utilizzate per abbattere drasticamente sia le operazioni di moltiplicazione e accumulo (MAC) sia il numero di parametri, cercando al contempo di minimizzare la perdita di accuratezza. Sono dunque varianti espressamente votate all'efficienza.
+
+Per concludere questa prima parte, vorrei evidenziare brevemente quali proprietà di invarianza ci garantisce di default un layer convoluzionale — ovvero senza applicare accorgimenti esterni o forzature, ma come proprietà intrinseca dell'operazione.
+Una caratteristica offerta per costruzione dal layer convoluzionale, come abbiamo già discusso, è l'equivarianza alla traslazione: se trasliamo l'immagine di input di 10 pixel, l'output (la feature map) risulterà traslato esattamente di 10 pixel.
+Tuttavia, ciò che solitamente desideriamo per la classificazione è l'invarianza a piccoli spostamenti (small shifts): vogliamo cioè che la rete non sia sensibile a minime variazioni di posizione nell'input.
+Questo comportamento si ottiene combinando i layer convoluzionali con il pooling layer (o con convoluzioni a stride maggiore di 1). Sottocampionando l'immagine e aggregando le informazioni all'interno della finestra di pooling, un piccolo spostamento delle feature all'interno di tale finestra viene completamente assorbito e azzerato dopo il pooling.
+Pertanto, le architetture convoluzionali con pooling sono invarianti a piccole traslazioni (spostamenti di 1 o 2 pixel, a seconda delle dimensioni della finestra di pooling). Ciò rende la rete robusta a piccoli disallineamenti.
+Qui potete vedere un esempio pratico: muovendo leggermente l'immagine in ingresso a una rete dotata di layer di pooling, la classe predetta in output rimane invariata.
+Ovviamente, se la traslazione diventa eccessiva, le informazioni escono dal campo visivo e l'oggetto diventa irriconoscibile: l'invarianza sussiste solo entro un certo margine di spostamento. Piccoli shift vengono ignorati dalla rete nel formulare la predizione finale, mentre traslazioni ampie portano l'oggetto fuori dalla vista dei layer di pooling e alterano l'output.
+Abbiamo fatto questo esempio la scorsa lezione: se la distanza relativa tra due occhi varia di uno, due o tre pixel, il layer di pooling assorbe questa oscillazione, rendendo i layer successivi agnostici rispetto a questo piccolo shift e conferendo maggiore robustezza al modello. Ma oltre una certa soglia, lo spostamento modifica radicalmente la rappresentazione.
+
+Al contrario, la rete non è affatto invariante di default rispetto a rotazioni e zoom (variazioni di scala).
+Se si ruota l'immagine, la feature map cambia totalmente, poiché per definizione le feature map non sono invarianti né a rotazioni né a ingrandimenti.
+Questo significa che le prestazioni della rete possono degradarsi sensibilmente se le immagini del set di test sono versioni ruotate rispetto a quelle viste durante il training: la rete non è abituata a riconoscere pattern ruotati di 90 gradi o più attorno agli assi.
+Pertanto, se vogliamo che il modello sia invariante rispetto a questo genere di trasformazioni, dobbiamo forzare tale invarianza.
+Ciò si ottiene fondamentalmente attraverso due strategie:
+1. Modifiche strutturali all'architettura: ad esempio introducendo layer con pesi condivisi orientati o architetture intrinsecamente invarianti/equivarianti.
+2. L'impiego della data augmentation, che è fondamentale. Mostrando alla rete durante l'addestramento sia l'immagine originale sia la sua versione ruotata o scalata, entrambe associate alla medesima etichetta, la rete impara che la rotazione o lo zoom non devono alterare la classe di appartenenza.
+La data augmentation consiste proprio nell'applicare trasformazioni geometriche casuali all'immagine preservandone la label, rendendo il modello notevolmente più robusto.
+Esistono anche layer specifici progettati per essere matematicamente equivarianti o invarianti a rotazioni e riflessioni (group convolutions, ecc.), ma si tratta di architetture particolari. Di default, i layer convoluzionali standard non sono invarianti a queste trasformazioni, quindi per ottenere tale robustezza è necessario ricorrere quantomeno alla data augmentation.
+
+Chiarito questo punto, passiamo ora allo studio delle architetture.
+Vediamo come assemblare una vera e propria architettura basata su CNN.
+Disponiamo ormai di tutti i mattoni fondamentali: conosciamo i layer convoluzionali standard, le due varianti (convoluzioni dilatate e depthwise separable), i pooling layer, i layer di Batch Normalization, il dropout per la regolarizzazione, i fully connected layer e tutti i meccanismi di raccordo tra layer convoluzionali e densi, quali il Global Average Pooling (GAP) o il flattening layer. Possiamo quindi costruire le nostre architetture.
+
+Nel corso degli anni successivi al 2012, all'interno della comunità scientifica sono nate diverse architetture standard.
+Si trattava essenzialmente di combinazioni e composizioni di questi layer che si erano dimostrate particolarmente efficaci nel risolvere compiti specifici.
+Solitamente, quando si affronta un nuovo problema, non si parte da zero nel progettare l'architettura: si comincia da una di queste architetture consolidate, utilizzandola come backbone, e la si modifica o adatta leggermente alle esigenze specifiche del proprio task.
+È estremamente conveniente e vantaggioso conoscere queste architetture, perché forniscono solide basi già sperimentate dalla comunità e comprovate come efficaci in molteplici situazioni. Ecco perché in questa lezione voglio fornirvi una panoramica delle principali alternative da cui partire per progettare la vostra rete.
+
+Prima di farlo, confronteremo le varie architetture su un benchmark di riferimento ben preciso: il task di classificazione di immagini sul dataset ImageNet (la competizione ILSVRC).
+ImageNet è un celebre dataset raccolto e messo a disposizione della comunità per una challenge annuale.
+Dal 2010 al 2017 il dataset è stato pubblicato e aggiornato ogni anno, e ogni anno la sfida veniva ripetuta.
+Questo dataset fungeva da riferimento (benchmark) per confrontare le diverse architetture proposte via via dai ricercatori.
+Si tratta di un compito di classificazione su ben 1000 classi distinte: un dataset imponente che conteneva in media circa 1,28 milioni di immagini di addestramento e un test set di circa 100.000 immagini.
+Una mole di dati notevole, ideale per mettere alla prova accuratezza, consumo di memoria ed efficienza computazionale dei modelli proposti.
+
+Nell'arco di quegli otto anni (dal 2010 al 2017) sono state proposte molteplici architetture per migliorare le prestazioni su questo dataset.
+ImageNet e il compito di classificazione visiva sono sufficientemente generali da fare da traino e da modello per molti altri task: se un'architettura si comportava meglio delle precedenti su ImageNet, con ogni probabilità avrebbe ottenuto prestazioni superiori anche su compiti diversi (come object detection o segmentazione). Per questo motivo ImageNet è considerato il benchmark per eccellenza.
+
+In quegli otto anni, le architetture vincitrici della competizione hanno fatto segnare traguardi storici.
+Si partiva nel 2010-2011 da un tasso di errore top-5 pari al 28,2%.
+Ricordiamo cosa si intende per errore top-5: una predizione della rete viene considerata corretta se tra le prime 5 classi con la probabilità più alta stimate dal modello è presente la classe reale (la ground truth).
+La rete calcola infatti una distribuzione di probabilità sulle classi; ordinando le classi in ordine decrescente, si considerano le prime cinque (ad esempio: prima classe "cane" con probabilità 0,28, seconda classe "casa" con 0,26, terza "auto" con 0,20 e così via). Se tra queste cinque classi è presente l'etichetta corretta, la classificazione viene considerata esatta.
+La metrica top-5 è quindi più "tollerante" rispetto alla top-1: nella top-1 il campione è classificato correttamente solo se la classe al primissimo posto è quella esatta; nella top-5 basta che figuri tra le prime cinque predizioni.
+Un errore del 28,2% indicava quindi che in oltre 28 casi su 100 la classe corretta non figurava nemmeno tra le prime 5 predizioni fornite dal modello.
+
+Questo errore è stato progressivamente abbattuto negli anni successivi grazie alle nuove architetture.
+Vedremo AlexNet (2012), una delle architetture convoluzionali storiche più celebri.
+Prima del 2012, i modelli vincenti non erano reti neurali convoluzionali, ma algoritmi di machine learning classico (come Support Vector Machines) basati su feature hand-crafted ingegnerizzate a mano, quali SIFT, SURF o feature di Haar.
+Il 2012 segna formalmente l'esplosione del Deep Learning: AlexNet è stata la prima architettura convoluzionale a vincere la sfida, riducendo immediatamente il tasso di errore di quasi il 10% rispetto allo stato dell'arte precedente.
+Si trattava di una rete relativamente poco profonda (appena 8 layer tra convoluzionali e densi, che oggi quasi non definiremmo "deep"), ma l'uso delle convoluzioni consentì di compiere un balzo in avanti straordinario.
+In seguito vedremo altri tentativi pionieristici, come GoogleNet nel 2014, che guadagnò un ulteriore 10% di accuratezza rispetto ad AlexNet, e poi ResNet (2015), un'architettura rivoluzionaria e tra le più diffuse e apprezzate ancora oggi.
+
+Facciamo quindi una panoramica delle prime architetture storiche: AlexNet, VGG e GoogleNet, dal 2012 al 2014, per comprendere l'intuizione e la strategia ingegneristica alla base di ciascuna.
+AlexNet era un'architettura molto lineare, essenzialmente un'applicazione diretta dei concetti visti nella lezione scorsa: si riceve l'immagine in ingresso e si applica una sequenza di layer convoluzionali alternati a pooling layer.
+All'epoca, tutte le immagini di input venivano ridimensionate a una dimensione standard di 227x227 pixel prima di essere date in pasto alla rete, a prescindere dalle dimensioni originali.
+Il primo layer convoluzionale produceva 96 feature map con filtri di dimensioni 11x11 pixel — filtri molto grandi.
+Seguiva un pooling layer che riduceva la risoluzione a 27x27 per le 96 feature map; poi un secondo layer convoluzionale con 256 feature map, e così via.
+Al termine della parte convoluzionale, dopo l'ultimo pooling layer (che forniva 256 feature map con risoluzione spaziale 6x6), veniva inserito un flattening layer, che trasformava le feature map in un unico vettore lungo $256 \times 6 \times 6$ (pari a 9216 elementi).
+Questo vettore viene collegato al primo layer fully connected (FC6), composto da 4096 neuroni.
+Segue poi un secondo layer fully connected (FC7), anch'esso con 4096 neuroni, e infine l'ultimo layer fully connected (FC8) con 1000 neuroni, che produce le 1000 probabilità di output, una per ciascuna delle categorie previste dal benchmark di ImageNet.
+
+All'epoca (nel 2012), le GPU commerciali disponibili sul mercato disponevano di pochissima memoria: per addestrare AlexNet i ricercatori dovettero suddividere il modello ed eseguire il training in parallelo su 2 GPU (delle NVIDIA GTX 580) con soli 3 GB di memoria ciascuna. E l'addestramento durava all'incirca 5 o 6 giorni.
+Oggi una rete del genere può essere addestrata comodamente sul proprio laptop in pochi minuti, poiché le GPU attuali sono incredibilmente più potenti ed efficienti rispetto a quelle di dodici o quattordici anni fa.
+Tuttavia, all'epoca si trattò di una svolta epocale grazie allo straordinario balzo di prestazioni ottenuto.
+
+È molto istruttivo analizzare AlexNet per comprendere come calcolare la dimensione di output di ciascun layer convoluzionale e il rispettivo numero di parametri.
+Prendiamo ad esempio il primo layer convoluzionale: produce 96 feature map con filtri 11x11; era configurato con uno stride pari a 4, senza padding (padding = 0), ed elaborava un'immagine di input di risoluzione 227x227 pixel su 3 canali RGB.
+L'output del primo layer convoluzionale, applicando le formule viste nella scorsa lezione, si calcola facilmente: la feature map in uscita ha una risoluzione spaziale di 55x55 pixel per 96 canali.
+Il numero di parametri è dato da:
+$k \times k \times C_{in} \times C_{out} + C_{out}$ (includendo i bias per ciascun canale di output), ovvero circa 35.000 parametri ($11 \times 11 \times 3 \times 96 + 96 \approx 35\,000$).
+È possibile calcolare anche il numero di operazioni di moltiplicazione e accumulo (MAC / FLOPs), ovvero la quantità di calcoli richiesti sulla GPU. E lo stesso calcolo può essere ripetuto per i successivi layer di convoluzione e di pooling.
+
+Per il resto della lezione è fondamentale tenere sempre a mente queste tre formule matematiche:
+1. **Dimensioni spaziali della feature map di output ($H_{out}, W_{out}$)**:
+   Partendo da un tensore di input con dimensioni $C_{in} \times H_{in} \times W_{in}$, il numero di canali di output $C_{out}$ è un iperparametro scelto da voi per il layer.
+   L'altezza della mappa in uscita è:
+   $$H_{out} = \left\lfloor \frac{H_{in} - k + 2p}{s} \right\rfloor + 1$$
+   dove $k$ è la dimensione del filtro, $p$ è il padding e $s$ è lo stride. Lo stesso calcolo si applica simmetricamente alla larghezza $W_{out}$.
+2. **Numero di parametri di un layer convoluzionale standard**:
+   $$\text{Parametri} = (C_{in} \times k \times k \times C_{out}) + C_{out}$$
+   (dove il termine $+ C_{out}$ corrisponde ai bias, uno per ogni feature map prodotta). Per le depthwise separable convolutions la formula è differente, come visto in precedenza.
+3. **Numero di operazioni di moltiplicazione e accumulo (Multiply-Add / MAC)**:
+   Consideriamo la moltiplicazione e l'addizione congiuntamente perché, ad ogni passo della convoluzione, si moltiplica il peso del filtro per il pixel dell'input e si accumula il valore per calcolare l'attivazione finale. Inoltre, a livello hardware sulle GPU, questa operazione è eseguita atomicamente come una singola istruzione (Fused Multiply-Add).
+   Quante operazioni di questo tipo si eseguono?
+   Si esegue un insieme di operazioni per ciascun pixel della feature map di output.
+   In questo caso la mappa di output ha dimensione $H_{out} \times W_{out}$ (ad esempio $55 \times 55$).
+   Per calcolare ciascun singolo pixel di output, si devono effettuare $k \times k$ moltiplicazioni e somme spaziali per ogni canale di ingresso ($C_{in}$), e questo per tutte le $C_{out}$ feature map generate.
+   Quindi il numero totale di operazioni multiply-and-add è:
+   $$\text{MAC} = H_{out} \times W_{out} \times k \times k \times C_{in} \times C_{out}$$
+   Nel primo layer di AlexNet, questo calcolo produce circa 105 milioni di operazioni!
+
+Queste formule sono cruciali perché gran parte delle architetture successive ha cercato di intervenire su questi fattori per abbattere il carico computazionale e il numero di parametri, ottimizzando le risoluzioni e le dimensioni dei filtri.
+Notate che il primo layer di AlexNet contava solo circa 35.000 parametri (pochissimi rispetto a un layer fully connected, che ne possiede a milioni), ma richiedeva ben 100 milioni di operazioni MAC!
+Guardando la formula, questo costo computazionale elevatissimo è legato in parte alla risoluzione della feature map in uscita ($55 \times 55$), che è necessario preservare per non perdere informazioni, ma dipende fortemente anche dalla dimensione del filtro ($11 \times 11$).
+
+Le architetture proposte successivamente ad AlexNet hanno cercato di ridurre questo onere computazionale impiegando esclusivamente convoluzioni 3x3 invece di filtri 11x11 o 5x5.
+AlexNet infatti utilizzava filtri di varie dimensioni a seconda dello stadio della rete (11x11, 5x5, 3x3).
+L'architettura VGG, proposta nel 2014, fu concepita utilizzando esclusivamente layer convoluzionali con filtri 3x3.
+La motivazione teorica alla base di questa scelta è che impilando 3 layer convoluzionali consecutivi con filtri 3x3, si ottiene lo stesso identico receptive field che si avrebbe con un unico layer dotato di filtri 7x7!
+Ricordate quanto abbiamo discusso la volta scorsa: se utilizziamo un layer convoluzionale 7x7, un singolo neurone osserva immediatamente una porzione 7x7 dell'input. Il receptive field con un singolo layer convoluzionale 7x7 è pari a 7 fin dal primo layer.
+Per ottenere lo stesso receptive field con filtri 3x3 al posto di un unico filtro 7x7, è sufficiente impilare più layer consecutivi di dimensione 3x3:
+- Il primo layer ha un receptive field di 3x3 rispetto all'input (ciascun neurone copre un'area 3x3).
+- Il secondo layer ha un receptive field di 3x3 rispetto alla feature map precedente, ma rispetto all'immagine di input originale copre una porzione di 5x5 pixel ($3 + 2 = 5$).
+- Il terzo layer ha un receptive field di 3x3 rispetto al layer precedente, di 5x5 rispetto a quello ancora prima, e di 7x7 rispetto all'immagine di input iniziale ($5 + 2 = 7$).
+Dunque, impilando 3 layer convoluzionali con kernel 3x3, si ottiene esattamente lo stesso receptive field che si avrebbe avuto con un singolo layer convoluzionale dotato di filtri 7x7.
+
+A questo punto la domanda spontanea è: perché dovremmo preferire questa soluzione?
+A prima vista si potrebbe pensare che, essendoci 3 layer anziché uno, ci siano più parametri; invece è vero l'esatto contrario: con questa configurazione i parametri sono molti meno!
+La spiegazione matematica è immediata:
+Supponiamo, per semplicità di confronto, che il numero di canali di input e di output rimanga costante ($C_{in} = C_{out} = C$), ovvero che ogni layer produca lo stesso numero di canali ricevuti in ingresso.
+Con un singolo layer 7x7, il numero di parametri (pesi) è:
+$7 \times 7 \times C^2 = 49 \, C^2$.
+Se invece impiliamo 3 layer con filtri 3x3, ciascun layer conta $3 \times 3 \times C \times C = 9 \, C^2$ parametri. Avendo 3 layer identici in cascata, il totale dei parametri è:
+$3 \times (3 \times 3 \times C^2) = 27 \, C^2$.
+$27 \, C^2$ è nettamente inferiore a $49 \, C^2$!
+Con 3 layer 3x3 si ottiene quasi la metà dei parametri rispetto al singolo layer 7x7, pur garantendo lo stesso identico receptive field!
+
+Non solo: questa configurazione risulta superiore anche per la natura compositiva e gerarchica del Deep Learning. Scomponendo il problema in 3 sotto-problemi più piccoli e graduali (intervallati da 3 funzioni di attivazione non lineari invece di una sola), la rete acquisisce una maggiore capacità di rappresentazione ed è molto più semplice da addestrare rispetto a un unico layer chiamato a coprire bruscamente un'area 7x7 dell'input. Questo tipo di architettura converge decisamente meglio.
+VGG ha sfruttato appieno questa proprietà: rendere la rete più profonda impilando esclusivamente piccoli filtri 3x3, così da raggiungere ampi receptive field risparmiando parametri.
+
+Questa intuizione — utilizzare quasi esclusivamente kernel 3x3 — è diventata lo standard di riferimento per tutte le architetture successive, incluse quelle moderne: con i filtri 3x3 non si perde nulla, si ottengono solo benefici computazionali ed espressivi.
+In generale, quando progettate architetture convoluzionali, potete tranquillamente evitare di lambiccarvi sulla dimensione ideale dei filtri: usate filtri 3x3 e, se desiderate una rappresentazione più profonda e un receptive field più esteso, aumentate semplicemente il numero di layer.
+
+Analizzando poi la distribuzione tra operazioni e parametri, VGG ha evidenziato un comportamento fondamentale: all'interno della rete si riscontra una situazione opposta e speculare tra il numero di moltiplicazioni-somme (MAC) e la quantità di parametri nei diversi stadi.
+Tipicamente, le operazioni di moltiplicazione e accumulo (MAC / FLOPs) sono concentrate quasi interamente nei primi layer convoluzionali. Questo accade perché i MAC dipendono in modo diretto dalla risoluzione spaziale ($H \times W$), e la risoluzione dell'immagine è massima all'inizio della rete. Si parte da una risoluzione molto elevata e poi la si riduce gradualmente tramite pooling o convoluzioni con stride. Di conseguenza, il volume di moltiplicazioni e somme all'inizio è imponente rispetto alla parte finale della rete.
+Quando infatti si raggiungono i layer densi (fully connected), il numero di operazioni spaziali crolla, poiché la risoluzione spaziale si è ridotta a 1x1 e il calcolo si riduce a semplici prodotti scalari.
+
+Per quanto riguarda i parametri, la situazione è esattamente capovolta:
+i layer convoluzionali contengono pochissimi parametri grazie alla connettività sparsa e al meccanismo di condivisione dei pesi (weight sharing).
+Al contrario, man mano che si avanza nella rete e si giunge ai fully connected layer, anche se la risoluzione spaziale delle feature map è ormai molto ridotta (ad esempio 6x6 pixel), il numero di canali è diventato altissimo (256, 512 o più).
+Supponiamo ad esempio di arrivare all'ultimo layer convoluzionale con 256 feature map di dimensione 6x6: appiattendo questo tensore tramite flattening, si ottiene un vettore di:
+$6 \times 6 \times 256 = 36 \times 256 = 9216$ elementi.
+Se colleghiamo questo vettore a un fully connected layer di 4096 neuroni (come avveniva in AlexNet o VGG), solo per questo singolo layer si ottengono:
+$9216 \times 4096 \approx 37,7$ milioni di parametri!
+(E in configurazioni VGG con 512 canali, questo valore supera abbondantemente i 100 milioni di pesi solo nella sezione fully connected!).
+Il concetto chiave è che la parte fully connected finale accentra una quantità enorme di parametri: il suo costo computazionale in termini di FLOPs è contenuto (trattandosi di normali prodotti scalari tra vettori), ma la quantità di parametri in memoria è gigantesca rispetto ai layer convoluzionali.
+Si ha quindi una situazione ribaltata (flip): nella prima parte della rete si concentra la quasi totalità del costo computazionale (FLOPs), mentre nella parte finale risiede la stragrande maggioranza dei parametri.
+
+La parte che esegue l'estrazione delle feature con i livelli convoluzionali richiede un'enorme quantità di operazioni di moltiplicazione e somma (multiply-accumulate / MAC) e molta memoria, perché è necessario memorizzare tutte le feature map a una risoluzione più elevata, ma non ha molti parametri.
+D'altra parte, l'ultima parte della rete presenta moltissimi parametri, ma è decisamente più efficiente per quanto riguarda il numero di operazioni.
+Quindi, osservando questo andamento in VGG, l'architettura successiva è stata proposta proprio nel tentativo di risolvere questo problema, rimuovendo il più possibile i livelli completamente connessi (fully connected) finali, poiché sono proprio quei livelli a generare un'enorme quantità di parametri.
+
+L'idea, quindi, è: perché non rimuoviamo i livelli fully connected finali, mantenendo solo un unico livello finale con 1000 neuroni per la classificazione finale? In questo modo evitiamo e rimuoviamo i due livelli fully connected nascosti che possiedono una quantità enorme di neuroni, come avevamo in AlexNet o in VGG.
+Quindi l'idea di GoogLeNet, come suggerisce il nome, è stata proposta dai ricercatori di Google nel 2014. L'idea dell'architettura è quella di utilizzare livelli convoluzionali per l'intera architettura e usare il livello fully connected soltanto come livello finale, deputato a fornire i 1000 neuroni di output.
+
+Per riuscire a mantenere la stessa capacità rappresentativa, hanno dovuto introdurre un nuovo livello/modulo, noto come il cosiddetto "modulo Inception" (o blocco Inception).
+L'idea del modulo Inception è che a ogni livello si creano fondamentalmente quattro rami paralleli. Questi quattro rami sono livelli convoluzionali paralleli con filtri di dimensioni diverse, pensati per estrarre tipi differenti di feature, poiché ciascun livello convoluzionale osserva porzioni diverse delle feature map di input.
+
+Abbiamo quindi un livello convoluzionale 1x1, che si limita a miscelare i canali di input. In questo esempio ci sono 192 canali di input: li miscela e genera 64 canali di output, ottenuti dalla combinazione dei 192 canali di input iniziali.
+Poi abbiamo un livello convoluzionale 3x3, che invece osserva una regione leggermente più ampia delle feature map di input.
+Troviamo poi un livello convoluzionale 5x5, e un livello di max pooling il cui scopo è estrarre e sintetizzare le informazioni dalle feature map.
+Dopodiché, ciò che si fa è concatenare tutti gli output dei quattro rami: si concatenano lungo la dimensione dei canali, ottenendo questo enorme stack di feature map.
+Si ottengono 416 feature map (o canali), che sono la somma di 64 più 128 più 32 più 192... si impilano tutte le feature map lungo la dimensione del canale.
+Per fare questo — e questo è un aspetto fondamentale — quando si impilano le feature map lungo la direzione dei canali, è necessario garantire che la risoluzione spaziale sia identica per tutte le mappe che si concatenano. Altrimenti non è possibile effettuare lo stacking e si otterrà un errore.
+Ciò significa che tutti e quattro questi livelli devono avere in output feature map con la medesima risoluzione spaziale, in questo caso 28x28.
+Questo implica che occorre gestire correttamente il padding, per evitare la riduzione della risoluzione spaziale: una convoluzione 3x3, se non si applica il padding, riduce la dimensione dell'output di 2 pixel (un valore per lato), quindi la risoluzione si rimpicciolisce; la convoluzione 5x5 la riduce di 4 (due per lato). Quindi è necessario applicare padding=1 alla 3x3 e padding=2 alla 5x5 per mantenere le dimensioni delle feature map.
+
+Il problema che questo modulo presenta in tale configurazione "naïve" è che, come potete notare, dal livello precedente a quello successivo il numero di canali raddoppia. Questo comporta un costo computazionale enorme in termini di moltiplicazioni e somme (multiply-accumulate operations), che rappresentavano già una criticità in VGG. Facendo così, il problema diventa ancora più grave.
+Questo è il problema. Per controllare il costo computazionale, il modulo Inception ha quindi incluso delle convoluzioni 1x1 per creare fondamentalmente un bottleneck (collo di bottiglia) prima di calcolare le convoluzioni 3x3 e 5x5.
+Quindi, prima di passare le feature map alla convoluzione 3x3, c'è una convoluzione 1x1 intermedia che riduce il numero di feature map da 192 a 96.
+Allo stesso modo, prima della convoluzione 5x5, riduciamo i canali da 192 a 16, risparmiando un numero elevatissimo di operazioni di moltiplicazione e somma (MAC).
+E dopo il max pooling — dato che il max pooling non altera il numero di feature map/canali, per cui l'output del pooling è ancora di 192 canali — per tenere sotto controllo questo elevato numero di feature map aggiungiamo un'ulteriore convoluzione 1x1 subito dopo il max pooling, che riduce le feature map a 32.
+
+In questo modo, quando concateno tutto, le feature map finali non sono più più di 400, ma scendono a 256, che è un numero decisamente inferiore.
+Di conseguenza, il numero di operazioni di moltiplicazione e somma (multiply-accumulate / FLOPs) si riduce notevolmente rispetto alla situazione precedente.
+Se si calcola il numero di moltiplicazioni e somme in questa configurazione senza convoluzioni 1x1, si finisce per avere oltre 300 milioni di operazioni multiply-add; utilizzando le convoluzioni 1x1 come bottleneck, le si riduce a 128 milioni, ossia a circa un terzo! E non si perde praticamente nulla in termini informativi, perché la convoluzione 1x1 in sostanza sintetizza le informazioni delle feature map di input; inoltre, essendoci quattro rami paralleli, questa informazione viene propagata efficacemente e alla fine non si perde granché.
+
+Tutto questo è confermato dai risultati prestazionali: GoogLeNet ha un totale di 22 livelli. VGG16 aveva 16 livelli, quindi GoogLeNet è persino più profonda di VGG, ma il numero di parametri è enormemente inferiore: parliamo di 6,8 milioni rispetto ai 138 milioni di VGG, e persino rispetto ai 61 milioni di parametri di AlexNet, che era la prima rete vista in precedenza.
+Anche il numero di operazioni (multiply-add / MAC) è inferiore di un fattore 10 rispetto a VGG; è leggermente superiore rispetto ad AlexNet, ma AlexNet aveva solo 8 livelli, quindi ce lo aspettiamo.
+E l'accuratezza è nettamente superiore: GoogLeNet migliora sensibilmente le prestazioni rispetto a VGG e migliora enormemente rispetto ad AlexNet. Questa è l'architettura.
+
+
+Abbiamo quindi questo modulo Inception, quello blu; ce ne sono 9 in totale.
+La prima parte della rete è costituita semplicemente da convoluzioni standard con pooling. Poi i rettangoli indicati con il 4 sono i moduli Inception. Successivamente abbiamo un livello di pooling e alcuni livelli convoluzionali finali al termine.
+Poi c'è un Global Average Pooling (GAP) che sintetizza tutte le feature map finali. Dopodiché si ha un unico layer denso (fully connected) con 1000 neuroni che produce i punteggi di classificazione finali.
+In questo modo abbiamo rimosso tutti i livelli fully connected eccetto quello di output, e ciò ci ha consentito di ridurre drasticamente il numero di parametri migliorando al contempo le prestazioni: si tratta di un guadagno enorme.
+
+Lo studio di queste reti — che naturalmente oggi non vengono più utilizzate, risalendo a 10 anni fa — rimane fondamentale da affrontare, perché mostra ciò di cui occorre tenere conto quando si progetta un'architettura: bisogna sempre considerare il consumo di memoria, le operazioni di moltiplicazione e somma (multiply-accumulate / FLOPs) e tutti questi aspetti. Altrimenti si rischia di creare un'architettura alla cieca, senza considerare questi vincoli, per poi scoprire — nel momento in cui la si vuole distribuire in un'applicazione reale: "Ok, ho prestazioni incredibili, ma la rete richiede 200 GB di memoria per girare", cosa impossibile per una piattaforma robotica o persino per un computer standard; oppure "impiega un minuto per fare una singola inferenza", il che è del tutto incompatibile con la maggior parte delle applicazioni pratiche.
+In casi del genere, quindi, è necessario ripensare l'architettura, e queste reti classiche suggeriscono proprio come intervenire per rendere la rete più efficiente senza perdere in accuratezza.
+
+Il passo successivo, dopo il 2014, è stato quello di risolvere un problema cruciale riscontrato dai ricercatori quando hanno provato ad aumentare il numero di livelli delle reti.
+Il ragionamento iniziale era: d'accordo, siamo partiti con GoogLeNet e abbiamo visto le sue prestazioni; poi sono arrivate GPU più avanzate e con più memoria, quindi ci siamo chiesti: perché non rendere la rete ancora più profonda? Più livelli significano più parametri, quindi aumentiamo la profondità!
+Il problema, tuttavia, è stato che aggiungendo molti livelli — 30, 40, 50, fino a 100 livelli — ci si aspettava che, avendo più parametri, si rischiasse l'overfitting (fenomeno comunque gestibile tramite tecniche di regolarizzazione); invece ciò che accadeva era che persino l'errore di training (addestramento) aumentava all'aumentare dei livelli!
+Questo comportamento è del tutto controintuitivo: con più parametri ci si aspetta che la rete tenda a fare overfitting, quindi l'errore di training dovrebbe essere più basso (e magari l'errore di test più alto). Invece si osservava che l'errore di training aumentava all'aumentare del numero di livelli.
+
+Il problema non riguardava la capacità del modello o la generalizzazione, bensì l'ottimizzazione.
+Abbiamo visto nelle lezioni precedenti che le reti molto profonde soffrono del problema della scomparsa del gradiente (vanishing gradient): il gradiente propagato all'indietro dalla backpropagation viene moltiplicato passo dopo passo per fattori costituiti dalle derivate dei vari livelli. Se questi fattori sono inferiori a uno, a ogni livello attraversato il gradiente si riduce drasticamente. Aggiungendo molti livelli, l'attenuazione accumulata rispetto all'inizio della rete è talmente marcata che il gradiente svanisce del tutto (vanishes).
+Di conseguenza, i primi livelli della rete ricevono un gradiente praticamente pari a zero; e se il gradiente è nullo, i pesi non vengono aggiornati e i neuroni non imparano. E se non imparano, persino l'errore di training aumenta.
+Il problema centrale era quindi il vanishing gradient. Naturalmente esiste anche l'exploding gradient (esplosione del gradiente), ma quello si può risolvere facilmente saturando o tagliando il gradiente (gradient clipping). Il vanishing gradient, invece, è una situazione molto più complessa da gestire.
+
+Ci sono due strategie che si possono adottare per mitigare questo problema, già viste nelle scorse lezioni. Una consiste nell'usare funzioni di attivazione che di per sé non riducano il gradiente: ad esempio, evitare la sigmoide — poiché satura e azzera il gradiente — e preferire la ReLU, che non riduce né satura il gradiente per i valori positivi. Tuttavia non è sufficiente.
+Si può anche utilizzare la Batch Normalization per standardizzare le uscite dei livelli intermedi, ma anche questo, da solo, non basta. Persino adottando un'adeguata inizializzazione dei pesi e la Batch Normalization, nelle reti estremamente profonde non si riesce a impedire che il gradiente collassi lungo il tragitto.
+
+Possiamo verificare questo fenomeno con un esperimento: se eseguiamo la medesima procedura di addestramento su due reti diverse, una con 20 livelli e l'altra con 56 livelli, osserviamo che la rete più profonda (56 livelli) al termine del training presenta sia un errore di addestramento più alto sia un errore di test più alto rispetto alla rete da 20 livelli!
+Ciò significa che più la rete è profonda, peggiori risultano i risultati.
+Ed era evidente che non si trattasse di overfitting: per costruzione, infatti, una rete da 56 livelli dovrebbe essere in grado di apprendere almeno le stesse cose apprese da una rete da 20 livelli. Se infatti considerassimo 20 dei 56 livelli addestrati e impostassimo i restanti a svolgere una semplice funzione identità, otterremmo esattamente lo stesso identico output.
+Quindi la rete più profonda deve essere teoricamente capace di apprendere almeno gli stessi concetti di quella da 20 livelli: non è possibile che una rete da 56 livelli impari meno cose di quella da 20.
+Ecco perché non può essere un problema di overfitting: con più parametri, semmai, ci sarebbe overfitting; la rete da 56 livelli dovrebbe replicare ciò che fa quella da 20 e fare persino di più. Il vero ostacolo è l'ottimizzazione, ovvero il problema del vanishing gradient.
+Era quindi fondamentale affrontare e superare questo problema, e la soluzione è stata l'introduzione dei blocchi residuali (residual blocks) e delle reti residuali, che costituiscono il concetto fondamentale alla base di ResNet (Residual Network).
+
+
+ResNet è stata ed è tuttora un'architettura all'avanguardia (state-of-the-art), perché questa cosa semplicissima che vedremo nella prossima slide ha letteralmente sbloccato la possibilità di addestrare reti profondissime, reti con più di 100 livelli.
+E l'idea è estremamente semplice: il blocco residuale (residual block) è semplicemente un blocco in cui è presente una "shortcut connection" (connessione scorciatoia o skip connection) che parte dall'input e va all'uscita dopo due blocchi convoluzionali.
+In pratica, si prende l'input di un blocco convoluzionale — che in ResNet è composto tipicamente da una convoluzione 3x3, Batch Normalization, ReLU, un'altra convoluzione 3x3 e Batch Normalization — e, prima dell'attivazione successiva, si inserisce un nodo di somma in cui si ri-somma l'input originario di quel blocco.
+Questa è l'architettura standard del blocco residuale.
+L'unica modifica tra le due strategie è proprio questa somma. Per eseguire tale somma, l'unico requisito è che la feature map in uscita dall'ultima convoluzione 3x3 abbia le stesse dimensioni: deve avere cioè la medesima risoluzione spaziale e lo stesso numero di canali dell'input, altrimenti non si potrebbe eseguire la somma, trattandosi di un'operazione elemento per elemento (element-wise), per cui i due tensori devono avere la stessa dimensionalità.
+
+Perché sommare ogni due livelli e non dopo ogni singolo livello?
+È stata una scelta progettuale empirica: hanno verificato sperimentalmente che funziona meglio così, e anche perché l'attenuazione del gradiente introdotta da due soli livelli convoluzionali è trascurabile, quindi questa struttura a blocchi di due livelli è ottimale.
+
+Si chiama "residuale" perché, essendoci la somma, l'output è fondamentalmente pari alla somma dell'input $x$ più questa funzione $F(x)$: $y = x + F(x)$.
+Dunque, ciò che i livelli interni devono apprendere non è direttamente l'intera funzione o l'output target in sé, bensì il "residuo", ovvero $F(x) = y - x$, cioè la differenza tra l'output desiderato e l'input.
+Se vogliamo ottenere l'output desiderato, che è la somma di $F(x)$ più l'input, i due livelli convoluzionali all'interno del blocco devono concentrarsi unicamente sull'apprendimento del residuo, ossia della differenza/variazione da applicare rispetto all'input.
+Questo potrebbe sembrare un cambiamento banale, ma in realtà è una modifica concettuale fondamentale: invece di dover apprendere da zero l'intera mappatura, la rete deve imparare solo il residuo, ovvero la modifica da apportare all'input. L'input trasporta già le informazioni originali: basta aggiungere qualcosa all'input per approssimare la funzione target, e questo rende il compito di ottimizzazione enormemente più semplice.
+
+Questo aspetto lo si può comprendere in questa prospettiva concettuale, o ancora meglio analizzando cosa accade al gradiente.
+La shortcut connection viene chiamata scorciatoia proprio perché crea un percorso preferenziale e diretto che consente al gradiente di "saltare" all'indietro durante la backpropagation senza essere alterato.
+Trattandosi di una connessione diretta priva di pesi e parametri, quando durante la backpropagation il gradiente arriva a questo nodo di somma, si divide in due percorsi distinti: un ramo passa attraverso la shortcut e, lungo questo percorso, non viene modificato perché non vi sono parametri e quindi non ci sono moltiplicazioni per le derivate dei pesi; l'altro ramo passa invece attraverso il blocco convoluzionale, dove sono presenti i parametri dei due livelli convoluzionali, e lungo questo ramo il gradiente viene moltiplicato per le derivate del blocco e quindi si attenua.
+Ma poi questi due rami si ricombinano per somma con la componente di gradiente passata intatta attraverso la shortcut: numericamente, quindi, il gradiente complessivo si mantiene elevato e non svanisce. C'è una parte che viene attenuata, ma c'è l'altra componente che viene preservata intatta.
+Lo si vede chiaramente anche dalle formule matematiche: calcolando il gradiente dell'output rispetto all'input, si ottiene $(1 + \frac{\partial F}{\partial x})$. C'è quindi un termine "1" che non viene alterato e preserva intatto il gradiente del livello successivo, mentre l'altro termine viene moltiplicato per la derivata del blocco $\frac{\partial F}{\partial x}$. Sommando i due contributi, il valore numerico non svanisce mai verso lo zero.
+E questo meccanismo si ripete lungo tutta la rete, a ogni blocco: ogni volta che si incontra questa shortcut connection — questo "binario" diretto — il gradiente può risalire all'indietro attraverso la rete senza attenuarsi.
+
+È una modifica concettualmente semplicissima, poiché consiste semplicemente nell'aggiunta di un nodo di somma, ma questo semplice nodo di somma ha rivoluzionato tutto: ha eliminato il problema del vanishing gradient, rendendo finalmente possibile l'addestramento di reti profondissime.
+Questo è sostanzialmente il nocciolo fondamentale da comprendere su ResNet. ResNet è fondamentalmente una concatenazione di questi blocchi residuali; ciascun blocco residuale è composto da due livelli convoluzionali (o tre in alcune configurazioni, come i bottleneck) seguiti dal nodo di somma, e questi blocchi vengono alternati in sequenza lungo tutta la rete.
+
+Il vantaggio che se ne ricava è immediato: l'ampiezza del gradiente in ResNet si mantiene pressoché costante e non decade all'aumentare del numero di blocchi.
+Se confrontiamo ora ResNet con una rete "plain" (ovvero la classica rete equivalente priva di connessioni residuali), vediamo chiaramente il vantaggio: sia l'errore di addestramento che l'errore di test diminuiscono drasticamente, consentendoci finalmente di aumentare la profondità senza incorrere in cali di prestazioni.
+Ad esempio, ResNet-56 (la versione di ResNet a 56 livelli) ottiene prestazioni nettamente superiori rispetto alla corrispondente rete plain a 56 livelli, il cui errore era invece sensibilmente più alto: il miglioramento è stato netto e fondamentale.
+
+Tipicamente, all'interno di ResNet, man mano che si avanza nella profondità della rete, si raddoppia il numero di feature map ogni certo numero di blocchi residuali: questo serve ad aumentare la capacità di estrarre e catturare feature via via più complesse. Questa è la scelta architetturale standard; l'unico vincolo a cui prestare attenzione è gestire opportunamente la risoluzione spaziale e il numero di canali/filtri quando si effettua la somma.
+
+
+Quindi, quando si esegue la somma, le dimensioni devono corrispondere.
+Per gestire questo aspetto, quando ad esempio si vuole raddoppiare il numero di filtri dopo il primo blocco convoluzionale, prima di poter eseguire la somma è necessario adattare l'input: se i due tensori hanno dimensioni differenti, infatti, non possono essere sommati elemento per elemento.
+Ci sono due possibilità:
+- La prima (opzione A) consiste fondamentalmente nell'aggiungere canali di zeri (zero-padding lungo la dimensione dei canali) per pareggiare il numero di canali.
+- L'altra alternativa (opzione B, o shortcut di proiezione) consiste nell'inserire una convoluzione 1x1 lungo la shortcut, che adatta il numero di canali portandoli al valore desiderato (ad esempio a 32 o 64), effettuando una proiezione lineare.
+
+Questa operazione serve ogni volta che si raddoppia il numero di filtri, cosa che occorre fare periodicamente lungo il percorso della rete per consentirle di estrarre feature di livello superiore.
+In pratica, si parte dall'immagine di input che ha 3 canali, poi si entra nel primo blocco residuale (composto da convoluzione 1, convoluzione 2, nodo di somma e ReLU). All'ingresso abbiamo 3 canali; se il blocco convoluzionale produce in output 32 (o 64) feature map, ci troviamo con un tensore di input di dimensioni $3 \times H \times W$ e un output del blocco di $32 \times H \times W$. Questi due tensori non sono dimensionalmente compatibili per un'addizione elemento per elemento.
+In questo punto, quindi, occorre intervenire sulla shortcut per renderla coerente con l'uscita del blocco: si applica una convoluzione 1x1 sulla connessione di skip.
+Naturalmente, inserire una convoluzione 1x1 lungo la shortcut fa sì che questa non sia più una pura funzione identità: introduce pesi apprendibili, quindi lungo questo ramo il gradiente non viene semplicemente moltiplicato per 1, ma subisce una trasformazione.
+Tuttavia, non è un'operazione che si deve fare a ogni blocco: in ResNet, tipicamente, si effettua una prima volta quando si passa dai 3 canali dell'immagine ai 64 canali, e poi si mantengono 64 canali invariati per una serie successiva di blocchi residuali.
+In tutti questi blocchi intermedi la risoluzione e il numero di canali delle feature map non cambiano (rimangono ad esempio $64 \times H \times W$), per cui tutte le shortcut connections sono pure funzioni identità prive di parametri. Solo occasionalmente, quando si aumenta il numero di feature map e si riduce la risoluzione spaziale, si applica una convoluzione di proiezione sulla shortcut. Essendo modifiche poco frequenti, non impattano negativamente sulla propagazione globale del gradiente.
+
+Questo è un esempio di come l'immagine viene elaborata e fluisce attraverso la rete: man mano che si scende in profondità, i blocchi calcolano solo una correzione residuale.
+Ed è proprio questo a rendere la rete così straordinariamente efficiente: i livelli del blocco devono calcolare unicamente la correzione residua, non l'intera funzione da zero, garantendo un flusso del gradiente molto più fluido ed efficace.
+
+Questo comportamento si può interpretare anche analizzando lo srotolamento (unfolding) della rete e osservando cosa accade se si rimuovono dei blocchi.
+È stato dimostrato sperimentalmente che se in una ResNet si rimuove uno dei blocchi a valle del training, la rete perde pochissima accuratezza grazie alla sua architettura a percorsi multipli (comportandosi quasi come un ensemble di reti più corte); al contrario, se si rimuovono blocchi convoluzionali da una rete "plain" convenzionale, l'accuratezza crolla drasticamente. Questo conferma ulteriormente la robustezza e l'efficienza di ResNet rispetto alle reti tradizionali.
+
+Una delle varianti fondamentali di ResNet, al posto del blocco residuale standard (basic block), consiste nell'utilizzare il blocco cosiddetto "bottleneck" (a collo di bottiglia).
+In questo blocco si introducono convoluzioni 1x1 con lo scopo di controllare e ridurre il numero di operazioni di moltiplicazione e accumulo (MAC / FLOPs).
+Questa variante è decisamente più efficiente rispetto alla versione base: in questo caso si hanno tre livelli convoluzionali al posto di due, mantenendo all'incirca lo stesso numero di parametri ma aumentando la capacità espressiva e la profondità della rete.
+Il blocco bottleneck è infatti l'architettura standard utilizzata nelle versioni più profonde di ResNet, perché consente di inserire più livelli senza far lievitare i parametri e il carico computazionale, ottenendo prestazioni superiori a parità di complessità.
+La differenza strutturale è la seguente: invece di due convoluzioni 3x3 consecutive, si utilizza una convoluzione 1x1 iniziale che riduce il numero di canali (ad esempio da 256 a 64, creando il bottleneck), seguita da una convoluzione 3x3 su 64 canali, e infine da un'altra convoluzione 1x1 che ripristina il numero originale di canali espandendoli nuovamente a 256.
+In questo modo, la convoluzione 3x3 opera su un numero ridotto di feature map (64 canali anziché 256), abbattendo drasticamente i calcoli e consentendo alla rete di processare molte più feature con un numero simile di parametri. È una formulazione estremamente conveniente.
+
+La famiglia ResNet comprende diverse varianti: si parte dalle versioni più leggere come ResNet-18 e ResNet-34 (che utilizzano il blocco base a due convoluzioni), fino a ResNet-50, ResNet-101 e ResNet-152, che raggiungono ben 152 livelli sfruttando i blocchi bottleneck per massimizzare l'efficienza.
+Analizzando il numero di parametri, si nota che persino la versione più profonda, ResNet-152, ha meno della metà dei parametri di VGG-16 (~60 milioni contro i 138 milioni di VGG), risultando infinitamente più leggera in termini di occupazione di memoria, con un costo computazionale (operazioni multiply-accumulate) molto più ridotto e un'accuratezza decisamente superiore (circa 78% di accuratezza top-1 contro il 71% di VGG).
+È quindi molto più efficiente e performante. Questa è ResNet, introdotta intorno al 2015-2016.
+Successivamente sono state proposte ulteriori evoluzioni di ResNet ancora più avanzate.
+Nelle slide sono riportati anche i calcoli dimensionali per verificare le dimensioni di output dei vari blocchi di ResNet.
+
+
+Vedremo poi come la rete residuale verrà ulteriormente modificata in MobileNet, dove dopo l'ultimo livello convoluzionale non avremo un'attivazione prima della somma (linear bottleneck), e capiremo perché questo fa la differenza quando si adatta l'architettura ResNet per MobileNet, ovvero la versione ottimizzata per smartphone e dispositivi embedded edge, progettata per essere più leggera e con molte meno operazioni di moltiplicazione e accumulo (MAC).
+
+Questi sono alcuni esempi di come ResNet venga impiegata, ad esempio, nella robotica moderna.
+Spesso viene utilizzata come rete di estrazione delle feature (feature extractor) — come ad esempio ResNet-18 o EfficientNet, un'altra architettura altamente efficiente per la robotica.
+La feature map estratta viene solitamente passata come input alla policy network, ovvero le reti per le strategie di reinforcement learning che vedremo nell'ultima parte del corso. La policy network si occupa poi di generare le azioni del robot.
+L'idea alla base di queste architetture robotiche è quindi quella di acquisire le immagini di input, estrarre le feature visive tramite ResNet e fornire queste rappresentazioni di alto livello alla policy network per calcolare le azioni del robot.
+Questo approccio è stato impiegato di recente anche per le cosiddette Diffusion Policy, che rappresentano uno dei metodi all'avanguardia (state-of-the-art) per il controllo dei robot, o in modelli come RT-1 (Robotics Transformer 1), impiegato per generare azioni robotizzate condizionate da istruzioni umane in linguaggio naturale. Si tratta di un canale estremamente potente per interagire con il robot e guidarlo nella comprensione dei compiti da eseguire.
+
+A partire dal 2017-2018, sono state proposte numerose varianti di ResNet volte a migliorarne ulteriormente l'efficienza.
+Una di queste varianti è DenseNet.
+DenseNet cambia radicalmente approccio: invece di sommare l'input all'output del blocco (come in ResNet), l'idea di DenseNet è quella di concatenare l'input del livello corrente con l'output prodotto dal livello stesso.
+Questo input concatenato più l'output viene poi fornito al livello successivo, e così via a cascata.
+Ciò significa che la concatenazione cresce a ogni livello: il numero di feature map ricevute da ciascun livello è pari alle feature map del livello immediatamente precedente più tutte le feature map prodotte da tutti i livelli dall'inizio della rete fino a quel punto!
+Ogni volta che si aggiunge un nuovo livello, si concatena il suo output con le feature map che aveva ricevuto in input.
+Ad esempio:
+prendiamo l'immagine iniziale con 3 canali. Il primo livello convoluzionale genera, diciamo, 32 feature map. Si concatenano quindi i 3 canali iniziali con i 32 canali del primo livello, ottenendo 35 canali.
+Questo tensore da 35 canali entra nel secondo livello convoluzionale. Il secondo livello produce, supponiamo, 64 feature map. Si concatenano quindi i 35 canali precedenti con i nuovi 64, ottenendo un tensore con 99 feature map in totale, e così via per tutti i livelli successivi.
+
+A ogni livello, quindi, si concatena la feature map di input con la feature map prodotta in uscita da quel livello.
+Questo viene fatto per propagare l'informazione attraverso tutta la rete senza perdere nulla: ogni livello della rete ha accesso diretto a tutte le informazioni estratte da ciascuna porzione della rete.
+Senza questa concatenazione, invece, si propaga unicamente ciò che ogni livello "digerisce" ed elabora, e il livello successivo deve lavorare esclusivamente su ciò che gli è stato passato dal livello precedente.
+Con DenseNet, invece, ciascun livello ha accesso all'intera storia e a tutte le informazioni generate da tutti i livelli precedenti: ad esempio, il livello 90 ha accesso diretto anche alle feature map grezze calcolate dal livello 1, esattamente come sono state estratte, senza alcuna alterazione o degradazione intermedia.
+
+Vedremo che, nonostante possa sembrare una struttura che richiede molti più calcoli, questa architettura offre prestazioni superiori rispetto a ResNet con un numero persino inferiore di parametri.
+L'unico aspetto che scala considerevolmente è l'occupazione di memoria, poiché durante l'addestramento tutte queste feature map devono essere mantenute in memoria per poter calcolare la backpropagation.
+Questo rende DenseNet un po' meno vantaggiosa in termini di memoria durante la propagazione, ma esistono implementazioni ottimizzate a basso livello in PyTorch che sfruttano accorgimenti intelligenti per rendere questa architettura assolutamente gestibile ed efficiente, nonostante l'elevata quantità di feature map coinvolte.
+
+Per oggi ci fermiamo qui. Domani vedremo nel dettaglio pratico perché DenseNet sia così conveniente, analizzeremo le altre alternative e spero che inizieremo a vedere alcune applicazioni di apprendimento supervisionato.
+Non sono sicuro che riusciremo a fare il laboratorio questo venerdì, perché prima del prossimo laboratorio vorrei coprire anche le reti neurali ricorrenti (RNN). Quindi probabilmente venerdì faremo lezione teorica sulle RNN, per poi svolgere la sessione di laboratorio la settimana prossima. In ogni caso vi invieremo una comunicazione ufficiale su Studium.
+Grazie a tutti e a presto.
+
+[Conversazioni informali e saluti a fine lezione mentre l'aula si svuota].

@@ -1,0 +1,2294 @@
+So this is a typical factor where at the end in order to map the output of the last convolutional layer
+so the features of the last convolutional layer with the final classifier or regressor
+you need either to use the global average pooling in order to have a fixed output
+on the dimension side for the connection with the fully connected layers
+or the flat-ten layer which flattens everything into a vector.
+Of course vectorizing with the flat-ten makes you dependent on the size of the input image
+while global average pooling makes you independent on the input image.
+The downside is that the gap summarizes information so you might lose information
+while the downside of the flattening is that then you are dependent on the input resolution.
+But it depends on what you want to keep.
+So before moving on
+let's talk about some variants of the standard convolutional layer.
+One of the variants are the delayed convolutions.
+The difference in respect to the standard convolution
+is that the delayed convolution has the stride embedded within the filter
+in the sense that when you apply deletion
+you basically, instead of considering the filter all the...
+Instead of, when you compute the convolution, instead of considering nine
+the nine elements close to each other,
+the filter has the standard convolution,
+when you apply deletion you basically consider a bigger neighborhood
+and you skip some of the pixels.
+So with deletion 2 the pixels that are considered as well
+when computing the convolution of the filter in that position
+are those highlighted there.
+So basically you overlap the filter on one pixel every two.
+So you skip one pixel then you compute the convolution.
+With deletion 4 you are basically overlapping the filter
+on a 16 by 16 area
+and you only consider those nine elements which are very...
+with a high distance between each one of the other.
+The effect of this is not that downsampling
+because if you don't apply stride, of course, then the window...
+will shift from one pixel to the other.
+So you still have the same effect at the end.
+You don't downsample the image.
+The difference is that your filter is looking to a bigger portion of the image
+with the same parameters.
+So the alternative of not using deletion is that
+if you want to look at a bigger part of the image
+is to have a bigger filter.
+So if you want to...
+instead of deletion 2,
+you want to look at a 5 by 5 portion of the image
+you need to use a 5 by 5 filter
+which implies that then you have 25 parameters
+instead of 9 of the 3 by 3.
+With deletion you have the same number of parameters
+3 by 3
+but you look at a bigger portion of the image.
+Of course, if you are skipping information
+the 5 by 5 will capture more detail inside that filter.
+So you can look at a bigger portion of the image.
+But that's basically deletion is a mingle crowd
+between computational efficiency
+and looking at a bigger portion of the image basically.
+So you keep the same weights for each channel
+but you look at a bigger region
+in the input image or the input feature model.
+Which thus translates basically into wider receptive field
+as we go into detail.
+You know, receptive field basically means that
+every time you stack a convolutional layer
+the current layer looks at a bigger portion
+with respect to the input image
+because of the compositional impact of the stacked layer.
+If you use deletion,
+the increase of the receptive field
+is bigger for each layer
+because by looking at a wider portion of the previous feature map
+you are looking at a wider portion
+faster, let's say,
+without going too much into the depth of the network
+thanks to the deletion.
+So for example, if these are the input pixels
+on the bottom row
+the first layer, if you apply deletion of 1
+with a 3x3 filter
+the receptive field is 3.
+For layer 2, if the deletion is 2
+this pixel, this node, this neuron
+immediately looks at 7
+sorry, 3, 3, 6, 7 pixels of the input image.
+If you didn't apply the deletion
+the layer 2 would have looked at 5 pixels instead of 7
+because of the compositional 3x3 filter.
+With the deletion you immediately look at a bigger portion.
+Applying the deletion of 2
+is like you get the same number of input pixels
+seen by the second layer
+if you don't apply the deletion
+you need 3 layers of 3x3
+to look at the same amount of pixels.
+OK?
+So here the receptive field of layer 1
+is 3.
+The second layer
+this neuron here
+without the deletion
+has access to
+arriving in a state of the number of connections.
+here should be 5 pixels
+so this pixel here looks at 5 pixels of input image
+with the deletion, instead, look at the slide
+the second layer looks at 7 pixels of input
+so you need fewer layers to reach the same receptive field
+that you would have reached with one layer more in this case
+basically the deletion equals to 2 makes you skip one layer
+in order to achieve the same receptive field
+so if your objective is to increase the receptive field
+and saving parameters at the same time
+you could use a deleted convolution of 2
+which makes you save one layer
+so you keep the same parameters that you have with 2 layers instead of 3
+but you have the same receptive field
+that you would have obtained with 3 stacked convolutional layers
+of 3 by 3 characters
+and of course if you further increase the deletion up to 4
+then the third layer looks at 1
+so you have a way bigger portion of the input
+up to 15 pixels in this case
+so it's a convenient way of using the convolution
+if you want to save parameters
+but still having a bigger receptive field
+another important alternative to the convolution
+are the depth-wise separable convolutions
+in standard convolution each filter looks at the entire depth of the input
+we saw how a convolutional filter is a cube
+that goes through the depth of the input
+so if you have C channels as the input maps
+that goes into the convolutional layer
+one of the parameters of the filter
+is 3 by 3 times the number of channels of the input
+times of course the number of visual mapping modes as the output
+so that's the formula without considering the biases for now
+for the number of parameters of a standard convolutional layer
+K by K which is the size of the filter
+times the number of input channels
+times the number of output visual maps
+and the number of parameters of the filter
+which is the height of the parameter of the layer
+depth-wise convolutions basically
+substitute the filter into separable filters
+which means that each input visual map
+has an associated filter
+which is not a 3D filter
+so it's not a solid filter
+that looks also to all the other visual maps
+it only looks at the corresponding visual maps
+so the filter is now 3 by 3
+it doesn't go into the depth
+it only looks at the associated input visual map
+so you have one filter for each one of these
+of the input visual map
+these outputs of course a number of visual maps
+which is equal to the input one
+because each filter corresponds to
+creates a corresponding filter
+corresponding maps
+and then of course that means that
+if you want to create an output map
+associated with this separable filter
+you have to add a one by one convolution
+that combines this visual map
+into a single, or let's say multiple visual map as the output
+so the idea is
+you create one filter
+for each input visual map
+so that filter is responsible for looking only at that visual map
+this provides you as the output
+a number of output visual map
+which is equal to the input visual map
+because we have one filter for each input visual map
+each filter creates the associated output visual map
+then to create the final output tensor
+if you want to have a different number of output visual map
+you need basically to combine these
+intermediate visual maps
+into a number of output visual map
+which depends on your hyper parameter
+so this see how it's still decided by you
+now why do we want to do this
+because this again saves us a lot of parameters
+if we keep fixed
+the number of input visual map
+and the number of output visual map
+the dead point separable convolutional layer
+the number of parameters are k by k
+times C in
+because you have one filter for each input visual map
+then you have to add the parameters
+of the one by one convolutional layer
+that you need in order to expand
+the visual map to C out
+the one by one convolutional layer
+weights only one parameter for each filter
+because it's one by one
+so the number of parameters is C in times C out
+so as you can see
+if you keep the same numbers
+in the two cases
+you basically go from
+300,000 weights in the standard case
+down to 33,000
+so it's basically almost nine times fewer parameters
+with respect to the standard convolution
+and also the multiply and add operation
+so the number of operations you need to apply
+falls down to a factor of nine or less
+so the separable convolutional layers
+are way more efficient than the standard convolutional
+the downside is that
+of course
+by doing it this way
+each filter, each visual you are learning
+it's detected only by looking at one visual map
+not considering the others
+so you are detecting features
+by looking only to one input visual map
+if you remember the example of visual maps
+where one visual map is for corners
+one visual map is for edges and so on
+that means that in order to learn the
+next features
+instead of considering together
+corners, edges, squares, triangles and so on
+you are just looking at the corners
+so you are discarding information
+for learning the new features
+so basically that means that
+the depthwise separable convolution
+are more efficient
+but usually less accurate
+than the standard convolution
+so they should be used
+when efficiency is the
+bottleneck of your application
+in fact they are used in mobile nets
+which is a variant of
+one of the architecture we are going to see
+designed to be deployed into
+smartphone or motor processor robots
+in which you want to reduce the number of parameters
+and the number of operations
+to make it faster and lightweight
+so in that case
+depthwise separable convolution
+are one of the options
+of course you lose a little bit of accuracy
+but not that much
+so it's understandable
+but the gain you get
+in the number of parameters
+and the number of multiplication adults
+is significant
+and here there is
+a small video that
+shows basically
+how the different stages of the depthwise
+and this is just to recap
+what happens when
+what you gain and what you lose
+by using the depthwise separable convolution
+so the number of parameters
+is way less
+we go from for example
+almost 400
+to 100,000 parameters
+down to 51,000 parameters
+also the multiplying nuts you get
+in the depthwise is way less
+it's one fourth of the multiplying nuts
+of the standard convolution
+the downside is that
+you lose a little bit of accuracy
+because they are less in quantity
+but you know the gain
+the loss you have
+is not that much
+compared to the gain you get
+regarding the efficiency
+and the memory you save.
+It's a trade-off of course
+that you might want to accept
+in this case.
+Here there is a summary of
+the one by one
+the deleted convolution
+and depthwise separable
+by comparing what you gain
+regarding the filters
+and where usually you want to use them
+okay
+usually one by one convolution
+is a convolutional layer
+which is
+it might seem useless
+but it's used in many applications
+many architectures
+because it's used to basically
+fuse and blend layers
+and do
+you know change the number of channels
+arbitrarily across the architecture
+so it's a very common layer
+a very common way of handling
+the mixing channel procedure
+of the architectures.
+The deleted and the depthwise instead
+are variants of the convolutional layer
+used for efficiency basically.
+Both the deleted and the depthwise separable
+are used to reduce
+the deleted to maintain the same perceptive field
+by requiring less layers.
+So again it's a matter of efficiency.
+The depthwise separable
+are used to reduce the number of multiply knots
+and the number of parameters
+while trying to
+lose less accuracy as possible
+in this process.
+So they are variants used for efficiency.
+Now to conclude this part
+I just wanted to
+quickly highlight what convolution
+convolutional layer gives you
+in terms of imbalances by default.
+So without applying
+without adding
+without trying to force the network
+to obtain some invariance
+what the convolutional layer gives you
+by default so without doing anything.
+One thing that the convolutional layer gives you
+and we already said that
+is the invariance to the translations.
+Because the convolution by itself
+is equivariant to the translation
+which means that if you shift the image
+by 10 pixels
+the output will be shifted by 10 pixels.
+And that's one of the things we get.
+The other thing we might want to have
+is the equivariance for small shift
+which means that we want
+the network to not be sensitive
+to small shift in the inputs.
+And this was achieved
+by using the pooling layer
+on the stripe bigger than 1.
+Because if you downsample the image
+you pool the information
+so if you have a small shift
+of the information in the visual map
+after pooling
+that shift is basically cancelled.
+So convolutional architecture
+with pooling
+they are invariant to small shifts.
+Shifts up to
+I don't know
+to pixels, to pixels
+depends on how big your pooling
+visual map is.
+And this makes basically
+the network invariant to small translation.
+Here you can see
+an example of this.
+So if you start moving the image
+with a network that has some pooling layer inside
+you have some invariance
+with respect to the output class.
+Now, basically, so of course
+if you start moving more
+then information goes outside the field of view
+so that makes the output
+of course unrecognizable.
+You have invariance
+up to a certain amount of translation.
+Of course if you start moving a lot
+the image, the more you move the image
+the more the output predictions changes
+of course because the information changes.
+So the invariance to shift is
+contained up to a certain amount of shift.
+As most shifts are basically ignored by the network
+when providing the final predictions
+if the shift becomes too wide
+then of course this changes the output.
+And you go outside the field of view
+of the pooling layer.
+We made this example last time.
+If you have a
+between the two eyes
+the distance between two eyes
+changes of one, two, three pixels
+the pooling layer
+absorbs this shift
+and that makes
+the sequence layer
+agnostic with respect to this small shift
+so they are more robust.
+But up to a certain point
+if the shift is too big
+then this changes everything.
+On the other hand
+rotations and zooms
+are not something that the network
+is invariant to by default.
+If you turn the image
+the feature map changes completely.
+Because feature maps are not invariant
+by definition
+with respect to the rotation
+or zoom.
+That means
+that
+it could change a lot
+the performance of the network
+if the test images
+are rotated versions
+of the training images.
+Because the network was not used
+to see images
+after 90%
+or more rotation
+around
+the
+x-axis or y-axis
+depending on what you are using.
+So if you want to
+build the environment
+with respect to this kind of
+transformation you need to
+force the network to be invariant
+to this kind of
+structure, to this kind of
+transformation.
+And this basically
+is achieved by
+different kinds of structures.
+One is the changes in the
+architecture
+basically
+you use
+shared weights or other kind of stuff.
+The other thing which is very
+important is the documentation.
+So basically
+you show the network
+that the image and its rotated
+version have the same label
+this of course helps the network
+to understand that rotation
+is not something to
+that changes the output.
+So that documentation
+is fundamental in this case
+to achieve the invariance of rotation
+or good zooms.
+So you do that by taking the image
+and applying random transformation
+to the image that doesn't change
+the output label. And this makes the network
+more efficient.
+Ok?
+There are
+specific layers
+that are designed to be invariant
+or repinvariant in rotation or reflections
+but those are specific cases.
+By default the convolutional
+layers are not invariant in this transformation
+so if you want to make them
+invariant then you have at least
+to provide that augmentation in order to
+make the network understand
+that rotation and
+zooms are not something that change
+the output.
+Ok.
+So, let's
+now move
+to the
+architecture.
+So, let's see how
+we can
+build
+our
+CNN-based architecture.
+So,
+let's see how
+we can build our
+CNN-based architecture.
+So,
+we basically
+have
+the tools to build
+our CNN-based architecture.
+Ok? Because we saw
+convolutional layers, we also saw
+two variants of these convolutional layers
+the delated convolution
+and the depthwise
+convolution. We know the pooling layer,
+the batch-node layer,
+what's the dropout layer if you want
+regularization, the fully connected
+layers and all the
+layers to adapt between
+convolutional and dense which are the global
+average pooling or the flat-chain
+layer. So we can build our
+architectures.
+Now, the
+way in the community
+during the years
+following 2012
+different kind of
+standard architectures
+were born.
+That were basically composition
+of the layers that
+were proven to be particularly
+effective in solving
+specific tasks.
+And usually when you build your own
+architecture for your
+problem, usually you start from
+one of these standard architectures.
+Then you maybe modify it
+slightly to adapt it to your problem.
+It's very convenient
+to have known this architecture because
+then you don't start from scratch in designing
+it. Ok?
+So you start designing your problem
+but starting from a backbone
+which is
+already provided by the community
+and which is known
+to be effective in
+many situations. So that's why
+in this lecture I wanted to give you
+an overview of the possible
+alternatives from which you can start
+designing your architecture.
+Before doing that
+we will compare architecture against
+a specific task
+which is the image classification
+on ImageNet. ImageNet is
+a dataset
+which was
+collected and made available
+in the community for a challenge.
+So basically each year
+is a dataset
+from 2010
+to 2017
+was published and updated every year
+and every year the challenge was repeated.
+And basically
+this dataset was a benchmark to compare
+the different architectures that each year
+were proposed by the scientists.
+It's a classification task
+with 1000 different classes.
+So it's
+a huge dataset that on average
+was contained
+1.28 millions of images
+of training images
+and the test set was
+something like
+100,000 test images.
+So it's a big dataset which offers
+a good challenge
+to test performance, accuracy,
+memory consumption,
+computational efficiency of the architectures
+that were proposed.
+So in these eight years
+between 2010 and 2017
+different architectures were proposed
+to improve the performance
+of these datasets.
+Now this dataset is general enough
+and image classification is general enough
+to act as a
+you know
+example for many other tasks.
+That means that if the architectures
+were performing better than
+the previous one on this task
+they were probably also
+going to perform better
+on other different tasks.
+That's why we consider
+this task as the benchmark
+to compare the architecture.
+So in those eight years
+the winner of
+this challenge across
+the years was
+where this kind of
+architecture is.
+Some of them you are going to see.
+We started from
+28.2% of error.
+Top 5 means that
+the top 5 accuracy error
+is the
+basically
+a prediction of the network
+is considered correct
+if among the five
+top
+score
+of the network there is
+the ground truth one.
+So usually the network
+outputs plus probabilities.
+So the first five probabilities
+are the first most probable
+categories.
+The first one could be
+dog with 20% of probabilities
+the second one could be
+house with 26 probabilities
+the third one could be
+car with 20
+0.2 probability and so on.
+If among these five there is
+a positive
+true class then
+that's considered a positive
+prediction.
+So top 5 is basically more
+forgiving than
+the top one.
+The top one the network is
+considered classified correctly
+only if the first
+the top category predicted
+by the order of probability
+is the correct one.
+The top five says
+even if the first one is not the correct one
+then I'm considering you as
+having the
+correct class.
+So 28.2%
+error means that
+28
+times out of
+100 test samples
+the correct sample was
+outside these five
+top
+classes that were
+output from the
+network.
+So this error
+was reduced across the years
+with the new architectures.
+We're going to see Alex Net
+2012 which is one of the most
+famous starting CNN
+architecture. Before
+that
+year these are not convolutional
+networks these are
+machine learning probably support
+vector machine with hand
+design features like SIP
+surf or hairways
+this kind of stuff. From
+2012 which is basically the
+year in which deep learning was
+born.
+Alex Net was the first architecture
+by using convolutional layers
+which immediately
+gained almost
+a 10% error just
+by using convolutional layer.
+Which was a very shallow
+network only eight layers
+I mean early on won't even
+consider it as a deep network
+but it used at the time
+convolutional layer and just
+with this it was able to
+gain 10% accuracy.
+Then
+we'll see other attempts like
+Google Net 2014
+which gained another 10% of accuracy
+with respect to Alex Net.
+Then ResNet which is one of
+the most famous most popular
+architecture still used nowadays.
+So let's see
+let's
+have a brief overview
+of the first architectures
+so
+Alex Net, TGG and Google
+Net. So from 2012
+to 2014 just
+to see the idea behind these strategies.
+So Alex
+Net was a very simple architecture
+and basically it was just the application
+of what we saw in the previous lecture.
+So we have our
+input image and then a series
+of convolutional layers.
+Alternated with pooling
+layers.
+At the time
+the images, the input
+images were considered where
+all the images were
+downsampled to
+227 times 227.
+Regardless of the input image
+before feeding the image into
+the network the image was
+downsampled to this value.
+Then the first
+convolutional layer had
+96 fissure maps and
+a filter size of 11 by
+11 by 11. So they were big filters
+with
+96 fissure maps.
+Then a pooling layer downsampled
+to 27 by
+27.
+This 96 fissure map.
+Then another convolutional layer
+with 256
+fissure maps and so on.
+This is the
+application. At the end
+after the final pooling layer
+which has
+256 fissure maps
+6 by 6
+with resolution. Then there is a
+flattening layer which
+creates a vector
+out of those fissure maps.
+A vector whose length
+is 256
+times 6 times 6.
+This is connected
+to the first fully
+fully connected layer
+FC6 with
+4096 neurons.
+Then you have another
+fully connected layer with the same
+amount of neurons. Then a final
+fully connected layer with
+1000 neurons because you need 2 hours.
+So you have a
+full 1000 properties.
+One for each category of
+immobile image net.
+Now at the time
+the GPUs
+that were available in 2012
+were not that big
+in terms of memory part.
+So they had to
+split the training
+of this architecture on 2 parallel
+GPUs with 3 GB
+of memory each.
+And the training at the time lasted for
+5-6 days.
+This network is a network
+that nowadays you can train
+on your laptop in
+minutes.
+Because the GPUs
+that we have now are way more
+efficient than the GPUs
+of 14 years ago
+of course.
+But at the time
+it was a huge
+breakthrough because of the
+gaming
+performance that they had.
+It's very interesting
+to look at
+AlexNet because it's
+from the point of view of how
+to compute the output
+dimension of each convolutional layer
+and the number of parameters.
+So for example the first convolutional layer
+whose output size is 96
+filters and
+the filter is 11 by 11
+the first convolutional
+layer was
+set with a stripe of 4
+no padding
+and it was processing an image
+that has
+227 times
+127 pixels
+for 3 channels of the RGB.
+Now the output
+of the first convolutional layer
+if you apply the formulas we saw last time
+can be computed like that.
+So the output feature map had
+55 times
+55 pixels for 96
+feature map.
+The number of parameters
+is
+k by k times the input
+feature map times the output feature map
+plus the biases.
+So 34,000 more or less
+parameters.
+You can also compute the multiplying
+odds.
+So the number of operations that this layer
+requires on the
+core processors
+on the GPU.
+And even then you can do the
+same on the
+pooling layers after the first convolutional layer.
+Now it's important
+for the rest of the lecture to remember
+these three formulas.
+So the
+output
+feature map
+size
+So starting from
+a tensor which is C in times
+H in times
+W in
+the output
+is C out
+and this is a hyper
+parameter of the layer.
+It's something you choose.
+The
+output feature map is
+H in minus k
+which is the size of the filter
+plus two times the padding
+over the stride plus one
+and the same goes
+for the width.
+So this is the formula to compute the output feature map.
+The number of parameters
+of the layer
+are C in
+times C out
+times k
+times k plus C out.
+Standard convolutional.
+The depth wise variable
+convolution is different.
+It's the formula we saw
+in the previous slide.
+The number of multiplying
+adds, so the number of operations
+that you have
+is multiplying adds
+together because each
+time to compute
+the convolution you multiply the filter
+weight by the pixel
+value then you add this value
+to compute the output value of the convolution.
+So we consider it as a single operation.
+And also because
+on low level on the GPU processor
+this operation is performed as an atomic
+operation.
+So that's what it meant.
+That's why we continue this way.
+For all main we have multiplying adds.
+You have
+one multiplying add for each
+pixel in the output feature map.
+The output feature map in this case has
+55 times 55
+pixels.
+So it's basically
+h out times
+w out.
+For each output
+pixel, to compute each
+output pixel, you need
+to perform k by k
+operations because if you have
+the filter over the input
+pixel.
+Okay. It's k by k.
+And then you have to do this
+for all the channels in the input.
+And for all
+the feature map you require.
+So that's the total number of multiplying adds
+you have in a convolutional review.
+Which is this number
+over here, which is 1 to the 100 million
+operations.
+More or less.
+Now these formulas are important because
+most of the architecture will try to play
+with this formula in order to reduce
+the computational effort
+and the number of parameters
+to play with
+the output resolution.
+So it's useful
+to see how Alex Net
+and the first architecture
+had 35,000
+parameters on the first convolutional layer
+which is not that much.
+If you compare this
+with a fully converted layer, a fully converted
+layer would have millions
+of parameters. But the number of
+operations is big.
+It's 100 millions multiplied adds.
+Okay. And if you
+look at the formula,
+those multiplied adds
+are basically
+due to the
+resolution of the output feature map.
+Which
+you can modify in
+a certain point because that's of course
+something you want to preserve in order to make
+information. But it's also partly related
+to the size of the filter, which is 11 by 11.
+It's a lot of operations.
+Okay.
+So the next
+architecture was proposed after Alex Net
+tried to reduce this cost
+by using only
+3 by 3 convolution instead of
+11 by 11 convolution.
+Okay. Because Alex Net
+was an architecture that was designed
+to use different kinds of
+filter sizes depending
+on the stage
+of the architecture. So it was
+using 11 by 11, 5 by 5,
+3 by 5, 3 by 5.
+VGG basically,
+the architecture proposed in 2014,
+was designed by using
+only 3 by 3
+convolutional layers.
+And that's basically because
+if you stack
+3 convolutional layers
+with
+a kernel filter of 3 by 3
+you have
+the same receptive field
+you would have obtained
+with just one layer
+but a filter of 7 by 7.
+So
+this is something
+remember that
+we did this
+last time on the third.
+So if you
+use a 7 by 7 convolutional
+layer,
+one neuron is looking at all
+these inputs immediately.
+So the receptive field
+with a 7 by 7 convolutional
+layer is 7
+just at the first layer.
+To have the same receptive
+field with 3 by 3
+kernels instead of 7 by 7
+kernels,
+you need to stack
+multiple layers
+of 3 by 3.
+So the first layer
+has a 3 by 3
+receptive field.
+Each neuron has a 3 by 3
+receptive field.
+The second layer
+is 3 by 3
+with respect to
+the previous one
+but with respect to
+the input
+it's 5 by 5.
+The third layer
+is 3 by 3
+with respect to
+the previous one
+5 by 5 with respect to
+the intermediate one
+and 7 by 7 with respect to
+the input.
+So if you stack 3 convolutional layers
+with 3 by 3 kernels
+you get the same receptive field
+that you would have get
+with one convolutional layer
+of 7 by 7 filters.
+Now the question is
+why would I do that?
+It seems that
+in this case I have more layers
+so I might think
+that I have more parameters
+but that's not the case.
+You have less parameters
+to this configuration instead.
+And it's explained there.
+If you maintain
+if you don't change the
+input and output channel
+so if every layer always outputs
+the same amount of channel
+as the one that it receives
+with the
+7 by 7 layer
+the number of parameters
+is 7 by 7 by C square
+so if you have 49
+times C square parameters
+if you stack
+3 layers with 3 by 3
+you have
+by applying the formula
+of the parameters
+in this case you have
+C in times C out
+times C out
+times C in times C out
+times 3 times 3
+times 3 times
+because you have 3 layers
+like this.
+If C in and C out is the same
+it becomes C square times 27
+which is less
+than 49
+times C square
+this is the 7 by 7
+single layer
+this is the parameters of 3
+3 by 3 layers
+so you have
+almost half
+the parameters
+and the same
+receptive field
+also
+it's better this configuration
+because of the compositional nature
+you are dividing the problem
+into 3 smaller sub-problems
+which is better with respect to
+asking to a single
+layer to immediately
+cover 7 by 7 portion
+of the inputs
+so you also gain with respect to the simplification
+of the problem
+this kind of architecture converges better
+than an architecture with one single 7 by 7 layer
+so VGG
+basically exploited this fact
+to make the network
+deeper
+by using more
+3 by 3 layers
+to gain the same amount of receptive field
+with less parameters
+ok
+this
+idea
+of you just using
+3 by 3 kernels
+is the idea that has been maintained
+for all the subsequent
+architectures
+also the newest one
+because at the end you don't lose anything
+you just gain
+by using 3 by 3 kernels
+so in general when you design
+convolutional architectures
+you can easily
+avoid
+thinking about the size
+of the filter
+just use 3 by 3 filters
+and if you want more depth
+increase the number of layers
+now
+regarding the operation
+of the parameters
+VGG basically highlighted
+an important fact
+there is
+an opposite situation
+between the number of multiply
+and the number of parameters
+across different parts of the network
+usually the number of multiply
+and adds is concentrated
+on the convolutional layer
+because the multiply and add depends
+on the resolution of the image
+and the resolution of the image
+is bigger at the beginning of the network
+you start from a very high resolution
+of the image and then
+little by little you downsample it
+by using pooling layer or strides
+but the number of multiply and adds
+at the beginning
+is huge
+with respect to
+the last part of the network
+because when you have
+the dense layers
+the fully connected layers
+the number of multiply and adds
+is way less
+because the resolution
+drops down to 1
+the kernel is 1 in that case
+so the number of multiply and adds
+is fewer because in practice
+it just has color product
+for the parameters
+the number of parameters
+the situation is reverberant
+because the convolutional layer
+have very few parameters
+thanks to the sparse nature
+and the parameter sharing thing
+but when you go down to the network
+and then you reach the dense layers
+even though
+your feature map
+are smaller now
+maybe at this point they could be
+6 by 6
+for example
+you have a lot of channels
+you have a lot of feature maps
+so the last tensor here
+could be something like
+let's say that you end up
+with a 256 feature map
+6 by 6 tensor
+of the last convolutional layer
+then you flatten this
+and you have
+if you flatten this
+the vector
+becomes
+let's do this
+with the calculator
+it's still
+36
+times
+256
+so it's
+9016
+166
+vector elements
+if you connect this
+to a fully connected layer
+of
+in the case of
+Gujiji was
+400
+4000 neurons
+you have to multiply this number
+times 4000
+times 900
+and this is the total number
+of parameters
+of the first fully connected layer
+so you can see that
+this is the number of
+layers
+which goes up
+to
+37 million
+or a million
+which is a lot
+just for being clear
+it's 100 million
+because probably the layer
+I made an example with this
+but probably the last convolutional layer
+has a little feature map
+or more feature map
+I don't remember
+the concept here is that
+the final fully connected layer
+has a lot of parameters
+so the computational cost is
+little because the operation
+you need to perform are just
+the scale products but the number of parameters
+is huge compared to the parameters
+that you have on the convolutional layer
+so you have like this flip situation
+in which the first part of the network
+the part that performs
+feature extraction with the convolutional layer
+has a lot of
+multiplying nuts operation
+and a lot of memory
+because you have to store all the feature map
+at a higher resolution
+but it doesn't have much parameters
+on the other hand
+the last part of the network has
+a lot of parameters
+but it's way more efficient with respect to the number of versions
+so
+according to this graph
+of UGG the next architecture
+was proposed trying to solve this problem
+by removing
+as much as possible
+the final fully connected layers
+because those are the layers that
+creates a lot of parameters
+so the idea is
+why don't we remove the final fully connected layer
+we only keep
+one final layer with 1000 neurons
+for the final classification
+so we avoid
+we remove the two hidden fully connected layers
+that has
+a lot of neurons like
+that we have in Alex Nettel
+or UGG
+so the idea of Google and Nettel
+as the name suggests
+was proposed by Google
+the Google Researcher in 2014
+the idea of the architecture is
+just use convolutional layers
+for the entire architecture
+and use the fully connected layer
+only as the final layer
+that should provide 1000 neurons
+in order to maintain
+the same representational power
+they had to introduce
+a new layer
+that was the same
+as the so called
+inception module
+or inception block
+the idea of the inception module
+is that at each layer
+I create four parts
+basically
+and these four parts
+are parallel
+convolutional layers
+with different
+filter sizes
+that should extract
+different kind of features
+because each
+convolutional layer
+looks at different portion
+of the input fissure maps
+so we have a one by one convolutional layer
+which only mixes
+the input channels
+in this example
+there are 192 input channels
+mixes them and creates
+64 output channels
+created by the mix of the
+input 192 input channels
+then you have a 3 by 3 convolutional layer
+which instead looks at
+a bigger region of the input fissure maps
+which is slightly bigger
+then a max pooling layer
+whose objective is to extract
+and summarize information
+from the fissure maps
+then what you do is that you concatenate
+all the output of the four
+branches
+you concatenate along the channel dimension
+and then you get this
+very huge stack
+of fissure maps
+it's 416
+which is the sum of the 64
+plus the 124
+plus the 138 plus the 32 plus the 190
+so you stack all of them
+all the fissure maps
+across the channel dimension
+in order to do that
+this is important
+when you stack your fissure map
+across the channel direction
+you need to guarantee that the resolution
+is the same for all the maps you stack
+otherwise you cannot perform the stack
+it gives you an error
+so that means that all the
+all those four convolutional layers
+have the same output
+fissure map of the same resolution
+28 times 28 in this case
+so that means
+that you need to play correctly
+with the padding
+in order to avoid the reduction
+in the resolution
+the 3x3 convolution
+if you don't apply padding
+reduces the output of one value
+so it's smaller
+the resolution
+the 5x5 of two
+so you need to apply padding one and padding two
+to get the fissure
+the problem
+that the module has
+in this configuration
+is that
+as you can see
+from the previous layer
+to the next layer
+the number of channels is doubled
+so this costs a lot
+with respect to the multiplier amounts
+that were a problem already in 2GG
+if you do this
+this makes the problem even bigger
+so this is the problem
+so the inception module
+in order to control the computational cost
+included the 1x1 convolution
+to basically create a bottleneck
+before computing
+the 3x3
+5x5
+convolutions
+so
+before
+feeding the maps
+to the 3x3 convolution
+there is an intermediate
+1x1 convolution
+that is the maximum
+that brings down
+the number of fissure maps
+from 192 to 96
+similarly
+before the 5x5
+we bring down
+from 192 to 16
+to save a lot
+of multiplier amounts
+of operation
+and
+after the max pooling
+the max pooling
+doesn't change the fissure map
+because it's not a level
+so the output of the max pooling
+is still 192
+to control this huge number
+of fissure maps
+we add another 1x1 convolution after
+that brings down the fissure map to 32
+this way when I concatenate everything
+now the fissure maps are not 400
+but are 256
+which is way less
+so the number of multiplying nuts
+is decreased
+considerably
+with respect to the previous situation
+if you compute the number of multiplying nuts
+on this configuration
+you will end up with
+way more
+multiplying amounts
+you have 300
+300 millions multiplying nuts
+if you
+use the version
+without the 1x1 convolution
+if you use the 1x1 convolution
+you reduce it to
+128 millions
+so it's 1 third
+and you don't lose almost anything
+because the 1x1 convolution
+basically summarizes
+the information of the input fissure map
+but
+since you have four branches
+this information is propagated
+and at the end you don't lose that much
+and this is
+basically confirmed
+by the performance
+because
+Google Net has
+a total of 22 layers
+ok
+VGG16
+had 16 layers
+so Google Net has even more layers
+than VGG
+but the number of parameters is
+way less
+it's 6.8 millions
+compared to the 138 millions
+of VGG and even compared to
+the 61 million parameters of AlexNet
+which was the first
+network we used before
+the number of multiplying nuts
+is a factor
+of 10 less than VGG
+it's a little bit more than AlexNet
+but AlexNet has only 8 layers
+so we expect that
+and the accuracy
+is way better
+Google Net is
+improving with respect to VGG
+and
+improving a lot with respect to AlexNet
+that's
+the architecture
+so you have this
+inception module, the blue one
+there are 9 inception modules in total
+the first part
+of the network is just standard convolution
+with a pooling
+then the rectangles
+indicated with the 4
+are the inception modules
+then you have a pooling layer
+and some final convolutional layer at the end
+then you have a block leverage pooling
+that brings everything
+to
+summarizing the final future maps
+then you have just one dense layer
+with 1000 neurons
+that outputs the final
+classification scores
+so you removed in this way
+all the fully connected data except the output 1
+that made us
+reduce a lot
+the number of parameters
+but we are improving the performance
+so that's a huge gain
+so the study here
+of course these networks are not used anymore
+because they were
+from 10 years ago
+but they are very important
+to study because they tell you
+what you need to consider
+when you design architecture
+you need to keep in mind
+the memory consumption
+the multiplying adds
+and all these things
+because otherwise you blindly create your architecture
+without considering the stuff
+then you want to deploy the architecture
+on a real application
+you might find yourself
+ok, I have incredible performance
+but the network requires 200 GB of memory
+to run
+which is impossible for a robotic platform
+or even a standard computer
+and it takes, I don't know, 1 minute
+to perform a prediction
+which is not compatible with most of the applications
+so in that case
+it requires you to rethink
+your architecture
+and this standard architecture
+suggests you what you could do
+in order to make the network
+more efficient without losing performance
+now
+the next step
+after 2014
+was to solve
+an important problem
+that researchers found
+when trying to increase
+the number of layers of networks
+it was ok
+we started with GoogleNet
+and we saw the performance
+then we got more advanced GPUs
+with more memory
+and we said ok
+why don't we make the network deeper
+so we have more parameters
+so let's improve and increase the layers
+now the problem
+was that
+after adding many layers
+30 layers, 40 layers, 50 layers
+100 layers
+what we expected was
+that we have more parameters
+so we risked the overfitting
+of course
+but that's something
+we can control
+with regularization
+instead
+what happened
+was that even the training error
+increased
+as we added more layers
+which is counterintuitive
+because
+the more the parameters
+the more we expect
+the network to overfit
+so the training error should be lower
+and maybe the test error higher
+but instead what was observed
+is that the training error was increasing
+by increasing the number of layers
+the problem
+was not on the performance side
+but was on the optimization side
+we saw in the previous lectures
+that deep network
+has the problem of diminishing gradients
+because the gradient
+propagated that
+by the back propagation
+it's multiplied
+little by little
+by factors
+that are the derivatives
+across the layers
+if these factors are less than one
+every time you multiply
+across one layer
+the gradient is dramatically reduced
+if you add more layers
+the reduction you get
+with respect to the beginning of the network
+is so big
+that the gradient basically vanishes
+so at the end
+the first layer of the network
+receives a gradient which is almost zero
+if the gradient is almost zero
+the parameters are not updated
+so they don't learn
+if they don't learn
+even the training error rises
+so the problem was
+the problem of vanishing gradient
+of course there is also the exploding gradient problem
+but that problem can be solved
+by just saturating the gradient
+for the vanishing one
+it's way more complicated
+the situation
+there are two things
+that we could do
+to deal with this problem
+that we already solved in the previous lecture
+one of the things is
+using activation that doesn't help
+to reduce the gradient by themselves
+for example
+avoid using the sigmoid
+because the sigmoid
+halts the gradient
+so prefer the reload
+because the reload doesn't halts the gradient
+but it's not enough
+ok
+you can also use
+batch normalization
+in order to standardize the output
+but
+again it's not enough
+even if you use the correct initialization of the weights
+even if you use batch normalization
+in those cases
+it's still not enough
+to let the gradient
+maintain its value
+across very deep networks
+so we can run this experiment
+and
+basically
+if you
+run a similar training procedure
+with two different networks
+one with 20 layers
+and the other one with
+56 layers
+what you observe
+is that
+the network with more layers
+at the end of training
+has a higher training error
+and a higher test error
+than the network with 20 layers
+so that means that
+the deeper the network
+the worse the results are
+and
+it was clear
+that
+this was not
+overfitting
+because by construction
+a 56 layer network
+should learn
+at least
+the same things
+that should be learned
+in the training
+by a 20 layers network
+because if you just
+consider
+20 layers of the 56
+that are trained
+and you set to identity
+the remaining ones
+you should get the exact same output
+so the deeper
+network should learn
+at least the same concept
+that the 20 layer networks
+learn
+so it's impossible
+that 56 layers
+network learns
+less things
+than the 20 layers one
+so that's why it's not an overfitting problem
+it cannot be an overfitting problem
+you have more parameters
+so
+you have to overfit
+actually with a 56 layer
+it has to learn the same things
+and even more
+with respect to the 20 layers one
+the problem is the optimization
+it's the very shimmy problem
+so we have to deal with this problem
+and the solution was
+the introduction of the residual node
+of the residual network
+which are
+the concept behind ResNet
+residual network
+ResNet has been and is still
+the state of the art architecture
+because these simple things
+we are going to see in the next slide
+basically unlock
+the possibility of having
+very very very deep networks
+networks with more than 100 layers
+and the idea is very simple
+the residual block
+is just a block
+in which you have
+this short cut connection
+from the input
+after two convolutional blocks
+so basically
+you take the input
+to a convolutional block
+convolutional block in ResNet
+is composed of a 3x3 convolution
+batch norm, reload
+3x3 convolution and batch norm
+before the next
+activation you insert
+a submission node
+in which you sum back
+the input to that node
+that's the standard architecture
+that's the residual block
+the only modification
+between the two strategies
+is this sum
+in order to perform this sum
+the only requirement
+is that the output feature
+map of the last comb 3x3
+needs to be the same
+so the output feature
+needs to have the same resolution
+and the same amount of channels
+of the input one
+otherwise you cannot perform
+a summation
+because the summation is an element wise operation
+so the two tensors
+needs to have the same capacity
+Why do we sum on 2
+every 2 and not after every rare
+every 2?
+That's just a choice
+they found that it's better this way
+and also because
+the gradient
+that you get from 2 convolutional layers
+is negligible
+so you can accept to have this kind of structure
+It's called residual
+because since you have the summation
+the output
+basically is
+the sum of the input plus
+this function f
+ok
+so what the
+layers need to learn
+is not the
+function
+the output itself
+so the input plus the residual
+the layers just need to compute
+the residual which is
+f which is d minus
+the input x
+ok so if you
+want to compute the desired output
+which is d which is the sum of
+f plus the input
+you just need a layer
+the 2 convolutional layer inside the blocks
+just need to focus
+on the residual so the difference
+between the desired output and the input
+now this might seem
+a trivial change
+but it's actually
+an important modification
+because instead of
+the need to learn the entire
+function
+you just need to learn
+the residual
+the modification you have to apply
+to the input
+so you still have the input
+which brings information
+you just need to add something to the input
+to match the desired output function
+which makes the task
+way easier
+now you can see this in this way
+or
+even better
+you can look
+at the gradient
+the shortcut connection
+basically is called shortcut
+because it creates a shortcut path
+for the gradient
+to jump back
+during the back propagation
+without being modified
+it has a shortcut connection
+without weights, without parameters
+so when the gradient reaches
+this summation point
+it splits into two paths
+one path goes
+to the shortcut
+and across this branch
+it's not modified
+because there are no parameters here
+so there are no gradients multiplied
+the gradient goes instead
+through the block
+since in the blocks there are parameters
+of two convolutional layers
+of course in this part
+the gradient is modified
+because it is multiplied
+by the gradient component
+of the two convolutional blocks
+so it is reduced
+but then it's combined back
+with the gradient that was passed
+through the shortcut connection
+so numerically the gradient stays high
+it's not reduced
+there is a component which is reduced
+but there is the other component
+which is maintained the same
+it's numerically kept the same way
+you can see this also
+if you compute the formulas
+because when you compute the gradient
+there is one plus the derivative
+across the block
+so the gradient from the previous layer
+there is one component
+which is not modified
+because it multiplies one
+so it stays the same
+the other one is multiplied
+by the gradient across the block
+so that part is reduced
+but then you sum them
+so numerically they are kept
+a value which is not
+vanishing anymore
+and this is repeated across the block
+every time you have this shortcut connection
+this rail, the blue rail
+that lets the gradient go back
+to the network without being reduced
+every time
+it's a very simple thing
+because we are just adding
+a submission node
+but this simple submission node changed everything
+this simple submission node
+made the gradient not vanishing
+which made possible
+to train very deep network
+and that's basically
+everything you should know
+about ResNet
+ResNet is just the concatenation
+of these residual blocks
+each residual block is composed
+of two convolutional layers
+or three in some configurations
+and then this submission node
+and you alternate continuously
+these blocks
+and that's basically
+the advantage you get
+the gradient size
+with ResNet
+stays almost the same
+and doesn't drop
+as you increase
+the number of blocks
+if you compare
+now ResNet
+against the
+plain network
+the one we have
+without the residual block
+then now you see
+the advantage with respect
+to the plain
+because the training error is reduced
+and also the test error commonly
+so now we can't go deeper
+without
+the need
+without losing performance
+ok
+so ResNet 56
+which is the version of ResNet
+with 56 layers
+achieved a 4%
+error
+which is a 30%
+test error
+with respect to the plain network
+which was instead 20%
+so the gain was significant
+usually what happens
+in ResNet is that
+you usually increase
+the number of blocks
+as you go through
+the network
+so you double the number of
+feature maps
+every certain amount
+of ResNet blocks
+this is to increase
+the capacity to capture
+information as you go through the networks
+and that's basically
+the design choice
+the only thing that you have to
+take care of
+is to maintain
+the resolution
+and the number of filters
+the same across
+basically
+the two
+when any performance
+so in order to deal with this
+you want to double the number of
+filters after the first convolutional
+layer in order to then perform
+the summation you have to adapt
+the input because otherwise
+the input cannot be summed
+if the tensor are at different dimensions
+so you have two possibilities
+the first option A
+is to basically add 16 channels
+with 0 so you can basically perform
+padding but across the channel dimension
+to adapt the number of channels
+the other alternative
+is to have
+a 1 by 1 convolution here
+which just adapts
+the number of channels
+and brings them back to 32
+perform this projection
+that's something that happens
+when you want to double
+the number of
+filters which you need to do
+every now and then
+during the network
+let's say path
+because otherwise you don't get more features
+so basically
+you start from the image
+which has three channels
+then you go through the first
+residual block
+which has
+convolution 1
+convolution 2
+here you have
+the summation and then you have the loop
+so here you have three channels
+in input
+if you want to output
+32 visual maps
+you have to deal with
+the fact that here you have a pencil
+which is 3HW
+and when you want to sum it back
+if after the
+second convolutional layer
+the visual maps are
+3HW
+these two tensors
+are not compatible to perform a summation
+so here you have to do
+something with this shortcut
+in order to make this
+consistent
+so you can
+apply
+this 1 by 1 convolution
+now of course this creates
+something in the shortcut which is not
+identical
+so it creates some graded drop
+here because you will multiply
+also the shortcut part
+with something which is not 1
+but you never have to do this
+every time
+usually on ResNet what you do is that you need to do this
+the first time because you need to go from
+3 to 64
+then you keep
+64
+for a certain amount of residual block
+ok
+so all this little block
+doesn't change the resolution
+of the visual map
+all the visual maps here stay 64HW
+so all these
+shortcut connections
+are identical
+and then at some point
+you perform another
+increase of the visual map
+so only on those situations
+you have something in the shortcut
+but those are not frequent
+so they don't change
+they don't affect the gradient propagation that much
+and that's
+an example of how the image
+is processed
+and goes through the network
+that's basically it
+the residual
+amount, so the correction
+computed by a network as you go down
+and that's
+why this network is so efficient
+because the layers
+on the block needs only to compute the
+correction rate, not the entire
+this makes the gradient
+flow way more
+efficient
+yeah that's basically
+the unfolding of the network
+and
+what happens if you remove the blocks
+to the network
+and this basically shows to you that
+if you remove one of the blocks
+the resident network
+doesn't lose much of your
+accuracy thanks to its structure
+while if you remove blocks
+convolutional blocks to the plane network
+it actually might lose a lot of accuracy
+that's why it's also way more
+efficient to use ResNet because it's more robust
+against
+inefficient reduction in the
+number of blocks that you use
+one of the variants
+of ResNet
+instead of having the residual block
+as it is, is by
+using the bottleneck
+block, which is
+just the same part
+where one by one convolution
+are included in order to
+control the number of
+multiplying hands
+this version is
+basically more efficient with respect
+to
+this
+version here because in this
+case you have three convolutional
+blocks in place of two
+so you have more or less the same parameters
+but you have more expressiveness
+of the network, so the bottleneck
+is usually the way in which ResNet is
+implemented because you have
+more layers but they don't
+increase the number
+of multiplying hands and the number of
+parameters, which makes
+this network preferable
+because it
+gains, it obtains better
+performance
+without increasing the computational complexity
+so the only difference is that
+instead of having
+two 3x3 convolution you have
+one 3x3 convolution
+before that you have a 1x1 convolution
+that brings the number of channels
+from 256 to
+64 and then a final
+one which brings back the number
+of channels to 256
+so the two situations
+the difference is that here you
+only have 64 channels
+here you have 256
+channels so you have more feature maps
+so you have more features
+but the number of
+parameters is more or less the same
+so in this case the network can extract
+more features by not
+changing the number of complexity
+the complexity of the network
+the number of parameters
+so it's way more convenient this version
+now the ResNet family
+has different variants
+so the smaller one is
+ResNet 18 and then you can go up
+to ResNet
+152
+so with 152 total layers
+the block
+the smaller one is the basic block
+then you exploit the bottom layer
+just so in order to make things
+more efficient
+those are the parameters
+you get and as you can see
+the deepest
+version of ResNet has
+less than a half
+the parameters of VGG16
+so
+it's way more
+convenient
+from the memory occupation point of view
+also the multiplying acts is less
+but the performance
+is way better
+78% accuracy against
+71% of VGG
+so it's more efficient
+and better
+and that's ResNet
+from 2017
+16-17
+then of course there were proposed newer versions
+of ResNet which are even better
+here there are some computation
+you can do to check the
+output size of different blocks
+for ResNet
+and
+the other
+the other thing
+that you need to
+to
+to
+to
+to
+to
+to
+to
+to
+to
+ask
+basically we'll see how this
+how the residual network
+will be modified
+into mobile net
+basically
+where after the last convolutional layer
+we won't have a pre-activation
+before the summing
+after the summing
+but we will see this why it makes
+difference when we
+adapt ResNet to the mobile net
+which is the version of ResNet that used into
+mobile smart phones and workplaces
+because it's more efficient. So it has some modification to make the network smaller and
+with less multiplying nuts operation.
+These are some examples of how ResNet has been used in, for example, modern robots.
+Sometimes it's used as a feature extraction network. For example, ResNet 18 or EfficientNet,
+which is a variant of ResNet, which is more efficient for robotics.
+This feature map is usually then used as the input to the policy network,
+which are the reinforcement learning strategies that we will see in the last part of the course.
+Policy network then output robot actions.
+So the idea of this architecture is it takes images, inputs, extracts features from ResNet,
+then outputs them.
+And provides these high-level features to policy network in order to compute robotic actions.
+And this was also used recently for diffusion policies,
+which are one of the state-of-the-art for robot control or other kind of techniques like RT1,
+which is used to compute actions conditioned on human instructions
+or neural networks.
+So this is a very useful language to speak with the robot and help the robot understanding
+what actions should be performed.
+So from 2018 onward, basically we started to propose variants of ResNet
+in order to make it even more efficient.
+One of these variants is DenseNet.
+It basically changes things.
+Instead of adding things to the residual block,
+the idea of DenseNet is to concatenate the input of the current layer,
+which is the input to the current layer which is computing convolutional stuff,
+with the output of the layer itself.
+And provide this concatenated input plus the output to the next layer and so on.
+That means that the concatenation grows for each layer.
+So the number of feature maps that each layer receives is the feature map of the previous layer
+plus all the feature maps from the layer from the beginning to that point.
+So every time you add a new layer, you concatenate the output to this layer
+to the input feature map to that layer itself.
+That means that, for example,
+here you have your image,
+and you have a convolutional layer,
+which outputs, let's say, 32 feature maps.
+And here you have three channels.
+Then what you do is that you concatenate these three channels
+to the 32 channels from the first layer.
+This is the concatenation procedure.
+So then you get 35 channels.
+And this goes into the second convolutional layer.
+The second convolutional layer outputs, let's say you ask for 64 feature maps.
+So it outputs a 64 channel tensor.
+Then you concatenate this 35 to the 64.
+So this gets a tensor which has 99 feature maps.
+And so on.
+So every time you add a new layer,
+you concatenate the input feature map to the output feature map of that layer.
+This is done in order to propagate the information across the network
+without losing the layer.
+Without losing anything.
+So each layer of the network has access to all the information extracted by each part of the network.
+Without this concatenation, instead,
+you only propagate what each layer computes and digests.
+So the next layer, without the concatenation,
+has to work only with what was produced by the previous layer.
+With GnansNet, instead, each layer has access to all the information
+from all the layers.
+So layer number 90 also has access to the feature map computed by layer number 1.
+As they are, without any kind of digestion or computation.
+We will see that, despite this, it might seem that it will require more computation.
+Instead, this architecture provides better performance with respect to ResNet with less parameters.
+The only thing that scales is the memory required by this network.
+Because each feature map needs to be stored in memory in order to compute the backpropagation.
+This is something that makes this network a little bit less effective with respect to the memory of the propagation.
+But there are some low-level implementations in Python which actually instead exploit some smart things
+to make this architecture still manageable, even if there is a lot of feature mapping involved here.
+So now we stop here.
+Tomorrow we will see, in practice, why GnansNet is convenient.
+We will see the other alternatives.
+And hopefully we will start seeing some supervised applications.
+I'm not sure we will have the lab on Friday, because before the next lab I wanted to also...
+cover the recurrent neural networks.
+So I don't think we will be able to do that tomorrow.
+So probably on Friday we will have theoretical lecture on recurrent neural networks.
+And then next week we will have the lab session.
+But we will provide you an announcement to you in the studio.
+So stay tuned.
+Thank you.
+Thank you.
+See you soon
+See you soon
+Rector
+I cut my Youngman graph.
+Yes, yes, yes.
+I'm going to the toilet!
+I'm going to the toilet!
+I'm going to the toilet!
+You can't do that, you're a teacher of the class, fuck!
+Eh, I'm going to the toilet.
+I'm going to the toilet, that's it.
+Are you recording me again?
+Do you want something?
+Clear?
+Help, help.
+Clear?

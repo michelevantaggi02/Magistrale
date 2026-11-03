@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 540" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 20px; fill: #0f172a; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #64748b; }
+      .box-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 13px; fill: #1e293b; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11px; fill: #334155; }
+      .math { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+      
+      .grid-c1 { fill: #eff6ff; stroke: #93c5fd; stroke-width: 1; }
+      .grid-c2 { fill: #f0fdf4; stroke: #86efac; stroke-width: 1; }
+      .grid-c3 { fill: #fdf2f8; stroke: #f472b6; stroke-width: 1; }
+      
+      .kernel-hl-c1 { fill: #f97316; fill-opacity: 0.35; stroke: #ea580c; stroke-width: 2; }
+      .kernel-hl-c2 { fill: #f97316; fill-opacity: 0.35; stroke: #ea580c; stroke-width: 2; }
+      .kernel-hl-c3 { fill: #f97316; fill-opacity: 0.35; stroke: #ea580c; stroke-width: 2; }
+      
+      .cube-wire { stroke: #c2410c; stroke-width: 2; stroke-dasharray: 4,3; fill: none; }
+      .cube-solid { stroke: #ea580c; stroke-width: 2.2; fill: #ea580c; fill-opacity: 0.15; }
+      
+      .out-grid { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.2; }
+      .out-active { fill: #10b981; stroke: #047857; stroke-width: 2.5; }
+      
+      .proj-arrow { stroke: #059669; stroke-width: 2.5; stroke-dasharray: 6,4; fill: none; marker-end: url(#arr-green-proj); }
+      .math-box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 8; }
+    </style>
+
+    <marker id="arr-green-proj" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#059669" />
+    </marker>
+    <marker id="arr-orange" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+      <polygon points="0 0, 6 2, 0 4" fill="#ea580c" />
+    </marker>
+  </defs>
+
+  <rect width="1020" height="540" class="bg" />
+
+  <!-- Header -->
+  <text x="35" y="32" class="title">Convoluzione su Volumi Tridimensionali (3D Tensor Convolution)</text>
+  <text x="35" y="52" class="subtitle">Volume d&#39;ingresso 3 × 5 × 5 (es. RGB) elaborato da un singolo filtro cubico 3 × 3 × 3 per produrre una Feature Map bidimensionale</text>
+
+  <!-- ==================== SEZIONE SINISTRA: VOLUME DI INGRESSO (3 SLICES 5x5) ==================== -->
+  <!-- Assonometria cavaliera: asse X orizzontale, asse Y verso il basso, asse Z a 45° sfalsato in alto a destra -->
+  <!-- 
+       Offset Z per canale:
+       Canale 3 (Blu/Posteriore): offset dx = 90, dy = -70
+       Canale 2 (Verde/Centrale): offset dx = 45, dy = -35
+       Canale 1 (Rosso/Frontale): offset dx = 0, dy = 0
+       Dimensione cella: 32 x 32 px. Matrice 5x5 = 160 x 160 px.
+       Origine Canale 1: x = 60, y = 230
+  -->
+
+  <g transform="translate(45, 110)">
+    <!-- Etichetta Volume d'Ingresso -->
+    <text x="70" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="14" fill="#1e293b">Tensore d&#39;Ingresso X (C_in × H_in × W_in = 3 × 5 × 5)</text>
+
+    <!-- CANALE 3 (Posteriore, Z=3) -->
+    <g transform="translate(140, 80)">
+      <!-- Sfondo matrice 5x5 -->
+      <rect x="0" y="0" width="160" height="160" fill="#fdf2f8" stroke="#f472b6" stroke-width="1.5" rx="4" />
+      <!-- Griglia 5x5 -->
+      <path d="M 32 0 L 32 160 M 64 0 L 64 160 M 96 0 L 96 160 M 128 0 L 128 160
+               M 0 32 L 160 32 M 0 64 L 160 64 M 0 96 L 160 96 M 0 128 L 160 128" stroke="#fbcfe8" stroke-width="1" />
+      <!-- Kernel highlight 3x3 in alto a sinistra -->
+      <rect x="0" y="0" width="96" height="96" class="kernel-hl-c3" rx="2" />
+      <text x="168" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#db2777">Canale 3 (B)</text>
+    </g>
+
+    <!-- CANALE 2 (Intermedio, Z=2) -->
+    <g transform="translate(95, 125)">
+      <rect x="0" y="0" width="160" height="160" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" rx="4" />
+      <path d="M 32 0 L 32 160 M 64 0 L 64 160 M 96 0 L 96 160 M 128 0 L 128 160
+               M 0 32 L 160 32 M 0 64 L 160 64 M 0 96 L 160 96 M 0 128 L 160 128" stroke="#bbf7d0" stroke-width="1" />
+      <rect x="0" y="0" width="96" height="96" class="kernel-hl-c2" rx="2" />
+      <text x="168" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#16a34a">Canale 2 (G)</text>
+    </g>
+
+    <!-- CANALE 1 (Frontale, Z=1) -->
+    <g transform="translate(50, 170)">
+      <rect x="0" y="0" width="160" height="160" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5" rx="4" />
+      <path d="M 32 0 L 32 160 M 64 0 L 64 160 M 96 0 L 96 160 M 128 0 L 128 160
+               M 0 32 L 160 32 M 0 64 L 160 64 M 0 96 L 160 96 M 0 128 L 160 128" stroke="#bfdbfe" stroke-width="1" />
+      <rect x="0" y="0" width="96" height="96" class="kernel-hl-c1" rx="2" />
+      <text x="168" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#2563eb">Canale 1 (R)</text>
+    </g>
+
+    <!-- ==================== CUBO DEL KERNEL 3x3x3 CONGIUNTO IN ASSONOMETRIA ==================== -->
+    <!-- Colleghiamo i 4 vertici del kernel 3x3 tra i tre canali per evidenziare il solido volumetrico -->
+    <!-- Fronte: (50, 170) -> (146, 170) -> (146, 266) -> (50, 266) -->
+    <!-- Retro:  (140, 80) -> (236, 80)  -> (236, 176) -> (140, 176) -->
+    <!-- Linee di connessione degli spigoli del parallelepipedo del filtro -->
+    <line x1="50" y1="170" x2="140" y2="80" class="cube-solid" />
+    <line x1="146" y1="170" x2="236" y2="80" class="cube-solid" />
+    <line x1="146" y1="266" x2="236" y2="176" class="cube-solid" />
+    <line x1="50" y1="266" x2="140" y2="176" class="cube-wire" />
+
+    <!-- Badge Filtro 3D -->
+    <g transform="translate(10, 85)">
+      <rect width="115" height="42" fill="#fff7ed" stroke="#fdba74" rx="5" />
+      <text x="57" y="17" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#c2410c">Filtro Cubico</text>
+      <text x="57" y="32" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#ea580c">3 × 3 × 3 (k=3)</text>
+    </g>
+
+    <!-- Frecce di Scorrimento 2D (Sliding Window) -->
+    <path d="M 152 218 L 180 218" stroke="#ea580c" stroke-width="2" marker-end="url(#arr-orange)" fill="none" />
+    <path d="M 98 272 L 98 300" stroke="#ea580c" stroke-width="2" marker-end="url(#arr-orange)" fill="none" />
+    <text x="186" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="600" fill="#ea580c">Slide X</text>
+    <text x="104" y="305" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="600" fill="#ea580c">Slide Y</text>
+  </g>
+
+  <!-- ==================== CENTRO: OPERAZIONE ALGEBRICA & PROIEZIONE ==================== -->
+  <g transform="translate(425, 210)">
+    <!-- Cerchio Operazione Somma -->
+    <circle cx="50" cy="50" r="30" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
+    <text x="50" y="44" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="bold" fill="#15803d">∑</text>
+    <text x="50" y="62" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#15803d">+ bias</text>
+
+    <!-- Frecce che entrano nel sommatore dal filtro cubico -->
+    <path d="M -30 20 C 0 20, 10 40, 20 45" stroke="#ea580c" stroke-width="2" fill="none" marker-end="url(#arr-orange)" />
+    <text x="-40" y="10" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="600" fill="#c2410c">Somma lungo i canali</text>
+
+    <!-- Freccia di Proiezione dal sommatore alla Feature Map di output -->
+    <path d="M 80 50 C 130 50, 160 30, 215 15" class="proj-arrow" />
+    <text x="100" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="700" fill="#047857">1 Scalare per patch</text>
+  </g>
+
+  <!-- ==================== DESTRA: FEATURE MAP BIDIMENSIONALE (OUTPUT) ==================== -->
+  <g transform="translate(680, 140)">
+    <text x="10" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="14" fill="#1e293b">Feature Map di Output (1 × 5 × 5)</text>
+    <text x="10" y="18" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748b">Matrice 2D scalare risultante dal singolo filtro</text>
+
+    <g transform="translate(20, 40)">
+      <!-- Matrice Output 5x5 (dimensione cella 32x32 = 160x160 px) -->
+      <rect x="0" y="0" width="160" height="160" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" rx="4" />
+      <path d="M 32 0 L 32 160 M 64 0 L 64 160 M 96 0 L 96 160 M 128 0 L 128 160
+               M 0 32 L 160 32 M 0 64 L 160 64 M 0 96 L 160 96 M 0 128 L 160 128" stroke="#e2e8f0" stroke-width="1" />
+
+      <!-- Cella Attiva in alto a sinistra (0,0) -->
+      <rect x="0" y="0" width="32" height="32" class="out-active" rx="2" />
+      <text x="16" y="20" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">y₁,₁</text>
+
+      <!-- Annotazione sulla cella calcolata -->
+      <g transform="translate(170, 8)">
+        <rect width="125" height="36" fill="#f0fdf4" stroke="#86efac" rx="4" />
+        <text x="62" y="16" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="700" fill="#15803d">Pixel Attivazione</text>
+        <text x="62" y="28" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#166534">y₁,₁ = ∑ W·X + b</text>
+      </g>
+    </g>
+
+    <!-- Legenda Parametri del Filtro Singolo -->
+    <g transform="translate(10, 235)">
+      <rect width="295" height="110" class="math-box" />
+      <text x="14" y="22" class="box-title">Formula del Singolo Filtro 3D</text>
+      <text x="14" y="44" class="math" font-size="12" fill="#0f172a">y(i, j) = ∑_{c=1}^{C_in} ∑_{u=1}^k ∑_{v=1}^k W_c(u, v) · X_c(i+u-1, j+v-1) + b</text>
+      
+      <text x="14" y="68" class="text" font-weight="700" fill="#1e293b">• Numero di Pesi per Filtro:</text>
+      <text x="160" y="68" class="text" font-weight="600" fill="#c2410c">C_in · k² + 1 = 3 · 3² + 1 = 28 pesi</text>
+      
+      <text x="14" y="88" class="text" font-weight="700" fill="#1e293b">• Dimensioni Tensore Pesi:</text>
+      <text x="160" y="88" class="text" font-weight="600" fill="#2563eb">W ∈ ℝ^{3 × 3 × 3},  b ∈ ℝ¹</text>
+
+      <text x="14" y="104" class="text" fill="#64748b">Per ottenere C_out feature map, servono C_out filtri 3D indipendenti.</text>
+    </g>
+  </g>
+</svg>

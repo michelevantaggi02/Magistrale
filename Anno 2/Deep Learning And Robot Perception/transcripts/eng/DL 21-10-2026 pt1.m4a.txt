@@ -1,0 +1,1391 @@
+about the deep neural network paradigm.
+So the idea of the previous lectures was let's learn the feature extractor because learning
+the way in which we extract features from images allows us to you know devise and develop specific
+features which are more customized in the task and more robust and more efficient in general.
+Now what we're going to do is how can we change the way in which the feature extractor learn
+in order to capture better features, best features in the image or in general in a
+genetic kind of input. And that's basically the convolutional network paradigm. Now the common
+pattern we are going to see the pattern means the sequence of layers that are usually that are
+common in convolutional neural networks.
+The neural network has usually this kind of fracture so you have like a sequence of
+multiplicity of these four layers factor which are repeated a number of times which depends on
+how big you how deep you want your neural network to be. Usually you have convolutional layers which
+starts this block then you have an optional normalization layer which could be a
+batch normalization in general because now we are talking about CNNs we will be talking about
+transformers that that normalization layer is usually a layer normalization not a batch
+normalization. The non-linearity is always there as we know because otherwise we get a layer
+collapse situation where two layers basically collapse into one and there is only linear
+representation of the process. Then there is again an optional pooling layer
+which we are going to talk about. This pattern is repeated a number of times which is user defined
+and it depends on how deep your network you want to be.
+Now let's briefly recall the convolutional operation because of course convolutional
+layers are called this way because they exploit the convolution. We know the convolution from
+the beginning of the course so you know that you have a kernel or you have a filter with some kind
+of parameters.
+This filter is convolved with an input the convolution basically is performed by flipping
+the kernel and performing multiplication between the position of the filter associated with the
+position in the image and you sum and you get the output value. So for each position of the filter
+overlap onto the input signal you get one number which is the result of the convolution.
+The convolution is commutative and it's basically a linear operation so it's basically computed by
+performing multiplication and addition operations. We also know that convolution and correlation are
+tightly related because convolution is the flipped version of the correlation. So you basically need to
+turn rotate the filter by 180 degrees
+in order to get the convolution by starting from the correlation. Now correlation is more convenient
+because you can directly overlap the filter as it is onto the image and perform multiplication and add
+while for convolution you need first to flip the kernel in order to perform the multiplication and add.
+Now in general this of course changes the operation but in convolutional layers that's not an issue.
+because in convolutional layers the filters are learned so the parameters are decided by the network so
+the network can learn to set the parameters so that they are flipped by 180 degrees during the training
+process by itself so in practice we can use the correlation because it saves us the flipping operation
+so it's computationally more efficient and easier to implement
+and it basically we can use it as an observation for our simulation. So let's see how it works.
+we can call it a convolution in neural network because the neural network will learn the parameters flipped by itself
+so it will apply the operation of the correlation but in practice it will learn the convolution
+because parameters are set automatically so the network will learn to basically flip the parameters during the training process
+so from now on just know that when we call the layers convolutional layers
+they are actually implemented as a correlation operation
+but in call it convolution because in practice parameters will be learned by the network
+so if the network needs convolution it will learn parameters so that it implement a convolution
+so since we can view the convolutional layer as a correlation with a learned filter
+in practice we can implement the convolution as we know by simply sliding the filter over an image
+and computing and performing the multiplication between the corresponding position of the filter and the image
+and then summing up all the contribution for the filter to get the output value
+we know that due to the border effects
+the result of the filter is the same as the output value
+so the result of the convolution, the resulting output map of the convolution will be slightly smaller
+with respect to the resolution because the filter cannot place itself on the border pixel
+because you don't have information outside
+so the resulting image will be slightly smaller where the reduction in the resolution depends on the size of the filter
+so the bigger the filter the more the reduction you have in the resulting image
+that's something we knew from previous lectures
+and that's something we can manage by using padding operation
+that's something we will be able to do even in convolutional
+basically the formula to compute the new resolution is there
+with simply the original height or the original width minus the kernel size plus one
+if you don't apply padding or stride operation as we are going to see later
+again the difference between the first lectures is just that the parameters of these filters in the kernel are learned
+they are not hand designed by engineers
+not that we decide what the filter should do
+like we did for example with Sobel
+like we did with the Gaussian filter, with the box filter
+all those filters
+we were deciding the parameters
+because we wanted to achieve a specific convolutional version
+and in that case we leave to the network the task of learning these parameters
+this is just an example to recap how convolutional performs
+by considering this 5x5 input black and white image
+so you place the kernel
+you multiply the window under consideration by the filter width
+in this case I fixed the product
+and then you sum up and you get 3, 3, minus 1 and so on
+this way you create what is called the output map
+so the output image
+the image produced by the convolutional operation
+if you apply this kind of filter for example to a real image
+with this kind of parameters
+so in this case the parameters are set by us
+this is like a Sobel filter
+which basically responds to edges, vertical edges
+because it computes the gradient between two
+uh...
+sides of one edge
+so if you slice this filter over this image
+the output map that you're gonna get
+it's something like this
+ok
+which reacts more on
+so with the blue one, the blue value here
+refers to high responses
+the red one to very low responses
+and the white one to zero basically
+so in this case you can see that it's reacting to situations
+where you have changes in the density values
+which is exactly what you expect from a gradient filter
+like a Sobel filter
+this is a Sobel light filter
+not exactly Sobel as we saw
+but it has a similar factor
+so you have positive, negative and individually of zeros
+so it's basically a band filter
+which responds when you have changes in the gradient
+so we expect the filter to provide a map
+an output map of the convolution
+which reacts when you see changes
+now if you compare the Sobel filter
+against typical learned filters
+from the very first layers of convolutional networks
+you see that there is not much of a difference actually
+and the only difference is that
+these parameters here
+of the learned weights
+are learned
+and it is very important
+it's peculiar the fact that they learn the same
+a similar filter
+to what we envisioned when we devised Sobel
+which means that the network is learning something
+which makes sense for us
+without explicitly asking the network
+to create a Sobel filter
+the network created
+a filter which resembles Sobel by itself
+because the network understood
+that on the very first layer of the network
+what you need to extract
+are low level features
+like edges and coordinates
+if you visualize the learned filters
+like this way
+you can always do that
+by just taking the filters after the training process
+and visualizing their map
+with a plot like a heat map or something
+and you can see that
+the output
+so this is the filter
+and this is the output of the map
+produced by the filter
+you can see that the output map is very similar
+to the output map of the computer Sobel
+which means that learning is
+something which is
+at least on the very first layer of the network
+which makes sense for us
+now the other thing which is
+which we are going to see
+that changes
+by applying this convolution
+is that it's not very different
+from an architectural point of view
+with respect to using a fully connected layer
+with some properties
+with some world of motion
+ok
+so in dense layers
+in fully connected layers
+if you have 7 inputs
+like in this case
+here we have
+a very well designed sample
+ok
+now we have 7 inputs
+each unit computes
+its output
+by performing a multiplication between
+these
+the vector of weights associated with this unit
+and the entire 7 units of the input
+so you can organize this as a matrix multiplication
+as you know from
+a machine learning course
+which we have a matrix W
+of layer 1
+scalar product with the input x
+that's a matrix
+that matrix there
+each row of the matrix corresponds to one of these units
+ok
+and each column contains the different
+parameter that connects the input to that unit
+now you can implement convolution
+similarly as a matrix vector multiplication
+like it that way
+the difference is that
+some of the
+entries of the matrix are 0
+and the weights are reused
+through the matrix
+so while in the fully connected layer
+you don't see the same parameter repeated more than once
+so every connection has a separate parameter
+to be learned
+in convolutional layers
+the parameters are reused for different units
+for different positions in the unit
+and the matrix is parts
+so you have zeros
+we'll understand why now in the next slides
+but that's a direct consequence of the convolutional matrix
+so
+the effect
+that we will see
+this has several advantages
+one of the immediate advantages
+is that
+you have less parameters
+ok
+for the same
+more or less number of units
+you expect to output from a convolutional layer
+the number of parameters in this example is 3
+while here it's 35
+for fully connected layers
+it's 3 of convolutional layers
+because you have 3 parameters which are repeated
+for all the units
+the other advantage is that
+you have less operation
+to compute, to perform
+because here you have
+36 multiplications
+35 sorry, multiplication
+while on the other hand you have less
+because you have just 3 parameters that multiply
+the zeros you can ignore them
+and the other advantage is more
+on the semantical power of the convolutional layer
+is that you are
+when you choose to use a convolutional layer
+you are
+placing to the network what is called an inductive bias
+which means you are imposing
+that
+information and features
+are organized in a specific way
+in this case is
+that you can detect features by only
+considering local information
+and not the entire image
+because the kernel, the filter looks only on a portion
+of the image to compute the convolution
+not to the entire image
+that's basically
+the other bias that you are imposing is that
+a feature
+can be detected regardless of its position
+since the parameters are used
+that means that
+you can move the filter without changing its characteristics
+to detect the same feature regardless of the position
+which is actually very useful
+let's see this in more detail
+a convolutional operation in particular
+convolutional layers are defined
+by considering 3 properties
+to modify the existing coding on empty layers
+the first property is the property of the sparse interaction
+the property that in the previous slide
+was encoded by the fact that in the matrix you saw the zeros
+so not all the hidden units are connected
+to all the hidden units of the previous and the next layer
+connection is reduced
+for one
+one neuron in convolutional layer
+is connected only to
+a local subset of the neuron from the previous layer
+and similarly that neuron
+contributes only
+to a local subset of the neurons of the next layer
+so that's called sparse interaction
+interaction is not dense
+ok
+the number of neurons
+from the previous layer
+that this neuron here
+sees
+or is influenced by
+one person
+in this case it's 3 neurons
+it's called the receptive field
+of the neuron
+so when you use convolutional layers
+it's like you know
+your hidden unit is partially blind
+it's like putting barriers
+on the side of your eyes
+you don't see the entire image
+you see only a small portion of the image
+that's the receptive field
+which might look as a disadvantage
+with respect to the fully connected
+the fully connected has full receptive field
+because the neuron can't see everything
+so this might seem some limitation
+we are going to see that that's not the case
+ok
+now the number of operations
+in this case is way less
+because with dense layer
+if you have m units
+and n inputs
+the number of operations is m times n
+correct
+because you have
+number of connections which is m times n
+with convolution
+with the sparse interaction property
+the number of operations is
+n times k
+where k is
+the receptive field
+or the kernel size
+so the dimension of the field
+the number of neurons
+with which the neuron
+the hidden unit is connected
+it's called the kernel size
+also if you want the receptive field
+the receptive field we will see
+is a more general concept
+which spreads through different layers
+where the kernel size
+is associated with a specific convolutional layer
+which says that
+one neuron is connected only to k
+block out neurons
+and the other neuron is connected to k block out neurons
+so that's the concept of the system
+ok
+so in this example
+you can see that
+with a kernel of three
+now this example is one dimensional
+you can imagine this
+of course in two dimension
+when you have images
+and the dots are the same
+when you have an image
+you can view each one of these pixels
+as one neuron input neuron
+so they are all neurons
+organized in a matrix
+if you want structure
+but it's the same
+of course you can vectorize them
+and get something like this
+or something like that
+it's the same concept
+then you have a filter
+2 by 3
+with which you perform the convolutional operation
+so you place the filter here
+and the output
+if you want the hidden unit
+is connected only to this subset of neurons
+not to the entire
+so that's a 3 by 3 window
+so the number of connections
+from one unit to the other is 9
+not the space that it would have been
+3 by 6
+yeah
+by 30 connections
+then you move your filter
+and you complete the next one
+and the next one
+and the next one
+and the next one
+and the next one
+and this basically creates your new image
+the new image is basically
+the hidden units of the convolutional layer
+the output of the convolutional layer
+organized in a matrix manner
+the output map
+of a convolutional layer
+is another set of hidden units
+that will be used for the next layers
+that's what you can see here
+ok
+in this case
+this is a
+dense layer
+which has full connection with the input image
+in this case
+a very small 4 by 4 image
+ok
+so it's like
+having
+if you look at a 4 by 4 image
+it's like having a
+reduced view of the input
+with respect to the input image
+if you consider for example a c-part
+that's for which the image is 30 units
+but 32 by 32
+in that case
+one unit would look at the entire number of pixels
+which is
+if you also consider the color
+3,072 inputs
+and the dense layer would have
+one connection for every one of these
+300,000 inputs
+so if you have 1,000 units
+for a dense layer
+you would have 3 millions of weights
+in just the first layer
+so you have a very small number of pixels
+in the first
+hit element
+if you use
+if you exploit the sparse interaction property
+of the convolution
+for example with a 5 by 5 convolutional filter
+the number of parameters
+is just 75
+we will see that you have
+one set of parameters
+for each color of the input image
+so at the end you have
+the filter is not a matrix
+but it's a small cube
+so the number of parameters
+depends also on the depth of the input
+so it's 75 weights
+for one specific unit
+instead of 3,000
+now
+with just the sparse interaction property
+you would have that
+to compute this
+output value here
+you have 75 parameters
+for this example
+but then to compute the next one
+you have another set of parameters
+so 75 more parameters
+that means that in total
+if your output map
+is like in this case
+4 by 4
+you would have 16 times 75 weights
+in total
+which is less than 3 millions of course
+but it's still more than 75
+because sparse interaction by itself
+only tells you that
+one output neuron is connected only
+to a portion of the input neuron
+of the image
+and that doesn't tell you
+that the same parameter
+used to compute the output
+for this position
+should be reused
+for the next position
+sparse interaction by itself
+doesn't define the convolution
+sparse interaction
+just says that one neuron
+is connected to some portion of the input
+if you want to implement the convolution
+you need an additional property
+the second property is that
+the fact that you reuse
+the parameters
+as you move
+as you slice
+over the input
+we'll see this next
+first
+two additional considerations
+on the sparse interaction
+why the sparse interaction
+makes sense for us
+well it makes sense because
+in general
+the hypothesis
+the assumption that we are making
+by using the sparse interaction property
+is that
+to detect a feature in an image
+we only need to look into
+a small neighborhood
+of one part of the image
+which is exactly the same assumption
+that we had
+when we defined
+the filters for
+sift
+or for the feature extractor
+at the beginning of the curves
+so we said that
+in order to detect a corner
+for example in arrays
+we need to look at a small window
+to look for the gradient variations
+we don't need to look to the entire image
+so we are applying the same concept here
+to detect a feature in a position of an image
+we just need to look at
+the small neighborhood around that position
+we don't need to look to the entire image
+to understand that there is a corner
+for example in the border of this car
+we don't need to look at the background
+we don't need to look at the
+I don't know
+ground or other parts of the car
+we just need to look to a small neighborhood
+and that's the hypothesis behind the sparse interaction
+that's why it works
+because in practice
+features can be detected by considering
+local information
+and not global
+so we can look at the background
+for the issue
+so it's an assumption of course
+but this assumption allows us to reduce
+considerably the number of parameters
+and if you remember
+if you reduce the number of parameters
+by adding a bias
+by adding an assumption
+if that assumption makes sense in general
+you are reducing the computational
+you are reducing the number of dimensions
+of the problem
+the number of parameters of the problem
+which reduces the risk over 50
+you are containing the power of the network
+by exploiting a property which makes sense
+this assumption is a prior
+basically it's like imposing a prior to the problem
+it's our knowledge
+we are saying to the network
+okay I'm limiting you
+by saying that you can only look at neighbor information
+when extracting the feature
+not to the entire image
+so we are reducing the power
+when respect to a fully connected layer
+but if this prior works
+it will make the network learn faster
+and more effective
+in a more effective way
+now it's in general true
+not always true
+this assumption
+that's why we need also other kinds of architecture
+but that holds true for many many situations
+now
+of course there is an immediate downside
+you might think
+you say okay
+yes
+information is local
+but to understand that I'm looking at a car
+I have to consider the entire image
+because maybe a local filter can detect the wheel
+but the wheel itself doesn't tell me
+that I'm looking at a car
+because it could be a bike
+it could be a motorcycle
+it could be a short bike
+it could be anything
+if I just see a wheel
+so looking at the wheel itself
+doesn't tell you
+that you are seeing a car
+you need actually global information
+for understanding the semantic meaning behind an image
+but with convolution we are reducing the receptive field
+we are only looking to a portion of it
+that seems that
+that
+these
+we
+fall us back to the original problem of the handcrafted feature
+in which since we only look at a small portion of the image
+we cannot detect higher level semantic concepts
+because we are not looking at the entire image all together
+that's something we do as human
+to understand
+what a scene is describing
+we look to the entire scene
+because in that way we can create correlation and relationships
+between objects in the scene
+and that would make us understand and differentiate between
+a scene of a room
+of a
+I don't know
+a bedroom
+of a kitchen and so on
+so
+it might seem that
+we are falling back to the same problem
+but that's not true
+thanks to the concept of receptive field
+because if you
+now let's go back to the monodimensional case
+so if you consider
+just
+this is our input
+x
+these are the input
+neurons
+so it's x0, x1, x2, x3 and x4
+if you just consider one unit
+by applying the sparse interaction property
+for a 3 by 3 kernel for example
+these neurons will only look at
+these three features
+it would ignore features x0 and x4
+so we are missing information
+we are not looking to the entire
+and that's true
+but what happens if I add another plane?
+now if I add another layer
+the receptive field of this neuron
+with respect to the previous layer
+is this one
+again it only looks at three
+hidden units of the previous layer
+but these three hidden units
+are influenced by the previous layer
+at the beginning of the network
+which is the input layer
+these units look at these three
+and these units look at these three
+so with respect to the input
+this neuron here
+is affected by
+all the input features
+as you add more layers
+the receptive field of the deeper layer
+increases with respect to the input
+because the receptive field propagates
+and expands as you go deeper
+that's why convolutional layer
+works perfectly
+in combination with deep networks
+because the assumption of sparse interaction
+is completely compensated
+by adding more layers to the network
+and this perfectly combines
+with the concept of compositional
+operation in deep networks
+where you split the problem
+into smaller sub-problems
+each convolutional layer
+basically computes a simple feature
+which is reused by the next layer
+which combines the simple feature
+to compute a higher level feature
+and additionally
+the deeper layer
+looks at the bigger portion of the input
+so it has progressively a wider view
+of the original input
+deeper, like after ten layers
+depending on the resolution of the input
+and on the current size
+at some point
+one of the deep layers
+will look at the entire image
+will be influenced by the entire image
+so you still have access to global information
+thanks to the depth of the layer
+that's the receptive field
+which is a direct consequence
+of the sparse interaction
+plus the fact that you use
+more than one layer
+which completely solves the problem of
+the blindness, if you want
+of just one layer
+you can take it
+now, as I was saying before
+that's good, but
+just the sparse interaction property
+I have a different set of parameters
+for each one of my units
+so here I would have
+W0, W1, W2
+while for this next neuron
+I have W3
+W4 and W5
+and then I have
+W6, W7 and W8
+I have nine parameters
+for the three neurons
+because for each interaction
+I have a different set of parameters
+these parameters are less
+than the parameters I would have
+with a fully connected layer
+but still I'm not reusing
+the same set of parameters
+for each neuron
+if I add the second property
+which is the parameter sharing property
+I'm solving this problem
+the parameter sharing says that
+the set of parameters that I've used
+to compute
+this unit is the same
+I'm going to use this unit and this unit
+so W0, W1, W2
+comes back here
+this is W0, W1 and W2
+this is W0, W1 and W2
+so now the parameters are not nine
+they are three
+and in this way I'm implementing
+the convolution
+because the fact that I'm reusing
+the parameter
+it's like shifting
+a filter from here to here
+and to here
+so sparse interaction
+plus the parameter sharing
+implements in fact the convolution
+now
+I have
+the same number of
+let's say
+computation operations
+because I still have to perform
+pre-multiplication and add for each unit
+so it depends on the kernel size
+but now the memory is less
+with respect to the sparse interaction
+with the sparse interaction
+I had nine parameters
+now I have only three parameters to store
+in this example
+and the assumption we are making
+to add this property
+is the fact that
+the same pattern
+the same feature
+that one in the units is responsible to find
+can appear
+regardless of the image position
+so I don't need a different set of parameters
+to identify a corner
+for the top left part of the image
+or the bottom right part of the image
+the corner is the corner
+because of its local characteristics
+not because of its position in the image
+so it doesn't make sense
+to have a different set of parameters
+depending on the position of the image
+because one feature
+can appear in the same way
+on different positions
+so if I have a filter
+which has been trained
+to detect a specific feature
+the parameters of that filter
+can be reused for all the positions in the image
+I don't need to change the parameters
+for different positions in the image
+because the wheel of the car
+in order to detect the wheel
+I need the parameters
+set in such a way
+that they can identify a circle-like structure
+but it's not that
+the parameters need to be different
+for the left wheel or the right wheel
+the parameters are the same
+I detect the wheel in the same way
+regardless of the position
+so that's why I can share the parameters
+across positions in the space
+because the feature
+doesn't depend on the position
+the feature depends on the local intensity values
+so again this is another property
+which makes sense
+in images but in general
+in any kind of input
+multidimensional input
+the same pattern
+can be re-identified
+regardless of its position in the image
+this saves us a lot of memory
+a lot of parameters
+so we don't need different filters
+to identify the same feature
+from different positions
+we can use the same filter
+and slice it
+so thanks to this
+if we don't share the parameters
+and if we wanted to select 1000 units
+for the inner layer
+we would have 76000 units
+and more weights
+thanks to the parameter sharing
+we only have 75 weights
+so if we compare
+a dense layer
+for example in the 32x32 image
+of the C part outset
+you go from something which is
+1 million
+I'm excluding in this case
+the color
+so let's consider the gray scale version
+of the C part
+with only one channel
+you go from 1 million weights
+of the dense layer
+down to the 25 parameter
+of the convolutional layer
+if you only use parts interaction
+you still have 25000
+if you reduce the weight
+you go down to 25 parameters
+so it's a huge reduction
+also on the number of operations
+which goes from 1 million to 25 thousands
+the convolutional layers
+are way more efficient
+both on the memory side
+and the computational side
+and the assumption you are making
+to make this happen
+they make sense
+the sparse interaction
+makes sense because
+to detect low level features
+you only need to look at local information
+to detect high level features
+there is the receptive field
+so you can just add more depth
+in order to compensate the locality
+of the field
+so you solve that problem completely
+the parameter sharing makes sense
+in general because that feature
+can be found anywhere
+regardless of its position
+so we are not losing information
+the inductive biases we are adding
+to the problem
+are reasonable
+and won't let us lose things
+in this case
+the convolutional layers
+the convolutional architectures
+in general
+are way more performing
+than dense architecture
+not only on the computational side
+but also on the performance side
+because thanks to this
+you are reducing the number of parameters
+by a lot
+so you reduce the risk of overfitting
+that means that the network
+can generalize better
+so we are using the
+inhibitor
+now the advantage is even more evident
+if you consider
+we consider for example
+the number of operations would be 200,000 with a convolutional layer
+it would be 8 billions with a dense layer
+so the advantage of convolutional is incredible
+and also convolutional operations can be efficiently implemented in GPUs
+so the advantage is even higher
+now training the convolutional layer is the same as training a dense layer
+so we can apply the same back propagation rule
+because if you go back at the beginning of this deck of slides
+you see that you can implement the convolution as a matrix multiplication operation
+where the matrix is sparse so you have a lot of zeros
+and the weights are repeated
+because of the sparse interaction and parameter sharing problem
+but it's still a problem
+so we can still do a matrix multiplication
+so you can train it in the same way as we train a standard dense fully connected layer
+by using back propagation
+so it doesn't change anything on the gradient computation side
+you can actually make advantage of this
+the fact that you are using weights to even make the back propagation more efficient
+because you don't need to actually perform this
+you can perform all the multiplication
+because some part of the matrix are repeated
+so all the gradients are repeated
+so you don't need to propagate the entire dimension
+so it makes the back propagation even more efficient
+but the idea is always the same
+that's a simple visualization of this process
+and it's just the way in which you propagate gradients
+there's nothing new here
+this is a visualization for example of 32 filters of layer 1
+as the training goes on
+so the filter parameters they slowly change
+and they adapt to different kind of features
+they can depend
+you see on the accuracy on the training which is increasing
+you see that the filter takes shapes different from each other
+now we are going to talk about why I'm talking about 32 filters
+from layer 1
+because up to now we are just considering one filter that slices over the image
+for a convolutional layer
+why I'm talking about more filters is something I'm going to explain in a second
+but let's assume for example we have more than one filter
+the first layer, the convolutional layer
+it's learning to see different filters
+each filter is responsible for detecting a specific feature in the image
+so for example this filter here
+is something similar to the Sobel
+with respect to the y-axis
+so it will detect edges with respect to the y-axis
+while the other filter here for example
+will detect edges with respect to the x-axis
+other filters will detect blocks
+for example like the block filter of SIFT
+other filters will detect other kinds of structures
+so each filter in the convolutional layer
+after training will be responsible
+for detecting a specific feature in the image
+we have a third property
+before explaining this concept
+but actually these properties are direct consequence of the convolution
+which is the equivalence to shifts
+which means that if you shift the input image
+the output will be shifted by the same amount
+that's a direct consequence of the convolutional layer
+because of the fact that you are using correlation for convolution
+ok
+so convolution is equivalent to translations
+it's not affected by translation
+the output is the same
+just translated
+that's the third property
+which means that if you translate your image
+the output map of the filter in the convolutional layer
+will be shifted
+with the same amount
+and this is visualized
+so if you shift the image
+the convolution is just shifted the same
+now be aware that that's not true for rotation
+if you rotate the image
+the output map is different
+because the convolution slices in the same way
+so if you rotate the image
+you detect different things
+think about it like this
+think about the Sobel filter
+if you rotate the image
+edges of the
+if the Sobel filter is Sobel filter for the y-axis
+now the filter will detect edges
+that were not present when the car was rotated in the other direction
+so the output is different
+so it is equivalent to translation but not to rotation
+that's something we
+if we want this invariance
+we need to acquire this invariance with other structures
+so by learning filters that are robust against
+so this is the summation of these priors
+now what we need to tell is what happens
+if the input image is
+the input is composed of multiple colors for example
+how does this change this operation
+actually it doesn't change anything
+we just need to consider
+that we have more than one channel
+so we have our image
+which is now not just a single matrix
+but three matrices
+so our kernel
+needs to slice
+over these three matrices now
+now we have two options
+either we slice the kernel on the first one
+then we move with the same kernel
+to the next one and to the next one
+that would make us use the exact same kernel
+with the same number of parameters
+let's assume here we have 3x3 kernel
+so 9 parameters
+that would change anything
+but actually it makes more sense
+to have a specific set of parameters
+for each channel
+because each channel might bring
+slightly different information
+so one feature in one channel
+in the same position
+might be different on the other channel
+in the same position
+so it makes sense that the filter
+changes its parameters according to the input channel
+so in practice
+in convolution your filter is not a matrix
+but it's a small cube
+with three stacked matrices
+so you have
+in total
+in this case
+3x3x3 parameters
+so 27 parameters
+when you perform the operation
+you place this cube
+overlapped to
+this position
+sorry for my
+not very good
+painting
+drawing skills
+in this kind of careful
+so now it's a cube
+that slides
+over the image
+be aware the output
+when you place the cube in this position
+it's still one number
+because you multiply and add
+on the red channel
+then you multiply and add
+different parameters on the green channel
+you multiply and add
+different parameters on the blue channel
+then you sum up everything
+so
+if you have a three
+channel input image
+when you slice this cube
+the result is still
+a single number
+where for each position
+you have the response
+of that filter
+that feature in that position
+so even if
+I have now a volume
+of images
+and the convolution operation
+is performed with this
+solid 3D structure
+the output is still
+a single value for each position
+which makes a single
+matrix map
+as the output
+this map is called
+in general
+the feature map
+because it tells you
+for each position
+if the feature
+for which that filter
+was responsible
+has been found here
+here, here or here
+so this is the
+filter that is responsible
+for the filter
+that is being found
+here, here or here
+each position corresponds to a position
+in the input image
+if the response is high
+0.9 for example
+that means that in the corresponding
+position in the input image
+that feature is present
+so if
+this filter is responsible for
+finding
+this corner
+that
+means that in this position of the image
+that corner is present
+if instead you see something
+like 0
+here means that in the corresponding
+position that corner
+is not present
+that's why these are called feature maps
+because they give you a
+map of the presence or
+the absence and the strength
+of the presence of a feature
+with respect to the input
+so that's the
+visualization of this
+concept
+when we have channel
+it's the same we have just an additional
+summation here
+but at the end you still get just one value
+the difference is that we have
+a different set of filter for each
+input channel
+so we have more parameters
+in this case
+this is the visualization of this concept
+let's see directly on
+this example here
+on the
+image of the car along
+the three colored channel
+so these are the three
+matrices
+of the filter
+and these are the three
+slices of this cube
+each one acts separately on the three
+colored channel
+so if you slice them
+you have this partial map
+but then you have to sum the map
+in order to get the final
+feature map
+because each position
+gives just one number
+because the convolution is along three axes
+but it just gives one number
+so you only get one
+overall feature map
+even if the input has three channels
+yes
+in this case
+it wouldn't depend
+too much
+on the color
+of the car
+the fact that we are using colors
+yes
+instead of using
+black and white
+it doesn't recognize the color
+of the car
+but that's how
+we can get a good point
+that depends on the task
+in the sense that
+if you want your
+I mean there are two things that might happen
+the first thing is
+you provide the color
+because you don't know whether the color
+is important or not for your task
+and then you leave to the network
+the job of understanding it
+and the network will do that
+if you for example provide examples
+of cars with different colors
+with the same category
+but the category is always car
+the network will learn to ignore the color
+by itself
+so the feature map will be learned
+to not consider the color at all
+and in practice in that case
+it might happen
+that the network puts to zero
+the weights of two of the three maps
+and only consider one
+in other tasks
+it might be that the color is important
+for example
+if you want to distinguish
+a Ferrari from another car
+usually Ferrari is red
+so in that case the color might be helpful
+it depends
+you can either
+if you know from the beginning
+that the color is not important
+you can provide grayscale images directly to the network
+if you don't know
+you can leave the task to the network
+and provide different examples
+of the network
+now
+before the break
+the other thing
+I want to say
+is that with one filter
+you are learning
+you are looking for one feature
+for example this car
+but in general
+I want more than one feature
+I need different corners
+different renditions
+different edges
+so what I can do
+is that I can ask
+the convolutional layer
+to learn
+not just one filter
+but multiple filters
+for each filter
+will be responsible for a different feature
+so I have my
+input image
+and my convolutional layer
+might have
+a set
+a bank of filters
+each filter
+at the beginning
+the filters are initialized randomly
+you know initialization
+we saw the initialization
+on the previous lectures
+you can use heat
+or xaviane sensation
+to initialize the parameters of the layer randomly
+that's the same thing we do
+with convolutional layers
+because the parameters of the filters
+needs to be learned
+so they are initialized randomly
+at the beginning you have just noise
+for all the filters
+and then
+each filter will specialize
+to detect a specific feature
+so let's assume
+this filter is responsible for this corner
+this filter is responsible for this corner
+this filter is responsible for edge
+on this direction
+so each filter
+will slice over this
+three channel input
+each filter will provide
+an associated feature map
+so we have a different feature map
+for each filter
+each feature map tells you
+whether this feature is present in each position of the filter
+or not
+so
+let's make
+a difference
+let's see
+this corner
+ok
+if you have
+this structure for example
+the first filter
+will react here
+ok
+so it will
+in the feature map you will have probably around here
+I don't know
+a high value 0.9
+then you have 0 anywhere else
+the second one
+will react here
+so you will have probably
+let's say here 0.9
+then 0 anywhere else
+this one will react probably here
+so you will have 0.9
+here and 0
+anywhere else
+so each feature map will be different
+because
+the filter is different
+each feature map will
+respond
+if that filter detects something in that position
+so after the first convolutional layer
+you will
+have a set of feature maps
+all these feature maps
+will be
+stacked
+ok
+sorry
+you will have a stack of feature maps
+and if you
+look at this output
+it has the same
+structure as the input
+so it's an image
+also the output of convolutional layer
+it's a sort of an image
+because it has a matrix like structure
+and it has channels
+so it's a sort of an image
+because it has a matrix like structure
+and it has channels
+each channel now
+is not the color
+after the convolutional layer
+each channel represents one feature map
+and so the response
+of one of the filters
+now it's not something
+you can visualize in color
+because the different channels
+doesn't bring color information
+they bring feature map information
+but from a mathematical point of view
+they are the same mathematical object
+here you have a tensor
+which could be a matrix
+which could be three channels
+124, 124
+height and width
+so it's C, H, W
+so it's C, H, W
+after the convolutional layer
+you still have a tensor
+but now
+the channel is the number of filters
+the resolution
+depends on the convolution
+because the convolution
+as you know because of the border effect
+might reduce the output
+so the image could be slightly smaller
+if you are using
+a 3x3 filter
+the result
+will be
+224 minus 3 plus 1
+so it will be 222
+so this feature map
+will be 222, 222
+with a kernel of 3
+with a kernel of 3
+with a kernel of 3
+with a kernel of 3
+so you still have an image
+like a tensor
+but you can see
+the number of filters
+in the structure
+the number of filters
+is something you decide
+it's a hyper parameter
+of the convolutional layer
+you tell the convolutional layer
+how many features you want
+the convolutional layer to learn
+usually it can be
+64, 128
+1000 filters
+we will see that
+how the architecture
+changes the number of filters
+so that means
+that the next convolutional layer
+behaves the same
+it will consider the feature map
+now
+not the color image
+at the beginning
+so the second convolutional layer
+will slice filters
+over the feature map
+stack
+to compute new feature maps
+and so on
+as you go into the depth
+and so on
+and so on
+which is
+what we will see here
+after
+but that's now
+in the show
