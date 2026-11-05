@@ -1,0 +1,225 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #1e1e2e; }
+      .title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 19px; font-weight: 700; fill: #cdd6f4; text-anchor: middle; }
+      .subtitle { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #a6adc8; text-anchor: middle; }
+      .card-bg { fill: #181825; stroke: #45475a; stroke-width: 1.5; rx: 8; }
+      .card-header { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #89b4fa; }
+      .card-subtext { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #a6adc8; }
+      .code-mono { font-family: "Fira Code", "JetBrains Mono", Consolas, monospace; font-size: 13px; font-weight: 600; }
+      .tape-cell { stroke: #313244; stroke-width: 1.5; }
+      .cell-text { font-family: "Fira Code", monospace; font-size: 18px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .label-text { font-family: system-ui, sans-serif; font-size: 12px; font-weight: 600; }
+      .accent-blue { fill: #89b4fa; }
+      .accent-mauve { fill: #cba6f7; }
+      .accent-green { fill: #a6e3a1; }
+      .accent-peach { fill: #fab387; }
+      .accent-yellow { fill: #f9e2af; }
+      .accent-red { fill: #f38ba8; }
+      .accent-teal { fill: #94e2d5; }
+    </style>
+
+    <marker id="arrow-peach" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fab387"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#a6e3a1"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#89b4fa"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f38ba8"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="520" rx="12" class="bg"/>
+
+  <!-- Title & Subtitle -->
+  <text x="480" y="32" class="title">Architettura della Finestra Scorrevole e Parsing LZ77 (Ziv-Lempel 1977)</text>
+  <text x="480" y="52" class="subtitle">Search Buffer S_B (Cronologia Recente) | Lookahead Buffer L_B (Simboli Entranti) | Generazione Token (o, l, c)</text>
+
+  <!-- Main Ribbon Container -->
+  <rect x="24" y="70" width="912" height="195" class="card-bg"/>
+
+  <!-- Labels above buffers -->
+  <!-- Search Buffer Label -->
+  <rect x="180" y="82" width="280" height="26" rx="5" fill="#1e2030" stroke="#89b4fa" stroke-width="1.2"/>
+  <text x="320" y="99" font-family="system-ui, sans-serif" font-size="12px" font-weight="700" fill="#89b4fa" text-anchor="middle">SEARCH BUFFER (S_B = 5 caratteri)</text>
+
+  <!-- Lookahead Buffer Label -->
+  <rect x="500" y="82" width="280" height="26" rx="5" fill="#241e30" stroke="#cba6f7" stroke-width="1.2"/>
+  <text x="640" y="99" font-family="system-ui, sans-serif" font-size="12px" font-weight="700" fill="#cba6f7" text-anchor="middle">LOOKAHEAD BUFFER (L_B = 5 caratteri)</text>
+
+  <!-- Sliding Tape Ribbon (14 cells, each 56px wide, 50px high) -->
+  <!-- Tape start x = 88, y = 120 -->
+
+  <!-- Cell -2: Expired Past -->
+  <rect x="68" y="120" width="56" height="50" class="tape-cell" fill="#181825"/>
+  <text x="96" y="145" class="cell-text" fill="#585b70">A</text>
+
+  <!-- Cell -1: Expired Past -->
+  <rect x="124" y="120" width="56" height="50" class="tape-cell" fill="#181825"/>
+  <text x="152" y="145" class="cell-text" fill="#585b70">B</text>
+
+  <!-- Search Buffer Cells (5 cells: x=180 to 460) -->
+  <!-- Cell 1: pos -5 -->
+  <rect x="180" y="120" width="56" height="50" class="tape-cell" fill="#1e2030"/>
+  <text x="208" y="145" class="cell-text" fill="#cdd6f4">A</text>
+  <text x="208" y="185" class="code-mono" fill="#6c7086" text-anchor="middle">-5</text>
+
+  <!-- Cell 2: pos -4 -->
+  <rect x="236" y="120" width="56" height="50" class="tape-cell" fill="#1e2030"/>
+  <text x="264" y="145" class="cell-text" fill="#cdd6f4">B</text>
+  <text x="264" y="185" class="code-mono" fill="#6c7086" text-anchor="middle">-4</text>
+
+  <!-- Cell 3: pos -3 (Start of match in Search Buffer!) -->
+  <rect x="292" y="120" width="56" height="50" class="tape-cell" fill="#2d3f35" stroke="#a6e3a1" stroke-width="2"/>
+  <text x="320" y="145" class="cell-text" fill="#a6e3a1">B</text>
+  <text x="320" y="185" class="code-mono accent-peach" text-anchor="middle">o=3</text>
+
+  <!-- Cell 4: pos -2 (Match continuation) -->
+  <rect x="348" y="120" width="56" height="50" class="tape-cell" fill="#2d3f35" stroke="#a6e3a1" stroke-width="2"/>
+  <text x="376" y="145" class="cell-text" fill="#a6e3a1">A</text>
+  <text x="376" y="185" class="code-mono" fill="#6c7086" text-anchor="middle">-2</text>
+
+  <!-- Cell 5: pos -1 (Match continuation) -->
+  <rect x="404" y="120" width="56" height="50" class="tape-cell" fill="#2d3f35" stroke="#a6e3a1" stroke-width="2"/>
+  <text x="432" y="145" class="cell-text" fill="#a6e3a1">B</text>
+  <text x="432" y="185" class="code-mono" fill="#6c7086" text-anchor="middle">-1</text>
+
+  <!-- CURSOR DIVIDER (Read/Write Head) between Search and Lookahead -->
+  <line x1="480" y1="108" x2="480" y2="195" stroke="#f38ba8" stroke-width="3" stroke-dasharray="none"/>
+  <!-- Cursor top pointer -->
+  <polygon points="474,106 486,106 480,116" fill="#f38ba8"/>
+  <text x="480" y="208" font-family="system-ui, sans-serif" font-size="11px" font-weight="700" fill="#f38ba8" text-anchor="middle">CURSORE</text>
+
+  <!-- Lookahead Buffer Cells (5 cells: x=500 to 780) -->
+  <!-- Cell 6: Lookahead char 1 (Matched) -->
+  <rect x="500" y="120" width="56" height="50" class="tape-cell" fill="#2d3f35" stroke="#a6e3a1" stroke-width="2"/>
+  <text x="528" y="145" class="cell-text" fill="#a6e3a1">B</text>
+  <text x="528" y="185" class="code-mono accent-green" text-anchor="middle">l=1</text>
+
+  <!-- Cell 7: Lookahead char 2 (Matched) -->
+  <rect x="556" y="120" width="56" height="50" class="tape-cell" fill="#2d3f35" stroke="#a6e3a1" stroke-width="2"/>
+  <text x="584" y="145" class="cell-text" fill="#a6e3a1">A</text>
+  <text x="584" y="185" class="code-mono accent-green" text-anchor="middle">l=2</text>
+
+  <!-- Cell 8: Lookahead char 3 (Matched) -->
+  <rect x="612" y="120" width="56" height="50" class="tape-cell" fill="#2d3f35" stroke="#a6e3a1" stroke-width="2"/>
+  <text x="640" y="145" class="cell-text" fill="#a6e3a1">B</text>
+  <text x="640" y="185" class="code-mono accent-green" text-anchor="middle">l=3</text>
+
+  <!-- Cell 9: Innovator Character c -->
+  <rect x="668" y="120" width="56" height="50" class="tape-cell" fill="#3e2d26" stroke="#fab387" stroke-width="2.5"/>
+  <text x="696" y="145" class="cell-text" fill="#fab387">C</text>
+  <text x="696" y="185" class="code-mono accent-peach" text-anchor="middle">c='C'</text>
+
+  <!-- Cell 10: Lookahead remaining -->
+  <rect x="724" y="120" width="56" height="50" class="tape-cell" fill="#241e30"/>
+  <text x="752" y="145" class="cell-text" fill="#cdd6f4">A</text>
+  <text x="752" y="185" class="code-mono" fill="#6c7086" text-anchor="middle">+5</text>
+
+  <!-- Cell +1: Unread Future -->
+  <rect x="780" y="120" width="56" height="50" class="tape-cell" fill="#181825"/>
+  <text x="808" y="145" class="cell-text" fill="#585b70">B</text>
+
+  <!-- Cell +2: Unread Future -->
+  <rect x="836" y="120" width="56" height="50" class="tape-cell" fill="#181825"/>
+  <text x="864" y="145" class="cell-text" fill="#585b70">A</text>
+
+  <!-- Annotations / Arrows -->
+  <!-- Offset Arrow (from cursor x=480 back to x=320) -->
+  <path d="M 475 116 C 420 85, 360 85, 323 115" fill="none" stroke="#fab387" stroke-width="2" marker-end="url(#arrow-peach)"/>
+  <text x="395" y="94" font-family="system-ui, sans-serif" font-size="12px" font-weight="700" fill="#fab387" text-anchor="middle">Offset o = 3 (distanza a ritroso)</text>
+
+  <!-- Length Bracket in Lookahead (x=500 to x=668) -->
+  <path d="M 500 220 L 500 230 L 584 230 L 584 236 L 584 230 L 668 230 L 668 220" fill="none" stroke="#a6e3a1" stroke-width="1.8"/>
+  <text x="584" y="250" font-family="system-ui, sans-serif" font-size="12px" font-weight="700" fill="#a6e3a1" text-anchor="middle">Longest Match l = 3 caratteri ("BAB")</text>
+
+  <!-- Innovator Callout -->
+  <line x1="696" y1="195" x2="696" y2="225" stroke="#fab387" stroke-width="1.5"/>
+  <text x="735" y="238" font-family="system-ui, sans-serif" font-size="11px" font-weight="600" fill="#fab387">Carattere innovatore</text>
+
+  <!-- Bottom Panel 1: Emitted Token (x=24, y=280, width=444, height=215) -->
+  <rect x="24" y="280" width="444" height="215" class="card-bg"/>
+  <text x="44" y="306" class="card-header">1. Generazione del Token LZ77 Classico</text>
+
+  <g transform="translate(44, 322)">
+    <rect x="0" y="0" width="404" height="42" rx="6" fill="#11111b" stroke="#313244" stroke-width="1.2"/>
+    <text x="18" y="26" class="code-mono" font-size="16px" fill="#cdd6f4">Token emesso: </text>
+    <text x="160" y="26" class="code-mono" font-size="17px" fill="#fab387" font-weight="700">( 3 ,</text>
+    <text x="210" y="26" class="code-mono" font-size="17px" fill="#a6e3a1" font-weight="700">3 ,</text>
+    <text x="250" y="26" class="code-mono" font-size="17px" fill="#f9e2af" font-weight="700">'C' )</text>
+    <text x="310" y="26" class="code-mono" font-size="14px" fill="#a6adc8">⇒ ( o, l, c )</text>
+  </g>
+
+  <!-- Fields explanation -->
+  <text x="44" y="386" class="card-text" font-weight="700" fill="#fab387">• Offset o = 3 :</text>
+  <text x="145" y="386" class="card-subtext">Quante posizioni saltare a ritroso dalla testina [⌈log₂ S_B⌉ bit]</text>
+
+  <text x="44" y="410" class="card-text" font-weight="700" fill="#a6e3a1">• Length l = 3 :</text>
+  <text x="145" y="410" class="card-subtext">Numero di simboli consecutivi da ricopiare [⌈log₂ L_B⌉ bit]</text>
+
+  <text x="44" y="434" class="card-text" font-weight="700" fill="#f9e2af">• Char c = 'C' :</text>
+  <text x="145" y="434" class="card-subtext">Primo carattere non corrispondente (innovatore) [⌈log₂ |𝒳|⌉ bit]</text>
+
+  <rect x="44" y="450" width="404" height="32" rx="4" fill="#181825" stroke="#45475a"/>
+  <text x="56" y="470" font-family="system-ui, sans-serif" font-size="11.5px" fill="#89b4fa">Avanzamento finestra: </text>
+  <text x="195" y="470" font-family="system-ui, sans-serif" font-size="11.5px" fill="#cdd6f4">il cursore avanza di </text>
+  <text x="312" y="470" class="code-mono accent-green" font-size="12px">l + 1 = 4</text>
+  <text x="375" y="470" font-family="system-ui, sans-serif" font-size="11.5px" fill="#cdd6f4">posizioni.</text>
+
+  <!-- Bottom Panel 2: Overlap property & LZSS (x=492, y=280, width=444, height=215) -->
+  <rect x="492" y="280" width="444" height="215" class="card-bg"/>
+  <text x="512" y="306" class="card-header" fill="#cba6f7">2. Proprietà di Overlap Ciclico (l &gt; o) e Run-Length</text>
+
+  <text x="512" y="330" class="card-subtext">Se il match si ripete oltre la finestra corrente (es. periodo corto ripetuto):</text>
+
+  <!-- Overlap visual example mini-tape -->
+  <g transform="translate(512, 342)">
+    <rect x="0" y="0" width="404" height="52" rx="6" fill="#11111b" stroke="#313244"/>
+
+    <!-- Past: ... A B -->
+    <rect x="10" y="10" width="32" height="32" rx="3" fill="#1e2030" stroke="#89b4fa"/>
+    <text x="26" y="27" class="code-mono" fill="#cdd6f4" font-size="13px" text-anchor="middle" dominant-baseline="central">A</text>
+
+    <rect x="44" y="10" width="32" height="32" rx="3" fill="#2d3f35" stroke="#a6e3a1"/>
+    <text x="60" y="27" class="code-mono" fill="#a6e3a1" font-size="13px" text-anchor="middle" dominant-baseline="central">B</text>
+
+    <!-- Cursor line -->
+    <line x1="82" y1="6" x2="82" y2="46" stroke="#f38ba8" stroke-width="2"/>
+
+    <!-- Lookahead: B A B A B A C -->
+    <rect x="88" y="10" width="30" height="32" rx="3" fill="#2d3f35" stroke="#a6e3a1"/>
+    <text x="103" y="27" class="code-mono" fill="#a6e3a1" font-size="12px" text-anchor="middle" dominant-baseline="central">B</text>
+
+    <rect x="120" y="10" width="30" height="32" rx="3" fill="#2d3f35" stroke="#a6e3a1"/>
+    <text x="135" y="27" class="code-mono" fill="#a6e3a1" font-size="12px" text-anchor="middle" dominant-baseline="central">A</text>
+
+    <rect x="152" y="10" width="30" height="32" rx="3" fill="#2d3f35" stroke="#a6e3a1"/>
+    <text x="167" y="27" class="code-mono" fill="#a6e3a1" font-size="12px" text-anchor="middle" dominant-baseline="central">B</text>
+
+    <rect x="184" y="10" width="30" height="32" rx="3" fill="#2d3f35" stroke="#a6e3a1"/>
+    <text x="199" y="27" class="code-mono" fill="#a6e3a1" font-size="12px" text-anchor="middle" dominant-baseline="central">A</text>
+
+    <rect x="216" y="10" width="30" height="32" rx="3" fill="#2d3f35" stroke="#a6e3a1"/>
+    <text x="231" y="27" class="code-mono" fill="#a6e3a1" font-size="12px" text-anchor="middle" dominant-baseline="central">B</text>
+
+    <rect x="248" y="10" width="30" height="32" rx="3" fill="#3e2d26" stroke="#fab387"/>
+    <text x="263" y="27" class="code-mono" fill="#fab387" font-size="12px" text-anchor="middle" dominant-baseline="central">C</text>
+
+    <!-- Token arrow -->
+    <text x="290" y="27" class="code-mono" fill="#cba6f7" font-size="12px" dominant-baseline="central">⇒ Token: (2, 5, 'C')</text>
+  </g>
+
+  <text x="512" y="415" class="card-text" font-weight="700" fill="#a6e3a1">Auto-generazione in avanti (Self-Referencing Loop):</text>
+  <text x="512" y="433" class="card-subtext">Poiché il decoder scrive sequenzialmente mentre legge a ritroso di offset o,</text>
+  <text x="512" y="449" class="card-subtext">copia i caratteri appena trascritti, estendendo pattern periodici a costo minimo.</text>
+
+  <rect x="512" y="458" width="404" height="24" rx="4" fill="#313244"/>
+  <text x="520" y="474" class="code-mono" font-size="11px" fill="#f9e2af">Evoluzione LZSS/DEFLATE: Flag 1-bit → (0, c) letterale o (1, o, l) match</text>
+
+</svg>

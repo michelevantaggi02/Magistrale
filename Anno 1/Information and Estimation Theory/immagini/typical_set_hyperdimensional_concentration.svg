@@ -1,0 +1,137 @@
+<svg width="100%" height="440" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Filtro Ombra Elegante -->
+    <filter id="shadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#020617" flood-opacity="0.5"/>
+    </filter>
+
+    <!-- Gradiente Spazio Totale -->
+    <radialGradient id="spaceGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.9"/>
+      <stop offset="70%" stop-color="#0f172a" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="1.0"/>
+    </radialGradient>
+
+    <!-- Gradiente Guscio Tipico -->
+    <radialGradient id="typicalShellGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="55%" stop-color="#0284c7" stop-opacity="0.0"/>
+      <stop offset="68%" stop-color="#38bdf8" stop-opacity="0.45"/>
+      <stop offset="78%" stop-color="#0284c7" stop-opacity="0.0"/>
+    </radialGradient>
+
+    <!-- Gradiente Centro ad Alta Probabilità Singola -->
+    <radialGradient id="modeGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sfondo Generale -->
+  <rect width="100%" height="100%" rx="12" fill="#090d16"/>
+
+  <!-- ================= LATO SINISTRO: GEOMETRIA IPERSPAZIALE ================= -->
+  <g transform="translate(230, 220)">
+    <!-- Spazio Totale Campionario X^n -->
+    <circle cx="0" cy="0" r="180" fill="url(#spaceGrad)" stroke="#334155" stroke-width="1.8" stroke-dasharray="4,4"/>
+    
+    <!-- Bagliore del Guscio Tipico -->
+    <circle cx="0" cy="0" r="180" fill="url(#typicalShellGrad)"/>
+    
+    <!-- Anello dell'Insieme Tipico A_ε^(n) -->
+    <circle cx="0" cy="0" r="132" fill="none" stroke="#38bdf8" stroke-width="18" stroke-opacity="0.35"/>
+    <circle cx="0" cy="0" r="141" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="3,2"/>
+    <circle cx="0" cy="0" r="123" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="3,2"/>
+
+    <!-- Campionamento di Punti Tipici nel Guscio -->
+    <g fill="#38bdf8" opacity="0.85">
+      <circle cx="127" cy="35" r="2.5"/>
+      <circle cx="132" cy="-20" r="2.2"/>
+      <circle cx="115" cy="65" r="2.5"/>
+      <circle cx="-130" cy="15" r="2.5"/>
+      <circle cx="-125" cy="-45" r="2.2"/>
+      <circle cx="-85" cy="100" r="2.5"/>
+      <circle cx="30" cy="130" r="2.2"/>
+      <circle cx="-40" cy="-125" r="2.5"/>
+      <circle cx="50" cy="-122" r="2.5"/>
+      <circle cx="95" cy="-90" r="2.2"/>
+      <circle cx="-95" cy="-90" r="2.2"/>
+      <circle cx="0" cy="132" r="2.5"/>
+      <circle cx="0" cy="-132" r="2.5"/>
+      <circle cx="132" cy="0" r="2.5"/>
+      <circle cx="-132" cy="0" r="2.5"/>
+    </g>
+
+    <!--alone attorno alla moda centrale (00...0) -->
+    <circle cx="0" cy="0" r="45" fill="url(#modeGrad)"/>
+    <circle cx="0" cy="0" r="4" fill="#f59e0b"/>
+
+    <!-- Sequenza più rara all'estremo (11...1) -->
+    <circle cx="165" cy="-45" r="3" fill="#f43f5e"/>
+
+    <!-- Linea raggio H(X) -->
+    <line x1="0" y1="0" x2="93" y2="-93" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="2,2"/>
+    <text x="40" y="-55" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#cbd5e1">Raggio ≈ H(X)</text>
+
+    <!-- Spessore guscio 2ε -->
+    <line x1="87" y1="-87" x2="100" y2="-100" stroke="#38bdf8" stroke-width="2"/>
+    <text x="108" y="-98" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#38bdf8">± nε</text>
+
+    <!-- Etichetta Moda Centrale -->
+    <path d="M 0 0 L -35 -40 L -75 -40" stroke="#f59e0b" stroke-width="1.2" fill="none"/>
+    <text x="-78" y="-44" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#f59e0b">xⁿ = (0,0,…,0)</text>
+    <text x="-78" y="-31" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" fill="#fbbf24">Massima p(xⁿ) singola</text>
+    <text x="-78" y="-19" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#94a3b8">Volume = 1 (Atipica!)</text>
+
+    <!-- Etichetta Sequenza Rara -->
+    <path d="M 165 -45 L 180 -65 L 210 -65" stroke="#f43f5e" stroke-width="1.2" fill="none"/>
+    <text x="215" y="-61" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#f43f5e">xⁿ = (1,1,…,1)</text>
+    <text x="215" y="-48" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" fill="#fda4af">Minima p(xⁿ) singola</text>
+  </g>
+
+  <!-- ================= LATO DESTRO: CARTELLINI CONCETTUALI ================= -->
+
+  <!-- Titolo Pannello -->
+  <text x="460" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#f8fafc">Concentrazione Asintotica dell'Insieme Tipico</text>
+  <text x="460" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" fill="#94a3b8">Geometria iperdimensionale nello spazio delle sequenze per n → ∞</text>
+
+  <!-- Scheda 1: Massa di Probabilità -->
+  <g transform="translate(460, 75)" filter="url(#shadow)">
+    <rect width="315" height="70" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.4"/>
+    <circle cx="24" cy="35" r="14" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+    <text x="24" y="40" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#34d399">1</text>
+    <text x="48" y="27" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#34d399">Massa di Probabilità Totale</text>
+    <text x="48" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#e2e8f0">Pr{A_ε^(n)} &gt; 1 − ε  →  1  (Quasi-Certezza)</text>
+    <text x="48" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">La quasi totalità delle sequenze generate cade nel guscio.</text>
+  </g>
+
+  <!-- Scheda 2: Volume / Cardinalità -->
+  <g transform="translate(460, 160)" filter="url(#shadow)">
+    <rect width="315" height="72" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.4"/>
+    <circle cx="24" cy="36" r="14" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="24" y="41" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#38bdf8">2</text>
+    <text x="48" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#38bdf8">Frazione di Volume Combinatorio</text>
+    <text x="48" y="45" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#e2e8f0">|A_ε^(n)| / |𝒳|ⁿ ≈ 2^(−n[log|𝒳| − H(X)])  →  0</text>
+    <text x="48" y="61" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">Il guscio tipico occupa un volume asintoticamente nullo!</text>
+  </g>
+
+  <!-- Scheda 3: Equipartizione Asintotica -->
+  <g transform="translate(460, 248)" filter="url(#shadow)">
+    <rect width="315" height="70" rx="8" fill="#1e293b" stroke="#818cf8" stroke-width="1.4"/>
+    <circle cx="24" cy="35" r="14" fill="#312e81" stroke="#818cf8" stroke-width="1.5"/>
+    <text x="24" y="40" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#a5b4fc">3</text>
+    <text x="48" y="27" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#a5b4fc">Equipartizione della Densità</text>
+    <text x="48" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#e2e8f0">∀ xⁿ ∈ A_ε^(n):  p(xⁿ) ≈ 2^(−n H(X))</text>
+    <text x="48" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">Ogni sequenza tipica è individualmente equiprobabile.</text>
+  </g>
+
+  <!-- Scheda 4: Risoluzione del Paradosso -->
+  <g transform="translate(460, 334)" filter="url(#shadow)">
+    <rect width="315" height="85" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.4"/>
+    <circle cx="24" cy="42" r="14" fill="#78350f" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="24" y="47" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#fbbf24">!</text>
+    <text x="48" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#fbbf24">Il Paradosso dell'AEP</text>
+    <text x="48" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#fde68a">La sequenza più probabile a priori (00…0) NON è tipica!</text>
+    <text x="48" y="58" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" fill="#cbd5e1">Probabilità singola alta × molteplicità 1 = Massa nulla.</text>
+    <text x="48" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" fill="#38bdf8">Probabilità singola 2^(−nH) × molteplicità 2^(nH) = Massa ≈ 1.</text>
+  </g>
+</svg>

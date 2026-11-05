@@ -155,25 +155,27 @@ Conformemente alla Sezione 3.12 di `STRUTTURA_E_GUIDA_APPUNTI.md`:
 
 ---
 
-## 9. Protocollo del Loop Iterativo di Revisione con Subagenti Indipendenti
+## 9. Protocollo a Due Fasi: Ottimizzazione Cognitiva e Loop di Revisione Accademica
 
-Al termine della redazione di ciascun capitolo si applica tassativamente la regola workspace `[[.agents/rules/revisione_automatica_subagente.md]]`:
+Al termine della redazione di ciascun capitolo si applica tassativamente la pipeline aggiornata definita in `STRUTTURA_E_GUIDA_APPUNTI.md`, `[[.agents/rules/ottimizzazione_cognitiva_subagente.md]]` e `[[.agents/rules/revisione_automatica_subagente.md]]`:
 
-1. **Invocazione Automatica (Iterazione $k$)**: L'agente principale, appena terminata la stesura o modifica del file `.md`, avvia un subagente indipendente (`invoke_subagent` con ruolo di *Academic Peer Reviewer*).
-2. **Isolamento Cognitivo**: Ciascun subagente opera in un contesto di sessione pulito ed estraneo alla stesura, prevenendo il *confirmation bias* del redattore.
-3. **Risorse Fornite al Subagente**:
-   - Accesso in sola lettura al file Markdown nello stato aggiornato.
-   - Accesso alle slide sorgente in PDF (`estimation_theory_final_2026.pdf` o `detection_theory_final_2026.pdf`).
-   - Accesso ai paper scientifici pertinenti (`notes/papers/`) e ai testi di Steven Kay.
-   - Accesso alla ricerca internet (`search_web`) per verificare formule, condizioni di regolarità e convenzioni notazionali.
-4. **Mandato di Revisione (Focus Esclusivo su Errori, Refusi e Correttezza Scientifica)**:
-   - Individuare sviste di calcolo, errori analitici, segni algebrici errati, dimensioni non conformi di matrici/vettori e omissioni di ipotesi matematiche.
-   - Verificare la perfetta aderenza alle slide del docente e ai paper scientifici.
-   - **Divieto Assoluto di Critica su Stile, Prosa o Formattazione del Vault**: Il revisore non deve giudicare né commentare lo stile del testo, il tono espositivo, la prosa o le convenzioni grafiche/linter del vault (linter, titoli, KaTeX, immagini), limitandosi strettamente all'accuratezza oggettiva dei contenuti.
-   - Fornire la correzione esatta per ciascun errore o refuso individuato (diff/drop-in replacement).
-5. **Loop Iterativo a Convergenza (Revisione $\to$ Modifica $\to$ Nuova Revisione)**:
-   - Se il subagente rileva errori o richiede modifiche, l'agente principale applica tempestivamente le correzioni tramite `edit_file`.
-   - **Obbligo di Riavvio del Loop**: Dopo aver applicato le modifiche, l'agente principale **deve obbligatoriamente avviare un NUOVO subagente indipendente (Iterazione $k+1$)** per verificare il file modificato a mente fresca.
-   - Il loop si ripete finché un subagente indipendente non certifica formalmente l'esito: **`CONFORME (Zero errori/incongruenze rilevate)`**.
-   - Solo a convergenza certificata il capitolo viene presentato all'utente con il riepilogo delle iterazioni e delle migliorie apportate.
+### Fase A — Ottimizzazione Cognitiva e Didattica (`cognitive-study-editor-v3`)
+1. **Invocazione Subagente**: Si invoca il subagente dedicato `cognitive-study-editor-v3`.
+2. **Obiettivi Didattici**:
+   - Massima scorrevolezza del testo, ritmo serrato e voce attiva in prima persona naturale da problem solver.
+   - Paragrafi snelli (1–4 righe) e chunking concettuale per l'esame: *Obiettivo / Intuizione $\to$ Sviluppo analitico commentato $\to$ Takeaway operativo e trabocchetti d'esame*.
+   - Dual coding visivo (*Dual Coding Theory*): integrazione di schemi a blocchi Mermaid (`flowchart LR/TD`) o curve/grafici vettoriali SVG salvati in `immagini/` ed inclusi come allegati nativi Obsidian (`![[nome_file.svg|center mid]]`).
+3. **Conformità Tassativa al Vault**:
+   - Grassetto `__termine__`, corsivo `_termine_`, ellissi tipografica `…` (U+2026, zero `...`), nessun divisore `---`.
+   - Solo H1 numerato; tutti i sottotitoli puramente descrittivi.
+   - Display math isolati con righe vuote prima e dopo.
+   - **Regola Fondamentale (Zero Perdite)**: mantenimento integrale del 100% di formule, teoremi, dimostrazioni, esempi ed esercizi.
+
+### Fase B — Loop Iterativo di Revisione Accademica Indipendente (`Independent Academic Reviewer`)
+1. **Invocazione Subagente Revisore**: Si invoca un revisore indipendente esterno a mente fresca.
+2. **Mandato Esclusivo**:
+   - Verifica riga per riga della correttezza teorica, concettuale e analitica a confronto con le slide e i paper ufficiali, accertando che l'ottimizzazione sintattica non abbia alterato alcuna formula.
+   - Totale assenza di meta-commenti o callout che menzionino errori delle note o delle slide.
+   - Esclusione assoluta di rilievi stilistici o grafici (riservati alla Fase A).
+3. **Loop a Convergenza**: se emergono rilievi, si applicano le modifiche e si rilancia un nuovo subagente fino alla certificazione formale: **`CONFORME (Zero errori/incongruenze rilevate)`**.
 

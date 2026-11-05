@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 480" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #1e1e2e; }
+      .axis-line { stroke: #a6adc8; stroke-width: 2; stroke-linecap: round; }
+      .grid-line { stroke: #313244; stroke-width: 1; stroke-dasharray: 4 4; }
+      .upper-curve { fill: none; stroke: #f38ba8; stroke-width: 3.5; stroke-linecap: round; }
+      .lower-curve { fill: none; stroke: #89b4fa; stroke-width: 3.5; stroke-linecap: round; }
+      .cesaro-curve { fill: none; stroke: #f9e2af; stroke-width: 2.5; stroke-dasharray: 6 4; }
+      .asymptote-line { fill: none; stroke: #a6e3a1; stroke-width: 2.5; stroke-dasharray: 4 4; }
+      .sandwich-band { fill: rgba(180, 190, 254, 0.12); }
+      .label-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 18px; font-weight: 700; fill: #cdd6f4; text-anchor: middle; }
+      .label-axis { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #bac2de; }
+      .label-tick { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #a6adc8; text-anchor: middle; }
+      .label-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #cdd6f4; }
+      .label-sub { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #a6adc8; }
+      .box-bg { fill: #181825; stroke: #45475a; stroke-width: 1.5; rx: 8; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#bac2de"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="840" height="480" rx="12" class="bg"/>
+
+  <!-- Title -->
+  <text x="420" y="34" class="label-title">Teorema del Sandwich di Shannon-Cover per Processi con Memoria e HMM</text>
+
+  <!-- Grid lines -->
+  <line x1="90" y1="390" x2="770" y2="390" class="axis-line" marker-end="url(#arrow)"/>
+  <line x1="90" y1="390" x2="90" y2="70" class="axis-line" marker-end="url(#arrow)"/>
+
+  <line x1="90" y1="310" x2="740" y2="310" class="grid-line"/>
+  <line x1="90" y1="230" x2="740" y2="230" class="grid-line"/>
+  <line x1="90" y1="150" x2="740" y2="150" class="grid-line"/>
+
+  <line x1="220" y1="390" x2="220" y2="80" class="grid-line"/>
+  <line x1="350" y1="390" x2="350" y2="80" class="grid-line"/>
+  <line x1="480" y1="390" x2="480" y2="80" class="grid-line"/>
+  <line x1="610" y1="390" x2="610" y2="80" class="grid-line"/>
+
+  <!-- Ticks X -->
+  <text x="90" y="412" class="label-tick">n = 1</text>
+  <text x="220" y="412" class="label-tick">n = 2</text>
+  <text x="350" y="412" class="label-tick">n = 3</text>
+  <text x="480" y="412" class="label-tick">n = 4</text>
+  <text x="610" y="412" class="label-tick">n = 5</text>
+  <text x="730" y="412" class="label-tick">n → ∞</text>
+
+  <!-- Axis Labels -->
+  <text x="780" y="395" class="label-axis">n</text>
+  <text x="40" y="66" class="label-axis" text-anchor="middle">Tasso (bit)</text>
+
+  <!-- Sandwich Shaded Area between Upper and Lower curve -->
+  <!-- Upper points: (90, 100), (220, 175), (350, 210), (480, 224), (610, 228), (730, 230) -->
+  <!-- Lower points: (90, 360), (220, 275), (350, 245), (480, 234), (610, 231), (730, 230) -->
+  <path d="M 90 100 
+           C 160 155, 270 200, 350 210
+           C 410 218, 520 226, 730 230
+           L 730 230
+           C 520 234, 410 238, 350 245
+           C 270 260, 160 310, 90 360
+           Z" class="sandwich-band"/>
+
+  <!-- Asymptote Line: H(Y) = 230 -->
+  <line x1="90" y1="230" x2="740" y2="230" class="asymptote-line"/>
+  <circle cx="730" cy="230" r="4" fill="#a6e3a1"/>
+  <text x="745" y="234" font-family="system-ui, sans-serif" font-size="14px" font-weight="700" fill="#a6e3a1">H(𝒴)</text>
+
+  <!-- Upper Curve: H(Y_n | Y^(n-1)) -->
+  <path d="M 90 100 
+           C 160 155, 270 200, 350 210
+           C 410 218, 520 226, 730 230" class="upper-curve"/>
+  <circle cx="90" cy="100" r="4" fill="#f38ba8"/>
+  <circle cx="220" cy="175" r="4" fill="#f38ba8"/>
+  <circle cx="350" cy="210" r="4" fill="#f38ba8"/>
+  <circle cx="480" cy="224" r="4" fill="#f38ba8"/>
+  <circle cx="610" cy="228" r="4" fill="#f38ba8"/>
+
+  <!-- Lower Curve: H(Y_n | Y^(n-1), X_1) -->
+  <path d="M 90 360 
+           C 160 310, 270 260, 350 245
+           C 410 238, 520 234, 730 230" class="lower-curve"/>
+  <circle cx="90" cy="360" r="4" fill="#89b4fa"/>
+  <circle cx="220" cy="275" r="4" fill="#89b4fa"/>
+  <circle cx="350" cy="245" r="4" fill="#89b4fa"/>
+  <circle cx="480" cy="234" r="4" fill="#89b4fa"/>
+  <circle cx="610" cy="231" r="4" fill="#89b4fa"/>
+
+  <!-- Cesaro Mean Curve: (1/n) H(Y^n) -->
+  <path d="M 90 100
+           C 150 140, 250 185, 350 205
+           C 430 218, 540 226, 730 230" class="cesaro-curve"/>
+  <circle cx="220" cy="155" r="3.5" fill="#f9e2af"/>
+  <circle cx="350" cy="190" r="3.5" fill="#f9e2af"/>
+  <circle cx="480" cy="214" r="3.5" fill="#f9e2af"/>
+
+  <!-- Informative Delta Annotation -->
+  <line x1="220" y1="183" x2="220" y2="267" stroke="#fab387" stroke-width="2"/>
+  <polygon points="216,187 220,179 224,187" fill="#fab387"/>
+  <polygon points="216,263 220,271 224,263" fill="#fab387"/>
+  <text x="230" y="228" font-family="system-ui, sans-serif" font-size="12px" font-weight="600" fill="#fab387">Gap: I(X₁; Yₙ | Yⁿ⁻¹) → 0</text>
+
+  <!-- Legend Box on Top Right -->
+  <g transform="translate(490, 65)">
+    <rect width="320" height="135" class="box-bg"/>
+    
+    <!-- Legend items -->
+    <line x1="15" y1="24" x2="45" y2="24" class="upper-curve"/>
+    <text x="55" y="28" class="label-text" font-weight="600">Limite Superiore: H(Yₙ | Yⁿ⁻¹) ↘ H(𝒴)</text>
+    <text x="55" y="42" class="label-sub">Decresce monotonamente (più storia = meno incertezza)</text>
+
+    <line x1="15" y1="62" x2="45" y2="62" class="cesaro-curve"/>
+    <text x="55" y="66" class="label-text" font-weight="600">Media di Cesàro: (1/n) H(Yⁿ) → H(𝒴)</text>
+    <text x="55" y="80" class="label-sub">Media aritmetica dei condizionati, racchiusa nel sandwich</text>
+
+    <line x1="15" y1="100" x2="45" y2="100" class="lower-curve"/>
+    <text x="55" y="104" class="label-text" font-weight="600">Limite Inferiore: H(Yₙ | Yⁿ⁻¹, X₁) ↗ H(𝒴)</text>
+    <text x="55" y="118" class="label-sub">Cresce monotonamente (effetto di X₁ si dissolve nel tempo)</text>
+  </g>
+</svg>

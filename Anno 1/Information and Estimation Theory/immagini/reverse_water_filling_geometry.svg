@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 540" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #1e1e2e; }
+      .axis-line { stroke: #a6adc8; stroke-width: 2; stroke-linecap: round; }
+      .grid-line { stroke: #313244; stroke-width: 1; stroke-dasharray: 4 4; }
+      .water-line { stroke: #f9e2af; stroke-width: 3; stroke-dasharray: 8 5; }
+      .rate-fill { fill: #89b4fa; fill-opacity: 0.75; stroke: #b4befe; stroke-width: 2; }
+      .dist-fill { fill: #eba0ac; fill-opacity: 0.55; stroke: #f38ba8; stroke-width: 2; }
+      .discard-fill { fill: #45475a; fill-opacity: 0.6; stroke: #6c7086; stroke-width: 2; stroke-dasharray: 4 3; }
+      .label-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 20px; font-weight: 700; fill: #cdd6f4; text-anchor: middle; }
+      .label-axis { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #bac2de; }
+      .label-channel { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 600; fill: #cdd6f4; text-anchor: middle; }
+      .label-value { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 700; fill: #cdd6f4; text-anchor: middle; }
+      .label-value-dark { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 700; fill: #11111b; text-anchor: middle; }
+      .label-water { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #f9e2af; }
+      .label-off { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 700; fill: #f38ba8; text-anchor: middle; }
+      .box-bg { fill: #181825; stroke: #45475a; stroke-width: 1.5; rx: 10; }
+      .box-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #89b4fa; }
+      .box-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #bac2de; }
+      .box-highlight { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 700; fill: #a6e3a1; }
+      .box-warn { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 600; fill: #f9e2af; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#bac2de"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="940" height="540" rx="14" class="bg"/>
+
+  <!-- Title -->
+  <text x="470" y="38" class="label-title">Geometria del Reverse Water-Filling (Allocazione Ottima del Rate e Distorsione)</text>
+
+  <!-- Coordinate axes: Origin at (90, 420) -->
+  <line x1="90" y1="420" x2="680" y2="420" class="axis-line" marker-end="url(#arrow)"/>
+  <line x1="90" y1="420" x2="90" y2="70" class="axis-line" marker-end="url(#arrow)"/>
+
+  <!-- Axis labels -->
+  <text x="690" y="425" class="label-axis">Componenti / Autovalori (i)</text>
+  <text x="42" y="70" class="label-axis" text-anchor="middle">Energia /</text>
+  <text x="42" y="88" class="label-axis" text-anchor="middle">Varianza σᵢ²</text>
+
+  <!-- Water level theta horizontal line at y = 260 (Height above origin = 420 - 260 = 160) -->
+  <line x1="90" y1="260" x2="650" y2="260" class="water-line"/>
+  <text x="658" y="265" class="label-water">Soglia θ (Livello Distorsione)</text>
+
+  <!-- 5 Columns: width = 74, spacing = 26.
+       X positions:
+       Col 1: x = 125 (mid = 162)
+       Col 2: x = 225 (mid = 262)
+       Col 3: x = 325 (mid = 362)
+       Col 4: x = 425 (mid = 462)
+       Col 5: x = 525 (mid = 562)
+  -->
+
+  <!-- Col 1: High variance sigma_1^2 = 310 (y from 420 up to 110).
+       Distortion D1 = theta (height 160, y: 260 to 420).
+       Rate R1 area (height 150, y: 110 to 260). -->
+  <rect x="125" y="260" width="74" height="160" class="dist-fill"/>
+  <rect x="125" y="110" width="74" height="150" class="rate-fill"/>
+  <text x="162" y="185" class="label-value-dark">R₁ &gt; 0</text>
+  <text x="162" y="202" class="box-text" text-anchor="middle" font-size="11px" fill="#11111b">(Codificata)</text>
+  <text x="162" y="345" class="label-value">D₁ = θ</text>
+  <text x="162" y="100" class="box-highlight" text-anchor="middle">σ₁²</text>
+  <text x="162" y="442" class="label-channel">Comp. 1</text>
+  <text x="162" y="458" class="box-text" text-anchor="middle" font-size="11px">Max energia</text>
+
+  <!-- Col 2: Medium-high variance sigma_2^2 = 250 (y from 420 up to 170).
+       Distortion D2 = theta (height 160, y: 260 to 420).
+       Rate R2 area (height 90, y: 170 to 260). -->
+  <rect x="225" y="260" width="74" height="160" class="dist-fill"/>
+  <rect x="225" y="170" width="74" height="90" class="rate-fill"/>
+  <text x="262" y="215" class="label-value-dark">R₂ &gt; 0</text>
+  <text x="262" y="232" class="box-text" text-anchor="middle" font-size="11px" fill="#11111b">(Codificata)</text>
+  <text x="262" y="345" class="label-value">D₂ = θ</text>
+  <text x="262" y="160" class="box-highlight" text-anchor="middle">σ₂²</text>
+  <text x="262" y="442" class="label-channel">Comp. 2</text>
+  <text x="262" y="458" class="box-text" text-anchor="middle" font-size="11px">Alta energia</text>
+
+  <!-- Col 3: Moderate variance sigma_3^2 = 200 (y from 420 up to 220).
+       Distortion D3 = theta (height 160, y: 260 to 420).
+       Rate R3 area (height 40, y: 220 to 260). -->
+  <rect x="325" y="260" width="74" height="160" class="dist-fill"/>
+  <rect x="325" y="220" width="74" height="40" class="rate-fill"/>
+  <text x="362" y="244" class="label-value-dark">R₃ &gt; 0</text>
+  <text x="362" y="345" class="label-value">D₃ = θ</text>
+  <text x="362" y="210" class="box-highlight" text-anchor="middle">σ₃²</text>
+  <text x="362" y="442" class="label-channel">Comp. 3</text>
+  <text x="362" y="458" class="box-text" text-anchor="middle" font-size="11px">Poco sopra θ</text>
+
+  <!-- Col 4: Low variance sigma_4^2 = 120 (y from 420 up to 300).
+       Below threshold theta! Entire bar is distortion D4 = sigma_4^2. Rate R4 = 0! -->
+  <rect x="425" y="300" width="74" height="120" class="discard-fill"/>
+  <text x="462" y="360" class="label-off">D₄ = σ₄²</text>
+  <text x="462" y="378" class="label-off" font-size="11px">R₄ = 0</text>
+  <text x="462" y="290" class="box-warn" text-anchor="middle">σ₄² ≤ θ</text>
+  <text x="462" y="442" class="label-channel">Comp. 4</text>
+  <text x="462" y="458" class="label-off">SCARTATA</text>
+
+  <!-- Col 5: Very low variance sigma_5^2 = 60 (y from 420 up to 360).
+       Far below theta. Entire bar is distortion D5 = sigma_5^2. Rate R5 = 0. -->
+  <rect x="525" y="360" width="74" height="60" class="discard-fill"/>
+  <text x="562" y="395" class="label-off">D₅ = σ₅²</text>
+  <text x="562" y="350" class="box-warn" text-anchor="middle">σ₅² ≪ θ</text>
+  <text x="562" y="442" class="label-channel">Comp. 5</text>
+  <text x="562" y="458" class="label-off">SCARTATA</text>
+
+  <!-- Side Summary Card on the Right (X = 645, Y = 100, Width = 275, Height = 410) -->
+  <rect x="645" y="100" width="275" height="410" class="box-bg"/>
+  <text x="660" y="128" class="box-title">Equazioni di Karush-Kuhn-Tucker</text>
+
+  <text x="660" y="156" class="box-highlight">Allocazione Distorsione:</text>
+  <text x="660" y="178" class="label-value" text-anchor="start" fill="#f38ba8">Dᵢ* = min(θ, σᵢ²)</text>
+
+  <text x="660" y="206" class="box-highlight">Allocazione Rate (bit):</text>
+  <text x="660" y="228" class="label-value" text-anchor="start" fill="#89b4fa">Rᵢ* = max(0, ½ log₂(σᵢ²/θ))</text>
+
+  <line x1="660" y1="245" x2="905" y2="245" stroke="#45475a" stroke-width="1"/>
+
+  <text x="660" y="268" class="box-title">Bilancio del Budget Totale:</text>
+  <text x="660" y="292" class="label-water">∑ᵢ min(θ, σᵢ²) = D</text>
+
+  <line x1="660" y1="310" x2="905" y2="310" stroke="#45475a" stroke-width="1"/>
+
+  <text x="660" y="333" class="box-title">Contrasto col Water-Filling Canale:</text>
+  <text x="660" y="356" class="box-text">• <tspan font-weight="700" fill="#a6e3a1">Canale</tspan>: versa potenza Pᵢ*</text>
+  <text x="670" y="374" class="box-text">nei canali a MINIMO rumore.</text>
+  <text x="660" y="396" class="box-text">• <tspan font-weight="700" fill="#89b4fa">Sorgente (Reverse)</tspan>: assegna rate</text>
+  <text x="670" y="414" class="box-text">alle componenti a MAX energia,</text>
+  <text x="670" y="432" class="box-text">pareggiando la distorsione a θ.</text>
+  <text x="660" y="454" class="box-text">• Se σᵢ² ≤ θ: componente spenta</text>
+  <text x="670" y="472" class="label-off" text-anchor="start">(Rᵢ = 0, distorsione Dᵢ = σᵢ²).</text>
+
+  <!-- Bottom Legend inside plot area -->
+  <g transform="translate(100, 485)">
+    <rect x="0" y="0" width="18" height="14" class="rate-fill"/>
+    <text x="26" y="11" class="box-text">Rate allocato Rᵢ &gt; 0 (bit)</text>
+
+    <rect x="180" y="0" width="18" height="14" class="dist-fill"/>
+    <text x="206" y="11" class="box-text">Distorsione controllata Dᵢ = θ</text>
+
+    <rect x="370" y="0" width="18" height="14" class="discard-fill"/>
+    <text x="396" y="11" class="box-text">Energia scartata (Rᵢ = 0, Dᵢ = σᵢ²)</text>
+  </g>
+</svg>

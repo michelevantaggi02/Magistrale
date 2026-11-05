@@ -1,0 +1,111 @@
+<svg width="100%" height="340" viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradienti -->
+    <linearGradient id="pfaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.20"/>
+    </linearGradient>
+    <linearGradient id="pdGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.10"/>
+    </linearGradient>
+    <pattern id="hatchPfa" width="6" height="6" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#f59e0b" stroke-width="1.4" />
+    </pattern>
+    <marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="foldArr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Titolo Globale -->
+  <text x="380" y="24" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="bold" fill="#f8fafc">Principio Geometrico e Statistico del Rilevatore GLRT a Legge Quadratica</text>
+  <text x="380" y="42" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Dal test gaussiano simmetrico a due code alla statistica chi-quadro ripiegata T = Z²</text>
+
+  <!-- ==================== PANNELLO 1: TEST A DUE CODE (GAUSSIANO) ==================== -->
+  <text x="192" y="65" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#38bdf8">1. Test a Due Code su Z = √N x̄ / σ_w</text>
+
+  <!-- Code H0 -->
+  <path d="M 45.0 250.0 L 45.0 249.6 L 47.1 249.6 L 49.2 249.5 L 51.3 249.4 L 53.4 249.3 L 55.5 249.2 L 57.6 249.0 L 59.8 248.8 L 61.9 248.6 L 64.0 248.4 L 66.1 248.2 L 68.2 247.9 L 70.3 247.5 L 72.4 247.1 L 74.5 246.7 L 76.6 246.2 L 78.7 245.7 L 80.8 245.0 L 82.9 244.3 L 85.0 243.6 L 87.1 242.7 L 89.2 241.7 L 91.4 240.7 L 93.5 239.5 L 95.6 238.2 L 97.7 236.8 L 99.8 235.2 L 101.9 233.5 L 104.0 231.7 L 106.1 229.7 L 108.2 227.5 L 109.9 225.6 L 109.9 250.0 Z" fill="url(#pfaGrad)"/>
+  <path d="M 45.0 250.0 L 45.0 249.6 L 47.1 249.6 L 49.2 249.5 L 51.3 249.4 L 53.4 249.3 L 55.5 249.2 L 57.6 249.0 L 59.8 248.8 L 61.9 248.6 L 64.0 248.4 L 66.1 248.2 L 68.2 247.9 L 70.3 247.5 L 72.4 247.1 L 74.5 246.7 L 76.6 246.2 L 78.7 245.7 L 80.8 245.0 L 82.9 244.3 L 85.0 243.6 L 87.1 242.7 L 89.2 241.7 L 91.4 240.7 L 93.5 239.5 L 95.6 238.2 L 97.7 236.8 L 99.8 235.2 L 101.9 233.5 L 104.0 231.7 L 106.1 229.7 L 108.2 227.5 L 109.9 225.6 L 109.9 250.0 Z" fill="url(#hatchPfa)"/>
+  <path d="M 275.1 250.0 L 276.8 227.5 L 278.9 229.7 L 281.0 231.7 L 283.1 233.5 L 285.2 235.2 L 287.3 236.8 L 289.4 238.2 L 291.5 239.5 L 293.6 240.7 L 295.8 241.7 L 297.9 242.7 L 300.0 243.6 L 302.1 244.3 L 304.2 245.0 L 306.3 245.7 L 308.4 246.2 L 310.5 246.7 L 312.6 247.1 L 314.7 247.5 L 316.8 247.9 L 318.9 248.2 L 321.0 248.4 L 323.1 248.6 L 325.2 248.8 L 327.4 249.0 L 329.5 249.2 L 331.6 249.3 L 333.7 249.4 L 335.8 249.5 L 337.9 249.6 L 340.0 249.6 L 340.0 250.0 Z" fill="url(#pfaGrad)"/>
+  <path d="M 275.1 250.0 L 276.8 227.5 L 278.9 229.7 L 281.0 231.7 L 283.1 233.5 L 285.2 235.2 L 287.3 236.8 L 289.4 238.2 L 291.5 239.5 L 293.6 240.7 L 295.8 241.7 L 297.9 242.7 L 300.0 243.6 L 302.1 244.3 L 304.2 245.0 L 306.3 245.7 L 308.4 246.2 L 310.5 246.7 L 312.6 247.1 L 314.7 247.5 L 316.8 247.9 L 318.9 248.2 L 321.0 248.4 L 323.1 248.6 L 325.2 248.8 L 327.4 249.0 L 329.5 249.2 L 331.6 249.3 L 333.7 249.4 L 335.8 249.5 L 337.9 249.6 L 340.0 249.6 L 340.0 250.0 Z" fill="url(#hatchPfa)"/>
+
+  <!-- Curve Gaussiane -->
+  <path d="M 45.0 249.6 L 47.1 249.6 L 49.2 249.5 L 51.3 249.4 L 53.4 249.3 L 55.5 249.2 L 57.6 249.0 L 59.8 248.8 L 61.9 248.6 L 64.0 248.4 L 66.1 248.2 L 68.2 247.9 L 70.3 247.5 L 72.4 247.1 L 74.5 246.7 L 76.6 246.2 L 78.7 245.7 L 80.8 245.0 L 82.9 244.3 L 85.0 243.6 L 87.1 242.7 L 89.2 241.7 L 91.4 240.7 L 93.5 239.5 L 95.6 238.2 L 97.7 236.8 L 99.8 235.2 L 101.9 233.5 L 104.0 231.7 L 106.1 229.7 L 108.2 227.5 L 110.3 225.2 L 112.4 222.7 L 114.5 220.0 L 116.6 217.1 L 118.8 214.1 L 120.9 210.8 L 123.0 207.4 L 125.1 203.8 L 127.2 200.0 L 129.3 196.0 L 131.4 191.9 L 133.5 187.6 L 135.6 183.2 L 137.7 178.6 L 139.8 173.9 L 141.9 169.1 L 144.0 164.2 L 146.1 159.2 L 148.2 154.2 L 150.4 149.2 L 152.5 144.1 L 154.6 139.1 L 156.7 134.2 L 158.8 129.3 L 160.9 124.5 L 163.0 119.9 L 165.1 115.4 L 167.2 111.2 L 169.3 107.1 L 171.4 103.3 L 173.5 99.8 L 175.6 96.6 L 177.8 93.6 L 179.9 91.1 L 182.0 88.9 L 184.1 87.1 L 186.2 85.6 L 188.3 84.6 L 190.4 84.0 L 192.5 83.8 L 194.6 84.0 L 196.7 84.6 L 198.8 85.6 L 200.9 87.1 L 203.0 88.9 L 205.1 91.1 L 207.2 93.6 L 209.4 96.6 L 211.5 99.8 L 213.6 103.3 L 215.7 107.1 L 217.8 111.2 L 219.9 115.4 L 222.0 119.9 L 224.1 124.5 L 226.2 129.3 L 228.3 134.2 L 230.4 139.1 L 232.5 144.1 L 234.6 149.2 L 236.8 154.2 L 238.9 159.2 L 241.0 164.2 L 243.1 169.1 L 245.2 173.9 L 247.3 178.6 L 249.4 183.2 L 251.5 187.6 L 253.6 191.9 L 255.7 196.0 L 257.8 200.0 L 259.9 203.8 L 262.0 207.4 L 264.1 210.8 L 266.2 214.1 L 268.4 217.1 L 270.5 220.0 L 272.6 222.7 L 274.7 225.2 L 276.8 227.5 L 278.9 229.7 L 281.0 231.7 L 283.1 233.5 L 285.2 235.2 L 287.3 236.8 L 289.4 238.2 L 291.5 239.5 L 293.6 240.7 L 295.8 241.7 L 297.9 242.7 L 300.0 243.6 L 302.1 244.3 L 304.2 245.0 L 306.3 245.7 L 308.4 246.2 L 310.5 246.7 L 312.6 247.1 L 314.7 247.5 L 316.8 247.9 L 318.9 248.2 L 321.0 248.4 L 323.1 248.6 L 325.2 248.8 L 327.4 249.0 L 329.5 249.2 L 331.6 249.3 L 333.7 249.4 L 335.8 249.5 L 337.9 249.6 L 340.0 249.6" stroke="#38bdf8" stroke-width="2.4" fill="none"/>
+  <path d="M 45.0 250.0 L 47.1 250.0 L 49.2 250.0 L 51.3 250.0 L 53.4 250.0 L 55.5 250.0 L 57.6 250.0 L 59.8 250.0 L 61.9 250.0 L 64.0 250.0 L 66.1 250.0 L 68.2 250.0 L 70.3 250.0 L 72.4 250.0 L 74.5 250.0 L 76.6 250.0 L 78.7 250.0 L 80.8 250.0 L 82.9 250.0 L 85.0 250.0 L 87.1 250.0 L 89.2 250.0 L 91.4 250.0 L 93.5 250.0 L 95.6 250.0 L 97.7 250.0 L 99.8 249.9 L 101.9 249.9 L 104.0 249.9 L 106.1 249.9 L 108.2 249.9 L 110.3 249.9 L 112.4 249.8 L 114.5 249.8 L 116.6 249.7 L 118.8 249.7 L 120.9 249.6 L 123.0 249.6 L 125.1 249.5 L 127.2 249.4 L 129.3 249.3 L 131.4 249.2 L 133.5 249.0 L 135.6 248.8 L 137.7 248.6 L 139.8 248.4 L 141.9 248.2 L 144.0 247.9 L 146.1 247.5 L 148.2 247.1 L 150.4 246.7 L 152.5 246.2 L 154.6 245.7 L 156.7 245.0 L 158.8 244.3 L 160.9 243.6 L 163.0 242.7 L 165.1 241.7 L 167.2 240.7 L 169.3 239.5 L 171.4 238.2 L 173.5 236.8 L 175.6 235.2 L 177.8 233.5 L 179.9 231.7 L 182.0 229.7 L 184.1 227.5 L 186.2 225.2 L 188.3 222.7 L 190.4 220.0 L 192.5 217.1 L 194.6 214.1 L 196.7 210.8 L 198.8 207.4 L 200.9 203.8 L 203.0 200.0 L 205.1 196.0 L 207.2 191.9 L 209.4 187.6 L 211.5 183.2 L 213.6 178.6 L 215.7 173.9 L 217.8 169.1 L 219.9 164.2 L 222.0 159.2 L 224.1 154.2 L 226.2 149.2 L 228.3 144.1 L 230.4 139.1 L 232.5 134.2 L 234.6 129.3 L 236.8 124.5 L 238.9 119.9 L 241.0 115.4 L 243.1 111.2 L 245.2 107.1 L 247.3 103.3 L 249.4 99.8 L 251.5 96.6 L 253.6 93.6 L 255.7 91.1 L 257.8 88.9 L 259.9 87.1 L 262.0 85.6 L 264.1 84.6 L 266.2 84.0 L 268.4 83.8 L 270.5 84.0 L 272.6 84.6 L 274.7 85.6 L 276.8 87.1 L 278.9 88.9 L 281.0 91.1 L 283.1 93.6 L 285.2 96.6 L 287.3 99.8 L 289.4 103.3 L 291.5 107.1 L 293.6 111.2 L 295.8 115.4 L 297.9 119.9 L 300.0 124.5 L 302.1 129.3 L 304.2 134.2 L 306.3 139.1 L 308.4 144.1 L 310.5 149.2 L 312.6 154.2 L 314.7 159.2 L 316.8 164.2 L 318.9 169.1 L 321.0 173.9 L 323.1 178.6 L 325.2 183.2 L 327.4 187.6 L 329.5 191.9 L 331.6 196.0 L 333.7 200.0 L 335.8 203.8 L 337.9 207.4 L 340.0 210.8" stroke="#10b981" stroke-width="2.2" stroke-dasharray="4 3" fill="none"/>
+
+  <!-- Asse Z -->
+  <line x1="35" y1="250.0" x2="350" y2="250.0" stroke="#94a3b8" stroke-width="1.3" marker-end="url(#arr)"/>
+  <text x="358" y="254.0" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-style="italic" fill="#94a3b8">Z</text>
+
+  <!-- Tacche Asse Z -->
+  <line x1="192.5" y1="250.0" x2="192.5" y2="254.0" stroke="#94a3b8" stroke-width="1"/>
+  <text x="192.5" y="266.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">0</text>
+
+  <!-- Soglie simmetriche -sqrt(gamma') e +sqrt(gamma') -->
+  <line x1="109.9" y1="80" x2="109.9" y2="250.0" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="109.9" y="74" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="#f59e0b">-√γ'</text>
+  <text x="97.9" y="236.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="bold" fill="#f59e0b">Q(√γ') = α/2</text>
+
+  <line x1="275.1" y1="80" x2="275.1" y2="250.0" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="275.1" y="74" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="#f59e0b">+√γ'</text>
+  <text x="289.1" y="236.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="bold" fill="#f59e0b">Q(√γ') = α/2</text>
+
+  <!-- Etichette curve Pannello 1 -->
+  <text x="192.5" y="105" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#38bdf8">H₀: N(0, 1)</text>
+  <text x="268.4" y="125" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="#10b981">H₁: N(d, 1)</text>
+
+  <!-- Regola decisionale Pannello 1 -->
+  <text x="192" y="282.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#f8fafc">Regola: <tspan font-weight="bold" fill="#f59e0b">|Z| &gt; √γ'</tspan> ➔ P_FA = 2 Q(√γ')</text>
+
+
+  <!-- ==================== FRECCIA DI TRASFORMAZIONE CENTRALE ==================== -->
+  <g transform="translate(352, 145)">
+    <line x1="0" y1="0" x2="52" y2="0" stroke="#c084fc" stroke-width="2" marker-end="url(#foldArr)"/>
+    <text x="26" y="-8" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#c084fc">T = Z²</text>
+    <text x="26" y="16" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#94a3b8">Ripiegamento</text>
+  </g>
+
+
+  <!-- ==================== PANNELLO 2: STATISTICA CHI-QUADRO ==================== -->
+  <text x="570" y="65" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#c084fc">2. Distribuzione GLRT Ripiegata T ~ χ₁²</text>
+
+  <!-- Aree P_D e P_FA Pannello 2 -->
+  <path d="M 536.4 250.0 L 537.8 200.0 L 540.1 200.3 L 542.5 200.7 L 544.8 201.1 L 547.1 201.5 L 549.4 201.9 L 551.7 202.3 L 554.0 202.7 L 556.4 203.1 L 558.7 203.6 L 561.0 204.0 L 563.3 204.4 L 565.6 204.9 L 568.0 205.3 L 570.3 205.7 L 572.6 206.2 L 574.9 206.6 L 577.2 207.1 L 579.6 207.5 L 581.9 208.0 L 584.2 208.5 L 586.5 208.9 L 588.9 209.4 L 591.2 209.9 L 593.5 210.3 L 595.8 210.8 L 598.1 211.2 L 600.5 211.7 L 602.8 212.2 L 605.1 212.6 L 607.4 213.1 L 609.7 213.6 L 612.0 214.0 L 614.4 214.5 L 616.7 214.9 L 619.0 215.4 L 621.3 215.8 L 623.6 216.3 L 626.0 216.8 L 628.3 217.2 L 630.6 217.6 L 632.9 218.1 L 635.2 218.5 L 637.6 219.0 L 639.9 219.4 L 642.2 219.8 L 644.5 220.3 L 646.9 220.7 L 649.2 221.1 L 651.5 221.5 L 653.8 222.0 L 656.1 222.4 L 658.5 222.8 L 660.8 223.2 L 663.1 223.6 L 665.4 224.0 L 667.7 224.4 L 670.0 224.8 L 672.4 225.2 L 674.7 225.6 L 677.0 226.0 L 679.3 226.3 L 681.7 226.7 L 684.0 227.1 L 686.3 227.4 L 688.6 227.8 L 690.9 228.2 L 693.2 228.5 L 695.6 228.9 L 697.9 229.2 L 700.2 229.6 L 702.5 229.9 L 704.9 230.2 L 707.2 230.6 L 709.5 230.9 L 711.8 231.2 L 714.1 231.5 L 715.0 250.0 Z" fill="url(#pdGrad)"/>
+  <path d="M 536.4 250.0 L 536.6 235.2 L 539.5 236.1 L 542.5 236.9 L 545.4 237.7 L 548.2 238.4 L 551.1 239.1 L 554.0 239.8 L 557.0 240.4 L 559.9 241.0 L 562.8 241.5 L 565.6 242.0 L 568.5 242.5 L 571.5 242.9 L 574.4 243.3 L 577.2 243.7 L 580.1 244.1 L 583.0 244.4 L 586.0 244.7 L 588.9 245.0 L 591.8 245.3 L 594.7 245.6 L 597.5 245.8 L 600.5 246.1 L 603.4 246.3 L 606.2 246.5 L 609.1 246.7 L 612.0 246.9 L 615.0 247.1 L 617.9 247.2 L 620.8 247.4 L 623.6 247.5 L 626.5 247.7 L 629.5 247.8 L 632.4 247.9 L 635.2 248.0 L 638.2 248.1 L 641.0 248.2 L 644.0 248.3 L 646.9 248.4 L 649.8 248.5 L 652.6 248.6 L 655.5 248.7 L 658.5 248.7 L 661.4 248.8 L 664.2 248.9 L 667.2 248.9 L 670.0 249.0 L 673.0 249.1 L 675.9 249.1 L 678.8 249.2 L 681.7 249.2 L 684.5 249.2 L 687.5 249.3 L 690.4 249.3 L 693.2 249.4 L 696.2 249.4 L 699.0 249.4 L 702.0 249.5 L 704.9 249.5 L 707.8 249.5 L 710.7 249.5 L 713.5 249.6 L 715.0 250.0 Z" fill="url(#pfaGrad)"/>
+  <path d="M 536.4 250.0 L 536.6 235.2 L 539.5 236.1 L 542.5 236.9 L 545.4 237.7 L 548.2 238.4 L 551.1 239.1 L 554.0 239.8 L 557.0 240.4 L 559.9 241.0 L 562.8 241.5 L 565.6 242.0 L 568.5 242.5 L 571.5 242.9 L 574.4 243.3 L 577.2 243.7 L 580.1 244.1 L 583.0 244.4 L 586.0 244.7 L 588.9 245.0 L 591.8 245.3 L 594.7 245.6 L 597.5 245.8 L 600.5 246.1 L 603.4 246.3 L 606.2 246.5 L 609.1 246.7 L 612.0 246.9 L 615.0 247.1 L 617.9 247.2 L 620.8 247.4 L 623.6 247.5 L 626.5 247.7 L 629.5 247.8 L 632.4 247.9 L 635.2 248.0 L 638.2 248.1 L 641.0 248.2 L 644.0 248.3 L 646.9 248.4 L 649.8 248.5 L 652.6 248.6 L 655.5 248.7 L 658.5 248.7 L 661.4 248.8 L 664.2 248.9 L 667.2 248.9 L 670.0 249.0 L 673.0 249.1 L 675.9 249.1 L 678.8 249.2 L 681.7 249.2 L 684.5 249.2 L 687.5 249.3 L 690.4 249.3 L 693.2 249.4 L 696.2 249.4 L 699.0 249.4 L 702.0 249.5 L 704.9 249.5 L 707.8 249.5 L 710.7 249.5 L 713.5 249.6 L 715.0 250.0 Z" fill="url(#hatchPfa)"/>
+
+  <!-- Curve Chi-Quadro -->
+  <path d="M 426.2 75.0 L 426.7 75.0 L 427.3 75.0 L 427.9 75.0 L 428.5 75.0 L 429.1 75.0 L 429.6 75.0 L 430.2 75.0 L 430.8 75.0 L 431.4 75.0 L 432.0 75.0 L 432.5 75.0 L 433.1 75.0 L 433.7 75.0 L 434.3 75.0 L 434.9 75.0 L 435.4 75.0 L 436.0 75.0 L 436.6 75.0 L 437.2 75.0 L 437.8 75.0 L 438.3 75.0 L 438.9 75.0 L 439.5 75.0 L 440.1 75.0 L 440.9 75.0 L 443.9 75.0 L 446.8 91.7 L 449.6 108.6 L 452.6 122.7 L 455.4 134.8 L 458.4 145.3 L 461.2 154.5 L 464.1 162.6 L 467.1 169.8 L 469.9 176.2 L 472.9 181.9 L 475.8 187.1 L 478.6 191.8 L 481.6 196.1 L 484.4 200.0 L 487.4 203.6 L 490.2 206.8 L 493.1 209.8 L 496.1 212.6 L 498.9 215.1 L 501.9 217.4 L 504.8 219.6 L 507.6 221.6 L 510.6 223.4 L 513.5 225.1 L 516.4 226.7 L 519.2 228.2 L 522.1 229.6 L 525.0 230.9 L 528.0 232.1 L 530.9 233.2 L 533.8 234.2 L 536.6 235.2 L 539.5 236.1 L 542.5 236.9 L 545.4 237.7 L 548.2 238.4 L 551.1 239.1 L 554.0 239.8 L 557.0 240.4 L 559.9 241.0 L 562.8 241.5 L 565.6 242.0 L 568.5 242.5 L 571.5 242.9 L 574.4 243.3 L 577.2 243.7 L 580.1 244.1 L 583.0 244.4 L 586.0 244.7 L 588.9 245.0 L 591.8 245.3 L 594.7 245.6 L 597.5 245.8 L 600.5 246.1 L 603.4 246.3 L 606.2 246.5 L 609.1 246.7 L 612.0 246.9 L 615.0 247.1 L 617.9 247.2 L 620.8 247.4 L 623.6 247.5 L 626.5 247.7 L 629.5 247.8 L 632.4 247.9 L 635.2 248.0 L 638.2 248.1 L 641.0 248.2 L 644.0 248.3 L 646.9 248.4 L 649.8 248.5 L 652.6 248.6 L 655.5 248.7 L 658.5 248.7 L 661.4 248.8 L 664.2 248.9 L 667.2 248.9 L 670.0 249.0 L 673.0 249.1 L 675.9 249.1 L 678.8 249.2 L 681.7 249.2 L 684.5 249.2 L 687.5 249.3 L 690.4 249.3 L 693.2 249.4 L 696.2 249.4 L 699.0 249.4 L 702.0 249.5 L 704.9 249.5 L 707.8 249.5 L 710.7 249.5 L 713.5 249.6" stroke="#38bdf8" stroke-width="2.4" fill="none"/>
+  <path d="M 426.4 147.8 L 428.8 178.6 L 431.1 187.6 L 433.4 191.7 L 435.7 193.9 L 438.1 195.1 L 440.4 195.7 L 442.7 196.1 L 445.0 196.3 L 447.3 196.3 L 449.6 196.2 L 452.0 196.2 L 454.3 196.0 L 456.6 195.9 L 458.9 195.7 L 461.2 195.6 L 463.6 195.5 L 465.9 195.3 L 468.2 195.2 L 470.5 195.1 L 472.9 195.1 L 475.2 195.0 L 477.5 195.0 L 479.8 194.9 L 482.1 194.9 L 484.4 195.0 L 486.8 195.0 L 489.1 195.1 L 491.4 195.1 L 493.7 195.2 L 496.1 195.3 L 498.4 195.5 L 500.7 195.6 L 503.0 195.8 L 505.3 196.0 L 507.6 196.2 L 510.0 196.4 L 512.3 196.6 L 514.6 196.9 L 516.9 197.1 L 519.2 197.4 L 521.6 197.7 L 523.9 198.0 L 526.2 198.3 L 528.5 198.6 L 530.9 198.9 L 533.2 199.3 L 535.5 199.6 L 537.8 200.0 L 540.1 200.3 L 542.5 200.7 L 544.8 201.1 L 547.1 201.5 L 549.4 201.9 L 551.7 202.3 L 554.0 202.7 L 556.4 203.1 L 558.7 203.6 L 561.0 204.0 L 563.3 204.4 L 565.6 204.9 L 568.0 205.3 L 570.3 205.7 L 572.6 206.2 L 574.9 206.6 L 577.2 207.1 L 579.6 207.5 L 581.9 208.0 L 584.2 208.5 L 586.5 208.9 L 588.9 209.4 L 591.2 209.9 L 593.5 210.3 L 595.8 210.8 L 598.1 211.2 L 600.5 211.7 L 602.8 212.2 L 605.1 212.6 L 607.4 213.1 L 609.7 213.6 L 612.0 214.0 L 614.4 214.5 L 616.7 214.9 L 619.0 215.4 L 621.3 215.8 L 623.6 216.3 L 626.0 216.8 L 628.3 217.2 L 630.6 217.6 L 632.9 218.1 L 635.2 218.5 L 637.6 219.0 L 639.9 219.4 L 642.2 219.8 L 644.5 220.3 L 646.9 220.7 L 649.2 221.1 L 651.5 221.5 L 653.8 222.0 L 656.1 222.4 L 658.5 222.8 L 660.8 223.2 L 663.1 223.6 L 665.4 224.0 L 667.7 224.4 L 670.0 224.8 L 672.4 225.2 L 674.7 225.6 L 677.0 226.0 L 679.3 226.3 L 681.7 226.7 L 684.0 227.1 L 686.3 227.4 L 688.6 227.8 L 690.9 228.2 L 693.2 228.5 L 695.6 228.9 L 697.9 229.2 L 700.2 229.6 L 702.5 229.9 L 704.9 230.2 L 707.2 230.6 L 709.5 230.9 L 711.8 231.2 L 714.1 231.5" stroke="#10b981" stroke-width="2.4" fill="none"/>
+
+  <!-- Asse T -->
+  <line x1="415" y1="250.0" x2="725" y2="250.0" stroke="#94a3b8" stroke-width="1.3" marker-end="url(#arr)"/>
+  <text x="732" y="254.0" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-style="italic" fill="#94a3b8">T</text>
+
+  <!-- Tacche Asse T -->
+  <line x1="425.0" y1="250.0" x2="425.0" y2="254.0" stroke="#94a3b8" stroke-width="1"/>
+  <text x="425.0" y="266.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">0</text>
+
+  <line x1="555.5" y1="250.0" x2="555.5" y2="254.0" stroke="#94a3b8" stroke-width="1"/>
+  <text x="555.5" y="266.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">λ ≈ 4.5</text>
+
+  <!-- Soglia singola gamma' -->
+  <line x1="536.4" y1="80" x2="536.4" y2="250.0" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3"/>
+  <circle cx="536.4" cy="235.1" r="3" fill="#f59e0b"/>
+  <text x="536.4" y="74" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="#f59e0b">Soglia γ'</text>
+  <text x="558.4" y="240.0" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="bold" fill="#f59e0b">P_FA = α</text>
+
+  <!-- Etichette curve Pannello 2 -->
+  <text x="459.8" y="112" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#38bdf8">H₀: χ₁²</text>
+  <text x="593.2" y="122" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#10b981">H₁: χ₁'²(λ)</text>
+
+  <!-- Regola decisionale Pannello 2 -->
+  <text x="570" y="282.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#f8fafc">Regola: <tspan font-weight="bold" fill="#f59e0b">T &gt; γ'</tspan> con <tspan fill="#10b981">P_D = ∫_γ'^∞ f(t; H₁)dt</tspan></text>
+
+  <!-- Note sintetiche a fondo figura -->
+  <text x="380" y="325" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#94a3b8">Le due semirette simmetriche |Z| &gt; √γ' convergono nell'unica coda destra T &gt; γ', preservando l'esatto falso allarme α.</text>
+</svg>

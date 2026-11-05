@@ -397,7 +397,8 @@ flowchart TD
     C --> G
     G --> H["3. Redazione Capitolo 'N. Titolo.md' (Integrazione Figure nei Callout e Video)"]
     H --> I["Formattazione KaTeX, Convenzioni Linter (__grassetto__, _corsivo_)"]
-    I --> R["4. Revisione Automatica con Subagente Indipendente (Slide, Paper, Web)"]
+    I --> O["4. Ottimizzazione Cognitiva (Subagente 'cognitive-study-editor-v3')"]
+    O --> R["5. Loop di Revisione Accademica (Subagente Indipendente Reviewer)"]
     R --> S["Applicazione Correzioni Rilevate dal Subagente"]
     S --> L["Merge con Advanced Merger in 'export/md/'"]
     L --> M["Esportazione PDF con Better Export PDF in 'export/pdf/'"]
@@ -413,12 +414,14 @@ flowchart TD
 3. **Fase 3 - Analisi, Traduzione e Rielaborazione**: Leggere e rielaborare i contenuti delle slide traducendoli integralmente in lingua italiana con rigore accademico e chiarezza didattica, correggendo direttamente nel testo qualsiasi errore presente nelle note di partenza.
 4. **Fase 4 - Numerazione e Titolo**: Assegnare il nome file progressivo corretto (partendo da `0.` per il capitolo iniziale della materia), allineando perfettamente l'heading H1.
 5. **Fase 5 - Composizione e Integrazione Figure**: Redigere il documento alternando spiegazioni teoriche, formule KaTeX rigorose ed esempi visivi basati sulle immagini estratte, formattate tassativamente con centratura e classe di dimensione appropriata (es. `![[immagine.png|center mid]]` o `![[immagine.png|center big]]`).
-6. **Fase 6 - Loop Iterativo di Revisione Automatica con Subagente Indipendente (Regola Tassativa a Convergenza)**:
-   - Subito dopo la stesura del capitolo, invocare obbligatoriamente un subagente indipendente (estraneo al contesto conversazionale di scrittura) tramite il tool `invoke_subagent`.
-   - Il subagente ha accesso al file del capitolo appena redatto, alle slide sorgente in PDF, ai paper scientifici estratti e alla ricerca internet (`search_web`), con il mandato esclusivo di individuare errori concettuali o matematici, formule errate, refusi algebrici/notazionali o discrepanze fattuali con le sorgenti, **escludendo esplicitamente qualunque analisi o giudizio su stile del testo, tono, prosa o formattazione/convenzioni del vault (linter, titoli, KaTeX, immagini)**, demandate all'agente autore.
-   - **Riavvio del Loop su Ogni Modifica**: se il subagente segnala errori o modifiche necessarie, l'agente principale applica tempestivamente le correzioni sul file e **deve obbligatoriamente avviare un NUOVO subagente indipendente** per riesaminare a mente fresca il file modificato.
-   - **Condizione di Uscita**: il loop (Revisione $\to$ Modifica $\to$ Nuova Revisione) si ripete finché un subagente indipendente non certifica formalmente l'esito **`CONFORME (Zero errori/incongruenze rilevate)`** (si veda `[[.agents/rules/revisione_automatica_subagente.md|Regola del Loop di Revisione Automatica con Subagente]]`).
-7. **Fase 7 - Segnalazione Finale delle Correzioni all'Utente**: Solo a convergenza raggiunta, descrivere esplicitamente all'utente le iterazioni svolte, le incongruenze corrette e la validazione finale del testo.
+6. **Fase 6 - Ottimizzazione Cognitiva e Visuale tramite Subagente Indipendente (`cognitive-study-editor-v3`)**:
+   - Invocare il subagente dedicato `cognitive-study-editor-v3` per ottimizzare la scorrevolezza sintattica, la voce attiva da problem solver, il ritmo (paragrafi snelli 1-4 righe) e la memorabilità per l'esame (chunking concettuale: Obiettivo $\to$ Sviluppo analitico commentato $\to$ Takeaway d'esame).
+   - Il subagente è pienamente autorizzato ad arricchire il capitolo con schemi concettuali Mermaid (`flowchart LR/TD`) o curve vettoriali SVG salvate in `<Materia>/immagini/` ed embeddate con wikilink Obsidian, nel pieno e tassativo rispetto delle convenzioni tipografiche (`__grassetto__`, `_corsivo_`, ellissi `…`, zero `---`, solo H1 numerato) (si veda `[[.agents/rules/ottimizzazione_cognitiva_subagente.md|Regola dell'Ottimizzazione Cognitiva Post-Stesura]]`).
+7. **Fase 7 - Loop Iterativo di Revisione Accademica con Subagente Indipendente (Regola Tassativa a Convergenza)**:
+   - Subito dopo l'ottimizzazione cognitiva, invocare obbligatoriamente un subagente indipendente estraneo (`Independent Academic Reviewer`) tramite `invoke_subagent`.
+   - Il subagente esamina il testo finale riga per riga con accesso alle slide e ai paper, con il mandato esclusivo di individuare errori concettuali o matematici, formule errate, refusi algebrici/notazionali o discrepanze fattuali con le sorgenti, **escludendo qualunque giudizio su stile o convenzioni del vault**.
+   - **Riavvio del Loop su Ogni Modifica**: se il revisore segnala errori, si applicano le correzioni e **si riavvia obbligatoriamente un NUOVO subagente indipendente** finché non si ottiene la certificazione formale: **`CONFORME (Zero errori/incongruenze rilevate)`** (si veda `[[.agents/rules/revisione_automatica_subagente.md|Regola del Loop di Revisione Automatica con Subagente]]`).
+8. **Fase 8 - Segnalazione Finale delle Correzioni all'Utente**: Solo a convergenza raggiunta, descrivere esplicitamente all'utente le iterazioni svolte, le incongruenze corrette e la validazione finale del testo.
 
 ### 4.2 Pipeline Estesa per Trascrizioni Audio e Lezioni Dense
 > [!IMPORTANT] Regola Workspace Dedicata

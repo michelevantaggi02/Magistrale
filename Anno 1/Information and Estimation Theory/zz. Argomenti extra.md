@@ -758,28 +758,28 @@ dove $\mathcal{R}_1$ indica la regione di decisione in cui si accetta l'ipotesi 
 Definiamo la funzione obiettivo lagrangiana introducendo il moltiplicatore scalare $\lambda$:
 
 $$
-F(\mathcal{R}_1, \lambda) = P_{\text{D}} + \lambda (P_{\text{FA}} - \alpha) = \int_{\mathcal{R}_1} f_{\mathbf{x}}(\mathbf{x}; H_1) \mathrm{d}\mathbf{x} + \lambda \left[ \int_{\mathcal{R}_1} f_{\mathbf{x}}(\mathbf{x}; H_0) \mathrm{d}\mathbf{x} - \alpha \right]
+F(\mathcal{R}_1, \lambda) = P_{\text{D}} - \lambda (P_{\text{FA}} - \alpha) = \int_{\mathcal{R}_1} f_{\mathbf{x}}(\mathbf{x}; H_1) \mathrm{d}\mathbf{x} - \lambda \left[ \int_{\mathcal{R}_1} f_{\mathbf{x}}(\mathbf{x}; H_0) \mathrm{d}\mathbf{x} - \alpha \right]
 $$
 
 Raggruppando gli integrali estesi alla medesima regione di decisione $\mathcal{R}_1$:
 
 $$
-F(\mathcal{R}_1, \lambda) = \int_{\mathcal{R}_1} \left[ f_{\mathbf{x}}(\mathbf{x}; H_1) + \lambda f_{\mathbf{x}}(\mathbf{x}; H_0) \right] \mathrm{d}\mathbf{x} - \lambda \alpha
+F(\mathcal{R}_1, \lambda) = \int_{\mathcal{R}_1} \left[ f_{\mathbf{x}}(\mathbf{x}; H_1) - \lambda f_{\mathbf{x}}(\mathbf{x}; H_0) \right] \mathrm{d}\mathbf{x} + \lambda \alpha
 $$
 
 Poiché il termine $\lambda \alpha$ è una costante indipendente dalla scelta geometrica della regione $\mathcal{R}_1$, per massimizzare l'integrale dobbiamo includere in $\mathcal{R}_1$ tutti e soli i punti dello spazio dei campioni $\mathbf{x} \in \mathcal{X}$ per i quali la funzione integranda risulta strettamente positiva:
 
 $$
-f_{\mathbf{x}}(\mathbf{x}; H_1) + \lambda f_{\mathbf{x}}(\mathbf{x}; H_0) > 0
+f_{\mathbf{x}}(\mathbf{x}; H_1) - \lambda f_{\mathbf{x}}(\mathbf{x}; H_0) > 0
 $$
 
 Poiché $f_{\mathbf{x}}(\mathbf{x}; H_0) > 0$ quasi ovunque sul supporto, dividendo per $f_{\mathbf{x}}(\mathbf{x}; H_0)$:
 
 $$
-\frac{f_{\mathbf{x}}(\mathbf{x}; H_1)}{f_{\mathbf{x}}(\mathbf{x}; H_0)} + \lambda > 0 \iff \frac{f_{\mathbf{x}}(\mathbf{x}; H_1)}{f_{\mathbf{x}}(\mathbf{x}; H_0)} > -\lambda
+\frac{f_{\mathbf{x}}(\mathbf{x}; H_1)}{f_{\mathbf{x}}(\mathbf{x}; H_0)} - \lambda > 0 \iff \frac{f_{\mathbf{x}}(\mathbf{x}; H_1)}{f_{\mathbf{x}}(\mathbf{x}; H_0)} > \lambda
 $$
 
-Definendo la soglia scalare $\gamma = -\lambda$ (con $\gamma > 0$ per garantire $\alpha < 1$) e il __Rapporto di Verosimiglianza__ (_Likelihood Ratio_):
+Definendo la soglia scalare $\gamma = \lambda$ (con $\gamma > 0$) e il __Rapporto di Verosimiglianza__ (_Likelihood Ratio_):
 
 $$
 L(\mathbf{x}) = \frac{f_{\mathbf{x}}(\mathbf{x}; H_1)}{f_{\mathbf{x}}(\mathbf{x}; H_0)}
@@ -1948,7 +1948,10 @@ $$
 
 Ciò dimostra analiticamente la stretta ottimalità del limite di Fano nel caso peggiore.
 
-## Dimostrazione Analitica del Teorema AEP tramite Disuguaglianza di Chebyshev
+## Dimostrazione Analitica del Teorema AEP tramite Disuguaglianza di Chebyshev sulla Varianza della Sorpresa
+
+> [!NOTE] Riferimento al Capitolo di Teoria
+> Trattazione teorica, intuizione ed esempi applicativi in [[8. Proprietà di Equipartizione Asintotica (AEP)]].
 
 ### Enunciazione del Teorema
 
@@ -2059,6 +2062,9 @@ $$
 La disuguaglianza di Chebyshev fornisce non solo la convergenza in probabilità, ma anche una delimitazione quantitativa della velocità di decadimento dell'errore asintotico nell'ordine di $O(1/n)$.
 
 ## Dimostrazione del Teorema di Cardinalità Minima per Insiemi ad Alta Probabilità
+
+> [!NOTE] Riferimento al Capitolo di Teoria
+> Trattazione teorica, intuizione ed esempi applicativi in [[8. Proprietà di Equipartizione Asintotica (AEP)]].
 
 ### Enunciazione del Teorema
 
@@ -3917,7 +3923,7 @@ $$
 x^n = w_1 w_2 \dots w_{c(n)}
 $$
 
-in modo tale che ogni frase $w_k$ sia la frase più corta non ancora incontrata nella sequenza passata. Ciascuna frase $w_k$ (eccetto al più l'ultima) è ottenuta concatenando una frase prefissa già censita $w_{j(k)}$ ($0 \le j(k) < k$, dove $w_0 = \emptyset$ è la frase vuota) con un singolo carattere innovativo $a_k \in \mathcal{X}$:
+in modo tale che ogni frase $w_k$ sia la frase più corta non ancora incontrata nella sequenza passata. Ciascuna frase $w_k$ (eccetto al più l'ultima) è ottenuta concatenando una frase prefissa già censita $w_{j(k)}$ ($0 \le j(k) < k$, dove $w_0 = \epsilon$ è la stringa vuota) con un singolo carattere innovativo $a_k \in \mathcal{X}$:
 
 $$
 w_k = w_{j(k)} \cdot a_k

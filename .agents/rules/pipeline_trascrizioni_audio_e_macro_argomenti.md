@@ -110,6 +110,7 @@ flowchart TD
      - Immagini con `center` e scala (`small`, `mid`, `big`), con affiancamento a coppie per le immagini `small` consecutive.
      - Generazione di schemi vettoriali SVG puliti o diagrammi Mermaid per i disegni e gli schemi concettuali richiesti dalle note.
      - **DIVIETO ASSOLUTO DI META-COMMENTI O CALLOUT SU CORREZIONI**: esporre unicamente e direttamente la teoria, le equazioni e i concetti corretti. Nessun callout né frase deve menzionare che si sta correggendo un refuso o un errore delle note o delle slide.
+   - **Post-stesura automatica**: applicazione dell'ottimizzazione cognitiva (`[[.agents/rules/ottimizzazione_cognitiva_subagente.md]]`) per massimizzare ritmo e memorabilità, seguita dal loop di revisione accademica indipendente (`[[.agents/rules/revisione_automatica_subagente.md]]`) fino a convergenza `CONFORME`.
 7. **Fase 7 - Resoconto Analitico Finale di Revisione (Esclusivamente in Chat / Log)**:
    - Presentazione finale all'utente che dettaglia (esclusivamente nel messaggio di chat o nei piani interni, MAI nel file del capitolo):
      - Tutte le correzioni apportate ai dubbi e alle sviste delle note dello studente.

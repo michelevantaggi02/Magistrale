@@ -1,46 +1,74 @@
 # A. Compressione Dati e Codifica di Sorgente
 
-La compressione dei dati rappresenta l'applicazione ingegneristica più diretta e pervasiva della teoria dell'informazione di Shannon. L'obiettivo fondamentale della codifica di sorgente senza perdita (__lossless data compression__) consiste nel convertire una sequenza di simboli generata da una sorgente aleatoria in una sequenza binaria di lunghezza minima attesa, garantendo al contempo che il ricevitore possa ricostruire la sequenza originaria in modo deterministico e privo di errori.
+La compressione dei dati rappresenta l'applicazione ingegneristica più diretta e pervasiva della teoria dell'informazione di Claude Shannon. L'obiettivo primario della codifica di sorgente senza perdita (__lossless data compression__) consiste nel convertire una sequenza di simboli emessa da una sorgente aleatoria in una sequenza binaria di lunghezza media attesa minima, garantendo al contempo che il decodificatore possa ricostruire la sequenza originale in modo deterministico, esatto e privo di ambiguità.
 
-La presente trattazione formalizza il modello matematico della codifica di sorgente, definisce le classi fondamentali di codici, dimostra i limiti invalicabili posti dalla disuguaglianza di Kraft-McMillan e dal Teorema di Shannon, ed espone in dettaglio gli algoritmi ottimi di Huffman, le formulazioni canoniche per gli standard industriali, la codifica di Shannon-Fano-Elias e i principi di ottimalità competitiva.
+In questo capitolo formalizziamo il modello matematico della codifica di sorgente, analizziamo la tassonomia delle classi di codici e dimostriamo i teoremi fondamentali di Kraft e McMillan. Esaminiamo poi il limite teorico di Shannon, l'algoritmo ottimo di David Huffman, le architetture canoniche impiegate negli standard industriali (Deflate, JPEG, PNG), la codifica di Shannon-Fano-Elias e i criteri di dominanza stocastica nell'ottimalità competitiva.
+
+## Architettura Concettuale della Codifica di Sorgente
+
+Il diagramma seguente sintetizza la mappa delle dipendenze concettuali e matematiche sviluppate nel capitolo:
+
+```mermaid
+flowchart TD
+    A["Sorgente Aleatoria X ~ p(x)"] --> B["Modello Matematico di Codifica C(x)"]
+    B --> C["Tassonomia delle Classi di Codici"]
+    C --> D["Non Singolari ⊃ Univocamente Decodificabili ⊃ Istantanei"]
+    D --> E["Limiti Fondamentali di Lunghezza"]
+    E --> F["Disuguaglianza di Kraft (Albero D-ario)"]
+    E --> G["Teorema di McMillan (Bound Combinatorio)"]
+    F & G --> H["Minimo Comune: ∑ D^(-l_i) ≤ 1"]
+    H --> I["Ottimizzazione Lagrangiana: l_i* = -log_D p(x_i)"]
+    I --> J["Limite di Shannon: H_D(X) ≤ L < H_D(X) + 1"]
+    J --> K["Algoritmi Costruttivi di Codifica"]
+    K --> L["Huffman Ottimo (Bottom-Up)"]
+    K --> M["Huffman Canonico (Standard Industriali)"]
+    K --> N["Shannon-Fano-Elias (Ponte verso Codifica Aritmetica)"]
+    J --> O["Analisi di Robustezza e Decisione"]
+    O --> P["Mismatched Code: Penale KL D(p || q)"]
+    O --> Q["Ottimalità Competitiva: Bound al 50%"]
+```
 
 ## Modello Matematico della Codifica di Sorgente
 
-Si consideri una sorgente discreta senza memoria (__Discrete Memoryless Source__, DMS) modellata come una variabile aleatoria discreta $X$ definita su un alfabeto finito $\mathcal{X} = \{x_1, x_2, \dots, x_m\}$ e governata da una funzione di massa di probabilità (PMF) $p(x) = \text{Pr}\{X = x\}$, con $p(x_i) > 0$ per ogni $i$ e $\sum_{i=1}^m p(x_i) = 1$.
+Consideriamo una sorgente discreta senza memoria (__Discrete Memoryless Source__, DMS) modellata come una variabile aleatoria discreta $X$ definita su un alfabeto finito $\mathcal{X} = \{x_1, x_2, \dots, x_m\}$.
 
-L'alfabeto di codice $\mathcal{D} = \{0, 1, \dots, D-1\}$ è un insieme discreto di cardinalità $D \ge 2$. Nel contesto delle telecomunicazioni e dell'informatica, si considera tipicamente l'alfabeto binario con $D = 2$ e $\mathcal{D} = \{0, 1\}$.
+La distribuzione statistica della sorgente è descritta dalla funzione di massa di probabilità (PMF) $p(x) = \text{Pr}\{X = x\}$, con $p(x_i) > 0$ per ciascun indice $i$ e condizione di normalizzazione $\sum_{i=1}^m p(x_i) = 1$.
 
-Si indica con $\mathcal{D}^*$ l'insieme di tutte le sequenze finite (stringhe o parole) costruite accostando simboli appartenenti all'alfabeto $\mathcal{D}$:
+L'alfabeto di codice $\mathcal{D} = \{0, 1, \dots, D-1\}$ è un insieme discreto di simboli di cardinalità finita $D \ge 2$. Nei sistemi informatici e nelle telecomunicazioni digitali si adotta quasi universalmente l'alfabeto binario con $D = 2$ e $\mathcal{D} = \{0, 1\}$.
+
+Indichiamo con $\mathcal{D}^*$ l'insieme di tutte le sequenze finite (parole o stringhe) ottenute concatenando un numero arbitrario di simboli dell'alfabeto $\mathcal{D}$:
 
 $$
 \mathcal{D}^* = \bigcup_{k=1}^\infty \mathcal{D}^k = \mathcal{D} \cup \mathcal{D}^2 \cup \mathcal{D}^3 \cup \dots
 $$
 
-### Definizione di Codice di Sorgente
+### Definizione Formale di Codice di Sorgente
 
-Un __codice di sorgente__ $C$ per una variabile aleatoria $X$ è una mappa deterministica dall'alfabeto di sorgente all'insieme delle stringhe finite di codice:
+Un __codice di sorgente__ $C$ per la variabile aleatoria $X$ è una mappa deterministica che associa a ciascun simbolo dell'alfabeto di sorgente una sequenza finita di simboli di codice:
 
 $$
 C: \mathcal{X} \to \mathcal{D}^*
 $$
 
-L'immagine $C(x)$ di un simbolo di sorgente $x \in \mathcal{X}$ prende il nome di __parola di codice__ (__codeword__) associata a $x$.
+L'immagine $C(x)$ prende il nome di __parola di codice__ (__codeword__) assegnata al simbolo di sorgente $x$.
 
-La __lunghezza__ della parola di codice $C(x)$, espressa in numero di simboli di codice (bit se $D = 2$), è denotata con $l(x)$ o con $l_i = l(x_i)$.
+La __lunghezza__ della parola di codice $C(x)$, misurata come numero di simboli di codice (bit se $D = 2$), è indicata con la notazione scalare $l(x)$ oppure $l_i = l(x_i)$ per $i = 1, \dots, m$.
 
 ### Lunghezza Media Attesa del Codice
 
-La prestazione di un codice di sorgente si quantifica attraverso il valore atteso della lunghezza delle parole di codice, calcolato rispetto alla distribuzione statistica della sorgente:
+La prestazione di un codice di sorgente si misura attraverso la sua __lunghezza media attesa__ $L(C)$, definita come il valore atteso della lunghezza delle parole rispetto alla distribuzione di probabilità della sorgente:
 
 $$
 L(C) = \mathbb{E}[l(X)] = \sum_{x \in \mathcal{X}} p(x) l(x) = \sum_{i=1}^m p(x_i) l_i
 $$
 
-L'obiettivo teorico e applicativo della compressione priva di perdite risiede nella progettazione di codici che minimizzino la lunghezza media attesa $L(C)$ preservando la decodificabilità esatta del messaggio.
+Il problema fondamentale della compressione senza perdita consiste nel minimizzare $L(C)$ selezionando opportunamente le lunghezze $l_i$, sotto il vincolo inderogabile che il ricevitore possa decodificare ogni sequenza senza equivoci.
 
 ## Tassonomia e Classi Fondamentali di Codici
 
-Non ogni funzione $C: \mathcal{X} \to \mathcal{D}^*$ risulta utilizzabile per la trasmissione o memorizzazione dei dati. A seconda dei vincoli di invertibilità imposti sulla decodifica di singoli simboli o di sequenze concatenate, i codici si articolano in quattro classi gerarchiche nidificate.
+Non tutte le funzioni di mappa $C: \mathcal{X} \to \mathcal{D}^*$ consentono una decodifica affidabile. Quando trasmettiamo simboli isolati o flussi continui privi di spaziatori, dobbiamo imporre condizioni di invertibilità via via più restrittive.
+
+I codici di sorgente si articolano in quattro classi gerarchiche nidificate.
 
 ### Codici Non Singolari
 
@@ -50,11 +78,13 @@ $$
 x_i \neq x_j \implies C(x_i) \neq C(x_j)
 $$
 
-Se un codice fosse singolare, esisterebbero almeno due simboli differenti con la medesima parola di codice (ad esempio $C(x_1) = C(x_2) = 0$), rendendo impossibile l'inversione della mappa anche in presenza di un singolo simbolo isolato.
+La non singolarità garantisce l'iniettività della mappa $C$ per singoli simboli isolati. Se un codice fosse singolare (ad esempio $C(x_1) = C(x_2) = 0$), il decodificatore non potrebbe risalire al simbolo emesso nemmeno in assenza di rumore.
+
+Tuttavia, la non singolarità non è sufficiente quando la sorgente emette una sequenza continua di simboli nel tempo.
 
 ### Estensione di un Codice
 
-Nella trasmissione di flussi continui, la sorgente emette una sequenza arbitraria di simboli $x_{i_1} x_{i_2} \dots x_{i_n} \in \mathcal{X}^*$. L'__estensione di codice__ $C^*$ è la funzione definita dalla concatenazione ordinata delle corrispondenti parole di codice:
+Nella trasmissione di flussi continui, la sorgente emette stringhe composte da più simboli $x_{i_1} x_{i_2} \dots x_{i_n} \in \mathcal{X}^*$. L'__estensione di codice__ $C^*$ è la funzione definita dalla concatenazione diretta delle parole di codice corrispondenti:
 
 $$
 C^*(x_{i_1} x_{i_2} \dots x_{i_n}) = C(x_{i_1}) C(x_{i_2}) \dots C(x_{i_n}) \in \mathcal{D}^*
@@ -68,21 +98,29 @@ $$
 \mathbf{x} \neq \mathbf{x}' \implies C^*(\mathbf{x}) \neq C^*(\mathbf{x}')
 $$
 
-In un codice univocamente decodificabile, qualsiasi stringa binaria concatenata può derivare da una e una sola sequenza originaria di simboli di sorgente. 
+Nei codici univocamente decodificabili, qualsiasi sequenza di bit concatenata può derivare da una sola sequenza originaria di simboli di sorgente.
 
-Un codice può essere non singolare senza essere univocamente decodificabile. Ad esempio, assegnando a una sorgente ternaria le parole $C(1) = 0$, $C(2) = 010$, $C(3) = 01$, $C(4) = 10$, il codice è chiaramente non singolare. Tuttavia, ricevendo la sequenza binaria $010$, il decodificatore non può determinare se la sorgente abbia emesso il singolo simbolo $2$, oppure la sequenza $14$ ($0$ seguito da $10$), oppure la sequenza $31$ ($01$ seguito da $0$). Il codice genera ambiguità irreversibile.
+Un codice può essere non singolare senza essere univocamente decodificabile. Consideriamo ad esempio l'alfabeto $\mathcal{X} = \{1, 2, 3, 4\}$ con assegnazione:
 
-### Codici Istantanei (o Codici Prefisso)
+$$
+C(1) = 0, \quad C(2) = 010, \quad C(3) = 01, \quad C(4) = 10
+$$
 
-Un codice $C$ si definisce __istantaneo__ o __codice a prefisso__ (__prefix code__) se nessuna parola di codice valida costituisce il prefisso di qualsiasi altra parola di codice dello stesso insieme:
+La mappa è iniettiva sui singoli simboli, dunque il codice è non singolare. Tuttavia, ricevendo la sequenza binaria $010$, il decodificatore si trova davanti a un'ambiguità insanabile: la sequenza può rappresentare il singolo simbolo $2$, oppure la coppia $14$ (cioè $0$ seguito da $10$), oppure la coppia $31$ (cioè $01$ seguito da $0$). Il codice non è univocamente decodificabile.
+
+### Codici Istantanei o Codici Prefisso
+
+Un codice $C$ si definisce __istantaneo__ o __codice a prefisso__ (__prefix-free code__) se nessuna parola di codice valida costituisce il prefisso di un'altra parola di codice dello stesso insieme:
 
 $$
 \forall i \neq j, \quad C(x_i) \text{ non è prefisso di } C(x_j)
 $$
 
-Nei codici istantanei, la fine di una parola di codice è auto-delimitata: non appena il ricevitore legge una sequenza di bit che forma una parola valida, tale parola può essere decodificata immediatamente, senza dover attendere i bit successivi e senza necessità di separatori espliciti.
+Nei codici istantanei la delimitazione di ciascuna parola è intrinseca: non appena il decodificatore riconosce una sequenza di bit corrispondente a una parola di codice valida, può emettere immediatamente il simbolo decodificato. Non occorre attendere i bit successivi (zero ritardo di decodifica) né inserire caratteri di spaziatura.
 
-L'inclusione gerarchica tra le classi segue la relazione:
+### Gerarchia Insiemistica delle Classi
+
+Le quattro classi formano una catena di inclusioni proprie:
 
 $$
 \text{Tutti i Codici} \supset \text{Codici Non Singolari} \supset \text{Codici Univocamente Decodificabili} \supset \text{Codici Istantanei}
@@ -90,42 +128,54 @@ $$
 
 ![[slide_12_code_classes_venn.png|center mid]]
 
-### L'Esempio Storico del Codice Morse
+Ogni codice istantaneo è univocamente decodificabile, ogni codice univocamente decodificabile è non singolare, ma i viceversa non valgono.
 
-Nel codice telegrafico di Samuel Morse, le lettere sono rappresentate da sequenze di punti e linee: ad esempio la lettera $E$ è codificata con un punto $(\cdot)$ e la lettera $A$ con un punto seguito da una linea $(\cdot -)$. Poiché la sequenza per $E$ è un prefisso esatto della sequenza per $A$, il codice Morse binario non sarebbe né istantaneo né univocamente decodificabile.
+### Il Caso Storico del Codice Morse
 
-Nella pratica telegrafica, il sistema opera correttamente unicamente perché introduce una __pausa di silenzio__ tra lettere consecutive e una pausa più lunga tra parole. Di conseguenza, l'alfabeto di codice effettivo non è binario ma ternario: $\mathcal{D} = \{\text{punto}, \text{linea}, \text{pausa}\}$, dove la pausa funge da delimitatore esplicito di fine simbolo.
+Nel codice telegrafico ideato da Samuel Morse, le lettere sono rappresentate da sequenze di punti e linee: la lettera $E$ corrisponde a un punto $(\cdot)$ e la lettera $A$ a un punto seguito da una linea $(\cdot -)$. Poiché la sequenza per $E$ è prefisso esatto di quella per $A$, il codice Morse binario non sarebbe né istantaneo né univocamente decodificabile.
 
-### Quadro Esemplificativo delle Classi di Codici
+Nella pratica telegrafica il sistema opera in modo affidabile perché introduce una __pausa di silenzio__ tra lettere consecutive e una pausa più lunga tra parole. L'alfabeto di codice reale non è binario ma ternario: $\mathcal{D} = \{\text{punto}, \text{linea}, \text{pausa}\}$, dove la pausa funge da delimitatore esplicito di fine parola.
 
-Si consideri una sorgente a quattro simboli $\mathcal{X} = \{1, 2, 3, 4\}$. La seguente tabella illustra il comportamento delle quattro classi:
+### Confronto Operativo tra le Classi di Codici
 
-| Simbolo | Codice Singolare | Non Singolare, Non Univocamente Decodificabile | Univocamente Decodificabile, Non Istantaneo | Codice Istantaneo (Prefisso) |
+Consideriamo una sorgente a quattro simboli $\mathcal{X} = \{1, 2, 3, 4\}$. La tabella seguente illustra il comportamento delle quattro classi:
+
+| Simbolo | Codice Singolare | Non Singolare, Non UD | Univocamente Decodificabile, Non Istantaneo | Codice Istantaneo (Prefisso) |
 | :---: | :---: | :---: | :---: | :---: |
 | $1$ | $0$ | $0$ | $10$ | $0$ |
 | $2$ | $0$ | $010$ | $00$ | $10$ |
 | $3$ | $0$ | $01$ | $11$ | $110$ |
 | $4$ | $0$ | $10$ | $110$ | $111$ |
 
-Nel terzo codice, la parola $C(3) = 11$ è prefisso esatto di $C(4) = 110$, impedendo la decodifica istantanea. Tuttavia, il codice è univocamente decodificabile: se i primi due bit sono $00$ o $10$, vengono decodificati immediatamente come $2$ o $1$; se iniziano per $11$, si analizzano i bit successivi: se segue un bit $1$, il primo simbolo è $3$ ($11$ seguito da $1\dots$); se segue una sequenza di zeri prima del successivo uno, un numero dispari di zeri identifica $4$ ($110$), mentre un numero pari identifica $3$ ($11$ seguito da $00$). La decodifica richiede quindi lookahead ma è priva di ambiguità. Nel quarto codice, nessuna parola è prefisso di un'altra: la lettura di uno $0$ identifica univocamente $1$, $10$ identifica $2$, $110$ identifica $3$ e $111$ identifica $4$.
+Analizziamo il terzo codice della tabella: la parola $C(3) = 11$ è prefisso di $C(4) = 110$, quindi il codice non è istantaneo. Tuttavia, esso è univocamente decodificabile: se la sequenza inizia per $00$ o $10$, decodifichiamo subito $2$ o $1$. Se invece inizia per $11$, dobbiamo guardare i bit successivi:
+- Se segue un $1$, il primo simbolo è certamente $3$ ($11$ seguito da un blocco che inizia per $1$).
+- Se segue una serie di zeri terminata da un uno, contiamo gli zeri: un numero dispari individua il simbolo $4$ ($110$ seguito da blocchi che iniziano per $00$ o $10$), mentre un numero pari individua il simbolo $3$ ($11$ seguito da sequenze di $00$).
+
+La decodifica è esatta ma richiede ritardo e ispezione dei bit futuri (__lookahead__). Nel quarto codice, invece, nessuna parola è prefisso di un'altra: la lettura di uno $0$ identifica univocamente $1$, la stringa $10$ identifica $2$, $110$ identifica $3$ e $111$ identifica $4$, istantaneamente e a zero memoria.
 
 ## La Disuguaglianza di Kraft per Codici Istantanei
 
-La proprietà prefissa impone un vincolo geometrico e algebrico stringente sulle lunghezze delle parole di codice ammissibili: non è possibile assegnare parole arbitrariamente corte a tutti i simboli della sorgente. Tale limite è sancito formalmente dalla __disuguaglianza di Kraft__ (1949).
+La richiesta che nessun codice sia prefisso di un altro impone un vincolo geometrico e algebrico stringente sulle lunghezze delle parole: non possiamo assegnare stringhe corte a troppi simboli contemporaneamente. Tale limite è sancito dalla celebre __disuguaglianza di Kraft__ (1949).
 
 ### Enunciato del Teorema di Kraft
 
-Sia dato un codice istantaneo definito su un alfabeto codice di dimensione $D$ avente parole di codice con lunghezze intere $l_1, l_2, \dots, l_m$. Allora le lunghezze soddisfano necessariamente la disuguaglianza:
+Sia dato un codice istantaneo definito su un alfabeto di codice di dimensione $D$, avente parole di codice con lunghezze intere $l_1, l_2, \dots, l_m$. Allora le lunghezze soddisfano necessariamente la disuguaglianza:
 
 $$
 \sum_{i=1}^m D^{-l_i} \le 1
 $$
 
-Viceversa, assegnato un qualsiasi insieme di interi positivi $l_1, l_2, \dots, l_m$ che soddisfi tale disuguaglianza, esiste sempre un codice istantaneo su alfabeto $D$-ario avente esattamente tali lunghezze di parola.
+Viceversa, assegnato un qualsiasi insieme di interi positivi $l_1, l_2, \dots, l_m$ che soddisfi tale disuguaglianza, esiste sempre un codice istantaneo su alfabeto $D$-ario con esattamente tali lunghezze di parola.
 
-### Dimostrazione Geometrica tramite Albero $D$-ario
+### Dimostrazione Geometrica tramite Albero D-ario
 
-Si consideri un albero $D$-ario completo di profondità $l_{\max} = \max_{1 \le i \le m} l_i$. La radice corrisponde alla stringa vuota, i rami che si diramano da ciascun nodo interno rappresentano i $D$ simboli dell'alfabeto di codice, e i nodi a profondità $l$ corrispondono biunivocamente alle sequenze di lunghezza $l$.
+Rappresentiamo le parole di codice come nodi all'interno di un albero $D$-ario completo di profondità massima:
+
+$$
+l_{\max} = \max_{1 \le i \le m} l_i
+$$
+
+La radice dell'albero rappresenta la stringa vuota, i $D$ rami uscenti da ogni nodo rappresentano i simboli dell'alfabeto $\mathcal{D}$, e ciascun nodo a profondità $l$ corrisponde biunivocamente a una sequenza di lunghezza $l$.
 
 Il numero totale di foglie (nodi terminali) al livello massimo $l_{\max}$ è pari a:
 
@@ -135,247 +185,331 @@ $$
 
 ![[slide_17_kraft_tree.png|center mid]]
 
-Si consideri una parola di codice $C(x_i)$ avente lunghezza $l_i \le l_{\max}$. Essa è rappresentata da un nodo posizionato a profondità $l_i$. 
+Consideriamo ora una parola di codice $C(x_i)$ avente lunghezza $l_i \le l_{\max}$. Essa corrisponde a un nodo collocato a profondità $l_i$.
 
-Affinché il codice sia istantaneo, nessun'altra parola di codice può trovarsi nel sottoalbero generato da tale nodo (altrimenti $C(x_i)$ sarebbe prefisso di tale parola) e tale nodo non può trovarsi nel sottoalbero di una parola di codice precedente (altrimenti una parola precedente sarebbe prefisso di $C(x_i)$).
+Affinché il codice sia istantaneo, nessun'altra parola può trovarsi nel sottoalbero generato da tale nodo (altrimenti $C(x_i)$ ne sarebbe prefisso) e tale nodo non può trovarsi nel sottoalbero di una parola già selezionata a profondità inferiore.
 
-Di conseguenza, la selezione del nodo a profondità $l_i$ __riserva ed elimina__ l'intero sottoalbero sottostante. Il numero di foglie al livello massimo $l_{\max}$ che discendono dal nodo a profondità $l_i$ è pari a:
+La selezione del nodo a profondità $l_i$ __elimina e riserva l'intero sottoalbero discendente__. Il numero di foglie al livello massimo $l_{\max}$ che discendono da tale nodo è pari a:
 
 $$
 D^{l_{\max} - l_i}
 $$
 
-Poiché per la condizione di prefisso nessun nodo di codice può essere discendente di un altro, gli insiemi di foglie riservate al livello $l_{\max}$ dai vari simboli di sorgente $i = 1, \dots, m$ sono mutuamente disgiunti.
+Poiché nessun nodo di codice può essere discendente di un altro, i sottoalberi riservati dai simboli $i = 1, \dots, m$ sono reciprocamente disgiunti.
 
-La somma del numero di foglie riservate da tutte le $m$ parole di codice non può superare il numero totale di foglie disponibili all'ultimo livello dell'albero:
+La somma delle foglie eliminate da tutte le $m$ parole di codice non può superare la capienza complessiva dell'ultimo livello dell'albero:
 
 $$
 \sum_{i=1}^m D^{l_{\max} - l_i} \le D^{l_{\max}}
 $$
 
-Raccogliendo a fattor comune $D^{l_{\max}}$ a primo membro:
+Raccogliendo il fattore $D^{l_{\max}}$ a primo membro:
 
 $$
 D^{l_{\max}} \sum_{i=1}^m D^{-l_i} \le D^{l_{\max}}
 $$
 
-Dividendo entrambi i membri per la costante positiva $D^{l_{\max}}$, si ottiene direttamente la disuguaglianza di Kraft:
+Dividendo entrambi i membri per la costante strettamente positiva $D^{l_{\max}}$, otteniamo direttamente la disuguaglianza di Kraft:
 
 $$
 \sum_{i=1}^m D^{-l_i} \le 1
 $$
 
-### Dimostrazione della Condizione Sufficiente (Costruzione Inversa)
+### Dimostrazione della Condizione Sufficiente
 
-Sia $\{l_1, l_2, \dots, l_m\}$ un insieme di interi positivi ordinati in modo non decrescente ($l_1 \le l_2 \le \dots \le l_m$) che soddisfa la disuguaglianza $\sum_{i=1}^m D^{-l_i} \le 1$.
+Assumiamo che un insieme di interi positivi $\{l_1, l_2, \dots, l_m\}$, ordinati in senso non decrescente ($l_1 \le l_2 \le \dots \le l_m$), soddisfi la condizione $\sum_{i=1}^m D^{-l_i} \le 1$.
 
-È possibile costruire l'albero di codice in modo iterativo greedy:
-1. Al passo $k$, si sceglie un nodo disponibile a profondità $l_k$ che non sia discendente di alcun nodo già assegnato.
-2. L'assegnazione elimina $D^{l_{\max} - l_k}$ foglie al livello $l_{\max}$.
-3. Il numero totale di foglie riservate dopo $k-1$ assegnazioni è $\sum_{j=1}^{k-1} D^{l_{\max} - l_j}$.
-4. Poiché $\sum_{i=1}^m D^{-l_i} \le 1$, per ogni $k \le m$ vale strettamente:
+Possiamo costruire il codice istantaneo mediante una procedura costruttiva greedy:
+1. Al passo $k$, scegliamo un nodo disponibile a profondità $l_k$ che non sia discendente di alcun nodo già assegnato.
+2. Tale assegnazione riserva $D^{l_{\max} - l_k}$ foglie al livello massimo $l_{\max}$.
+3. Il numero totale di foglie occupate dopo aver assegnato i primi $k-1$ simboli è $\sum_{j=1}^{k-1} D^{l_{\max} - l_j}$.
+4. Poiché per ipotesi $\sum_{i=1}^m D^{-l_i} \le 1$, per ciascun indice intermedio $k \le m$ vale:
 
-   $$
-   \sum_{j=1}^{k-1} D^{l_{\max} - l_j} < D^{l_{\max}}
-   $$
+$$
+\sum_{j=1}^{k-1} D^{l_{\max} - l_j} < \sum_{i=1}^m D^{l_{\max} - l_i} \le D^{l_{\max}}
+$$
 
-5. Rimane sempre almeno una foglia libera a profondità $l_{\max}$, il che garantisce l'esistenza di almeno un nodo genitore libero a profondità $l_k$.
+All'ultimo livello rimane sempre almeno una foglia libera. Risalendo l'albero fino a quota $l_k$, troviamo necessariamente un nodo genitore disponibile.
 
-L'algoritmo costruttivo termina con successo producendo un codice rigorosamente istantaneo.
+L'algoritmo costruttivo assegna tutti gli $m$ simboli senza conflitti di prefisso, dimostrando la sufficienza della condizione.
 
-### Disuguaglianza di Kraft Estesa per Alfabeti Numerabili
+### Estensione ad Alfabeti Numerabili Infiniti
 
-Se l'alfabeto di sorgente è numerabile ma infinito ($\{x_1, x_2, \dots\}$ con $m \to \infty$), la disuguaglianza di Kraft mantiene la propria validità sotto forma di serie convergente:
+Se l'alfabeto di sorgente è infinito numerabile ($\mathcal{X} = \{x_1, x_2, \dots\}$ con $m \to \infty$), la disuguaglianza di Kraft mantiene la propria validità nella forma di serie convergente:
 
 $$
 \sum_{i=1}^\infty D^{-l_i} \le 1
 $$
 
-Qualsiasi sequenza di lunghezze per cui la serie diverga o superi l'unità non può corrispondere ad alcun codice istantaneo valido.
+Se la serie diverge o supera l'unità, non può esistere alcun codice istantaneo con tali lunghezze.
 
 ## Il Teorema di McMillan per Codici Univocamente Decodificabili
 
-Un interrogativo fondamentale sorge spontaneo: accettando codici che non siano istantanei, ma unicamente univocamente decodificabili (ammettendo cioè ritardi di decodifica o complessità di parsing retrogrado), è possibile eludere la disuguaglianza di Kraft e ottenere parole di codice più corte?
+Sorge spontaneo un quesito ingegneristico fondamentale: se rinunciamo alla decodifica istantanea e ammettiamo un ritardo temporale (utilizzando codici univocamente decodificabili con lookahead), possiamo violare la disuguaglianza di Kraft e ottenere parole di codice più corte?
 
-Il __Teorema di McMillan__ (1956) risponde negativamente a tale quesito, dimostrando che la medesima disuguaglianza governa l'intera classe dei codici univocamente decodificabili.
+Il __Teorema di McMillan__ (1956) risponde negativamente: la medesima disuguaglianza governa l'intera classe dei codici univocamente decodificabili.
 
 ### Enunciato del Teorema di McMillan
 
-Sia $C$ un codice univocamente decodificabile con lunghezze delle parole di codice $l_1, l_2, \dots, l_m$ su un alfabeto di cardinalità $D$. Allora:
+Sia $C$ un codice univocamente decodificabile definito su un alfabeto di codice di dimensione $D$, con lunghezze delle parole $l_1, l_2, \dots, l_m$. Allora le lunghezze soddisfano necessariamente la disuguaglianza di Kraft:
 
 $$
 \sum_{i=1}^m D^{-l_i} \le 1
 $$
 
-La dimostrazione formale, basata sull'elevamento a potenza polinomiale $k$-esima della sommatoria e sulla delimitazione combinatoria del numero di sequenze distinte $N_{k, j} \le D^j$, è riportata integralmente nella sezione dedicata di [[zz. Argomenti extra#Dimostrazione Integrale del Teorema di McMillan per Codici Univocamente Decodificabili|approfondimento analitico di McMillan]].
+### Dimostrazione Algebrica tramite Bound Combinatorio
 
-### Conseguenza Strutturale
+Dimostriamo il teorema elevando la sommatoria a una potenza intera arbitraria $k \ge 1$:
 
-Poiché la classe dei codici istantanei è un sottoinsieme proprio dei codici univocamente decodificabili, e poiché entrambe le classi condividono esattamente il medesimo vincolo algebrico sulle lunghezze ammissibili:
+$$
+\left( \sum_{i=1}^m D^{-l_i} \right)^k = \sum_{i_1=1}^m \sum_{i_2=1}^m \dots \sum_{i_k=1}^m D^{-(l_{i_1} + l_{i_2} + \dots + l_{i_k})}
+$$
+
+La somma a secondo membro scorre su tutte le $m^k$ possibili sequenze di $k$ simboli di sorgente. 
+
+Raggruppiamo i termini in base alla lunghezza complessiva della sequenza di codice concatenata:
+
+$$
+j = \sum_{r=1}^k l_{i_r}
+$$
+
+Poiché ogni parola ha lunghezza minima pari a $1$ e massima pari a $l_{\max}$, la lunghezza complessiva $j$ assume valori nell'intervallo discreto:
+
+$$
+k \le j \le k l_{\max}
+$$
+
+Possiamo quindi riscrivere la potenza $k$-esima raccogliendo i termini con la medesima lunghezza $j$:
+
+$$
+\left( \sum_{i=1}^m D^{-l_i} \right)^k = \sum_{j=k}^{k l_{\max}} N_{k, j} D^{-j}
+$$
+
+dove $N_{k, j}$ indica il numero esatto di sequenze composte da $k$ simboli di sorgente la cui parola di codice estesa ha lunghezza pari a $j$.
+
+Qui interviene il punto logico cruciale: poiché il codice è univocamente decodificabile per ipotesi, sequenze distinte di $k$ simboli di sorgente devono necessariamente produrre stringhe binarie distinte.
+
+D'altra parte, il numero totale di sequenze distinte di lunghezza $j$ costruibili con un alfabeto di dimensione $D$ è pari a $D^j$. Ne consegue il bound combinatorio:
+
+$$
+N_{k, j} \le D^j
+$$
+
+Sostituendo questa disuguaglianza nella sommatoria, ciascun termine soddisfa:
+
+$$
+N_{k, j} D^{-j} \le D^j D^{-j} = 1
+$$
+
+La sommatoria contiene al più $k l_{\max} - k + 1 \le k l_{\max}$ termini, ciascuno limitato superiormente da $1$:
+
+$$
+\left( \sum_{i=1}^m D^{-l_i} \right)^k \le \sum_{j=k}^{k l_{\max}} 1 \le k l_{\max}
+$$
+
+Estraendo la radice $k$-esima da entrambi i membri:
+
+$$
+\sum_{i=1}^m D^{-l_i} \le (k l_{\max})^{1/k}
+$$
+
+Poiché la disuguaglianza vale per qualsiasi intero positivo $k$, facciamo tendere $k$ all'infinito:
+
+$$
+\lim_{k \to \infty} (k l_{\max})^{1/k} = 1
+$$
+
+Otteniamo così in modo inconfutabile:
+
+$$
+\sum_{i=1}^m D^{-l_i} \le 1
+$$
+
+Per la trattazione analitica estesa e ulteriori note storiche rimandiamo all'[[zz. Argomenti extra#Dimostrazione Integrale del Teorema di McMillan per Codici Univocamente Decodificabili|approfondimento analitico di McMillan]].
+
+### Conseguenza Fondamentale: Nessun Vantaggio dal Ritardo
+
+Poiché i codici istantanei sono un sottoinsieme proprio dei codici univocamente decodificabili, ed entrambe le classi condividono esattamente il medesimo vincolo algebrico $\sum D^{-l_i} \le 1$:
 
 $$
 \min_{C \in \text{Univocamente Decodificabili}} L(C) = \min_{C \in \text{Istantanei}} L(C)
 $$
 
-Non esiste alcun codice univocamente decodificabile che possa raggiungere una lunghezza media di parola strettamente inferiore a quella ottenibile dal miglior codice istantaneo. I progettisti di sistemi di compressione possono quindi limitare la ricerca esclusivamente ai codici istantanei senza alcuna perdita di efficienza teorica.
+Ammettere un ritardo di decodifica o una complessità di parsing retrogrado non consente di guadagnare nemmeno una frazione di bit nella lunghezza media attesa. Ai fini della compressione ottima possiamo quindi restringere l'attenzione esclusivamente ai codici prefissi.
 
 ## Lunghezza Media Ottima e Limite di Shannon
 
-Avendo stabilito che qualsiasi codice ammissibile deve soddisfare $\sum_{i=1}^m D^{-l_i} \le 1$, il problema della codifica di sorgente ottima si riduce a un problema di ottimizzazione matematica vincolata:
+Avendo dimostrato che ogni codice ammissibile deve rispettare il vincolo di Kraft, il problema della progettazione ottima si traduce nel problema di ottimizzazione matematica vincolata:
 
 $$
 \min_{l_1, \dots, l_m \in \mathbb{N}^+} \sum_{i=1}^m p_i l_i \quad \text{soggetto a} \quad \sum_{i=1}^m D^{-l_i} \le 1
 $$
 
-### Rilassamento Continuo e Derivazione Variazionale
+### Rilassamento Continuo e Ottimizzazione Lagrangiana
 
-Rilassando il vincolo di interezza e ammettendo che le lunghezze possano assumere valori reali continui $l_i \in \mathbb{R}^+$, si applica il metodo dei moltiplicatori di Lagrange. La funzione Lagrangiana è definita da:
+Rilassiamo momentaneamente il vincolo di interezza, ammettendo che le lunghezze possano assumere valori reali continui $l_i \in \mathbb{R}^+$.
+
+Poiché la funzione obiettivo è lineare e il vincolo definisce un insieme convesso, l'ottimo si troverà sul bordo del vincolo ($\sum D^{-l_i} = 1$). Formuliamo la funzione Lagrangiana:
 
 $$
 \mathcal{L}(l_1, \dots, l_m, \lambda) = \sum_{i=1}^m p_i l_i + \lambda \left( \sum_{i=1}^m D^{-l_i} - 1 \right)
 $$
 
-Scrivendo la base $D$ come esponenziale naturale $D^{-l_i} = e^{-l_i \ln D}$ e derivando rispetto alla lunghezza $l_i$:
+Esprimendo la base $D$ tramite esponenziale naturale $D^{-l_i} = e^{-l_i \ln D}$ e derivando parzialmente rispetto a ciascuna lunghezza $l_i$:
 
 $$
 \frac{\partial \mathcal{L}}{\partial l_i} = p_i - \lambda D^{-l_i} \ln D = 0
 $$
 
-Risolvendo per $D^{-l_i}$:
+Risolvendo rispetto al termine esponenziale:
 
 $$
 D^{-l_i} = \frac{p_i}{\lambda \ln D}
 $$
 
-Sommando su tutti gli indici $i$ per imporre il vincolo $\sum_{i=1}^m D^{-l_i} = 1$:
+Sommiamo su tutti gli indici $i = 1, \dots, m$ per imporre la saturazione del vincolo di Kraft:
 
 $$
 \sum_{i=1}^m D^{-l_i} = \frac{\sum_{i=1}^m p_i}{\lambda \ln D} = \frac{1}{\lambda \ln D} = 1 \implies \lambda \ln D = 1
 $$
 
-Sostituendo il valore del moltiplicatore ottimo $\lambda \ln D = 1$:
+Sostituendo il moltiplicatore ottimo $\lambda \ln D = 1$ nella relazione precedente:
 
 $$
 D^{-l_i^*} = p_i \iff l_i^* = -\log_D p_i = \log_D \frac{1}{p_i}
 $$
 
-Sostituendo le lunghezze ottime reali $l_i^*$ nell'espressione della lunghezza media attesa:
+Calcoliamo ora la lunghezza media attesa corrispondente alle lunghezze ottime continue:
 
 $$
 L^* = \sum_{i=1}^m p_i l_i^* = -\sum_{i=1}^m p_i \log_D p_i = H_D(X)
 $$
 
-L'entropia di sorgente $H_D(X)$ rappresenta il minimo teorico assoluto della lunghezza media attesa per qualsiasi codice a parole prefisse o univocamente decodificabili.
+L'entropia di sorgente $H_D(X)$ costituisce il limite inferiore invalicabile per la lunghezza media attesa di qualsiasi codice di sorgente decodificabile senza ambiguità.
 
-### Distribuzioni Diadiche ($D$-adiche)
+### Distribuzioni Diadiche e Compressione Ideale
 
-Una distribuzione di probabilità si definisce __diadica__ (o $D$-adica) se ogni probabilità è una potenza intera negativa della base di codice:
+Una distribuzione di probabilità si definisce __diadica__ (o $D$-adica) se ogni probabilità è una potenza intera negativa della base dell'alfabeto di codice:
 
 $$
 p_i = D^{-k_i}, \quad k_i \in \mathbb{N}^+
 $$
 
-Per distribuzioni $D$-adiche, le lunghezze ottime continue $l_i^* = -\log_D(D^{-k_i}) = k_i$ sono numeri interi esatti. In questo caso ideale:
-1. La disuguaglianza di Kraft è soddisfatta con eguaglianza stretta: $\sum D^{-k_i} = \sum p_i = 1$.
-2. La lunghezza media attesa coincide esattamente con l'entropia della sorgente:
+Per le distribuzioni $D$-adiche, le lunghezze ottime continue $l_i^* = -\log_D(D^{-k_i}) = k_i$ sono già numeri interi esatti. In questo scenario ideale:
+1. La disuguaglianza di Kraft è saturata all'uguaglianza: $\sum D^{-k_i} = \sum p_i = 1$.
+2. La lunghezza media attesa del codice prefisso coincide esattamente con l'entropia della sorgente:
 
-   $$
-   L = H_D(X)
-   $$
+$$
+L = H_D(X)
+$$
 
-### Il Teorema di Shannon per Sorgenti Non Diadiche
+Non vi è alcuno spreco di bit, e il codice è perfetto.
 
-Quando la sorgente non presenta una distribuzione $D$-adica, i valori $-\log_D p_i$ non sono interi. Per garantire la decodificabilità prefissa, Shannon propose di arrotondare ciascuna lunghezza reale all'intero superiore immediato tramite la funzione soffitto (__ceiling__):
+### Teorema del Limite di Shannon per Sorgenti Generiche
+
+Nelle sorgenti reali le probabilità non sono generalmente potenze negative di $D$, per cui i valori $-\log_D p_i$ non risultano interi.
+
+Per preservare la decodificabilità istantanea garantendo la validità del vincolo di Kraft, Claude Shannon propose di arrotondare ciascuna lunghezza continua all'intero superiore immediato tramite la funzione soffitto (__ceiling__):
 
 $$
 l_i = \left\lceil \log_D \frac{1}{p_i} \right\rceil
 $$
 
-Tale assegnazione definisce il cosiddetto __codice di Shannon__.
+Tale schema costruttivo prende il nome di __codice di Shannon__.
 
-Verifichiamo che tale codice soddisfi la disuguaglianza di Kraft:
+Verifichiamo che il codice di Shannon soddisfi la disuguaglianza di Kraft:
 
 $$
 l_i \ge \log_D \frac{1}{p_i} \implies D^{-l_i} \le D^{-\log_D(1/p_i)} = p_i
 $$
 
-Sommando su tutti gli stati:
+Sommando su tutti i simboli della sorgente:
 
 $$
 \sum_{i=1}^m D^{-l_i} \le \sum_{i=1}^m p_i = 1
 $$
 
-La disuguaglianza di Kraft è rigorosamente soddisfatta, assicurando l'esistenza di un codice prefisso avente tali lunghezze.
+La condizione di Kraft è rigorosamente soddisfatta, assicurando l'esistenza di un codice prefisso avente tali lunghezze.
 
-Dalla definizione della funzione soffitto, le lunghezze intere soddisfano la doppia disuguaglianza:
+Dalla definizione della funzione soffitto, ogni lunghezza intera rispetta la doppia disuguaglianza:
 
 $$
 \log_D \frac{1}{p_i} \le l_i < \log_D \frac{1}{p_i} + 1
 $$
 
-Moltiplicando ciascun termine per $p_i$ e sommando su tutti i simboli $i = 1, \dots, m$:
+Moltiplichiamo ciascun termine per la probabilità $p_i$ e sommiamo su tutti i simboli $i = 1, \dots, m$:
 
 $$
 \sum_{i=1}^m p_i \log_D \frac{1}{p_i} \le \sum_{i=1}^m p_i l_i < \sum_{i=1}^m p_i \log_D \frac{1}{p_i} + \sum_{i=1}^m p_i
 $$
 
-Poiché il primo termine è $H_D(X)$ e $\sum p_i = 1$, si ottiene il __Teorema del Limite di Shannon sulla Lunghezza Attesa__:
+Riconoscendo l'entropia $H_D(X)$ a primo membro e ricordando che $\sum p_i = 1$, otteniamo il celebre __Teorema del Limite di Shannon__:
 
 $$
 H_D(X) \le L < H_D(X) + 1
 $$
 
-Sia $L^*$ la lunghezza media del codice prefisso globalmente ottimo (il codice di Huffman). Poiché il codice di Huffman minimizza la lunghezza media tra tutti i codici prefissi e il codice di Shannon è un codice prefisso ammissibile, vale $L^* \le L_{\text{Shannon}}$, da cui:
+Sia $L^*$ la lunghezza media attesa del codice prefisso globalmente ottimo (il codice di Huffman). Poiché il codice di Huffman minimizza la lunghezza media su tutti i codici prefissi e il codice di Shannon è un codice prefisso ammissibile, vale la catena di disuguaglianze:
 
 $$
-H_D(X) \le L^* < H_D(X) + 1
+H_D(X) \le L^* \le L_{\text{Shannon}} < H_D(X) + 1
 $$
 
-Il costo dell'arrotondamento all'intero non supera mai $1$ bit per simbolo.
+L'inefficienza dovuta all'arrotondamento all'intero non supera mai $1$ simbolo di codice per simbolo di sorgente ($1$ bit per simbolo se $D = 2$).
 
 ### Abbattimento del Sovraccarico tramite Codifica a Blocchi
 
-Il termine additivo unitario $+1$ bit/simbolo può rappresentare un'inefficienza significativa se l'entropia della sorgente è ridotta (ad esempio se $H(X) = 0.2$ bit, spendere fino a $1.2$ bit implica una ridondanza percentuale considerevole).
+Un sovraccarico fino a $1$ bit/simbolo può risultare inaccettabile quando l'entropia della sorgente è molto bassa (ad esempio se $H(X) = 0.2$ bit/simbolo, pagare $1.2$ bit significa introdurre una ridondanza percentuale del $500\%$).
 
-Per abbattere tale sovraccarico, si applica la tecnica della __codifica a blocchi__ (sorgente estesa di ordine $n$), trattando gruppi di $n$ simboli consecutivi $X^n = (X_1, X_2, \dots, X_n)$ come super-simboli definiti sull'alfabeto prodotto $\mathcal{X}^n$.
-
-Applicando il Teorema di Shannon al blocco esteso:
+Per abbattere tale sovraccarico, raggruppiamo la sequenza in blocchi di $n$ simboli consecutivi:
 
 $$
-H_D(X_1, X_2, \dots, X_n) \le L_n^* < H_D(X_1, X_2, \dots, X_n) + 1
+X^n = (X_1, X_2, \dots, X_n) \in \mathcal{X}^n
 $$
 
-Dividendo l'intera disuguaglianza per la lunghezza del blocco $n$, la lunghezza media per singolo simbolo di sorgente $L_n^* / n$ soddisfa:
+Trattiamo il vettore $X^n$ come un super-simbolo appartenente all'alfabeto prodotto di cardinalità $m^n$. Applicando il Teorema di Shannon al codice ottimo per il blocco $X^n$:
+
+$$
+H_D(X^n) \le L_n^* < H_D(X^n) + 1
+$$
+
+Dividendo l'intera disuguaglianza per la dimensione del blocco $n$, la lunghezza media per singolo simbolo di sorgente $L_n^* / n$ soddisfa:
 
 $$
 \frac{H_D(X^n)}{n} \le \frac{L_n^*}{n} < \frac{H_D(X^n)}{n} + \frac{1}{n}
 $$
 
-Se la sorgente è stazionaria e priva di memoria (i.i.d.), $H_D(X^n) = n H_D(X)$, per cui:
+Se la sorgente è priva di memoria e identicamente distribuita (i.i.d.), l'entropia congiunta si fattorizza in $H_D(X^n) = n H_D(X)$, per cui:
 
 $$
 H_D(X) \le \frac{L_n^*}{n} < H_D(X) + \frac{1}{n}
 $$
 
-Facendo tendere la dimensione del blocco all'infinito:
+Facendo tendere la lunghezza del blocco all'infinito:
 
 $$
 \lim_{n \to \infty} \frac{L_n^*}{n} = H_D(X)
 $$
 
-Se la sorgente presenta memoria statistica ma è stazionaria, per il teorema dell'entropy rate vale $\lim_{n \to \infty} \frac{H(X^n)}{n} = H(\mathcal{X})$, per cui:
+Se la sorgente presenta memoria statistica ma è stazionaria, per il teorema dell'entropy rate vale $\lim_{n \to \infty} \frac{H(X^n)}{n} = H(\mathcal{X})$, ottenendo:
 
 $$
 \lim_{n \to \infty} \frac{L_n^*}{n} = H(\mathcal{X})
 $$
 
-La codifica a blocchi consente di avvicinarsi asintoticamente al limite teorico di Shannon con scarto arbitrariamente piccolo a spese di una complessità combinatoria crescente esponenzialmente con la dimensione del blocco ($m^n$).
+La codifica a blocchi consente di avvicinarsi all'entropia con precisione arbitraria, al prezzo di una complessità combinatoria crescente esponenzialmente con la dimensione del blocco ($m^n$).
 
-### Il Costo della Statistica Errata (Mismatched Code)
+### Il Costo della Statistica Errata: Mismatched Code e Divergenza KL
 
-Supponiamo che un progettista ottimizzi un codice di compressione prefisso assumendo un modello teorico descritto da una PMF $q(x)$, mentre la reale distribuzione statistica del sistema fisico è governata da $p(x)$. 
+Supponiamo che un progettista ottimizzi un codice prefisso assumendo un modello teorico errato $q(x)$, mentre la realtà fisica della sorgente è governata dalla distribuzione $p(x)$.
 
-Le lunghezze del codice assegnate ai simboli saranno $l(x) = \lceil \log_2(1/q(x)) \rceil$. Calcolando la lunghezza media attesa rispetto alla reale misura di probabilità $p(x)$:
+Le lunghezze assegnate ai simboli saranno determinate in base al modello presunto:
+
+$$
+l_q(x) = \left\lceil \log_2 \frac{1}{q(x)} \right\rceil
+$$
+
+Calcoliamo la lunghezza media attesa rispetto alla vera misura di probabilità $p(x)$:
 
 $$
 \mathbb{E}_p[l_q(X)] = \sum_{x \in \mathcal{X}} p(x) \left\lceil \log_2 \frac{1}{q(x)} \right\rceil
@@ -387,36 +521,42 @@ $$
 \sum_{x \in \mathcal{X}} p(x) \log_2 \frac{1}{q(x)} \le \mathbb{E}_p[l_q(X)] < \sum_{x \in \mathcal{X}} p(x) \log_2 \frac{1}{q(x)} + 1
 $$
 
-Scomponendo il logaritmo mediante l'artificio algebrico $\log_2 \frac{1}{q(x)} = \log_2 \frac{p(x)}{q(x)} + \log_2 \frac{1}{p(x)}$:
+Scomponiamo l'argomento logaritmico moltiplicando e dividendo per la vera probabilità $p(x)$:
+
+$$
+\log_2 \frac{1}{q(x)} = \log_2 \frac{p(x)}{q(x)} + \log_2 \frac{1}{p(x)}
+$$
+
+Moltiplicando per $p(x)$ e sommando su tutto l'alfabeto $\mathcal{X}$:
 
 $$
 \sum_{x \in \mathcal{X}} p(x) \log_2 \frac{1}{p(x)} + \sum_{x \in \mathcal{X}} p(x) \log_2 \frac{p(x)}{q(x)} = H(p) + D(p \parallel q)
 $$
 
-Ne discende il Teorema del Codice Mismatched:
+Ne discende il __Teorema del Codice Mismatched__:
 
 $$
 H(p) + D(p \parallel q) \le \mathbb{E}_p[l_q(X)] < H(p) + D(p \parallel q) + 1
 $$
 
-Il prezzo esatto, misurato in bit addizionali per simbolo, pagato per aver formulato un modello probabilistico errato coincide esattamente con la __divergenza di Kullback-Leibler__ $D(p \parallel q)$ tra la realtà fisica e il modello teorico.
+Il prezzo esatto, misurato in bit sprecati per simbolo, pagato per aver formulato un modello statistico errato coincide con la __divergenza di Kullback-Leibler__ $D(p \parallel q) \ge 0$. La divergenza KL quantifica l'inefficienza intrinseca di compressione derivante dall'adozione del modello $q$ al posto della realtà $p$.
 
-## L'Algoritmo di Huffman Ottimo (1952)
+## Algoritmo di Huffman Ottimo
 
-Mentre il codice di Shannon assegna lunghezze teoriche $l_i = \lceil \log(1/p_i) \rceil$ senza garantire la stretta ottimalità per alfabeti a lunghezza finita, David Huffman (1952) sviluppò un algoritmo costruttivo greedy deterministico che calcola la codifica prefissa a minima lunghezza media attesa assoluta.
+Mentre il codice di Shannon assegna lunghezze teoriche $l_i = \lceil \log(1/p_i) \rceil$ senza garantire l'ottimalità globale a blocchi finiti, David Huffman (1952) ideò una procedura deterministica greedy che costruisce il codice prefisso a minima lunghezza media attesa assoluta.
 
 ### Procedura Costruttiva Bottom-Up
 
-L'algoritmo di Huffman opera iterativamente fondendo i simboli a probabilità minore a partire dal basso (foglie) verso l'alto (radice):
+L'algoritmo di Huffman costruisce l'albero di codice partendo dalle foglie (i simboli meno probabili) e risalendo progressivamente verso la radice:
 
-1. __Ordinamento__: Si elencano i simboli della sorgente ordinandoli in modo decrescente di probabilità.
-2. __Riduzione (Merge)__: Si selezionano i due simboli con le probabilità più basse e si fondono in un unico super-simbolo aggregato avente probabilità pari alla somma delle due probabilità.
-3. __Ricorsione__: Si riordina il nuovo insieme di $m-1$ elementi e si ripete la fusione finché non rimane un unico elemento radice di probabilità $1$.
-4. __Espansione Retrograda (Backtracking)__: Partendo dalla radice, a ciascun ramo della biforcazione si assegna un bit binario ('0' al ramo superiore, '1' al ramo inferiore). Ripercorrendo l'albero fino ai simboli originari, si ricavano le parole di codice univoche.
+1. __Ordinamento__: Elenchiamo i simboli della sorgente in ordine decrescente di probabilità.
+2. __Fusione (Merge)__: Selezioniamo i due simboli con le probabilità più basse e li fondiamo in un unico super-nodo avente probabilità pari alla somma delle due probabilità.
+3. __Ricorsione__: Riordiniamo la lista ridotta di $m-1$ elementi e iteriamo la fusione fino a ottenere un unico nodo radice di probabilità $1.00$.
+4. __Backtracking e Assegnazione Bit__: Partendo dalla radice, assegniamo a ciascuna diramazione un bit binario ('0' al ramo superiore, '1' al ramo inferiore). Ripercorrendo l'albero dalla radice alle foglie, ricaviamo le parole di codice definitive.
 
-### Esempio Didattico Dettagliato
+### Sviluppo Analitico Completo su Esempio a Cinque Simboli
 
-Si consideri una sorgente a 5 simboli $\mathcal{X} = \{1, 2, 3, 4, 5\}$ avente le seguenti probabilità:
+Consideriamo una sorgente a 5 simboli $\mathcal{X} = \{1, 2, 3, 4, 5\}$ caratterizzata dal seguente vettore di probabilità:
 
 $$
 p(1) = 0.25, \quad p(2) = 0.25, \quad p(3) = 0.20, \quad p(4) = 0.15, \quad p(5) = 0.15
@@ -424,16 +564,16 @@ $$
 
 ![[slide_04_huffman_reduction_example.png|center mid]]
 
-L'albero di riduzione procede attraverso le seguenti iterazioni:
-1. I due simboli a minima probabilità sono $4$ e $5$ ($p(4)=p(5)=0.15$). Vengono fusi nel super-simbolo $\{4, 5\}$ di probabilità $0.15 + 0.15 = 0.30$.
-2. L'insieme ridotto contiene ora $\{1, 2, 3, \{4, 5\}\}$ con probabilità $\{0.25, 0.25, 0.20, 0.30\}$. Ordinando: $\{4, 5\}: 0.30$, $1: 0.25$, $2: 0.25$, $3: 0.20$.
-3. I due simboli a minima probabilità sono $2$ e $3$. Vengono fusi nel nodo $\{2, 3\}$ con probabilità $0.25 + 0.20 = 0.45$.
-4. L'insieme ridotto contiene $\{\{4, 5\}: 0.30, 1: 0.25, \{2, 3\}: 0.45\}$. Si fondono i due nodi minori $\{4, 5\}$ e $1$, generando il nodo $\{\{4, 5\}, 1\}$ con probabilità $0.30 + 0.25 = 0.55$.
-5. Rimangono due super-nodi: $\{\{4, 5\}, 1\}$ ($0.55$) e $\{2, 3\}$ ($0.45$). La loro unione genera la radice con probabilità $1.00$.
+Seguiamo l'evoluzione dell'albero di riduzione passo dopo passo:
+1. I due simboli a probabilità minima sono $4$ e $5$ ($p(4) = p(5) = 0.15$). Li fondiamo nel super-nodo $\{4, 5\}$ con probabilità $0.15 + 0.15 = 0.30$.
+2. L'insieme ridotto contiene ora $\{1: 0.25, 2: 0.25, 3: 0.20, \{4, 5\}: 0.30\}$. Ordinando in modo decrescente: $\{4, 5\}: 0.30$, $1: 0.25$, $2: 0.25$, $3: 0.20$.
+3. I due elementi minimi sono $2$ e $3$. Li fondiamo nel super-nodo $\{2, 3\}$ avente probabilità $0.25 + 0.20 = 0.45$.
+4. L'insieme ridotto contiene $\{\{2, 3\}: 0.45, \{4, 5\}: 0.30, 1: 0.25\}$. I due elementi minimi sono $\{4, 5\}$ e $1$. Li fondiamo generando il nodo $\{\{4, 5\}, 1\}$ con probabilità $0.30 + 0.25 = 0.55$.
+5. Rimangono due super-nodi: $\{\{4, 5\}, 1\}$ ($0.55$) e $\{2, 3\}$ ($0.45$). La loro fusione finale chiude la radice a probabilità $1.00$.
 
-Ripercorrendo l'albero per l'assegnazione dei bit:
+Ripercorrendo l'albero per l'assegnazione dei bit otteniamo la tabella seguente:
 
-| Simbolo $x$ | $p(x)$ | Parola di Codice $C(x)$ | Lunghezza $l(x)$ | Lunghezza Ottima Continua $l^*(x)$ |
+| Simbolo $x$ | Probabilità $p(x)$ | Parola di Codice $C(x)$ | Lunghezza $l(x)$ | Lunghezza Ideale $-\log_2 p(x)$ |
 | :---: | :---: | :---: | :---: | :---: |
 | $1$ | $0.25$ | $01$ | $2$ bit | $2.00$ bit |
 | $2$ | $0.25$ | $10$ | $2$ bit | $2.00$ bit |
@@ -441,166 +581,234 @@ Ripercorrendo l'albero per l'assegnazione dei bit:
 | $4$ | $0.15$ | $000$ | $3$ bit | $2.74$ bit |
 | $5$ | $0.15$ | $001$ | $3$ bit | $2.74$ bit |
 
-Calcolo della lunghezza media del codice di Huffman:
+Calcoliamo la lunghezza media attesa del codice di Huffman:
 
 $$
 L(C_{\text{Huff}}) = 0.25(2) + 0.25(2) + 0.20(2) + 0.15(3) + 0.15(3) = 0.50 + 0.50 + 0.40 + 0.45 + 0.45 = 2.30 \quad \text{bit}
 $$
 
-Calcolo dell'entropia di Shannon della sorgente:
+Calcoliamo l'entropia di Shannon della sorgente:
 
 $$
-H(X) = 2(0.25 \log_2 4) + 0.20 \log_2 5 + 2(0.15 \log_2(1/0.15)) \approx 2(0.50) + 0.20(2.3219) + 0.30(2.737) \approx 2.2855 \quad \text{bit}
+H(X) = 2(0.25 \log_2 4) + 0.20 \log_2 5 + 2\left(0.15 \log_2 \frac{1}{0.15}\right) \approx 2(0.50) + 0.20(2.3219) + 0.30(2.7370) \approx 2.2855 \quad \text{bit}
 $$
 
-La ridondanza del codice è minima:
+La ridondanza del codice di Huffman è trascurabile:
 
 $$
-L(C_{\text{Huff}}) - H(X) = 2.30 - 2.2855 = 0.0145 \quad \text{bit/simbolo}
+R = L(C_{\text{Huff}}) - H(X) = 2.30 - 2.2855 = 0.0145 \quad \text{bit/simbolo}
 $$
 
-L'efficienza del codice $\eta = H(X)/L = 2.2855 / 2.30 \approx 99.37\%$.
+L'efficienza di compressione raggiunge:
 
-### Codifica di Huffman $D$-aria e Simboli Fittizi di Padding
+$$
+\eta = \frac{H(X)}{L(C_{\text{Huff}})} = \frac{2.2855}{2.30} \approx 99.37\%
+$$
 
-Quando l'alfabeto di codice ha cardinalità $D > 2$ (ad esempio ternario con $D = 3$), a ciascun passo di fusione si devono aggregare $D$ simboli anziché $2$.
+### Codici di Huffman D-ari e Calcolo dei Simboli Dummy
 
-A ciascuna riduzione, il numero totale di elementi si riduce esattamente di $D - 1$:
+Quando l'alfabeto di codice ha cardinalità $D > 2$ (ad esempio ternario con $D = 3$), a ciascun passo di riduzione dobbiamo fondere $D$ nodi anziché $2$.
+
+A ogni fusione, il numero totale di elementi si riduce esattamente di $D - 1$:
 
 $$
 m_{\text{nuovo}} = m_{\text{vecchio}} - (D - 1)
 $$
 
-Affinché l'albero si chiuda perfettamente su un unico nodo radice dopo un numero intero $k$ di aggregazioni, la dimensione dell'alfabeto iniziale deve soddisfare la congruenza modulare:
+Affinché l'albero si chiuda perfettamente su un unico nodo radice dopo un numero intero $k$ di aggregazioni successive, la dimensione iniziale dell'alfabeto deve soddisfare la congruenza modulare:
 
 $$
 m = 1 + k(D - 1) \iff m \equiv 1 \pmod{D - 1}
 $$
 
-Se la dimensione originaria $m$ non soddisfa tale condizione, l'ultimo passo di riduzione si troverebbe con un numero parziale di rami compreso tra $2$ e $D-1$, generando una biforcazione incompleta alla radice che viola la compattezza dell'albero ottimo.
+Se la dimensione originaria $m$ non soddisfa tale condizione, all'ultimo passo di riduzione rimarrebbero meno di $D$ rami (tra $2$ e $D-1$), generando una biforcazione incompleta alla radice che viola la compattezza ottima dell'albero.
 
-La soluzione consiste nell'introdurre $m_{\text{dummy}}$ __simboli fittizi__ (__dummy symbols__) aventi probabilità rigorosamente nulla ($p_{\text{dummy}} = 0$), calcolati in modo tale che $(m + m_{\text{dummy}}) \equiv 1 \pmod{D - 1}$:
+Risolviamo il problema aggiungendo $m_{\text{dummy}}$ __simboli fittizi__ (__dummy symbols__) aventi probabilità rigorosamente nulla ($p_{\text{dummy}} = 0$). Il numero di simboli dummy necessari è dato dalla formula analitica:
 
 $$
 m_{\text{dummy}} = [-(m - 1)] \bmod (D - 1) = \begin{cases} 0 & \text{se } (m - 1) \bmod (D - 1) = 0 \\ (D - 1) - [(m - 1) \bmod (D - 1)] & \text{altrimenti} \end{cases}
 $$
 
-I simboli fittizi si collocano in fondo alla lista delle probabilità e vengono assorbiti nella primissima fusione, garantendo la perfetta simmetria dell'albero $D$-ario.
+I simboli fittizi vengono collocati in fondo alla lista ordinata e assorbiti immediatamente nella primissima fusione, garantendo la perfetta simmetria dell'albero $D$-ario.
 
-### Dimostrazione dell'Ottimalità di Huffman
+### Dimostrazione di Ottimalità tramite Forma Canonica
 
-L'ottimalità dell'algoritmo di Huffman poggia sulle tre proprietà canoniche dei codici prefissi ottimi (inversione di monotonia, parità di lunghezza dei due simboli meno probabili, gemellaggio come nodi fratelli). 
+L'ottimalità globale dell'algoritmo di Huffman poggia sulle tre proprietà necessarie di un codice prefisso ottimo in forma canonica:
+1. __Inversione dell'ordine__: se $p_j > p_k$, allora $l_j \le l_k$ (simboli più frequenti hanno parole non più lunghe).
+2. __Parità di lunghezza minima__: i due simboli a probabilità minima hanno la medesima lunghezza massima: $l_{m-1} = l_m$.
+3. __Gemellaggio__: i due simboli a probabilità minima differiscono solo per l'ultimo bit, ossia condividono lo stesso nodo genitore nell'albero di codice.
 
-La dimostrazione formale rigorosa per induzione sul numero di simboli $m$ è presentata integralmente nella sezione [[zz. Argomenti extra#Dimostrazione Formale del Teorema di Ottimalità dei Codici di Huffman tramite Riduzione Canonica|dimostrazione formale di ottimalità di Huffman]].
+Dimostriamo l'ottimalità per induzione matematica sul numero di simboli $m$.
 
-## Codici di Huffman Canonici e Applicazioni Industriali
+Per la base induttiva $m = 2$, l'unico codice prefisso ammissibile assegna un singolo bit a ciascun simbolo ($l_1 = l_2 = 1$). La lunghezza media è $L = 1$, che coincide con la costruzione di Huffman.
 
-In un'applicazione software o hardware reale (come la decompressione di un archivio ZIP o la visualizzazione di un'immagine JPEG), la trasmissione dell'albero di Huffman rappresenta un overhead rilevante: descrivere esplicitamente la topologia dell'albero e le parole di codice assegnate a un alfabeto di $256$ simboli byte richiederebbe centinaia di byte aggiuntivi.
+Assumiamo ora come ipotesi induttiva che l'algoritmo di Huffman sia ottimo per qualsiasi sorgente con $m - 1$ simboli.
 
-I __Codici Canonici di Huffman__ risolvono tale problema standardizzando in modo deterministico l'assegnazione dei bit a partire dalla sola conoscenza della lista ordinata delle lunghezze delle parole di codice $\{l_1, l_2, \dots, l_m\}$.
+Consideriamo una sorgente a $m$ simboli e sia $C_m$ il codice generato da Huffman. La fusione dei due simboli minimi $m-1$ e $m$ in un super-simbolo aggregato genera una sorgente ridotta a $m-1$ simboli con codice $C_{m-1}$.
 
-### Regole di Generazione dei Codici Canonici
+Esprimiamo la lunghezza media di $C_m$ in funzione di quella di $C_{m-1}$:
 
-1. I simboli vengono ordinati primariamente per lunghezza di parola crescente ($l_i \le l_{i+1}$) e secondariamente per ordine lessicografico o alfabetico per simboli aventi pari lunghezza.
-2. Alla prima parola di codice (la più corta) viene assegnata la sequenza formata da $l_1$ zeri:
+$$
+L(C_m) = \sum_{i=1}^{m-2} p_i l_i + p_{m-1} l_{m-1} + p_m l_m
+$$
 
-   $$
-   C(x_1) = 00\dots0
-   $$
+Poiché $l_{m-1} = l_m = l_{\text{super}} + 1$:
 
-3. Per passare alla parola successiva $C(x_{i+1})$ avente lunghezza $l_{i+1}$:
-   - Si incrementa di $1$ in aritmetica binaria intera il valore numerico della parola precedente $C(x_i)$:
+$$
+L(C_m) = \sum_{i=1}^{m-2} p_i l_i + (p_{m-1} + p_m)(l_{\text{super}} + 1) = L(C_{m-1}) + p_{m-1} + p_m
+$$
 
-     $$
-     V_{i+1}' = V_i + 1
-     $$
+Sia ora $C_m^*$ un codice prefisso ipoteticamente ottimo a $m$ simboli. Senza perdita di generalità, possiamo riorganizzare $C_m^*$ in modo che i due simboli minimi siano fratelli a profondità massima. Fondendoli, otteniamo un codice prefisso ammissibile $C_{m-1}^*$ per la sorgente ridotta, per cui vale analogamente:
 
-   - Se la lunghezza della nuova parola è maggiore ($l_{i+1} > l_i$), si esegue uno shift a sinistra di $l_{i+1} - l_i$ posizioni, accodando $l_{i+1} - l_i$ zeri:
+$$
+L(C_m^*) = L(C_{m-1}^*) + p_{m-1} + p_m
+$$
 
-     $$
-     V_{i+1} = (V_i + 1) \ll (l_{i+1} - l_i)
-     $$
+Sottraendo membro a membro le due relazioni:
 
-Grazie a questa convenzione:
-- Il trasmettitore deve comunicare al ricevitore unicamente il numero di bit assegnato a ciascun simbolo (pochi byte di metadati).
-- La decodifica può essere implementata in modo estremamente rapido tramite lookup table dirette indicizzate per lunghezza, eliminando i puntatori ad albero in memoria RAM.
-- Tale architettura costituisce il motore di compressione interno di formati onnipresenti quali __Deflate (PKZIP, Gzip)__, __PNG__, __JPEG__ e __Brotli__.
+$$
+L(C_m) - L(C_m^*) = L(C_{m-1}) - L(C_{m-1}^*)
+$$
 
-## Equivalenza tra Codifica di Sorgente e il Gioco delle "20 Domande"
+Per ipotesi induttiva, Huffman è globalmente ottimo per alfabeti di $m-1$ simboli, dunque $L(C_{m-1}) \le L(C_{m-1}^*)$, da cui $L(C_{m-1}) - L(C_{m-1}^*) \le 0$.
 
-Un'interpretazione epistemologica profonda della codifica di sorgente risiede nella sua stretta equivalenza con il celebre gioco d'azzardo logico delle "20 Domande", in cui un giocatore deve identificare un oggetto incognito $X \sim p(x)$ formulando domande binarie a risposta esclusiva (Sì / No).
+D'altra parte, per definizione di codice ottimo su $m$ simboli, deve valere $L(C_m^*) \le L(C_m)$, ossia $L(C_m) - L(C_m^*) \ge 0$.
 
-### Domande Libere e Strategia Ottima
+L'unica condizione compatibile è l'identità a somma zero:
 
-Sia $Q$ il numero di domande binarie necessarie a identificare univocamente l'oggetto incognito $X$. Ciascuna domanda corrisponde a partizionare lo spazio campionario $\mathcal{X}$ in due sottoinsiemi $A$ e $A^c$, chiedendo «$X \in A$ ?».
+$$
+L(C_m) - L(C_m^*) = 0 \iff L(C_m) = L(C_m^*)
+$$
 
-Se il giocatore è libero di costruire arbitrariamente i sottoinsiemi $A$ ad ogni iterazione:
-- Ciascuna strategia di gioco definisce un albero binario le cui foglie sono i singoli elementi di $\mathcal{X}$.
-- Il numero di domande formulate per raggiungere la foglia $x$ coincide esattamente con la profondità del nodo, ossia la lunghezza della parola di codice $l(x)$ in un codice prefisso binario.
-- Il numero medio atteso di domande necessarie coincide con la lunghezza media attesa del codice:
+Il codice di Huffman è rigorosamente ottimo per ogni $m$. Per i dettagli completi si veda la [[zz. Argomenti extra#Dimostrazione Formale del Teorema di Ottimalità dei Codici di Huffman tramite Riduzione Canonica|dimostrazione formale di ottimalità di Huffman]].
 
-  $$
-  \mathbb{E}[Q] = \sum_{x \in \mathcal{X}} p(x) l(x) = L
-  $$
+## Codici di Huffman Canonici e Standard Industriali
 
-- La strategia di interrogazione che minimizza il numero medio di domande corrisponde all'__algoritmo di Huffman__.
-- Il numero medio di domande è delimitato dall'entropia di Shannon:
+In un'applicazione ingegneristica reale (come la decompressione di un archivio ZIP o la riproduzione di un flusso JPEG), trasmettere l'albero di Huffman esplicito comporterebbe un overhead di metadati inaccettabile: salvare la topologia dei nodi e i puntatori per un alfabeto di $256$ byte richiederebbe svariate centinaia di byte aggiuntivi.
 
-  $$
-  H(X) \le \mathbb{E}[Q_{\text{ottimo}}] < H(X) + 1
-  $$
+I __Codici di Huffman Canonici__ risolvono il problema alla radice standardizzando l'assegnazione delle parole di codice a partire dalla sola conoscenza della lista ordinata delle lunghezze $\{l_1, l_2, \dots, l_m\}$.
 
-### Domande Vincolate all'Ordine e Codici a Fetta (Slice Codes / Codici Alfabetici)
+### Il Problema dell'Overhead dei Metadati
 
-Nel gioco standard delle 20 domande, l'algoritmo di Huffman formula quesiti su sottoinsiemi arbitrari $\mathcal{A} \subseteq \mathcal{X}$ («$X \in \mathcal{A}$ ?»). Consideriamo ora lo stesso gioco con un insieme ristretto di domande: assumiamo che i simboli di $\mathcal{X} = \{1, 2, \dots, m\}$ siano ordinati e che le uniche domande ammissibili siano della forma «$X > a$ ?» per una certa soglia $a$ (domande a fetta o __slice questions__).
+Un albero di Huffman non è univoco: a ogni fusione possiamo scambiare arbitrariamente l'assegnazione dello '0' e dell' '1' sui due rami, generando decine di codici equivalenti con la medesima lunghezza media $L$.
 
-Si distinguono due scenari fondamentali (Cover & Thomas Sez. 5.9; Lucidi 12–13):
+Nei sistemi industriali vogliamo eliminare questa ambiguità imponendo una convenzione deterministica universale nota sia al codificatore sia al decodificatore.
 
-1. __Ordinamento Naturale per Probabilità Decrescente ($p_1 \ge p_2 \ge \dots \ge p_m$)__:
-   - L'albero standard generato dalla procedura di fusione di Huffman potrebbe non corrispondere a fette ordinate (nell'esempio a 5 simboli, il codice originario per $4$ è $000$ e per $1$ è $01$, non ordinati lessicograficamente).
-   - Tuttavia, prelevando il vettore delle lunghezze ottime ordinate di Huffman $l_1 \le l_2 \le \dots \le l_m$ (ad esempio $\{2, 2, 2, 3, 3\}$) e assegnando i simboli ordinati al primo nodo disponibile da sinistra a destra sull'albero, si ottiene la nuova assegnazione:
+### Algoritmo Deterministico di Assegnazione Canonica
 
-     $$
-     1 \to 00, \quad 2 \to 01, \quad 3 \to 10, \quad 4 \to 110, \quad 5 \to 111
-     $$
+L'algoritmo di canonizzazione opera secondo due regole fondamentali:
 
-   - Ciascun bit divide l'insieme dei nodi in fette contigue $\{x : x \le a\}$ e $\{x : x > a\}$.
-   - Poiché le lunghezze $\{l_i\}$ sono identiche a quelle di Huffman, tale codice a fette è __simultaneamente alfabetico e globalmente ottimo__:
+1. __Ordinamento Primario e Secondario__: Ordiniamo i simboli primariamente per lunghezza di parola crescente ($l_i \le l_{i+1}$) e secondariamente per ordine lessicografico naturale per simboli aventi la medesima lunghezza.
+2. __Assegnazione del Primo Codice__: Alla prima parola (la più corta in assoluto) assegniamo una sequenza interamente formata da $l_1$ zeri:
 
-     $$
-     L_{\text{slice}} = L_{\text{Huff}} = 2.30 \quad \text{bit}
-     $$
+$$
+C(x_1) = 00\dots0_2 \quad (V_1 = 0)
+$$
 
-2. __Ordinamento Lessicografico Arbitrario Indipendente dalle Probabilità__:
-   - Se l'alfabeto possiede un ordine prefissato arbitrario (ad esempio alfabetico $A, B, C, \dots$) in cui la sequenza di probabilità non è monotona, l'assegnazione di Huffman può violare il vincolo d'ordine e non può essere riordinata senza alterare le lunghezze.
-   - Il codice ottimo con vincolo d'ordine (detto __codice alfabetico__ o albero di ricerca binaria ottimo) si ricava tramite algoritmi specializzati (quali l'algoritmo di Hu-Tucker o di Gilbert-Moore).
-   - In questo scenario generale, la lunghezza media del codice alfabetico ottimo soddisfa il limite:
+3. __Regola di Avanzamento Sequenziale__: Per calcolare la parola successiva $C(x_{i+1})$ avente lunghezza $l_{i+1}$:
+   - Se la lunghezza non cambia ($l_{i+1} = l_i$), incrementiamo di un'unità il valore intero binario:
 
-     $$
-     H(X) \le L_{\text{alfabetico}} < H(X) + 2
-     $$
+$$
+V_{i+1} = V_i + 1
+$$
 
-## Confronto tra Algoritmi di Codifica: Shannon, Fano e Huffman
+   - Se la lunghezza aumenta ($l_{i+1} > l_i$), incrementiamo prima di uno il valore precedente e poi eseguiamo uno shift a sinistra di $l_{i+1} - l_i$ posizioni binarie, accodando $l_{i+1} - l_i$ zeri:
 
-Prima dell'invenzione del metodo di Huffman, Claude Shannon (1948) e Robert Fano (1949) avevano proposto due approcci alternativi di codifica a prefisso.
+$$
+V_{i+1} = (V_i + 1) \ll (l_{i+1} - l_i) = (V_i + 1) \cdot 2^{l_{i+1} - l_i}
+$$
 
-### Codifica di Shannon
-Assegna direttamente a ciascun simbolo la lunghezza arrotondata per eccesso $l_i = \lceil \log_2(1/p_i) \rceil$. Garantisce la proprietà prefissa e la convergenza a blocchi, ma per alfabeti piccoli può risultare sensibilmente inefficiente rispetto a Huffman.
+Lo shift a sinistra garantisce che il nuovo valore occupi un sottoalbero distinto e che nessuna parola precedente possa diventarne prefisso.
 
-### Codifica di Fano (Top-Down Greedy)
-L'algoritmo di Fano adotta un approccio opposto a quello di Huffman, procedendo in modo top-down:
-1. Si elencano i simboli in ordine decrescente di probabilità.
-2. Si partiziona la sequenza in due gruppi contigui in modo tale che la somma delle probabilità dei due blocchi sia il più vicina possibile ($p(A) \approx p(B) \approx 0.5$).
-3. Si assegna il bit '0' al primo blocco e '1' al secondo blocco.
-4. Si itera ricorsivamente la bipartizione su ciascun sottogruppo finché ogni sottoinsieme contiene un unico simbolo.
+### Generazione Dettagliata del Codebook Canonico
 
-### Controesempio di Sub-Ottimalità di Fano
+Applichiamo la procedura al vettore delle lunghezze ricavato nell'esempio a 5 simboli: $l = [2, 2, 2, 3, 3]$.
 
-Sebbene intuitiva, la procedura greedy top-down di Fano non garantisce l'ottimalità globale, poiché una scelta localmente ottima alla radice può vincolare le partizioni successive a sottoalberi inefficienti.
+1. Simbolo $x_1$ ($l_1 = 2$): assegniamo $2$ zeri $\implies C(x_1) = 00_2$ ($V_1 = 0$).
+2. Simbolo $x_2$ ($l_2 = 2$): stessa lunghezza $\implies V_2 = V_1 + 1 = 1 \implies C(x_2) = 01_2$.
+3. Simbolo $x_3$ ($l_3 = 2$): stessa lunghezza $\implies V_3 = V_2 + 1 = 2 \implies C(x_3) = 10_2$.
+4. Simbolo $x_4$ ($l_4 = 3$): salto di lunghezza ($l_4 - l_3 = 1$ bit) $\implies V_4 = (V_3 + 1) \ll 1 = (2 + 1) \ll 1 = 6 \implies C(x_4) = 110_2$.
+5. Simbolo $x_5$ ($l_5 = 3$): stessa lunghezza $\implies V_5 = V_4 + 1 = 7 \implies C(x_5) = 111_2$.
 
-Si consideri la classica distribuzione a 5 simboli (Cover & Thomas, Esempio 5.5.1):
+Il diagramma vettoriale seguente illustra il flusso deterministico di generazione:
 
-| Simbolo $x$ | $p(x)$ | Codice Fano | Lunghezza Fano $l_F(x)$ | Codice Huffman | Lunghezza Huffman $l_H(x)$ |
+![[huffman_canonical_codebook.svg|center mid]]
+
+### Vantaggi Hardware e Implementazioni nei Formati Reali
+
+Questa formulazione offre vantaggi ingegneristici straordinari:
+- __Minimo overhead nel file compresso__: il trasmettitore non deve inviare l'albero né le parole di codice; è sufficiente trasmettere il conteggio di quante parole esistono per ciascuna lunghezza. Per un alfabeto di $256$ byte bastano poche decine di byte di header.
+- __Decodifica hardware istantanea__: il ricevitore memorizza unicamente due array compatti (`base_code[len]` e `symbol_offset[len]`). La decodifica si riduce a un semplice confronto numerico e a un accesso indicizzato in tabella (__lookup table__), senza alcun puntatore ad albero in memoria RAM.
+- __Standard industriali__: i codici canonici di Huffman costituiscono il nucleo di compressione di formati universali come __Deflate (ZIP, gzip, zlib)__, __PNG__, __JPEG__, __MP3__ e __Brotli__.
+
+## Equivalenza con il Gioco delle Venti Domande
+
+Un'elegante interpretazione della codifica di sorgente risiede nella sua equivalenza formale con il gioco logico delle "20 Domande", in cui un giocatore deve identificare un oggetto incognito $X \sim p(x)$ formulando domande binarie a risposta esclusiva (Sì / No).
+
+### Strategia Ottima con Domande Binarie Libere
+
+Sia $Q$ il numero di domande necessarie per individuare con certezza l'oggetto $X$. Ogni domanda corrisponde a partizionare lo spazio $\mathcal{X}$ in due insiemi complementari $A$ e $A^c$, chiedendo «$X \in A$ ?».
+
+Se il giocatore può scegliere arbitrariamente i sottoinsiemi $A$:
+- La sequenza delle risposte Sì ($1$) e No ($0$) corrisponde a un cammino su un albero binario prefisso le cui foglie sono i singoli oggetti di $\mathcal{X}$.
+- Il numero di domande formulate per identificare l'oggetto $x$ coincide con la profondità della foglia, ossia la lunghezza della parola $l(x)$.
+- Il numero medio atteso di domande coincide con la lunghezza media attesa del codice:
+
+$$
+\mathbb{E}[Q] = \sum_{x \in \mathcal{X}} p(x) l(x) = L(C)
+$$
+
+- La strategia di interrogazione che minimizza il numero medio di quesiti è esattamente l'__algoritmo di Huffman__.
+- Il numero medio di domande è delimitato inferiormente e superiormente dall'entropia di Shannon:
+
+$$
+H(X) \le \mathbb{E}[Q_{\text{ottimo}}] < H(X) + 1
+$$
+
+### Domande Vincolate all'Ordine e Codici a Fetta
+
+Consideriamo ora una variante in cui gli elementi di $\mathcal{X} = \{1, 2, \dots, m\}$ possiedono un ordinamento intrinseco e le uniche domande ammissibili sono della forma «$X > a$ ?» per una data soglia $a$ (__slice questions__ o domande a fetta).
+
+Si distinguono due scenari fondamentali:
+
+1. __Ordinamento per probabilità decrescente ($p_1 \ge p_2 \ge \dots \ge p_m$)__:
+   - Se preleviamo il vettore delle lunghezze ottime di Huffman ordinate $l_1 \le l_2 \le \dots \le l_m$ e assegniamo le parole ordinatamente da sinistra a destra sull'albero, ogni bit partiziona lo spazio in insiemi contigui del tipo $\{x : x \le a\}$ e $\{x : x > a\}$.
+   - Le lunghezze rimangono identiche a quelle del codice di Huffman originario:
+
+$$
+L_{\text{slice}} = L_{\text{Huff}} = 2.30 \quad \text{bit}
+$$
+
+   Il codice a fette è contemporaneamente alfabetico e globalmente ottimo.
+
+2. __Ordinamento lessicografico arbitrario indipendente dalle probabilità__:
+   - Se l'alfabeto possiede un ordine alfabetico fisso in cui le probabilità non sono monotone, l'albero di Huffman standard non può essere riordinato senza alterare le lunghezze.
+   - Il codice ottimo che rispetta il vincolo d'ordine (albero binario di ricerca ottimo) viene ricavato mediante algoritmi dedicati, quali l'__algoritmo di Hu-Tucker__ o di __Gilbert-Moore__.
+   - In questo scenario generale, la lunghezza media soddisfa la delimitazione:
+
+$$
+H(X) \le L_{\text{alfabetico}} < H(X) + 2
+$$
+
+Il vincolo d'ordine costa al più $1$ bit aggiuntivo rispetto a Huffman.
+
+## Confronto Prestazionale: Shannon, Fano e Huffman
+
+Prima dell'algoritmo di Huffman, Claude Shannon (1948) e Robert Fano (1949) avevano proposto due approcci indipendenti di codifica a prefisso.
+
+### Filosofie Algoritmiche a Confronto
+
+- __Codice di Shannon (Analitico Diretto)__: calcola le lunghezze $l_i = \lceil \log_2(1/p_i) \rceil$ a partire dalle probabilità cumulative. Garantisce la decodificabilità prefissa e la convergenza asintotica a blocchi, ma su singoli simboli è spesso sub-ottimo.
+- __Codice di Fano (Top-Down Greedy)__: ordina i simboli per probabilità decrescente e li partiziona ricorsivamente in due sottoinsiemi contigui di massa probabilistica il più vicina possibile a $0.5$. Assegna il bit '0' al primo gruppo e '1' al secondo, procedendo dall'alto verso il basso.
+- __Codice di Huffman (Bottom-Up Esatto)__: fonde i nodi minimi dal basso verso l'alto, garantendo l'ottimalità globale matematica.
+
+### Il Controesempio di Cover e Thomas: Sub-Ottimalità di Fano
+
+L'approccio greedy top-down di Fano è intuitivo ma soffre di miopia algoritmica: una decisione localmente ottima alla radice può vincolare le partizioni successive a configurazioni complessivamente inefficienti.
+
+Thomas Cover e Joy Thomas illustrano questa discrepanza tramite una celebre distribuzione a 5 simboli (Esempio 5.5.1):
+
+| Simbolo $x$ | Probabilità $p(x)$ | Codice di Fano | Lunghezza $l_F(x)$ | Codice di Huffman | Lunghezza $l_H(x)$ |
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | $1$ | $0.35$ | $00$ | $2$ bit | $0$ | $1$ bit |
 | $2$ | $0.17$ | $01$ | $2$ bit | $100$ | $3$ bit |
@@ -608,86 +816,85 @@ Si consideri la classica distribuzione a 5 simboli (Cover & Thomas, Esempio 5.5.
 | $4$ | $0.16$ | $110$ | $3$ bit | $110$ | $3$ bit |
 | $5$ | $0.15$ | $111$ | $3$ bit | $111$ | $3$ bit |
 
-Analisi delle due costruzioni:
-1. __Costruzione di Fano__:
-   - Prima bipartizione: l'algoritmo minimizza la differenza partizionando tra $\{1, 2\}$ ($\sum = 0.52$) e $\{3, 4, 5\}$ ($\sum = 0.48$), con scarto $|0.52 - 0.48| = 0.04$ (rispetto a $|0.35 - 0.65| = 0.30$).
-   - Questo assegna prefisso '0' a $\{1, 2\}$ e prefisso '1' a $\{3, 4, 5\}$.
-   - Le successive suddivisioni generano le lunghezze $\{2, 2, 2, 3, 3\}$.
-   - Lunghezza media attesa di Fano:
+Esaminiamo le scelte compiute dai due algoritmi:
 
-     $$
-     L_{\text{Fano}} = 0.35(2) + 0.17(2) + 0.17(2) + 0.16(3) + 0.15(3) = 0.70 + 0.34 + 0.34 + 0.48 + 0.45 = 2.31 \quad \text{bit}
-     $$
+1. __Costruzione di Fano__:
+   - Alla prima bipartizione, l'algoritmo confronta la separazione $\{1\}$ ($0.35$) vs $\{2, 3, 4, 5\}$ ($0.65$), scarto $|0.35 - 0.65| = 0.30$, con la separazione $\{1, 2\}$ ($0.52$) vs $\{3, 4, 5\}$ ($0.48$), scarto $|0.52 - 0.48| = 0.04$.
+   - Fano sceglie avidamente la seconda partizione, assegnando il prefisso '0' a $\{1, 2\}$ e '1' a $\{3, 4, 5\}$.
+   - Le suddivisioni successive producono le lunghezze $\{2, 2, 2, 3, 3\}$.
+   - Calcolo della lunghezza media di Fano:
+
+$$
+L_{\text{Fano}} = 0.35(2) + 0.17(2) + 0.17(2) + 0.16(3) + 0.15(3) = 0.70 + 0.34 + 0.34 + 0.48 + 0.45 = 2.31 \quad \text{bit}
+$$
 
 2. __Costruzione di Huffman__:
-   - Fusione bottom-up dei simboli minimi $4$ e $5$: $0.16 + 0.15 = 0.31$.
-   - Fusione dei due simboli successivi $2$ e $3$: $0.17 + 0.17 = 0.34$.
-   - Fusione dei due super-nodi: $0.34 + 0.31 = 0.65$.
-   - Fusione finale alla radice: il simbolo $1$ ($0.35$) si unisce con il super-nodo ($0.65$).
-   - Al simbolo più probabile $1$ viene assegnata una parola di un solo bit ('0'), mentre agli altri quattro simboli è assegnata una parola di $3$ bit.
-   - Lunghezza media attesa di Huffman:
+   - Fonde dal basso i simboli $4$ e $5$: $0.16 + 0.15 = 0.31$.
+   - Fonde i simboli $2$ e $3$: $0.17 + 0.17 = 0.34$.
+   - Fonde i due super-nodi: $0.34 + 0.31 = 0.65$.
+   - Fusione finale alla radice: il simbolo più frequente $1$ ($0.35$) si unisce con il super-nodo ($0.65$).
+   - Al simbolo $1$ viene assegnata una parola di un solo bit ('0'), mentre agli altri quattro simboli è assegnata una parola di $3$ bit.
+   - Calcolo della lunghezza media di Huffman:
 
-     $$
-     L_{\text{Huff}} = 0.35(1) + 0.17(3) + 0.17(3) + 0.16(3) + 0.15(3) = 0.35 + 3(0.65) = 2.30 \quad \text{bit}
-     $$
+$$
+L_{\text{Huff}} = 0.35(1) + (0.17 + 0.17 + 0.16 + 0.15) \cdot 3 = 0.35 + 3(0.65) = 2.30 \quad \text{bit}
+$$
 
-Il confronto numerico dimostra in modo inconfutabile la stretta sub-ottimalità dell'approccio top-down di Fano:
+Il confronto numerico dimostra in modo inconfutabile la stretta sub-ottimalità di Fano:
 
 $$
 L_{\text{Huff}} = 2.30 \quad \text{bit} < L_{\text{Fano}} = 2.31 \quad \text{bit}
 $$
 
-## Codifica di Shannon-Fano-Elias
+## Codifica di Shannon-Fano-Elias e Fondamenti della Codifica Aritmetica
 
-La codifica di __Shannon-Fano-Elias__ costituisce uno schema analitico fondamentale, non solo per il suo valore teorico, ma perché stabilisce il ponte concettuale diretto tra la codifica a simboli discreti e la moderna __codifica aritmetica__.
+La codifica di __Shannon-Fano-Elias__ riveste un'importanza concettuale primaria perché stabilisce il legame matematico diretto tra la codifica a simboli discreti e la moderna __codifica aritmetica__.
 
-### La Funzione di Ripartizione Cumulativa Modificata
+### Funzione di Ripartizione Cumulativa Modificata
 
-Sia $\mathcal{X} = \{1, 2, \dots, m\}$ un alfabeto discreto ordinato con probabilità $p(x) > 0$. Si definisce la funzione di distribuzione cumulativa (CDF):
+Sia $\mathcal{X} = \{1, 2, \dots, m\}$ un alfabeto discreto ordinato con probabilità $p(x) > 0$. Definiamo la funzione di distribuzione cumulativa (CDF):
 
 $$
 F(x) = \sum_{a=1}^x p(a)
 $$
 
-con la convenzione $F(0) = 0$.
+con la convenzione iniziale $F(0) = 0$.
 
-Poiché la funzione $F(x)$ definisce gradini discreti di ampiezza $p(x)$, Peter Elias propose di utilizzare il __punto medio__ di ciascun gradino, introducendo la funzione cumulativa modificata:
+La funzione $F(x)$ definisce gradini discreti di ampiezza $p(x)$ nell'intervallo $[0, 1]$. Peter Elias propose di utilizzare il __punto medio__ di ciascun gradino, introducendo la funzione cumulativa modificata:
 
 $$
 \bar{F}(x) = \sum_{a=1}^{x-1} p(a) + \frac{1}{2} p(x) = F(x-1) + \frac{1}{2} p(x)
 $$
 
-Poiché per ipotesi $p(x) > 0$, i punti medi di simboli distinti sono rigorosamente separati:
+Poiché $p(x) > 0$, i punti medi di simboli distinti sono rigorosamente separati:
 
 $$
 x \neq y \implies \bar{F}(x) \neq \bar{F}(y)
 $$
 
-Di conseguenza, il valore reale $\bar{F}(x) \in [0, 1)$ identifica univocamente il simbolo $x$.
+Il numero reale $\bar{F}(x) \in [0, 1)$ identifica univocamente il simbolo $x$.
 
 ![[slide_28_shannon_fano_elias_interval.png|center mid]]
 
-### Troncamento Binario ed Estrazione del Codice
+### Troncamento Binario ed Estrazione della Codeword
 
-Essendo un numero reale continuo nell'intervallo $[0, 1)$, $\bar{F}(x)$ richiederebbe una precisione infinita (un numero infinito di bit). 
-
-Per ottenere un codice a lunghezza finita, si tronca lo sviluppo binario di $\bar{F}(x)$ a un numero finito $l(x)$ di cifre binarie. Lo sviluppo in base 2 è dato da:
+Essendo un numero reale continuo in $[0, 1)$, $\bar{F}(x)$ richiederebbe in linea di principio un numero infinito di bit. Per ricavare una parola finita, consideriamo il suo sviluppo binario:
 
 $$
 \bar{F}(x) = 0.b_1 b_2 b_3 \dots = \sum_{i=1}^\infty b_i 2^{-i}
 $$
 
-Si definisce il troncamento a $l(x)$ bit:
+Definiamo il troncamento di $\bar{F}(x)$ a $l(x)$ bit:
 
 $$
 \lfloor \bar{F}(x) \rfloor_{l(x)} = 0.b_1 b_2 \dots b_{l(x)} = \sum_{i=1}^{l(x)} b_i 2^{-i}
 $$
 
-La sequenza binaria finita $b_1 b_2 \dots b_{l(x)}$ costituisce la parola di codice $C(x)$.
+La sequenza finita di bit $b_1 b_2 \dots b_{l(x)}$ costituisce la parola di codice $C(x)$.
 
-### Teorema sulla Lunghezza e Proprietà Prefissa
+### Dimostrazione Rigorosa della Proprietà Prefissa
 
-Scegliendo la lunghezza di troncamento:
+Scegliendo come lunghezza di troncamento:
 
 $$
 l(x) = \left\lceil \log_2 \frac{1}{p(x)} \right\rceil + 1
@@ -695,113 +902,171 @@ $$
 
 il codice di Shannon-Fano-Elias risulta rigorosamente __istantaneo (prefisso)__.
 
-#### Dimostrazione
-
-Dalla scelta di $l(x) = \lceil \log_2(1/p(x)) \rceil + 1 \ge \log_2(1/p(x)) + 1$, si ottiene:
+Dimostriamo questa proprietà fondamentale. Dalla scelta di $l(x)$:
 
 $$
-2^{-l(x)} \le 2^{-(\log_2(1/p(x)) + 1)} = \frac{p(x)}{2}
+l(x) \ge \log_2 \frac{1}{p(x)} + 1 \implies 2^{-l(x)} \le 2^{-(\log_2(1/p(x)) + 1)} = \frac{p(x)}{2}
 $$
 
-D'altra parte, per la natura del troncamento binario, l'errore commesso trascurando i bit oltre l'indice $l(x)$ soddisfa strettamente:
+D'altra parte, per le proprietà elementari dello sviluppo binario, l'errore commesso trascurando i bit successivi a $l(x)$ è strettamente delimitato:
 
 $$
 \bar{F}(x) - \lfloor \bar{F}(x) \rfloor_{l(x)} = \sum_{i=l(x)+1}^\infty b_i 2^{-i} < 2^{-l(x)} \le \frac{p(x)}{2}
 $$
 
-Ne deriva che l'intervallo diadico associato al troncamento:
+Associamo al troncamento l'intervallo diadico semiaperto:
 
 $$
 I(x) = \left[ \lfloor \bar{F}(x) \rfloor_{l(x)}, \, \lfloor \bar{F}(x) \rfloor_{l(x)} + 2^{-l(x)} \right)
 $$
 
-ha ampiezza al più $p(x)/2$. Poiché $\lfloor \bar{F}(x) \rfloor_{l(x)} \le \bar{F}(x)$ e $\lfloor \bar{F}(x) \rfloor_{l(x)} + 2^{-l(x)} > \bar{F}(x)$, e dato che $\bar{F}(x) = F(x-1) + \frac{1}{2}p(x)$ dista esattamente $p(x)/2$ da entrambi gli estremi del gradino $[F(x-1), F(x))$, l'intervallo diadico $I(x)$ cade interamente all'interno del gradino:
+L'intervallo $I(x)$ ha ampiezza $2^{-l(x)} \le p(x)/2$ e contiene il punto medio $\bar{F}(x)$. Poiché per definizione $\bar{F}(x) = F(x-1) + \frac{1}{2}p(x)$ dista esattamente $p(x)/2$ da entrambi gli estremi del gradino $[F(x-1), F(x))$, l'intero intervallo diadico $I(x)$ cade strettamente all'interno del gradino:
 
 $$
 I(x) \subset [F(x-1), F(x))
 $$
 
-Poiché i gradini $[F(x-1), F(x))$ corrispondenti a simboli differenti sono disgiunti per costruzione, anche gli intervalli diadici $I(x)$ e $I(y)$ per $x \neq y$ sono reciprocamente disgiunti. 
+Poiché i gradini associati a simboli differenti sono mutuamente disgiunti, anche gli intervalli diadici $I(x)$ e $I(y)$ per $x \neq y$ sono disgiunti.
 
-Nessuna parola di codice può pertanto essere prefisso di un'altra (il che corrisponderebbe al contenimento di un intervallo diadico dentro un altro). Il codice è quindi rigorosamente prefisso.
+Nessun intervallo diadico può contenerne un altro. In termini di stringhe binarie, ciò implica che nessuna sequenza troncata può essere prefisso di un'altra. Il codice è rigorosamente prefisso.
 
-### Calcolo della Lunghezza Media Attesa
+### Delimitazione della Lunghezza Media Attesa
 
-Calcolando il valore atteso della lunghezza del codice:
+Calcoliamo il valore atteso della lunghezza del codice di Shannon-Fano-Elias:
 
 $$
-L = \sum_{x \in \mathcal{X}} p(x) l(x) = \sum_{x \in \mathcal{X}} p(x) \left( \left\lceil \log_2 \frac{1}{p(x)} \right\rceil + 1 \right)
+L_{\text{SFE}} = \sum_{x \in \mathcal{X}} p(x) l(x) = \sum_{x \in \mathcal{X}} p(x) \left( \left\lceil \log_2 \frac{1}{p(x)} \right\rceil + 1 \right)
 $$
 
-Poiché $\lceil z \rceil < z + 1$:
+Applicando la disuguaglianza $\lceil z \rceil < z + 1$:
 
 $$
 l(x) < \log_2 \frac{1}{p(x)} + 2
 $$
 
-Moltiplicando per $p(x)$ e sommando:
+Moltiplicando per $p(x)$ e sommando su tutti i simboli:
 
 $$
-L < \sum_{x \in \mathcal{X}} p(x) \left( \log_2 \frac{1}{p(x)} + 2 \right) = H(X) + 2 \quad \text{bit}
+L_{\text{SFE}} < \sum_{x \in \mathcal{X}} p(x) \log_2 \frac{1}{p(x)} + 2 \sum_{x \in \mathcal{X}} p(x) = H(X) + 2 \quad \text{bit}
 $$
 
-Il codice di Shannon-Fano-Elias richiede al più $2$ bit aggiuntivi rispetto all'entropia teorica della sorgente:
+D'altra parte, poiché $l(x) \ge \log_2(1/p(x)) + 1$:
 
 $$
 H(X) + 1 \le L_{\text{SFE}} < H(X) + 2
 $$
 
-Sebbene richieda circa 1 bit in più rispetto a Huffman, questo schema consente la decomposizione aritmetica ricorsiva per flussi sequenziali continui, rappresentando il fondamento matematico diretto della __Codifica Aritmetica__.
+Il codice di Shannon-Fano-Elias richiede tra $1$ e $2$ bit in più rispetto all'entropia teorica della sorgente.
+
+### Connessione Architetturale con la Codifica Aritmetica
+
+La codifica di Shannon-Fano-Elias paga un prezzo di circa $1$ bit di sovraccarico in più rispetto a Huffman sul singolo simbolo. Tuttavia, essa presenta un vantaggio concettuale decisivo: non richiede la costruzione di alberi combinatori.
+
+Quando la applichiamo a una sequenza di $n$ simboli consecutivi, l'intervallo $[0, 1)$ viene suddiviso ricorsivamente moltiplicando le probabilità condizionate dei simboli in arrivo. Al termine della sequenza, è sufficiente trasmettere i bit corrispondenti al punto medio dell'intervallo finale.
+
+Il sovraccarico di $2$ bit viene così spalmato sull'intera sequenza di $n$ simboli, riducendo l'overhead a soli $2/n$ bit per simbolo. Questo principio costituisce il fondamento matematico diretto della __Codifica Aritmetica__, impiegata nei moderni standard di compressione video (H.264/AVC, H.265/HEVC tramite CABAC) e immagini (JPEG 2000, JPEG XL).
 
 ## Teorema sull'Ottimalità Competitiva della Codifica di Sorgente
 
-La formulazione classica di ottimalità di un codice mira a minimizzare la lunghezza media attesa:
+La formulazione classica di ottimalità mira a minimizzare la lunghezza media attesa:
 
 $$
 C^* = \arg\min_C \mathbb{E}[l_C(X)]
 $$
 
-Tuttavia, in un'ottica decisionale o di teoria dei giochi competitiva, ci si potrebbe domandare: *è possibile che un codice alternativo $C'$ risulti migliore del codice ottimo nella maggioranza delle trasmissioni individuali, pur avendo una media leggermente peggiore a causa di parole molto lunghe assegnate a eventi rari?*
+Tuttavia, in uno scenario di teoria dei giochi o di decisione competitiva, possiamo porci una domanda più profonda: _un codice concorrente $C'$ potrebbe risultare migliore del codice di Shannon o di Huffman nella maggioranza delle trasmissioni individuali, pagando una media peggiore solo a causa di parole molto lunghe assegnate a eventi rarissimi?_
 
-Il __Teorema dell'Ottimalità Competitiva__ (Cover & Thomas, Sez. 5.10; Lucido 32–33) inquadra il confronto tra codici prefissi come un gioco a somma zero tra due giocatori. Dati una PMF $p(x)$ e un simbolo estratto $X \sim p(x)$, il payoff per il primo codificatore vale $+1$ se la sua parola è strettamente più corta ($l(X) < l'(X)$), $0$ se hanno pari lunghezza ($l(X) = l'(X)$), e $-1$ se è più lunga ($l(X) > l'(X)$).
+Il __Teorema dell'Ottimalità Competitiva__ (Thomas Cover e Joy Thomas, Sez. 5.10) dimostra che ciò è matematicamente impossibile: il codice ottimo domina stocasticamente qualsiasi concorrente anche nel confronto a coppie.
 
-### Enunciato del Teorema di Cover & Thomas
+### Il Modello del Gioco a Somma Zero tra Codificatori
 
-Sia $l(x) = \lceil \log_2(1/p(x)) \rceil$ la lunghezza della parola di codice assegnata dal codice di Shannon per una distribuzione $p(x)$. Sia $l'(x)$ la lunghezza assegnata da un qualsiasi altro codice univocamente decodificabile. 
+Consideriamo due progettisti che competono per codificare la medesima variabile aleatoria $X \sim p(x)$. Il primo giocatore assegna le lunghezze $l(x)$ previste dal codice di Shannon, mentre il secondo adotta un qualsiasi codice alternativo univocamente decodificabile con lunghezze $l'(x)$.
 
-Allora, per ogni intero $c \ge 1$, la probabilità che il codice concorrente superi il codice di Shannon di almeno $c$ bit è delimitata esponenzialmente:
+A ogni estrazione del simbolo $X$, definiamo il payoff $W$ per il codice di Shannon come:
+
+$$
+W = \begin{cases} +1 & \text{se } l(X) < l'(X) \quad (\text{Shannon vince}) \\ 0 & \text{se } l(X) = l'(X) \quad (\text{Parità}) \\ -1 & \text{se } l(X) > l'(X) \quad (\text{Shannon perde}) \end{cases}
+$$
+
+### Enunciato e Dimostrazione del Teorema di Cover e Thomas
+
+Sia $l(x) = \lceil \log_2(1/p(x)) \rceil$ la lunghezza assegnata dal codice di Shannon per una distribuzione $p(x)$, e sia $l'(x)$ la lunghezza assegnata da un qualsiasi codice concorrente univocamente decodificabile.
+
+Per ogni intero $c \ge 1$, la probabilità che il codice concorrente batta il codice di Shannon di almeno $c$ bit decade esponenzialmente:
 
 $$
 \text{Pr}\{l(X) \ge l'(X) + c\} \le \frac{1}{2^{c-1}}
 $$
 
-In particolare:
-- Per $c = 2$: la probabilità che un codice alternativo batta il codice di Shannon di $2$ o più bit non può superare la metà:
+Dimostriamo il teorema in modo rigoroso. Definiamo l'insieme dei simboli per cui il codice concorrente supera il codice di Shannon di almeno $c$ bit:
 
-  $$
-  \text{Pr}\{l(X) - l'(X) \ge 2\} \le \frac{1}{2}
-  $$
+$$
+S = \{x \in \mathcal{X} : l(x) - l'(x) \ge c\}
+$$
 
-- Per margini elevati la probabilità decade esponenzialmente: ad esempio, un concorrente può vincere di $c = 5$ bit in meno di $2^{-(5-1)} = 1/16$ dei casi.
-- Nel gioco competitivo, il codice di Shannon (e a fortiori il codice ottimo di Huffman) garantisce che la probabilità di vincere sia maggiore o uguale alla probabilità di perdere:
+Dalla definizione della funzione soffitto nel codice di Shannon, abbiamo:
 
-  $$
-  \text{Pr}\{l(X) < l'(X)\} \ge \text{Pr}\{l(X) > l'(X)\}
-  $$
+$$
+l(x) < \log_2 \frac{1}{p(x)} + 1 \iff 2^{l(x) - 1} < \frac{1}{p(x)} \iff p(x) < 2^{-(l(x) - 1)} = 2 \cdot 2^{-l(x)}
+$$
 
-  assicurando un payoff medio atteso intrinsecamente non negativo: $\mathbb{E}[\text{Payoff}] \ge 0$.
+Per ogni simbolo $x \in S$, vale la condizione $l(x) \ge l'(x) + c$, da cui $-l(x) \le -l'(x) - c$. Sostituendo nella disequazione precedente:
 
-La dimostrazione analitica rigorosa, basata sulla disuguaglianza di McMillan e sul bound esponenziale pesato $\text{Pr}\{l(X) - l'(X) \ge c\} \le 2^{-(c-1)}$, è dettagliata nella sezione [[zz. Argomenti extra#Teorema sull'Ottimalità Competitiva della Codifica di Shannon e Huffman|approfondimento sull'ottimalità competitiva]].
+$$
+p(x) < 2 \cdot 2^{-l'(x) - c} = 2^{-(c-1)} 2^{-l'(x)}
+$$
 
-## Quadro Sinottico Comparativo dei Metodi di Codifica di Sorgente
+Sommiamo ora le probabilità su tutti gli elementi dell'insieme critico $S$:
 
-La tabella seguente riassume le caratteristiche strutturali, algoritmiche e prestazionali degli schemi di codifica senza perdita analizzati:
+$$
+\text{Pr}\{l(X) - l'(X) \ge c\} = \sum_{x \in S} p(x) < 2^{-(c-1)} \sum_{x \in S} 2^{-l'(x)} \le 2^{-(c-1)} \sum_{x \in \mathcal{X}} 2^{-l'(x)}
+$$
 
-| Algoritmo di Codifica | Approccio Costruttivo | Vincolo di Lunghezza $l(x)$ | Delimitazione della Lunghezza Media $L$ | Ottimalità Dimostrata | Standard e Ambiti Applicativi Tipici |
+Poiché il codice alternativo $l'$ è univocamente decodificabile per ipotesi, esso deve rispettare la disuguaglianza di McMillan: $\sum_{x \in \mathcal{X}} 2^{-l'(x)} \le 1$.
+
+Sostituendo questo limite superiore unitario:
+
+$$
+\text{Pr}\{l(X) \ge l'(X) + c\} \le 2^{-(c-1)}
+$$
+
+La disuguaglianza è pienamente dimostrata. Per ulteriori dettagli e generalizzazioni si veda la sezione dedicata in [[zz. Argomenti extra#Teorema sull'Ottimalità Competitiva della Codifica di Shannon e Huffman|approfondimento sull'ottimalità competitiva]].
+
+### Conseguenze Operative: Bound al Cinquanta Percento e Payoff Atteso
+
+Questo risultato comporta conseguenze decisive:
+
+1. __Bound al 50% per $c = 2$__: ponendo $c = 2$ nella disuguaglianza:
+
+$$
+\text{Pr}\{l(X) - l'(X) \ge 2\} \le \frac{1}{2^{2-1}} = \frac{1}{2}
+$$
+
+Nessun codice al mondo può superare il codice di Shannon di $2$ o più bit per più del $50\%$ delle trasmissioni.
+2. __Decadimento Esponenziale__: per margini maggiori la probabilità crolla: un codice alternativo può vincere con un vantaggio di $c = 5$ bit in meno di $2^{-(5-1)} = 1/16$ dei casi ($6.25\%$), e di $c = 10$ bit in meno dello $0.2\%$.
+3. __Dominanza Stocastica a Coppie__: considerando il confronto globale tra vittoria e sconfitta:
+
+$$
+\text{Pr}\{l(X) < l'(X)\} \ge \text{Pr}\{l(X) > l'(X)\}
+$$
+
+Il codice di Shannon (e a maggior ragione il codice globalmente ottimo di Huffman) garantisce che la probabilità di vincere sia sempre maggiore o uguale alla probabilità di perdere contro qualsiasi avversario, assicurando un payoff medio atteso intrinsecamente non negativo:
+
+$$
+\mathbb{E}[W] \ge 0
+$$
+
+Ottimizzare la media attesa $\mathbb{E}[L]$ non espone a rischi occulti nella stragrande maggioranza delle realizzazioni individuali.
+
+## Quadro Sinottico Comparativo dei Metodi di Codifica
+
+La tabella seguente riassume le caratteristiche matematiche, algoritmiche e prestazionali degli schemi di codifica senza perdita analizzati nel capitolo:
+
+| Metodo di Codifica | Filosofia Costruttiva | Assegnazione Lunghezze $l(x)$ | Delimitazione Lunghezza Media $L$ | Grado di Ottimalità | Standard e Applicazioni |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| __Codice di Shannon (1948)__ | Assegnazione analitica diretta | $l(x) = \lceil \log_D(1/p(x)) \rceil$ | $H_D(X) \le L < H_D(X) + 1$ | Sub-ottimo a blocchi finiti; asintotico per $n \to \infty$ | Basi teoriche, dimostrazioni analitiche di Shannon |
-| __Codice di Fano (1949)__ | Top-down greedy per bisezione di massa | Partizione ricorsiva con $p(A) \approx p(B)$ | $H(X) \le L < H(X) + 2$ | Sub-ottimo (decisioni top-down irreversibili) | Primi sistemi telematici e architetture storiche |
-| __Codice di Huffman (1952)__ | Bottom-up iterativo con fusione nodi minimi | Risultato della topologia dell'albero | $H_D(X) \le L^* < H_D(X) + 1$ | __Ottimo Assoluto__ su blocchi di simboli a cardinalità fissa | Archivi ZIP, gzip, compressori generici |
-| __Huffman Canonico__ | Standardizzazione lessicografica deterministica | Vettore di lunghezze di Huffman $\{l_i\}$ | Identica al codice di Huffman | Ottimo con minimo consumo di metadati d'intestazione | __JPEG__, __PNG__, __Deflate__, __MP3__, __Brotli__ |
-| __Shannon-Fano-Elias__ | Troncamento binario del punto medio CDF | $l(x) = \lceil \log_2(1/p(x)) \rceil + 1$ | $H(X) + 1 \le L < H(X) + 2$ | Sub-ottimo per simboli singoli (+2 bit) | Fondamento concettuale della __Codifica Aritmetica__ |
-| __Codifica a Blocchi ($n$-estesa)__ | Huffman applicato a super-simboli $\mathcal{X}^n$ | Lunghezze su alfabeto $\mathcal{X}^n$ | $H(\mathcal{X}) \le \frac{L_n}{n} < H(\mathcal{X}) + \frac{1}{n}$ | Asintoticamente convergente all'entropy rate | Trasmissione di testi naturali, compressione fax |
+| __Codice di Shannon (1948)__ | Assegnazione analitica diretta | $l(x) = \lceil \log_D(1/p(x)) \rceil$ | $H_D(X) \le L < H_D(X) + 1$ | Sub-ottimo a blocchi finiti; asintotico per $n \to \infty$ | Dimostrazioni teoriche, teoremi limite |
+| __Codice di Fano (1949)__ | Top-down greedy per bisezione di probabilità | Bipartizione ricorsiva con $p(A) \approx p(B)$ | $H(X) \le L < H(X) + 2$ | Sub-ottimo (decisioni top-down irreversibili) | Primi protocolli telematici, architetture storiche |
+| __Codice di Huffman (1952)__ | Bottom-up esatto tramite fusione nodi minimi | Topologia dell'albero binario/D-ario | $H_D(X) \le L^* < H_D(X) + 1$ | __Ottimo Assoluto__ su blocchi a cardinalità fissa | Compressione generica, archivi ZIP, gzip |
+| __Huffman Canonico__ | Generazione deterministica lessicografica | Dal solo vettore delle lunghezze $\{l_i\}$ | Coincide esattamente con Huffman | Ottimo con trasmissione minima dei metadati | __Deflate (ZIP, gzip)__, __JPEG__, __PNG__, __MP3__, __Brotli__ |
+| __Shannon-Fano-Elias__ | Troncamento binario del punto medio CDF | $l(x) = \lceil \log_2(1/p(x)) \rceil + 1$ | $H(X) + 1 \le L < H(X) + 2$ | Sub-ottimo per singoli simboli (+2 bit) | Fondamento teorico della __Codifica Aritmetica__ |
+| __Codifica a Blocchi ($n$-estesa)__ | Huffman applicato a super-simboli $\mathcal{X}^n$ | Lunghezze ottime su alfabeto $\mathcal{X}^n$ | $H(\mathcal{X}) \le \frac{L_n^*}{n} < H(\mathcal{X}) + \frac{1}{n}$ | Asintoticamente convergente all'entropy rate | Compressione testi naturali, fax, immagini |

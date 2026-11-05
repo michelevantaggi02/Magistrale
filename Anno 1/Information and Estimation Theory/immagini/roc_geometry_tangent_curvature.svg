@@ -1,0 +1,117 @@
+<svg width="100%" height="470" viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradiente per area AUC -->
+    <linearGradient id="aucGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.08"/>
+    </linearGradient>
+
+    <!-- Marker per freccia assi -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="tangentArrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f59e0b"/>
+    </marker>
+  </defs>
+
+  <!-- Titolo e Sottotitolo -->
+  <text x="380" y="26" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="bold" fill="#f8fafc">Geometria della Curva ROC e Pendenza del Test di Verosimiglianza</text>
+  <text x="380" y="46" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Legame differenziale dP_D / dP_FA = γ e concavità (rendimenti marginali decrescenti)</text>
+
+  <!-- Griglia interna del grafico -->
+  <line x1="152.0" y1="90" x2="152.0" y2="390" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="80" y1="330.0" x2="440" y2="330.0" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="224.0" y1="90" x2="224.0" y2="390" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="80" y1="270.0" x2="440" y2="270.0" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="296.0" y1="90" x2="296.0" y2="390" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="80" y1="210.0" x2="440" y2="210.0" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="368.0" y1="90" x2="368.0" y2="390" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="80" y1="150.0" x2="440" y2="150.0" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="440" y1="90" x2="440" y2="390" stroke="#475569" stroke-width="1.2"/>
+  <line x1="80" y1="90" x2="440" y2="90" stroke="#475569" stroke-width="1.2"/>
+
+  <!-- Area AUC -->
+  <path d="M 80.0 390.0 L 83.6 319.9 L 87.2 292.5 L 90.8 273.2 L 94.4 258.0 L 98.0 245.4 L 101.6 234.6 L 105.2 225.2 L 108.8 216.8 L 112.4 209.3 L 116.0 202.5 L 119.6 196.3 L 123.2 190.6 L 126.8 185.4 L 130.4 180.5 L 134.0 176.0 L 137.6 171.7 L 141.2 167.8 L 144.8 164.0 L 148.4 160.5 L 152.0 157.2 L 155.6 154.1 L 159.2 151.2 L 162.8 148.4 L 166.4 145.7 L 170.0 143.2 L 173.6 140.8 L 177.2 138.5 L 180.8 136.4 L 184.4 134.3 L 188.0 132.3 L 191.6 130.4 L 195.2 128.6 L 198.8 126.9 L 202.4 125.3 L 206.0 123.7 L 209.6 122.2 L 213.2 120.7 L 216.8 119.3 L 220.4 118.0 L 224.0 116.7 L 227.6 115.5 L 231.2 114.3 L 234.8 113.2 L 238.4 112.1 L 242.0 111.1 L 245.6 110.1 L 249.2 109.1 L 252.8 108.2 L 256.4 107.3 L 260.0 106.4 L 263.6 105.6 L 267.2 104.8 L 270.8 104.1 L 274.4 103.4 L 278.0 102.7 L 281.6 102.0 L 285.2 101.4 L 288.8 100.7 L 292.4 100.1 L 296.0 99.6 L 299.6 99.0 L 303.2 98.5 L 306.8 98.0 L 310.4 97.5 L 314.0 97.1 L 317.6 96.6 L 321.2 96.2 L 324.8 95.8 L 328.4 95.4 L 332.0 95.0 L 335.6 94.7 L 339.2 94.4 L 342.8 94.0 L 346.4 93.7 L 350.0 93.4 L 353.6 93.2 L 357.2 92.9 L 360.8 92.7 L 364.4 92.4 L 368.0 92.2 L 371.6 92.0 L 375.2 91.8 L 378.8 91.6 L 382.4 91.4 L 386.0 91.3 L 389.6 91.1 L 393.2 91.0 L 396.8 90.8 L 400.4 90.7 L 404.0 90.6 L 407.6 90.5 L 411.2 90.4 L 414.8 90.3 L 418.4 90.2 L 422.0 90.2 L 425.6 90.1 L 429.2 90.1 L 432.8 90.0 L 436.4 90.0 L 440.0 90.0 L 440.0 390.0 Z" fill="url(#aucGrad)"/>
+
+  <!-- Diagonale di casualità (peggior ROC: moneta a caso, AUC = 0.5) -->
+  <line x1="80" y1="390" x2="440" y2="90" stroke="#64748b" stroke-width="1.8" stroke-dasharray="5 4"/>
+  <text x="281.6" y="240.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8" transform="rotate(-36.5, 281.6, 240.0)">Diagonale di casualità: P_D = P_FA (AUC = 0.5)</text>
+
+  <!-- Curva ROC LRT -->
+  <path d="M 80.0 390.0 L 83.6 319.9 L 87.2 292.5 L 90.8 273.2 L 94.4 258.0 L 98.0 245.4 L 101.6 234.6 L 105.2 225.2 L 108.8 216.8 L 112.4 209.3 L 116.0 202.5 L 119.6 196.3 L 123.2 190.6 L 126.8 185.4 L 130.4 180.5 L 134.0 176.0 L 137.6 171.7 L 141.2 167.8 L 144.8 164.0 L 148.4 160.5 L 152.0 157.2 L 155.6 154.1 L 159.2 151.2 L 162.8 148.4 L 166.4 145.7 L 170.0 143.2 L 173.6 140.8 L 177.2 138.5 L 180.8 136.4 L 184.4 134.3 L 188.0 132.3 L 191.6 130.4 L 195.2 128.6 L 198.8 126.9 L 202.4 125.3 L 206.0 123.7 L 209.6 122.2 L 213.2 120.7 L 216.8 119.3 L 220.4 118.0 L 224.0 116.7 L 227.6 115.5 L 231.2 114.3 L 234.8 113.2 L 238.4 112.1 L 242.0 111.1 L 245.6 110.1 L 249.2 109.1 L 252.8 108.2 L 256.4 107.3 L 260.0 106.4 L 263.6 105.6 L 267.2 104.8 L 270.8 104.1 L 274.4 103.4 L 278.0 102.7 L 281.6 102.0 L 285.2 101.4 L 288.8 100.7 L 292.4 100.1 L 296.0 99.6 L 299.6 99.0 L 303.2 98.5 L 306.8 98.0 L 310.4 97.5 L 314.0 97.1 L 317.6 96.6 L 321.2 96.2 L 324.8 95.8 L 328.4 95.4 L 332.0 95.0 L 335.6 94.7 L 339.2 94.4 L 342.8 94.0 L 346.4 93.7 L 350.0 93.4 L 353.6 93.2 L 357.2 92.9 L 360.8 92.7 L 364.4 92.4 L 368.0 92.2 L 371.6 92.0 L 375.2 91.8 L 378.8 91.6 L 382.4 91.4 L 386.0 91.3 L 389.6 91.1 L 393.2 91.0 L 396.8 90.8 L 400.4 90.7 L 404.0 90.6 L 407.6 90.5 L 411.2 90.4 L 414.8 90.3 L 418.4 90.2 L 422.0 90.2 L 425.6 90.1 L 429.2 90.1 L 432.8 90.0 L 436.4 90.0 L 440.0 90.0" stroke="#38bdf8" stroke-width="2.8" fill="none"/>
+
+  <!-- Retta tangente nel punto operativo -->
+  <line x1="94.4" y1="208.5" x2="224.0" y2="93.1" stroke="#f59e0b" stroke-width="2.2"/>
+
+  <!-- Segmenti tratteggiati per punto operativo -->
+  <line x1="152.0" y1="157.2" x2="152.0" y2="390" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <line x1="152.0" y1="157.2" x2="80" y2="157.2" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <circle cx="152.0" cy="157.2" r="5" fill="#f59e0b" stroke="#0f172a" stroke-width="1.5"/>
+
+  <!-- Tangenti agli estremi -->
+  <!-- Origine (0,0): tangente verticale (gamma -> infinity) -->
+  <line x1="80" y1="390" x2="80" y2="320" stroke="#a855f7" stroke-width="2.2" stroke-dasharray="4 2"/>
+  <text x="88" y="345" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="#c084fc">γ → +∞ (tangente verticale)</text>
+
+  <!-- Angolo (1,1): tangente orizzontale (gamma -> 0) -->
+  <line x1="440" y1="90" x2="370" y2="90" stroke="#a855f7" stroke-width="2.2" stroke-dasharray="4 2"/>
+  <text x="365" y="82" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="#c084fc">γ → 0 (tangente orizzontale)</text>
+
+  <!-- Punto ideale (0,1): ricevitore perfetto -->
+  <circle cx="80" cy="90" r="4.5" fill="#10b981" stroke="#0f172a" stroke-width="1.5"/>
+  <text x="90" y="104" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#10b981">Ricevitore Perfetto (d → +∞)</text>
+
+  <!-- Assi Cartesiani Principali -->
+  <line x1="80" y1="390" x2="475" y2="390" stroke="#94a3b8" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="80" y1="390" x2="80" y2="65" stroke="#94a3b8" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <text x="480" y="394" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#f8fafc">P_FA</text>
+  <text x="80" y="58" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#f8fafc">P_D</text>
+
+  <!-- Tacche asse P_FA -->
+  <text x="80" y="408" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0</text>
+  <text x="152.0" y="408" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0.2</text>
+  <text x="224.0" y="408" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0.4</text>
+  <text x="296.0" y="408" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0.6</text>
+  <text x="368.0" y="408" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0.8</text>
+  <text x="440.0" y="408" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#f8fafc">1.0</text>
+
+  <!-- Tacche asse P_D -->
+  <text x="68" y="394" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0</text>
+  <text x="68" y="334.0" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0.2</text>
+  <text x="68" y="274.0" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0.4</text>
+  <text x="68" y="214.0" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0.6</text>
+  <text x="68" y="154.0" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">0.8</text>
+  <text x="68" y="94.0" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#f8fafc">1.0</text>
+
+  <!-- Box Informativo Laterale Destro (Scheda Sinottica) -->
+  <rect x="470" y="65" width="270" height="350" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.4"/>
+  <text x="485" y="92" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#38bdf8">PROPRIETÀ MATEMATICHE ROC</text>
+
+  <!-- Blocco 1: Pendenza -->
+  <circle cx="495" cy="122" r="3.5" fill="#f59e0b"/>
+  <text x="508" y="126" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="#f59e0b">1. Pendenza Locale = Soglia γ</text>
+  <text x="508" y="146" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#cbd5e1">dP_D / dP_FA = γ</text>
+  <text x="508" y="163" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">La retta tangente nel punto (P_FA, P_D)</text>
+  <text x="508" y="177" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">ha coefficiente angolare identico a γ.</text>
+
+  <!-- Blocco 2: Concavità -->
+  <circle cx="495" cy="205" r="3.5" fill="#38bdf8"/>
+  <text x="508" y="209" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="#38bdf8">2. Concavità Verso il Basso</text>
+  <text x="508" y="229" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#cbd5e1">d²P_D / dP_FA² = -1 / f_L(γ; H₀) ≤ 0</text>
+  <text x="508" y="246" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">Rendimenti marginali decrescenti:</text>
+  <text x="508" y="260" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">all'aumentare di P_FA la pendenza cala.</text>
+
+  <!-- Blocco 3: Limiti asintotici -->
+  <circle cx="495" cy="288" r="3.5" fill="#c084fc"/>
+  <text x="508" y="292" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="#c084fc">3. Condizioni al Contorno</text>
+  <text x="508" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#cbd5e1">• γ → +∞ : (0, 0) con tangente verticale</text>
+  <text x="508" y="326" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#cbd5e1">• γ → 0   : (1, 1) con tangente orizzontale</text>
+
+  <!-- Blocco 4: Deflessione d -->
+  <circle cx="495" cy="354" r="3.5" fill="#10b981"/>
+  <text x="508" y="358" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="#10b981">4. Deflessione d (SNR Rilevazione)</text>
+  <text x="508" y="376" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#cbd5e1">P_D = Q( Q⁻¹(P_FA) - d )</text>
+  <text x="508" y="392" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">Se d cresce, la curva sale verso (0, 1).</text>
+</svg>
