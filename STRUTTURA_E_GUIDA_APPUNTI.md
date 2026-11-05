@@ -37,8 +37,18 @@ Magistrale/
 │   │   ├── ...
 │   │   ├── 3. Trasformata di Fourier.md
 │   │   └── immagini/
-│   ├── Machine Learning/                # [INIZIATO] Introduzione a Supervised/Unsupervised
-│   │   └── 0. Introduzione.md
+│   ├── Machine Learning/                # [IN CORSO] 4 capitoli completati (0..3: Notazione, Supervised, Probabilita, Regressione Lineare)
+│   │   ├── 0. Notazione e Concetti Fondamentali.md
+│   │   ├── 1. Introduzione al Supervised Learning.md
+│   │   ├── 2. Teoria della Probabilita.md
+│   │   ├── 3. Regressione Lineare.md
+│   │   ├── GUIDA_APPUNTI_MACHINE_LEARNING.md
+│   │   ├── dispense/
+│   │   └── immagini/
+│   ├── Information and Estimation Theory/ # [INIZIATO] Stima classica/bayesiana, Rilevazione, Teoria dell'Informazione
+│   │   ├── GUIDA_APPUNTI_INFORMATION_AND_ESTIMATION_THEORY.md
+│   │   ├── immagini/
+│   │   └── notes/
 │   └── export/                          # Output generati per la consultazione aggregata
 │       ├── md/                          # File Markdown uniti (Advanced Merger)
 │       └── pdf/                         # PDF finali impaginati (Better Export PDF)
@@ -76,6 +86,7 @@ Magistrale/
 | **Anno 1** | **Lezioni integrative DSP** | Concluso | 4 file (`0.` - `3.`), `immagini/` | Esportati `Lezioni integrative DSP-merged.md` e `.pdf`. Tratta segnali analogici/continui, LTI e trasformata di Fourier continua. |
 | **Anno 1** | **Electronic Embedded Systems** | Bozza | `0. Introduzione.md` | Da espandere: programmazione FPGA, sintesi VHDL, toolchain Xilinx Vivado/Vitis, sistemi Real-Time. |
 | **Anno 1** | **Machine Learning** | Iniziato | `GUIDA_APPUNTI_MACHINE_LEARNING.md`, `dispense/ML_Notes.pdf`, `immagini/` | Guida specifica attiva in `Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md`. 13 capitoli d'esame (`0.`..`C.`) basati sulla dispensa del Prof. Costante (225 pp). Esclusi argomenti con `*` (Capitolo 6 GLMs). Pipeline per dispense LaTeX con figure originali ed esempi grafici ad-hoc. Stesura incrementale un capitolo alla volta. |
+| **Anno 1** | **Information and Estimation Theory** | Iniziato | `GUIDA_APPUNTI_INFORMATION_AND_ESTIMATION_THEORY.md`, `notes/` | Guida specifica attiva in `Anno 1/Information and Estimation Theory/GUIDA_APPUNTI_INFORMATION_AND_ESTIMATION_THEORY.md`. Diviso in due macro-parti con progressione `0..E`: Parte I (Stima e Rilevazione, 6 capitoli `0.`..`5.` ripartiti in Teoria/Limiti e Stimatori/Metodi, Prof. Rugini, ref. Steven Kay Vol. I & II) e Parte II (Teoria dell'Informazione, 9 capitoli `6.`..`E.`, ref. Cover & Thomas, Shannon e paper scientifici). Decompressione on-demand degli archivi zip tematici in sottocartelle di `notes/`. |
 | **Anno 2** | **Deep Learning And Robot Perception** | In corso | `0. Immagini, filtri e gradienti.md`, `immagini/` | Primo capitolo corposo già redatto (450+ righe) corredato da 53 figure. Da proseguire con CNN, feature detection, object detection, segmentation, 3D perception. |
 | **Anno 2** | **Autonomous Robotics** | In corso | 9 file (`0.` - `8.`), `zz. Argomenti extra.md`, `immagini/` (98 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8, 10, 12, 13 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, Monte Carlo Localization (Particle Filter) con Importance Sampling, Low-Variance Resampling, Augmented MCL, KLD-Sampling, modelli di misura LiDAR (catena 4 frame, Feature-Based, Likelihood Field con distance transform precalcolata O(1), Beam Model a 4 componenti), e fondamenti del Filtro di Kalman lineare time-varying (osservatore di Luenberger, convenzione Q/R, derivazione bayesiana). |
 
@@ -348,11 +359,14 @@ Gli appunti del vault non devono sembrare un'enciclopedia asettica o un manuale 
   - Compromessi fisici (rumore dei sensori, aliasing, clipping, overflow fixed point vs floating point).
 
 ### 3.11 Revisione Critica delle Note e Segnalazione Errori Concettuali
-> [!IMPORTANT] Regola Tassativa: Analisi Critica e Segnalazione Obbligatoria degli Errori
+> [!IMPORTANT] Regola Tassativa: Analisi Critica, Divieto Assoluto di Meta-Commenti e Segnalazione Post-Stesura
 > Quando vengono fornite o analizzate le note della lezione (appunti scritti a mano, trascrizioni orali, schemi veloci o formule ricopiate):
-> 1. **Analisi Critica Obbligatoria**: È **tassativamente richiesto analizzare la presenza di errori a livello concettuale, matematico o notazionale** all'interno delle note grezze (es. segni algebrici errati, formule goniometriche incongruenti, sovrapposizione di simboli con significati multipli non distinti, definizioni tautologiche o passaggi logici fallaci).
-> 2. **Correzione Diretta nel Testo degli Appunti**: L'appunto finale deve incorporare direttamente la versione corretta, rigorosa e coerente con la teoria di riferimento (evitando di perpetuare sviste o ambiguità di trascrizione nel vault).
-> 3. **Segnalazione Post-Stesura per Visione e Confronto**: Al termine della redazione o riscrittura degli appunti, l'assistente AI **deve esplicitamente segnalare all'utente gli errori o le incongruenze rilevate nelle note di partenza**, specificando dove si trovava l'errore, qual era l'incongruenza concettuale e come è stato corretto nel capitolo. In questo modo l'utente può visionare la correzione, verificare la spiegazione e allineare la propria comprensione per lo studio e per l'esame.
+> 1. **Analisi Critica Obbligatoria**: È **tassativamente richiesto analizzare la presenza di errori a livello concettuale, matematico o notazionale** all'interno delle note grezze o delle trascrizioni (es. segni algebrici errati, formule goniometriche incongruenti, sovrapposizione di simboli con significati multipli non distinti, definizioni tautologiche o passaggi logici fallaci).
+> 2. **Esposizione Diretta della Teoria Corretta (DIVIETO ASSOLUTO DI META-COMMENTI)**: 
+>    - L'appunto finale deve incorporare **direttamente ed esclusivamente la versione corretta, rigorosa e coerente** con la teoria di riferimento, senza alcuna esitazione.
+>    - È **SEVERAMENTE VIETATO** inserire nel corpo del documento (testo, callout `[!NOTE]`, `[!WARNING]`, `[!INFO]`, o note a piè di pagina) frasi, disclaimer o precisazioni che menzionino esplicitamente di aver corretto una formula, un errore o un refuso delle note dello studente o delle slide (es. *«Nelle note dello studente la formula era errata…»*, *«Correzione refusi delle note di studio»*, *«Nelle note si incontra un'ambiguità»*, *«Abbiamo corretto il termine -1 in +1»* $\to$ **ASSOLUTAMENTE VIETATO**).
+>    - Il testo degli appunti deve presentarsi come una trattazione scientifica e accademica pura, autorevole e definitiva, esponendo la verità analitica direttamente, senza alcun accenno al processo correttivo o ai materiali intermedi.
+> 3. **Segnalazione degli Errori Esclusivamente in Chat / Piani di Lavoro**: Eventuali spiegazioni di cosa era errato nelle note e di come è stato corretto devono essere comunicate **esclusivamente all'utente nella risposta in chat** (o nei documenti interni di piano come `piano_implementazione_...`), per consentirgli di visionare la correzione e chiarire i propri dubbi per lo studio, **MAI nel corpo degli appunti**.
 
 ### 3.12 Separazione tra Contenuti di Lezione e Approfondimenti Extra (`zz. Argomenti extra.md`)
 > [!IMPORTANT] Regola Tassativa: Separazione dei Contenuti e Gestione degli Argomenti Extra
@@ -383,7 +397,9 @@ flowchart TD
     C --> G
     G --> H["3. Redazione Capitolo 'N. Titolo.md' (Integrazione Figure nei Callout e Video)"]
     H --> I["Formattazione KaTeX, Convenzioni Linter (__grassetto__, _corsivo_)"]
-    I --> L["Merge con Advanced Merger in 'export/md/'"]
+    I --> R["4. Revisione Automatica con Subagente Indipendente (Slide, Paper, Web)"]
+    R --> S["Applicazione Correzioni Rilevate dal Subagente"]
+    S --> L["Merge con Advanced Merger in 'export/md/'"]
     L --> M["Esportazione PDF con Better Export PDF in 'export/pdf/'"]
     M --> N["Aggiornamento README.md"]
 ```
@@ -397,7 +413,12 @@ flowchart TD
 3. **Fase 3 - Analisi, Traduzione e Rielaborazione**: Leggere e rielaborare i contenuti delle slide traducendoli integralmente in lingua italiana con rigore accademico e chiarezza didattica, correggendo direttamente nel testo qualsiasi errore presente nelle note di partenza.
 4. **Fase 4 - Numerazione e Titolo**: Assegnare il nome file progressivo corretto (partendo da `0.` per il capitolo iniziale della materia), allineando perfettamente l'heading H1.
 5. **Fase 5 - Composizione e Integrazione Figure**: Redigere il documento alternando spiegazioni teoriche, formule KaTeX rigorose ed esempi visivi basati sulle immagini estratte, formattate tassativamente con centratura e classe di dimensione appropriata (es. `![[immagine.png|center mid]]` o `![[immagine.png|center big]]`).
-6. **Fase 6 - Segnalazione Finale delle Correzioni all'Utente**: Al termine della stesura, descrivere esplicitamente all'utente le incongruenze concettuali rilevate nelle note e le correzioni applicate, così da permettergli di visionare le modifiche e verificare la teoria.
+6. **Fase 6 - Loop Iterativo di Revisione Automatica con Subagente Indipendente (Regola Tassativa a Convergenza)**:
+   - Subito dopo la stesura del capitolo, invocare obbligatoriamente un subagente indipendente (estraneo al contesto conversazionale di scrittura) tramite il tool `invoke_subagent`.
+   - Il subagente ha accesso al file del capitolo appena redatto, alle slide sorgente in PDF, ai paper scientifici estratti e alla ricerca internet (`search_web`), con il mandato esclusivo di individuare errori concettuali o matematici, formule errate, refusi algebrici/notazionali o discrepanze fattuali con le sorgenti, **escludendo esplicitamente qualunque analisi o giudizio su stile del testo, tono, prosa o formattazione/convenzioni del vault (linter, titoli, KaTeX, immagini)**, demandate all'agente autore.
+   - **Riavvio del Loop su Ogni Modifica**: se il subagente segnala errori o modifiche necessarie, l'agente principale applica tempestivamente le correzioni sul file e **deve obbligatoriamente avviare un NUOVO subagente indipendente** per riesaminare a mente fresca il file modificato.
+   - **Condizione di Uscita**: il loop (Revisione $\to$ Modifica $\to$ Nuova Revisione) si ripete finché un subagente indipendente non certifica formalmente l'esito **`CONFORME (Zero errori/incongruenze rilevate)`** (si veda `[[.agents/rules/revisione_automatica_subagente.md|Regola del Loop di Revisione Automatica con Subagente]]`).
+7. **Fase 7 - Segnalazione Finale delle Correzioni all'Utente**: Solo a convergenza raggiunta, descrivere esplicitamente all'utente le iterazioni svolte, le incongruenze corrette e la validazione finale del testo.
 
 ### 4.2 Pipeline Estesa per Trascrizioni Audio e Lezioni Dense
 > [!IMPORTANT] Regola Workspace Dedicata
@@ -482,6 +503,7 @@ Prima di concludere qualsiasi sessione di scrittura o refactoring di un appunto:
 - [ ] **Densità e Ritmo**: Paragrafi snelli (1–4 righe), ritmo scorrevole, con l'intuizione fisica/geometrica spiegata chiaramente prima della formula.
 - [ ] **Ipertestualità (Wikilink)**: Presenza di collegamenti interni coerenti alle lezioni precedenti o alle sezioni correlate (`[[Capitolo#Sezione|Testo]]`).
 - [ ] **Analisi Critica e Segnalazione Errori Concettuali**: Le note grezze della lezione sono state esaminate criticamente per individuare errori concettuali, matematici o notazionali; le incongruenze sono state corrette direttamente nel testo e segnalate puntualmente all'utente nel messaggio di riepilogo per la revisione.
+- [ ] **Revisione Automatica con Subagente Indipendente**: Al termine della redazione, è stato avviato un subagente esterno (privo del bias di scrittura) dotato di accesso a slide, paper scientifici e ricerca web per individuare errori analitici, incongruenze o passaggi migliorabili, e le correzioni sono state applicate al documento.
 - [ ] **Separazione Contenuti Extra**: Le dimostrazioni estese, i modelli fisici di dettaglio e le nozioni collaterali non presenti letteralmente nelle slide sono state collocate nel file `zz. Argomenti extra.md` della materia e puntualmente citate nel documento primario tramite wikilink.
 - [ ] **Newline Finale**: Il file termina con un newline singolo.
 

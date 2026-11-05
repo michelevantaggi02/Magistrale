@@ -115,11 +115,13 @@ $$
 \mathbf{p}(t) = \mathbf{p}(0) + \mathbf{v}(0)t + \int_{0}^{t} \left( \int_{0}^{\tau} \mathbf{a}_{\text{moto}}(s) \, ds \right) d\tau
 $$
 
-L'accelerazione di moto $\mathbf{a}_{\text{moto}}^b$ nel frame corpo $\{b\}$ viene ricavata sottraendo la gravità $\mathbf{g}^w = [0, 0, -g]^T$:
+L'accelerazione di moto $\mathbf{a}_{\text{moto}}^b$ nel frame corpo $\{b\}$ viene ricavata compensando la componente gravitazionale:
 
 $$
-\mathbf{a}_{\text{moto}}^b = \mathbf{a}_{\text{misurata}}^b - R_w^b(t) \, \mathbf{g}^w
+\mathbf{a}_{\text{moto}}^b = \mathbf{a}_{\text{misurata}}^b - R_w^b(t) \, \mathbf{g}_{\text{app}}^w = \mathbf{a}_{\text{misurata}}^b + R_w^b(t) \, \mathbf{g}^w
 $$
+
+dove $\mathbf{g}^w = [0, 0, -g]^T$ è l'accelerazione di gravità diretta verso il basso e $\mathbf{g}_{\text{app}}^w = [0, 0, g]^T$ è la reazione apparente registrata a riposo ($\mathbf{a}_{\text{moto}} = \mathbf{0} \implies \mathbf{a}_{\text{misurata}}^b = R_w^b \mathbf{g}_{\text{app}}^w$).
 
 ### Propagazione Dell'Errore Angolare Del Giroscopio
 
@@ -304,7 +306,7 @@ La stima della posizione relativa del rover rispetto alla base fissa raggiunge u
 
 ## Parametri Metrologici Avanzati E Fisica Dei Sensori
 
-Questa sezione approfondisce le definizioni metrologiche e i modelli fisici accennati nell'[[2. Sensori per la Robotica Mobile#Appendice: Caratteristiche Metrologiche E Sensori Fisici|Appendice della Lezione 5]].
+Questa sezione approfondisce le definizioni metrologiche e i modelli fisici accennati nell'[[2. Sensori per la Robotica Mobile#Appendice: Caratteristiche Metrologiche E Sensori Fisici|Appendice del Capitolo 2]].
 
 ### Quantificazione Del Dynamic Range In Decibel
 
@@ -399,181 +401,153 @@ $$
 
 La forza di Coriolis agisce interamente lungo l'asse ortogonale $y$:
 
-Questa forza ciclica induce un'oscillazione secondaria lungo l'asse $y$. La deflessione ortogonale viene misurata con elevata sensibilità rilevando la variazione differenziale di capacità $\Delta C$ tra elettrodi microscopici a pettine, fornendo un segnale di tensione proporzionale alla velocità angolare esterna $\Omega_z$.
+$$
+\mathbf{F}_c = \begin{bmatrix} 0 \\ -2m \, \Omega_z v_x \\ 0 \end{bmatrix} \implies F_{c,y} = -2m \, \Omega_z v_x
+$$
 
----
+Questa forza ciclica induce un'oscillazione secondaria lungo l'asse $y$. La deflessione ortogonale viene misurata con elevata sensibilità rilevando la variazione differenziale di capacità $\Delta C$ tra elettrodi microscopici a pettine, fornendo un segnale di tensione proporzionale alla velocità angolare esterna $\Omega_z$.
 
 ## Derivazione Analitica Del Line Fitting (OLS E WLS) in Coordinate Polari
 
-Nel contesto del rilevamento di ostacoli piani da scansioni LiDAR, la rappresentazione esplicita cartesiana $y = mx + q$ fallisce quando la retta è parallela all'asse $y$ ($m \to \infty$). Si adotta la __forma normale di Hesse__:
+Nel contesto del rilevamento di ostacoli piani da scansioni LiDAR, la rappresentazione esplicita cartesiana $y = mx + q$ fallisce in caso di pareti verticali ($m \to \infty$). Si adotta la __forma normale di Hesse__:
 
 $$
-x \cos\alpha + y \sin\alpha - r = 0
+x \cos\alpha + y \sin\alpha - r = 0 \iff \rho \cos(\theta - \alpha) - r = 0
 $$
 
-dove $r \ge 0$ è la distanza minima ortogonale dall'origine alla retta e $\alpha \in [-\pi, \pi]$ è l'angolo del vettore normale orientato.
+dove $r \ge 0$ è la distanza ortogonale minima dall'origine alla retta e $\alpha \in [0, 2\pi)$ è l'orientamento angolare del vettore normale.
 
-### Formulazione Del Problema Di Ottimizzazione OLS
+### Formulazione del Problema di Ottimizzazione WLS
 
-Dato un insieme di $N$ punti misurati nel piano $\{ (x_i, y_i) \}_{i=1}^N$, la distanza ortogonale con segno (residuo geometrico) tra il generico punto $P_i$ e la retta candidata è:
-
-$$
-d_i = x_i \cos\alpha + y_i \sin\alpha - r
-$$
-
-L'obiettivo dei Minimi Quadrati Ordinari (OLS, _Total Least Squares_) è minimizzare la somma dei quadrati delle distanze perpendicolari:
+Dato un insieme di $n$ punti laser espressi in coordinate polari grezze $\{ (\rho_i, \theta_i) \}_{i=1}^n$, ciascun punto presenta un'incertezza sulla distanza misurata con varianza $\sigma_{\rho,i}^2$. Si definisce il peso stocastico di ciascun campione come:
 
 $$
-S(\alpha, r) = \sum_{i=1}^N d_i^2 = \sum_{i=1}^N \left( x_i \cos\alpha + y_i \sin\alpha - r \right)^2
+w_i = \frac{1}{\sigma_{\rho,i}^2}
 $$
 
-#### 1. Ottimizzazione Rispetto Al Parametro Distanza $r$
-
-Calcoliamo la derivata parziale prima di $S$ rispetto a $r$ e poniamola uguale a zero:
+La funzione di costo ai minimi quadrati pesati da minimizzare rispetto a $(r, \alpha)$ è:
 
 $$
-\frac{\partial S}{\partial r} = -2 \sum_{i=1}^N \left( x_i \cos\alpha + y_i \sin\alpha - r \right) = 0
+S(r, \alpha) = \sum_{i=1}^n w_i \left( \rho_i \cos(\theta_i - \alpha) - r \right)^2
 $$
 
-Dividendo per $-2N$:
+#### Ottimizzazione Rispetto al Parametro Distanza $r$
+
+Annullando la derivata parziale prima di $S$ rispetto a $r$:
 
 $$
-\frac{1}{N}\sum_{i=1}^N x_i \cos\alpha + \frac{1}{N}\sum_{i=1}^N y_i \sin\alpha - r = 0
+\frac{\partial S}{\partial r} = -2 \sum_{i=1}^n w_i \left( \rho_i \cos(\theta_i - \alpha) - r \right) = 0
 $$
 
-Definendo il baricentro (media campionaria) dei punti misurati come:
-
 $$
-\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i, \quad \bar{y} = \frac{1}{N} \sum_{i=1}^N y_i
+\left( \sum_{i=1}^n w_i \right) r = \sum_{i=1}^n w_i \rho_i \cos(\theta_i - \alpha) \implies r = \frac{\sum_{i=1}^n w_i \rho_i \cos(\theta_i - \alpha)}{\sum_{i=1}^n w_i}
 $$
 
-Otteniamo la relazione fondamentale in forma chiusa per $r$:
+Esprimendo $\rho_i \cos(\theta_i - \alpha) = \rho_i \cos\theta_i \cos\alpha + \rho_i \sin\theta_i \sin\alpha = x_i \cos\alpha + y_i \sin\alpha$, si ritrova l'equivalenza baricentrica:
 
 $$
-r = \bar{x} \cos\alpha + \bar{y} \sin\alpha
+r = \bar{x}_w \cos\alpha + \bar{y}_w \sin\alpha
 $$
 
-__Interpretazione geometrica__: la retta ottima stimata passa inderogabilmente per il baricentro $(\bar{x}, \bar{y})$ dei punti misurati.
+dove $\bar{x}_w = \frac{\sum w_i x_i}{\sum w_i}$ e $\bar{y}_w = \frac{\sum w_i y_i}{\sum w_i}$ rappresentano le coordinate del baricentro pesato. La retta stimata passa sempre per il baricentro pesato dei punti.
 
----
+#### Ottimizzazione Rispetto all'Angolo della Normale $\alpha$
 
-#### 2. Ottimizzazione Rispetto all'Angolo Della Normale $\alpha$
-
-Sostituendo l'espressione di $r$ all'interno del residuo $d_i$:
+Calcoliamo la derivata totale di $S(r(\alpha), \alpha)$ rispetto ad $\alpha$:
 
 $$
-d_i = (x_i - \bar{x}) \cos\alpha + (y_i - \bar{y}) \sin\alpha
+\frac{d S}{d\alpha} = \sum_{i=1}^n 2 w_i \left( \rho_i \cos(\theta_i - \alpha) - r \right) \left( \rho_i \sin(\theta_i - \alpha) - \frac{\partial r}{\partial\alpha} \right)
 $$
 
-Definiamo per brevità le coordinate scarto dal baricentro:
+Poiché $\sum_{i=1}^n w_i (\rho_i \cos(\theta_i - \alpha) - r) = 0$, il termine associato a $\frac{\partial r}{\partial\alpha}$ si annulla identicamente:
 
 $$
-\tilde{x}_i = x_i - \bar{x}, \quad \tilde{y}_i = y_i - \bar{y}
+\frac{d S}{d\alpha} = 2 \sum_{i=1}^n w_i \rho_i^2 \cos(\theta_i - \alpha) \sin(\theta_i - \alpha) - 2 r \sum_{i=1}^n w_i \rho_i \sin(\theta_i - \alpha) = 0
 $$
 
-La funzione di costo $S$ dipende ora unicamente da $\alpha$:
+Sfruttando le identità goniometriche:
+- $2 \cos(\theta_i - \alpha)\sin(\theta_i - \alpha) = \sin(2(\theta_i - \alpha)) = \sin(2\theta_i)\cos(2\alpha) - \cos(2\theta_i)\sin(2\alpha)$
+- Sostituendo $r = \frac{\sum_j w_j \rho_j \cos(\theta_j - \alpha)}{\sum_k w_k}$ e sviluppando il prodotto con $\sum_i w_i \rho_i \sin(\theta_i - \alpha)$, si perviene all'espressione:
 
 $$
-S(\alpha) = \sum_{i=1}^N \left( \tilde{x}_i \cos\alpha + \tilde{y}_i \sin\alpha \right)^2 = \sum_{i=1}^N \left( \tilde{x}_i^2 \cos^2\alpha + \tilde{y}_i^2 \sin^2\alpha + 2 \tilde{x}_i \tilde{y}_i \cos\alpha \sin\alpha \right)
+\frac{d S}{d\alpha} = N \cos(2\alpha) - D \sin(2\alpha) = 0
 $$
 
-Sfruttando le note identità trigonometriche di duplicazione degli angoli:
-- $\cos^2\alpha = \frac{1 + \cos(2\alpha)}{2}$
-- $\sin^2\alpha = \frac{1 - \cos(2\alpha)}{2}$
-- $2 \cos\alpha \sin\alpha = \sin(2\alpha)$
-
-Raggruppiamo i termini:
+dove:
 
 $$
-S(\alpha) = \frac{1}{2} \sum_{i=1}^N (\tilde{x}_i^2 + \tilde{y}_i^2) + \frac{1}{2} \cos(2\alpha) \sum_{i=1}^N (\tilde{x}_i^2 - \tilde{y}_i^2) + \sin(2\alpha) \sum_{i=1}^N (\tilde{x}_i \tilde{y}_i)
+N = \sum_{i=1}^n w_i \rho_i^2 \sin(2\theta_i) - \frac{2}{\sum_{k=1}^n w_k} \sum_{i=1}^n \sum_{j=1}^n w_i w_j \rho_i \rho_j \cos\theta_i \sin\theta_j
 $$
 
-Deriviamo $S(\alpha)$ rispetto ad $\alpha$ e imponiamo la condizione di stazionarietà $\frac{d S}{d \alpha} = 0$:
-
 $$
-\frac{d S}{d \alpha} = -\sin(2\alpha) \sum_{i=1}^N (\tilde{x}_i^2 - \tilde{y}_i^2) + 2 \cos(2\alpha) \sum_{i=1}^N (\tilde{x}_i \tilde{y}_i) = 0
+D = \sum_{i=1}^n w_i \rho_i^2 \cos(2\theta_i) - \frac{1}{\sum_{k=1}^n w_k} \sum_{i=1}^n \sum_{j=1}^n w_i w_j \rho_i \rho_j \cos(\theta_i + \theta_j)
 $$
 
-Separando le variabili trigonometriche:
+Uguagliando a zero si ottiene la condizione stazionaria:
 
 $$
-\sin(2\alpha) \sum_{i=1}^N (\tilde{x}_i^2 - \tilde{y}_i^2) = 2 \cos(2\alpha) \sum_{i=1}^N (\tilde{x}_i \tilde{y}_i)
+D \sin(2\alpha) = N \cos(2\alpha) \implies \tan(2\alpha) = \frac{N}{D}
 $$
 
-Dividendo per $\cos(2\alpha)$:
+#### Condizione di Minimo e Risoluzione del Quadrante con $\operatorname{atan2}$
+
+Calcolando la derivata seconda di $S$ rispetto ad $\alpha$:
 
 $$
-\tan(2\alpha) = \frac{2 \sum_{i=1}^N \tilde{x}_i \tilde{y}_i}{\sum_{i=1}^N (\tilde{x}_i^2 - \tilde{y}_i^2)} = \frac{-2 \sum_{i=1}^N (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^N (y_i - \bar{y})^2 - \sum_{i=1}^N (x_i - \bar{x})^2}
+\frac{d^2 S}{d\alpha^2} = -2 N \sin(2\alpha) - 2 D \cos(2\alpha) = -2 \left( N \sin(2\alpha) + D \cos(2\alpha) \right)
 $$
 
-L'angolo della normale $\alpha$ viene calcolato senza ambiguità di quadrante tramite la funzione $\text{atan2}$:
+Affinché la soluzione corrisponda a un __minimo locale__ ($\frac{d^2 S}{d\alpha^2} > 0$), la quantità in parentesi deve risultare strettamente negativa:
 
 $$
-\alpha = \frac{1}{2} \text{atan2}\left( -2 \sum_{i=1}^N \tilde{x}_i \tilde{y}_i, \; \sum_{i=1}^N (\tilde{y}_i^2 - \tilde{x}_i^2) \right)
+N \sin(2\alpha) + D \cos(2\alpha) < 0
 $$
 
-Se il valore calcolato di $r = \bar{x}\cos\alpha + \bar{y}\sin\alpha$ risulta negativo, si inverte la direzione della normale ($\alpha \leftarrow \alpha + \pi$, $r \leftarrow -r$) per preservare la convenzione standard $r \ge 0$.
-
----
-
-### Estensione Ai Minimi Quadrati Pesati (WLS)
-
-Quando i singoli punti $P_i$ presentano varianze eterogenee $\sigma_i^2$ (ad esempio a causa della dispersione radiale LiDAR che cresce con la distanza misurata $\rho_i$), si introduce il peso stocastico:
+Ciò impone la scelta di segno concorde per cui $\sin(2\alpha) \propto -N$ e $\cos(2\alpha) \propto -D$. L'orientamento ottimo privo di ambiguità di quadrante è pertanto:
 
 $$
-w_i = \frac{1}{\sigma_i^2}
+\alpha = \frac{1}{2} \operatorname{atan2}(-N, -D)
 $$
 
-La funzione di costo WLS vale:
+Se il valore calcolato di $r$ è negativo, si ripristina la convenzione geometrica standard $r \ge 0$ ponendo $\alpha \leftarrow (\alpha + \pi) \pmod{2\pi}$ e $r \leftarrow -r$.
+
+### Propagazione delle Incertezze e Matrice Jacobiana $F_{PQ}$
+
+I campioni sensoriali del LiDAR costituiscono variabili aleatorie raggruppate nel vettore di misura $\mathbf{Z} \in \mathbb{R}^{2n}$ partizionato nelle componenti di raggio $P$ e di orientamento angolare $Q$:
 
 $$
-S_w(\alpha, r) = \sum_{i=1}^N w_i \left( x_i \cos\alpha + y_i \sin\alpha - r \right)^2
+P = \begin{bmatrix} P_1 \\ \vdots \\ P_n \end{bmatrix} = \begin{bmatrix} \rho_1 \\ \vdots \\ \rho_n \end{bmatrix} \in \mathbb{R}^n, \quad Q = \begin{bmatrix} Q_1 \\ \vdots \\ Q_n \end{bmatrix} = \begin{bmatrix} \theta_1 \\ \vdots \\ \theta_n \end{bmatrix} \in \mathbb{R}^n
 $$
 
-Il baricentro pesato si ottiene come:
+Sotto l'ipotesi standard di errori di misura reciprocamente indipendenti, la matrice di covarianza congiunta dei dati grezzi $C_{PQ} \in \mathbb{R}^{2n \times 2n}$ è diagonale a due blocchi:
 
 $$
-\bar{x}_w = \frac{\sum w_i x_i}{\sum w_i}, \quad \bar{y}_w = \frac{\sum w_i y_i}{\sum w_i} \implies r = \bar{x}_w \cos\alpha + \bar{y}_w \sin\alpha
+C_{PQ} = \begin{bmatrix} C_P & \mathbf{0} \\ \mathbf{0} & C_Q \end{bmatrix} = \begin{bmatrix} \operatorname{diag}(\sigma_{\rho_1}^2, \dots, \sigma_{\rho_n}^2) & \mathbf{0} \\ \mathbf{0} & \operatorname{diag}(\sigma_{\theta_1}^2, \dots, \sigma_{\theta_n}^2) \end{bmatrix}
 $$
 
-E l'orientamento della normale diventa:
+I parametri stimati della retta costituiscono a loro volta variabili aleatorie descritte dalla coppia $(R, A) = (r, \alpha)$, derivate tramite le funzioni non lineari $(R, A) = f(P_1, \dots, P_n, Q_1, \dots, Q_n)$ con $f : \mathbb{R}^{2n} \to \mathbb{R}^2$.
+
+Definita la matrice Jacobiana $F_{PQ} \in \mathbb{R}^{2 \times 2n}$:
 
 $$
-\tan(2\alpha) = \frac{-2 \sum_{i=1}^N w_i (x_i - \bar{x}_w)(y_i - \bar{y}_w)}{\sum_{i=1}^N w_i (y_i - \bar{y}_w)^2 - \sum_{i=1}^N w_i (x_i - \bar{x}_w)^2}
-$$
-
----
-
-### Propagazione Delle Incertezze E Matrice Jacobiana $F_{PQ}$
-
-I punti di misura laser non sono grandezze deterministiche, ma variabili aleatorie raggruppate nel vettore di misura $\mathbf{P} \in \mathbb{R}^{2N}$:
-
-$$
-\mathbf{P} = \begin{bmatrix} \rho_1 & \theta_1 & \rho_2 & \theta_2 & \dots & \rho_N & \theta_N \end{bmatrix}^T
-$$
-
-con matrice di covarianza congiunta a blocchi diagonali $C_P \in \mathbb{R}^{2N \times 2N}$. Di conseguenza, anche i parametri stimati della retta $\mathbf{Q} = [\alpha, r]^T \in \mathbb{R}^2$ sono variabili aleatorie con matrice di covarianza $C_Q = C_{AR} \in \mathbb{R}^{2 \times 2}$:
-
-$$
-C_{AR} = \begin{bmatrix} \sigma_\alpha^2 & \sigma_{\alpha r} \\ \sigma_{\alpha r} & \sigma_r^2 \end{bmatrix}
-$$
-
-Applicando la legge di propagazione lineare delle covarianze mediante il Jacobiano della trasformazione di stima:
-
-$$
-C_{AR} = F_{PQ} \, C_P \, F_{PQ}^T
-$$
-
-dove $F_{PQ} \in \mathbb{R}^{2 \times 2N}$ è la matrice Jacobiana delle funzioni di stima $\alpha(\mathbf{P})$ e $r(\mathbf{P})$ rispetto al vettore delle misure $\mathbf{P}$:
-
-$$
-F_{PQ} = \begin{bmatrix}
-\frac{\partial \alpha}{\partial \rho_1} & \frac{\partial \alpha}{\partial \theta_1} & \dots & \frac{\partial \alpha}{\partial \rho_N} & \frac{\partial \alpha}{\partial \theta_N} \\[8pt]
-\frac{\partial r}{\partial \rho_1} & \frac{\partial r}{\partial \theta_1} & \dots & \frac{\partial r}{\partial \rho_N} & \frac{\partial r}{\partial \theta_N}
+F_{PQ} := \frac{\partial f}{\partial(P, Q)} = \begin{bmatrix}
+\frac{\partial r}{\partial P_1} & \dots & \frac{\partial r}{\partial P_n} & \frac{\partial r}{\partial Q_1} & \dots & \frac{\partial r}{\partial Q_n} \\[8pt]
+\frac{\partial \alpha}{\partial P_1} & \dots & \frac{\partial \alpha}{\partial P_n} & \frac{\partial \alpha}{\partial Q_1} & \dots & \frac{\partial \alpha}{\partial Q_n}
 \end{bmatrix}
 $$
 
-La conoscenza esplicita di $C_{AR}$ è indispensabile nei filtri di localizzazione e SLAM (es. EKF-SLAM basato su linee): consente al robot di calcolare l'ellisse di confidenza e la distanza di Mahalanobis tra le rette osservate all'istante $t$ e le pareti già censite nella mappa globale.
+la matrice di covarianza associata ai parametri della retta stimata $C_{RA} \in \mathbb{R}^{2 \times 2}$ si calcola per propagazione lineare:
+
+$$
+C_{RA} = F_{PQ} \, C_{PQ} \, F_{PQ}^T = \begin{bmatrix} \sigma_R^2 & \sigma_{RA} \\ \sigma_{RA} & \sigma_A^2 \end{bmatrix}
+$$
+
+dove:
+- $\sigma_R^2$ è la varianza sulla distanza ortogonale stimata $r$;
+- $\sigma_A^2$ è la varianza sull'orientamento della normale $\alpha$;
+- $\sigma_{RA}$ è la covarianza incrociata tra distanza e orientamento.
+
+La matrice $C_{RA}$ descrive l'ellisse di incertezza della retta estratta ed è impiegata direttamente nei filtri di stima dello stato (EKF-SLAM) per definire la covarianza del rumore di misura $R_t$ e calcolare la distanza di Mahalanobis nel data association.
 
 ## Formulazione Matriciale Dell'Histogram Filter Come Catena Di Markov
 
@@ -666,7 +640,7 @@ $$
 bel(x_t) = p(x_t \mid z_{1:t}, u_{1:t})
 $$
 
-Tuttavia, dal punto di vista dell'analisi teorica dei processi stocastici (come illustrato nelle lezioni avanzate del Prof. Valigi, slide 38–39), il Particle Filter trova la sua giustificazione analitica più rigorosa estendendo lo stato all'intera sequenza storica delle pose attraversate dal robot:
+Tuttavia, dal punto di vista dell'analisi teorica rigorosa dei processi stocastici markoviani, il Particle Filter trova la sua giustificazione analitica più solida estendendo lo stato all'intera sequenza storica delle pose attraversate dal robot:
 
 $$
 x_{0:t} = \{ x_0, x_1, \dots, x_t \}
@@ -782,7 +756,7 @@ Nel framework robotico __ROS / ROS2 (Nav2)__, il package di localizzazione 2D pe
 
 L'implementazione in linguaggio C originaria fonde congiuntamente l'adattamento della cardinalità $M$ tramite __KLD-Sampling__ e il recupero dal rapimento tramite __Augmented MCL__. Analizziamo le quattro funzioni e routine cardine del sorgente di `amcl`.
 
-### 1. Calcolo Del Limite Dinamico KLD: `pf_resample_limit`
+### Calcolo Del Limite Dinamico KLD: `pf_resample_limit`
 
 La funzione `pf_resample_limit(pf_t *pf, int k)` calcola il numero di particelle necessario $n$ dato il numero $k$ di bin non vuoti nell'istogramma KD-Tree:
 
@@ -817,7 +791,7 @@ int pf_resample_limit(pf_t *pf, int k)
 - `pf->pop_z`: quantile normale $z_{1-\delta}$ (`kld_z`, default $0.99 \implies 2.326$);
 - Il risultato viene saturato tra `min_samples` (default 500) e `max_samples` (default 5000).
 
-### 2. Aggiornamento Pesi E Filtri Esponenziali: `pf_update_sensor`
+### Aggiornamento Pesi E Filtri Esponenziali: `pf_update_sensor`
 
 All'arrivo di una nuova scansione laser, la funzione valuta il modello di verosimiglianza per ciascun campione e aggiorna le medie mobili esponenziali a lungo e breve termine ($w_{\text{slow}}$ e $w_{\text{fast}}$):
 
@@ -861,7 +835,7 @@ void pf_update_sensor(pf_t *pf, pf_sensor_model_fn_t sensor_fn, void *sensor_dat
 }
 ```
 
-### 3. Ricampionamento Con Iniezione Casuale: `pf_update_resample`
+### Ricampionamento Con Iniezione Casuale: `pf_update_resample`
 
 La funzione genera la nuova popolazione alternando il campionamento proporzionale alla CDF all'iniezione di pose casuali:
 
@@ -928,7 +902,7 @@ void pf_update_resample(pf_t *pf)
 }
 ```
 
-### 4. Configurazione Dei Parametri in ROS Launch File
+### Configurazione Dei Parametri in ROS Launch File
 
 Nel file di configurazione (`amcl.launch` o `nav2_params.yaml`) i parametri chiave governano direttamente queste routine:
 

@@ -109,8 +109,9 @@ flowchart TD
      - Formule matematiche KaTeX bilanciate, display math su righe isolate.
      - Immagini con `center` e scala (`small`, `mid`, `big`), con affiancamento a coppie per le immagini `small` consecutive.
      - Generazione di schemi vettoriali SVG puliti o diagrammi Mermaid per i disegni e gli schemi concettuali richiesti dalle note.
-7. **Fase 7 - Resoconto Analitico Finale di Revisione**:
-   - Presentazione finale all'utente che dettaglia:
+     - **DIVIETO ASSOLUTO DI META-COMMENTI O CALLOUT SU CORREZIONI**: esporre unicamente e direttamente la teoria, le equazioni e i concetti corretti. Nessun callout né frase deve menzionare che si sta correggendo un refuso o un errore delle note o delle slide.
+7. **Fase 7 - Resoconto Analitico Finale di Revisione (Esclusivamente in Chat / Log)**:
+   - Presentazione finale all'utente che dettaglia (esclusivamente nel messaggio di chat o nei piani interni, MAI nel file del capitolo):
      - Tutte le correzioni apportate ai dubbi e alle sviste delle note dello studente.
      - Tutti gli errori, allucinazioni e fraintendimenti corretti della trascrizione audio AI.
      - Indice riepilogativo dei capitoli generati e delle relative coperture concettuali.

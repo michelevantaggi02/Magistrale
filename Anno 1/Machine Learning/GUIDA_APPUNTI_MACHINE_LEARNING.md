@@ -85,7 +85,10 @@ flowchart TD
     E --> I
     H --> I
     I --> L["Applicazione Stile Autore (Pragmatismo, Paragrafi Snelli, KaTeX)"]
-    L --> M["5. Verifica Qualità, Correttezza Notazionale e Validazione con l'Utente"]
+    L --> R["5. Loop Iterativo di Revisione Automatica con Subagente Indipendente"]
+    R --> S["Applicazione Correzioni Rilevate dal Subagente"]
+    S --> R
+    R -- "CONFORME" --> M["6. Chiusura Capitolo & Validazione con l'Utente"]
 ```
 
 ### 3.1 Flusso Incrementale: Un Capitolo per Volta
@@ -95,6 +98,7 @@ Per massimizzare l'efficacia dello studio e consentire una revisione puntuale:
    - Si seleziona un capitolo (es. `0. Notazione e Concetti Fondamentali.md`).
    - Si estraggono le relative figure e si creano gli eventuali grafici didattici integrativi.
    - Si redige il testo completo in italiano, verificando la coerenza delle formule.
+   - Si esegue il **Loop Iterativo di Revisione Automatica con Subagente Indipendente** a convergenza (`CONFORME`).
    - Si conclude la sessione presentando il lavoro all'utente per la revisione, prima di passare al capitolo successivo.
 
 ### 3.2 Estrazione e Pulizia delle Figure della Dispensa
@@ -138,6 +142,16 @@ La dispensa del professore è rigorosa ma in alcuni passaggi teorici manca di su
      schema_<capitolo>_<descrizione>.svg
      ```
    - Esempio: `fig_ex_4_geometria_hat_matrix.png`, `schema_12_backprop_flusso.svg`, `fig_ex_10_lasso_vs_ridge_vincoli.png`.
+
+### 3.4 Loop Iterativo di Revisione Automatica con Subagente Indipendente (Regola Vault)
+In ossequio alla regola generale del vault definita in `[[.agents/rules/revisione_automatica_subagente.md|revisione_automatica_subagente.md]]`:
+1. Subito dopo la stesura del capitolo, si invoca obbligatoriamente un subagente indipendente (`TypeName: "research"`, `Role: "Independent Academic Reviewer"`).
+2. Il reviewer confronta il capitolo con `ML_Notes.pdf` verificando:
+   - Rigore matematico, algebrico e notazionale (segni, indici, dimensioni vettori/matrici).
+   - Fedeltà al perimetro didattico della dispensa e assenza di allucinazioni/teorie esterne non trattate dal docente.
+   - **Assenza totale di meta-commenti o callout su correzioni o refusi delle note/slide** (il testo deve esporre solo e direttamente la teoria corretta e definitiva).
+3. Se emergono criticità, l'agente principale applica le correzioni e **avvia obbligatoriamente un NUOVO subagente indipendente** per riesaminare il testo modificato.
+4. Il capitolo può essere presentato all'utente **esclusivamente quando un subagente certifica l'esito formale `CONFORME`**.
 
 ## 4. Convenzioni Notazionali del Docente (Capitolo 1)
 
@@ -210,13 +224,16 @@ Tutti i documenti `.md` di Machine Learning devono uniformarsi senza eccezioni a
 - Un elenco puntato o numerato **deve essere completato integralmente prima di inserire callout, immagini o blocchi matematici estesi**.
 - È severamente vietato interrompere una lista a metà (es. punto 1, poi un'immagine o callout, poi punto 2). Eventuali figure di commento vanno posizionate immediatamente al termine della lista completa.
 
-### 5.5 Stile dell'Autore e Comprensibilità
+### 5.5 Stile dell'Autore, Comprensibilità e Divieto di Meta-Commenti
 - **Lingua Italiana**: Testo redatto interamente in italiano, traducendo e rielaborando ogni paragrafo della dispensa originale (mantenendo in inglese solo termini tecnici universali come *overfitting*, *bias-variance tradeoff*, *feature*, *early stopping*, *regularization*).
 - **Voce in Prima Persona Naturale**: Alternare prima persona singolare (*"ho un dataset"*, *"se calcolo la derivata ottengo"*) e plurale (*"abbiamo visto"*, *"possiamo interpretare"*).
 - **Pragmatismo Ingegneristico e Zero Fuffa**:
   - Evitare aperture pompose o cerimoniali accademici.
   - Spiegare il *perché* geometrico e concettuale prima di buttare giù la formula analitica.
   - Paragrafi agili e snelli (da 1 a 4 righe al massimo).
+- **Divieto Assoluto di Meta-Commenti su Correzioni o Refusi**:
+  - È severamente vietato inserire box come `>[!WARNING] Correzione Refusi delle Note` o frasi del tipo *"Nelle note dello studente la formula conteneva un errore..."*, *"Abbiamo corretto l'indice..."*.
+  - Il documento deve esporre direttamente la teoria e le formule corrette e definitive, come in una pubblicazione accademica formale. Le segnalazioni di correzione vanno fatte unicamente in chat all'utente.
 - **Callout Mirati**:
   - `>[!NOTE]`: chiarimenti operativi, convenzioni o dettagli implementativi.
   - `>[!IMPORTANT]`: condizioni matematiche cruciali, limiti teorici, proprietà d'esame.
@@ -237,5 +254,7 @@ Prima di ritenere completato un capitolo della materia:
 - [ ] **Sintassi Tipografica Linter**: Utilizzo di `__grassetto__`, `_corsivo_` e `…`.
 - [ ] **Assenza di Linee Orizzontali**: Nessun separatore `---` presente nel corpo del testo.
 - [ ] **Integrità degli Elenchi**: Nessun elenco interrotto a metà da blocchi grafici o callout.
+- [ ] **Divieto di Meta-Commenti**: Nessuna frase o callout fa riferimento a refusi delle note o a spiegazioni del processo correttivo.
 - [ ] **Ritmo e Comprensibilità**: Testo scorrevole, paragrafi brevi (1-4 righe), prima persona ingegneristica, spiegazione intuitiva prima delle formule analitiche.
+- [ ] **Certificazione di Revisione con Subagente Indipendente**: Il capitolo è stato esaminato da un subagente indipendente fino a conseguire la certificazione formale `CONFORME`.
 - [ ] **Revisione con l'Utente**: Il capitolo è stato concluso e presentato all'utente per la validazione prima di passare al capitolo successivo.

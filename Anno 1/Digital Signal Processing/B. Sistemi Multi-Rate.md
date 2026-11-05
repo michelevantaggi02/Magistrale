@@ -144,11 +144,19 @@ I campioni ai multipli interi di $L$ mantengono il valore dei campioni originari
 
 Normalmente l'analisi è confinata nell'intervallo di Nyquist di base, ma l'espansione temporale allarga l'intervallo di osservazione a $[-f_s'/2, f_s'/2]$, rendendo visibili le repliche spettrali che devono essere eliminate dal filtro passa-basso digitale.
 
-I parametri di taglio del filtro interpolatore alla nuova frequenza di campionamento sono:
+I parametri di taglio del filtro interpolatore ideale alla nuova frequenza di campionamento sono:
 
 $$f_c = \frac{f_s}2 = \frac{f_s'}{2L}, \quad \omega_c' = \frac{2\pi f_c}{f_s'} = \frac \pi L$$
 
-Il filtro FIR interpolatore deve avere un __guadagno in continua pari a $L$__ per preservare l'ampiezza nominale dei campioni originari ($y_{\text{up}}(nL) = x(n)$) e compensare la scalatura spettrale introdotta dall'espansione del rate.
+Nella progettazione pratica di filtri FIR interpolatori (ad esempio mediante finestratura di Kaiser), la prima replica spettrale indesiderata (immagine) compare centrata a $f_s$, con bordo inferiore a $f_s - f_{\max}$. La transizione del filtro può quindi essere posizionata simmetricamente a cavallo di $f_c = f_s/2$:
+
+$$\Delta f \leq 2\left(\frac{f_s}{2} - f_{\max}\right)$$
+
+$$f_{\text{pass}} = f_c - \frac{\Delta f}{2} = f_{\max}, \quad f_{\text{stop}} = f_c + \frac{\Delta f}{2} = f_s - f_{\max} > \frac{f_s}{2}$$
+
+In tal modo la banda di arresto sopprime interamente le immagini spettrali senza intaccare la banda base originaria.
+
+Il filtro FIR interpolatore deve inoltre avere un __guadagno in continua pari a $L$__ per preservare l'ampiezza nominale dei campioni originari ($y_{\text{up}}(nL) = x(n)$) e compensare la scalatura spettrale introdotta dall'inserimento di $L-1$ zeri.
 
 ### Tecnica Di Progettazione Polifase
 
@@ -168,7 +176,7 @@ Scomponendo anche l'indice dei coefficienti $k'$ nella base $L$ con $k' = kL + j
 
 $$y_{\text{up}}(nL+i) = \sum_{k=-M}^{M-1}\sum_{j=0}^{L-1} d(kL+j) x_{\text{up}}((n-k)L + i - j), \quad i=0,\dots,L-1$$
 
-Si noti che l'estremo superiore $k' = LM$ della sommatoria non compare esplicitamente poiché per il filtro interpolatore ideale a banda $\pi/L$ vale $d(LM) = 0$ (proprietà di annullamento della sinc nei multipli di $L$), per cui ciascun sottofiltro polifase ha esattamente $2M$ coefficienti non nulli.
+Si noti che l'estremo superiore $k' = LM$ della sommatoria non compare esplicitamente poiché per il filtro interpolatore ideale a banda $\pi/L$ vale $d(LM) = 0$ (proprietà di annullamento della sinc nei multipli di $L$), per cui ciascun sottofiltro polifase ha una lunghezza pari a $2M$ coefficienti (con $-M \le k \le M-1$).
 
 Si definiscono quindi gli $L$ filtri polifase $d_i(k)$ come:
 
@@ -203,20 +211,27 @@ La decimazione è l'operazione duale dell'interpolazione, ovvero la riduzione co
 
 ![[immagini/decimatore_ideale.svg|center big]]
 
-Prima di sottocampionare di un fattore $M$, è indispensabile garantire che lo spettro del segnale sia confinato entro l'intervallo $[0, f_s''/2]$, inserendo un filtro passa-basso digitale con frequenza di taglio $f_c = f_s''/2 = f_s' / (2M)$.
+Prima di sottocampionare di un fattore $M$, è indispensabile garantire che lo spettro del segnale sia confinato entro l'intervallo $[-f_s''/2, f_s''/2]$ (o $|f| \leq f_s''/2$), inserendo un filtro passa-basso digitale con frequenza di taglio $f_c = f_s''/2 = f_s' / (2M)$.
 
 L'eliminazione delle componenti spettrali comprese tra $f_s''/2$ e $f_s'/2$ rappresenta una perdita di informazione irreversibile, ma matematicamente obbligatoria per prevenire distorsioni da ripiegamento spettrale (aliasing).
 
 ![[immagini/blocchi_ideal_decim.png|center mid]]
 
 >[!note]
->Poiché i filtri ideali brick-wall non sono realizzabili, si impiegano filtri FIR progettati ad esempio con finestra di Kaiser, fissando:
+>Poiché i filtri ideali brick-wall non sono realizzabili, si impiegano filtri FIR passa-basso reali progettati ad esempio con finestra di Kaiser.
+>Per prevenire rigorosamente qualsiasi ripiegamento spettrale (aliasing) all'interno dell'intero intervallo di Nyquist di destinazione $[-f_s''/2, f_s''/2]$, l'inizio della banda di arresto del filtro anti-aliasing deve essere collocato prima o al più sulla frequenza di Nyquist decimata:
 >
->$$f_{\text{pass}} < \frac{f_s''}{2}$$
+>$$f_{\text{stop}} \leq \frac{f_s''}{2}$$
 >
->$$\Delta f = 2\left(\frac{f_s''}{2} - f_{\text{pass}}\right)$$
+>Fissata la banda passante utile $f_{\text{pass}} < f_{\text{stop}}$, la banda di transizione risulta:
 >
->dove $f_{\text{stop}} = f_s'' - f_{\text{pass}} > \frac{f_s''}{2}$.
+>$$\Delta f = f_{\text{stop}} - f_{\text{pass}}$$
+>
+>con frequenza di taglio nominale a $-6\text{ dB}$:
+>
+>$$f_c = \frac{f_{\text{pass}} + f_{\text{stop}}}{2} < \frac{f_s''}{2}$$
+>
+>(Qualora si adotti un criterio rilassato in cui si ammette aliasing nella sola banda di transizione senza contaminare la banda utile $[0, f_{\text{pass}}]$, la condizione limite teorica diventa $f_{\text{stop}} \leq f_s'' - f_{\text{pass}}$).
 
 Il costo computazionale nominale diretto richiederebbe $N$ moltiplicazioni per ciascun campione ad alta frequenza. Tuttavia, poiché il decimatore trattiene solo 1 campione su $M$ (scartandone $M-1$), implementando la struttura polifase i calcoli vengono eseguiti solo per i campioni in uscita, riducendo l'onere computazionale medio a $N/M$ operazioni per campione d'ingresso.
 
@@ -251,7 +266,9 @@ Trattandosi di due filtri ideali passa-basso con tagli rispettivamente pari a $\
 
 $$\omega_c' = \frac{2\pi f_c}{f_s'} = \min\left(\frac \pi L, \frac \pi M\right) = \frac \pi{\max(L,M)}$$
 
-A seconda che risulti $L > M$ (conversione verso l'alto o up-sampling netto) oppure $L < M$ (conversione verso il basso o down-sampling netto), il filtro unico assume le caratteristiche rispettivamente del filtro interpolatore o del filtro decimatore.
+e con __guadagno in continua rigorosamente pari a $L$__ per preservare la dinamica e compensare l'inserimento degli zeri operato dall'upsampler.
+
+A seconda che risulti $L > M$ (conversione verso l'alto o up-sampling netto) oppure $L < M$ (conversione verso il basso o down-sampling netto), il filtro unico assume la frequenza di taglio rispettivamente del filtro interpolatore ($f_c = f_s / 2$) o del filtro decimatore ($f_c = f_s'' / 2$).
 
 ## Filtri Multi-Stadio
 
@@ -262,8 +279,8 @@ Per ottimizzare le risorse, la conversione viene scomposta in __più stadi in ca
 Nei convertitori sample-rate a rapporto razionale viene scomposto soltanto lo stadio che impone il vincolo di filtraggio più severo.
 
 L'ordine di allocazione dei fattori intermedi segue una regola precisa:
-- __Dal fattore più grande al più piccolo__ per gli interpolatori (in modo che i filtri a pendenza più ripida operino alle frequenze di campionamento più basse).
-- __Dal fattore più piccolo al più grande__ per i decimatori (per massimizzare la reiezione prima di ridurre ulteriormente la frequenza).
+- __Dal fattore più piccolo al più grande__ per gli interpolatori (in modo che il primo filtro, che possiede la banda di transizione più stretta e l'ordine più elevato, operi alla frequenza di campionamento più bassa possibile).
+- __Dal fattore più grande al più piccolo__ per i decimatori (in modo da abbattere drasticamente la frequenza di campionamento fin dal primo stadio e ridurre il numero di campioni al secondo elaborati dai filtri successivi, lasciando il filtro più selettivo all'uscita alla frequenza più bassa).
 
 ![[immagini/multi_stadio.svg|center big]]
 
@@ -306,9 +323,9 @@ L\frac{\omega'/2}{\sin(\omega'/2)}, & \text{se } |\omega'| \leq \frac \pi L\\
 0,& \text{se } \frac\pi L < |\omega'| \leq \pi
 \end{cases} $$
 
-Tale filtro FIR può essere progettato agevolmente mediante il [[8. Filtri FIR - Finite Impulse Response#^14b2ae|Metodo del campionamento in frequenza]].
+Tale filtro FIR può essere progettato agevolmente mediante il [[8. Filtri FIR - Finite Impulse Response#Metodo Del Campionamento in Frequenza|Metodo del campionamento in frequenza]].
 
-Noti la lunghezza $N$ del filtro desiderato (con $N = 2LM + 1$) e i campioni di frequenza, i coefficienti impulsivi simmetrici si determinano mediante IDFT a $N$ punti:
+Noti la lunghezza $N$ del filtro desiderato (con $N = 2LM + 1$) e la griglia dei campioni di frequenza $\omega_i' = \frac{2\pi i}{N}$ (con $-LM \leq i \leq LM$), i coefficienti impulsivi simmetrici si determinano mediante IDFT a $N$ punti:
 
 $$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')e^{j\omega_i'k'}, \quad -LM \leq k' \leq LM $$
 

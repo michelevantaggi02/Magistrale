@@ -1,0 +1,1664 @@
+10. FIR DIGITAL FILTER DESIGN
+
+538
+
+D(ω)= e−jωM ejπ/2 A(ω)= e−jωM ejπ/2 ejπα(ω) |A(ω)|
+H(ω)= e−jωM 
+where α(ω)=
+sponses:
+
+
+
+
+
+
+
+1 − sign A(ω)
+
+|H(ω)| = |A(ω)| ,
+
+/2, which gives for the magnitude and phase re-
+
+arg H(ω)= −ωM +
+
+π
+2
+
++ π α(ω)
+
+(10.1.18)
+
+How good is the rectangular window design? How well does the truncated 
+D(ω)
+represent the desired response D(ω)? In other words, how good is the approximation
+
+D(ω) D(ω)?
+Intuitively one would expect that 
+D(ω)→ D(ω) as N increases. This is true for any
+ω which is a point of continuity of D(ω), but it fails at points of discontinuity, such as
+at the transition edges from passband to stopband. Around these edges one encounters
+the celebrated Gibbs phenomenon of Fourier series, which causes the approximation to
+be bad regardless of how large N is.
+To illustrate the nature of the approximation 
+D(ω) D(ω), we consider the design
+of an ideal lowpass ﬁlter of cutoff frequency ωc = 0.3π, approximated by a rectangularly windowed response of length N = 41 and then by another one of length N = 121.
+For the case N = 41, we have M = (N − 1)/2 = 20. The designed impulse response is
+given by Eq. (10.1.10):
+
+
+
+
+
+sin 0.3π(n − 20)
+,
+h(n)= d(n − 20)=
+π(n − 20)
+
+n = 0, 1, . . . , 40
+
+and in particular, h(20)= d(0)= ωc /π = 0.3. The second design has N = 121 and
+M = 60. Its impulse response is, with h(60)= d(0)= 0.3:
+
+
+sin 0.3π(n − 60)
+h(n)= d(n − 60)=
+,
+n = 0, 1, . . . , 120
+π(n − 60)
+The two impulse responses are plotted in Fig. 10.1.4. Note that the portion of the
+second response extending ±20 samples around the central peak at n = 60 coincides
+numerically with the ﬁrst response. The corresponding magnitude responses are shown
+in Fig. 10.1.5. An intermediate case having N = 81 is shown in Figs. 10.1.6 and 10.1.7.
+In Fig. 10.1.5, the magnitude responses were computed by evaluating:
+N−1
+
+h(n)e−jωn
+
+H(ω)=
+
+(10.1.19)
+
+n=0
+
+The length-N impulse response h(n) deﬁned in Eq. (10.1.10) may be thought of
+formally as the rectangularly windowed double-sided sequence deﬁned by
+
+h(n)= w(n)d(n − M) ,
+
+−∞ < n < ∞
+
+(10.1.20)
+
+where w(n) is the length-N rectangular window. In the frequency domain, this translates to the convolution of the corresponding spectra, as in Eq. (9.1.8):
+
+10.1. WINDOW METHOD
+
+539
+
+Fig. 10.1.4 Rectangularly windowed impulse responses for N = 41 and N = 121.
+
+Fig. 10.1.5 Rectangularly windowed magnitude responses for N = 41 and N = 121.
+
+π
+H(ω)=
+
+
+
+−π
+
+W(ω − ω )e−jω M D(ω )
+
+dω
+2π
+
+(10.1.21)
+
+
+
+where the e−jω M arises from the delay in d(n − M).
+The spectrum W(ω) of the rectangular window was given in Eq. (9.1.9) (with L = N).
+Thus, the designed ﬁlter H(ω) will be a smeared version of the desired shape D(ω).
+In particular, for the ideal lowpass case, because D(ω ) is nonzero and unity only over
+the subinterval −ωc ≤ ω ≤ ωc , the frequency convolution integral becomes:
+
+ ωc
+H(ω)=
+
+−ωc
+
+
+
+W(ω − ω )e−jω M
+
+dω
+2π
+
+(10.1.22)
+
+The ripples in the frequency response H(ω), observed in Fig. 10.1.5, arise from the
+(integrated) ripples of the rectangular window spectrum W(ω). As N increases, we
+observe three effects in Fig. 10.1.5:
+1. For ω’s that lie well within the passband or stopband (i.e., points of continuity), the
+ripple size decreases as N increases, resulting in ﬂatter passband and stopband.
+
+For such ω, we have D(ω)→
+D(ω) as N → ∞.
+
+10. FIR DIGITAL FILTER DESIGN
+
+540
+
+2. The transition width decreases with increasing N. Note also that for any N, the
+windowed response H(ω) is always equal to 0.5 at the cutoff frequency ω = ωc .
+(This is a standard property of Fourier series.)
+3. The largest ripples tend to cluster near the passband-to-stopband discontinuity
+(from both sides) and do not get smaller with N. Instead, their size remains
+approximately constant, about 8.9 percent, independent of N. Eventually, as N →
+∞, these ripples get squeezed onto the discontinuity at ω = ωc , occupying a set
+of measure zero. This behavior is the Gibbs phenomenon.
+
+10.1.3 Hamming Window
+To eliminate the 8.9% passband and stopband ripples, we may replace the rectangular
+window w(n) in Eq. (10.1.20) by a non-rectangular one, which tapers off gradually at
+its endpoints, thus reducing the ripple effect. There exist dozens of windows [219–222]
+and among these the Hamming window is a popular choice; it is deﬁned by:
+
+
+w(n)= 0.54 − 0.46 cos
+
+2πn
+N−1
+
+
+,
+
+n = 0, 1, . . . , N − 1
+
+(10.1.23)
+
+In particular, the Hamming windowed impulse response for a length-N lowpass ﬁlter
+will be, where N = 2M + 1 and n = 0, 1, . . . , N − 1:
+
+h(n)= w(n)d(n − M)= 0.54 − 0.46 cos
+
+ 2πn 
+N−1
+
+
+
+·
+
+
+
+sin ωc (n − M)
+
+π(n − M)
+
+(10.1.24)
+
+As an example, consider the design of a length N = 81 lowpass ﬁlter with cutoff
+frequency ωc = 0.3π. Fig. 10.1.6 shows the rectangularly and Hamming windowed
+impulse responses. Note how the Hamming impulse response tapers off to zero more
+gradually. It was computed by Eq. (10.1.24) with N = 81 and M = 40. Fig. 10.1.7 shows
+the corresponding magnitude responses.
+
+Fig. 10.1.6 Rectangular and Hamming windowed impulse responses for N = 81.
+
+10.2. KAISER WINDOW
+
+541
+
+Fig. 10.1.7 Rectangular and Hamming windowed magnitude responses for N = 81.
+
+The passband/stopband ripples of the rectangular window design are virtually eliminated from the Hamming window design. Actually, there are small ripples with maximum overshoot of about 0.2%, but they are not visible in the scale of Fig. 10.1.7. The
+price for eliminating the ripples is loss of resolution, which is reﬂected into a wider
+transition width.
+
+10.2 Kaiser Window
+10.2.1 Kaiser Window for Filter Design
+The rectangular and Hamming window designs are very simple, but do not provide
+good control over the ﬁlter design speciﬁcations. With these windows, the amount of
+overshoot is always ﬁxed to 8.9% or 0.2% and cannot be changed to a smaller value if so
+desired.
+A ﬂexible set of speciﬁcations is shown in Fig. 10.2.1 in which the designer can
+arbitrarily specify the amount of passband and stopband overshoot δpass , δstop , as well
+as the transition width Δf .
+The passband/stopband frequencies {fpass , fstop } are related to the ideal cutoff frequency fc and transition width Δf by
+
+fc =
+
+1
+(fpass + fstop ) ,
+2
+
+Δf = fstop − fpass
+
+(10.2.1)
+
+Thus, fc is chosen to lie exactly in the middle between fpass and fstop . Eqs. (10.2.1)
+can be inverted to give:
+
+fpass = fc −
+
+1
+Δf ,
+2
+
+fstop = fc +
+
+1
+Δf
+2
+
+(10.2.2)
+
+The normalized versions of the frequencies are the digital frequencies:
+
+ωpass =
+
+2πfpass
+
+fs
+
+,
+
+ωstop =
+
+2πfstop
+
+fs
+
+,
+
+ωc =
+
+2πfc
+
+fs
+
+,
+
+Δω =
+
+2πΔf
+
+fs
+
+10. FIR DIGITAL FILTER DESIGN
+
+542
+
+In practice, the passband and stopband overshoots are usually expressed in dB:
+
+
+Apass = 20 log10
+
+1 + δpass
+
+
+Astop = −20 log10 δstop
+
+,
+
+1 − δpass
+
+(10.2.3)
+
+A simpliﬁed version of the passband equation can be obtained by expanding it to
+ﬁrst order in δpass , giving:
+
+Apass = 17.372δpass
+
+(10.2.4)
+
+which is valid for small values of δpass . Eqs. (10.2.3) can be inverted to give:
+
+δpass =
+
+10Apass /20 − 1
+,
+10Apass /20 + 1
+
+δstop = 10−Astop /20
+
+(10.2.5)
+
+Thus, one can pass back and forth between the speciﬁcation sets:
+
+{fpass , fstop , Apass , Astop }
+
+designed
+filter |H( f )|
+
+
+
+desired ideal
+filter |D( f )|
+
+1+δpass
+1−δpass
+
+{fc , Δf , δpass , δstop }
+
+Apass
+
+1
+
+Astop
+
+Δf = transition
+width
+
+1/2
+
+f
+
+δstop
+0
+
+fstop
+
+fpass
+
+passband
+
+fs /2
+
+stopband
+
+fc
+
+Fig. 10.2.1 Magnitude response speciﬁcations for a lowpass ﬁlter.
+
+Although δpass and δstop can be speciﬁed independently of each other, it is a property of all window designs that the ﬁnal designed ﬁlter will have equal passband and
+stopband ripples. Therefore, we must design the ﬁlter on the basis of the smaller of the
+two ripples, that is,
+
+δ = min(δpass , δstop )
+
+(10.2.6)
+
+The designed ﬁlter will have passband and stopband ripple equal to δ. The value of
+
+δ can also be expressed in dB:
+A = −20 log10 δ ,
+
+δ = 10−A/20
+
+(10.2.7)
+
+10.2. KAISER WINDOW
+
+543
+
+In practice, the design is usually based on the stopband ripple δstop . This is so
+because any reasonably good choices for the passband and stopband attenuations (e.g.,
+Apass = 0.1 dB and Astop = 60 dB) will almost always result into δstop < δpass , and
+therefore, δ = δstop , and in dB, A = Astop . Thus, it is useful to think of A as the
+stopband attenuation.
+The main limitation of most windows is that they have a fixed value of δ, which
+depends on the particular window shape. Such windows limit the achievable passband
+and stopband attenuations {Apass , Astop } to only certain speciﬁc values.
+For example, Table 10.2.1 shows the attenuations achievable by the rectangular and
+Hamming windows, calculated from Eq. (10.2.3) with the values δ = δpass = δstop =
+0.089 and δ = δpass = δstop = 0.002, respectively. The table also shows the corresponding value of the transition width parameter D of Eq. (10.2.11).
+The only windows that do not suffer from the above limitation are the Kaiser window
+[245–247], the Dolph-Chebyshev window [248–253], and the Saramäki windows [254].
+These windows have an adjustable shape parameter that allows the window to achieve
+any desired value of ripple δ or attenuation A.
+Window
+
+δ
+
+Astop
+
+Apass
+
+D
+
+Rectangular
+Hamming
+Kaiser
+
+8.9%
+0.2%
+variable δ
+
+−21 dB
+−54 dB
+
+1.55 dB
+0.03 dB
+17.372δ
+
+0.92
+3.21
+(A − 7.95)/14.36
+
+−20 log10 δ
+
+Table 10.2.1 Speciﬁcations for rectangular, Hamming, and Kaiser windows.
+
+The Kaiser window is unique in the above class in that it has near-optimum performance (in the sense of minimizing the sidelobe energy of the window), as well as
+having the simplest implementation. It depends on two parameters: its length N and
+the shape parameter α. Assuming odd length N = 2M + 1, the window is deﬁned, for
+n = 0, 1, . . . , N − 1, as follows:
+
+(Kaiser window)
+
+w(n)=
+
+ 
+
+I0 α 1 − (n − M)2 /M2
+I0 (α)
+
+(10.2.8)
+
+where I0 (x) is the modified Bessel function of the first kind and 0th order. This function
+and its evaluation by the routine I0.c are discussed at the end of this section. The numerator in Eq. (10.2.8) can be rewritten in the following form, which is more convenient
+for numerical evaluation:
+
+ 
+
+I0 α n(2M − n)/M
+,
+w(n)=
+I0 (α)
+
+n = 0, 1, . . . , N − 1
+
+(10.2.9)
+
+Like all window functions, the Kaiser window is symmetric about its middle, n = M,
+and has the value w(M)= 1 there. At the endpoints, n = 0 and n = N − 1, it has the
+value 1/I0 (α) because I0 (0)= 1.
+Figure 10.2.2 compares a Hamming window of length N = 51 to the Kaiser windows
+of the same length and shape parameters α = 7 and α = 5. For α = 5 the Kaiser and
+
+10. FIR DIGITAL FILTER DESIGN
+
+544
+
+Hamming windows agree closely, except near their endpoints. For α = 0 the Kaiser
+window reduces to the rectangular one.
+
+Fig. 10.2.2 Kaiser and Hamming windows for N = 51 and α = 5, 7.
+
+The window parameters {N, α} are computable in terms of the ﬁlter speciﬁcations,
+namely, the ripple δ and transition width Δf . The design equations developed by Kaiser
+[245–247] are as follows. The shape parameter α is calculated from:
+
+⎧
+⎪
+⎨ 0.1102(A − 8.7),
+0.5842(A − 21)0.4 +0.07886(A − 21),
+α=
+⎪
+⎩ 0,
+
+if A ≥ 50
+if 21 < A < 50
+if A ≤ 21
+
+(10.2.10)
+
+where A is the ripple in dB, given by Eq. (10.2.7). The ﬁlter length N is inversely related
+to the transition width:
+
+Δf =
+
+Dfs
+N−1
+
+
+
+N−1=
+
+Dfs
+Δf
+
+(10.2.11)
+
+where the factor D is computed also in terms of A by
+
+⎧
+⎨ A − 7.95
+,
+D=
+⎩ 14.36
+0.922,
+
+if A > 21
+if A ≤ 21
+
+(10.2.12)
+
+The most practical range of these formulas is for A ≥ 50 dB, for which they simplify
+to:
+
+α = 0.1102(A − 8.7) ,
+
+D=
+
+A − 7.95
+14.36
+
+(for A ≥ 50 dB)
+
+(10.2.13)
+
+To summarize, the steps for designing a lowpass ﬁlter are as follows. Given the
+speciﬁcations {fpass , fstop , Apass , Astop }:
+1. Calculate fc and Δf from Eq. (10.2.1). Then, calculate ωc = 2πfc /fs .
+
+10.2. KAISER WINDOW
+
+545
+
+2. Calculate δpass and δstop from Eq. (10.2.5).
+3. Calculate δ = min(δpass , δstop ) and A = −20 log10 δ in dB.
+4. Calculate α and D from Eqs. (10.2.10) and (10.2.12).
+5. Calculate the ﬁlter length N from Eq. (10.2.11) and round it up to the next odd
+integer, N = 2M + 1, and set M = (N − 1)/2.
+6. Calculate the window function w(n), n = 0, 1, . . . , N − 1 from Eq. (10.2.8).
+7. Calculate the windowed impulse response, for n = 0, 1, . . . , N − 1:
+
+
+
+
+
+h(n)= w(n)d(n − M)= w(n)·
+
+sin ωc (n − M)
+
+(10.2.14)
+
+π(n − M)
+
+In particular, we have h(M)= w(M)ωc /π = ωc /π, because w(M)= 1.
+Note that the window parameters {N, α} depend only on the speciﬁcations {A, Δf } and
+not on fc . However, h(n) does depend on fc .
+The design steps can be modiﬁed easily to design highpass and bandpass ﬁlters. For
+highpass ﬁlters, the role of fpass and fstop are interchanged; therefore, the only change in
+the steps is to deﬁne Δf = fpass −fstop and to use the highpass response from Eq. (10.1.4).
+The highpass impulse response will be:
+
+!
+
+"
+
+
+
+h(n)= w(n)d(n − M)= w(n)· δ(n − M)−
+
+sin ωc (n − M)
+
+π(n − M)
+
+The ﬁrst term can be simpliﬁed to w(n)δ(n − M)= w(M)δ(n − M)= δ(n − M)
+because w(M)= 1. Therefore, the designed ﬁlter will be:
+
+
+
+h(n)= δ(n − M)−w(n)·
+
+
+
+sin ωc (n − M)
+
+π(n − M)
+
+(10.2.15)
+
+For the same value of ωc , the lowpass and highpass ﬁlters are complementary. The
+sum of Eqs. (10.2.14) and (10.2.15) gives:
+
+hLP (n)+hHP (n)= δ(n − M) ,
+
+n = 0, 1, . . . , N − 1
+
+(10.2.16)
+
+which becomes in the z-domain:
+
+HLP (z)+HHP (z)= z−M
+
+(10.2.17)
+
+For bandpass ﬁlters, the desired speciﬁcations may be given as in Fig. 10.2.3. There
+are now two stopbands and two transition widths. The ﬁnal design will have equal
+transition widths, given by Eq. (10.2.11). Therefore, we must design the ﬁlter based on
+the smaller of the two widths, that is,
+
+Δf = min(Δfa , Δfb )
+where the left and right transition widths are:
+
+(10.2.18)
+
+10. FIR DIGITAL FILTER DESIGN
+
+546
+
+Δfa = fpa − fsa ,
+
+Δfb = fsb − fpb
+
+(10.2.19)
+
+Figure 10.2.3 shows the case where the left transition width is the smaller one and,
+thus, deﬁnes Δf . The ideal cutoff frequencies fa and fb can be calculated by taking them
+to be Δf /2 away from the passband or from the stopbands. The standard definition is
+with respect to the passband:
+
+fa = fpa −
+
+1
+Δf ,
+2
+
+fb = fpb +
+
+1
+Δf
+2
+
+(10.2.20)
+
+This choice makes the passband just right and the stopband somewhat wider than
+required. The alternative definition makes the stopbands right and the passband wider:
+
+fa = fsa +
+
+1
+Δf ,
+2
+
+fb = fsb −
+
+1
+Δf
+2
+
+desired ideal
+filter |D( f )|
+1+δpass
+1−δpass
+
+standard
+design alternative
+design
+
+Apass
+
+1
+
+Δf Δf
+2 2
+
+Astop
+
+(10.2.21)
+
+Δf
+2
+
+Δfa
+
+Δf
+2
+Δfb
+
+δstop
+
+f
+
+0
+
+fpa
+
+fsa
+
+stopband
+
+fpb
+
+passband
+
+fa
+
+fsb
+fb
+
+fb
+
+fs /2
+
+stopband
+
+Fig. 10.2.3 Bandpass ﬁlter speciﬁcations.
+
+Once the cutoff frequencies {fa , fb } and the window parameters {N, α} are calculated, the bandpass impulse response may be deﬁned, for n = 0, 1, . . . , N − 1:
+
+
+
+h(n)= w(n)d(n − M)= w(n)·
+
+
+
+
+
+
+
+sin ωb (n − M) − sin ωa (n − M)
+
+π(n − M)
+
+(10.2.22)
+
+where h(M)= (ωb − ωa )/π, and ωa = 2πfa /fs , ωb = 2πfb /fs . Next, we present a
+lowpass and a bandpass design example.
+Example 10.2.1: Lowpass Design. Using the Kaiser window, design a lowpass digital ﬁlter with
+the following speciﬁcations:
+
+fs = 20 kHz
+fpass = 4 kHz, fstop = 5 kHz
+Apass = 0.1 dB, Astop = 80 dB
+
+10.2. KAISER WINDOW
+
+547
+
+Solution: First, we calculate δpass and δstop from Eq. (10.2.5):
+δpass =
+
+100.1/20 − 1
+= 0.0058,
+100.1/20 + 1
+
+δstop = 10−80/20 = 0.0001
+
+Therefore, δ = min(δpass , δstop )= δstop = 0.0001, which in dB is A = −20 log10 δ =
+Astop = 80. The D and α parameters are computed by:
+
+α = 0.1102(A − 8.7)= 0.1102(80 − 8.7)= 7.857,
+
+D=
+
+A − 7.95
+= 5.017
+14.36
+
+The ﬁlter width and ideal cutoff frequency are:
+
+Δf = fstop − fpass = 1 kHz,
+
+fc =
+
+1
+(fpass + fstop )= 4.5 kHz,
+2
+
+ωc =
+
+2πfc
+
+fs
+
+= 0.45π
+
+Eq. (10.2.11) gives for the ﬁlter length (rounded up to the nearest odd integer):
+
+N =1+
+
+Dfs
+= 101.35
+Δf
+
+⇒
+
+N = 103,
+
+M=
+
+1
+(N − 1)= 51
+2
+
+The windowed impulse response will be, for n = 0, 1, . . . , 102:
+
+h(n)= w(n)d(n − M)=
+
+
+
+
+
+
+I0 7.857 n(102 − n)/51
+sin 0.45π(n − 51)
+·
+I0 (7.857)
+π(n − 51)
+
+with h(51)= ωc /π = 0.45. Figure 10.2.4 shows the magnitude response in dB of h(n),
+that is, 20 log10 |H(ω)|, where H(ω) was evaluated by Eq. (10.1.19). Note the transition width extending from 4 to 5 kHz and the stopband speciﬁcation deﬁned by the
+horizontal grid line at −80 dB. The passband speciﬁcation is more than satisﬁed. It is
+Apass  17.372δ = 0.0017 dB.
+
+Fig. 10.2.4 Kaiser, Hamming, and rectangular window designs, N = 103.
+The ﬁgure also shows the corresponding Hamming and rectangularly windowed designs
+for the same length of N = 103. They both have a smaller transition width—the rectangular
+one even more so, but their stopband attenuations are limited to the standard values of
+54 dB and 21 dB, respectively.
+
+10. FIR DIGITAL FILTER DESIGN
+
+548
+
+Example 10.2.2: Bandpass Design. Using the Kaiser window, design a bandpass digital ﬁlter
+with the following speciﬁcations:
+
+fs = 20 kHz
+fsa = 3 kHz, fpa = 4 kHz, fpb = 6 kHz,
+Apass = 0.1 dB, Astop = 80 dB
+
+fsb = 8 kHz
+
+Solution: The parameters {δpass , δstop , δ, A, α, D} are the same as in the previous example. The
+two transition widths are:
+
+Δfa = fpa − fsa = 4 − 3 = 1 kHz,
+
+Δfb = fsb − fpb = 8 − 6 = 2 kHz
+
+Therefore, the minimum width is Δf = min(Δfa , Δfb )= 1 kHz, and the ﬁlter length:
+
+N =1+
+
+Dfs
+= 101.35
+Δf
+
+⇒
+
+N = 103,
+
+M=
+
+1
+(N − 1)= 51
+2
+
+Using the standard definition of Eq. (10.2.20), we ﬁnd for the left and right ideal cutoff
+frequencies:
+
+fa = fpa −
+
+1
+Δf = 4 − 0.5 = 3.5 kHz,
+2
+
+fb = fpb +
+
+1
+Δf = 6 + 0.5 = 6.5 kHz
+2
+
+with the normalized values ωa = 2πfa /fs = 0.35π, ωb = 2πfb /fs = 0.65π.
+For the alternative definition of Eq. (10.2.21), we have fa = 3 + 0.5 = 3.5 and fb = 8 − 0.5 =
+7.5 kHz, resulting in ωa = 0.35π and ωb = 0.75π. Figure 10.2.5 shows the magnitude
+response of the designed ﬁlter in dB, both for the standard and the alternative deﬁnitions.
+The standard design has just the right passband extending over [4, 6] kHz and a wider
+stopband that starts at 7 kHz. The alternative design has a wider passband extending over
+[4, 7] kHz.
+
+Fig. 10.2.5 Kaiser window design of a bandpass ﬁlter.
+
+Next, we discuss three more Kaiser design examples for digital audio applications,
+namely, two-way and three-way loudspeaker crossover ﬁlters and a ﬁve-band graphic
+equalizer.
+
+10.2. KAISER WINDOW
+
+549
+
+In all three cases, the sampling rate is fs = 44.1 kHz, the stopband attenuation is
+Astop = 65 dB, and all the transition widths are taken to be equal to Δf = 2 kHz. This
+implies that all the ﬁlters will have the same length N and Kaiser parameters D and α.
+With A = Astop = 65 dB, we ﬁnd
+
+D=
+N−1=
+
+A − 7.95
+= 3.973,
+14.36
+
+α = 0.1102(A − 8.7)= 6.204,
+
+Dfs
+3.973 × 44.1
+=
+= 87.6
+Δf
+2
+
+⇒
+
+N = 89,
+
+M=
+
+1
+(N − 1)= 44
+2
+
+Note that the given value of A = 65 dB corresponds to δpass = δstop = 10−65/20 =
+0.00056, which results in the small passband attenuation Apass = 0.0097 dB.
+Such ﬁlters are to within the capabilities of modern DSP chips. Assuming a typical
+instruction rate of 20 MIPS, which is 20 instructions per μsec, or, Tinstr = 50 nsec per
+instruction, and assuming the sample processing implementation requires N MACs per
+output sample computed, the total computational time for processing each input sample
+will be NTinstr = 89×50 = 4.45 μsec, which ﬁts well within the time separating each input
+sample, T = 1/fs = 1/44.1 = 22.68 μsec.
+Several such ﬁlters can even be implemented simultaneously on the same DSP chip,
+namely, 22.68/4.45 = 5.1, or, about ﬁve length-89 ﬁlters. Conversely, the longest single
+ﬁlter that can be implemented will have length such that NTinstr = T, or, N = T/Tinstr =
+finstr /fs = 20000/44.1  453, resulting in the smallest implementable transition width
+of
+2
+
+Δfmin 
+
+Dfs
+Dfs
+=
+= 0.386 kHz
+N
+finstr
+
+Example 10.2.3: Two-Way Crossover Filters. All conventional loudspeakers contain an analog
+crossover network that splits the incoming analog audio signal into its low- and highfrequency components that drive the woofer and tweeter parts of the loudspeaker. More
+advanced loudspeakers may contain even a third component for the mid-frequency part
+of the input [255].
+Digital loudspeaker systems operate on the digitized audio input and use (FIR or IIR) digital
+ﬁlters to split it into the appropriate frequency bands, which are then converted to analog
+format, ampliﬁed, and drive the corresponding parts of the loudspeaker [256,257]. Such
+“digital” loudspeakers have been available for a while in professional digital studios and
+are becoming commercially available for home use (where typically the digital output of a
+CD player is connected to the digital input of the loudspeaker).
+In this example, we take the cutoff frequency of the lowpass and highpass ﬁlters, known as
+the crossover frequency, to be fc = 3 kHz, which leads to the normalized frequency ωc =
+2πfc /fs = 0.136π. (This numerical value of fc is chosen only for plotting convenience—a
+more realistic value would be 1 kHz.) The designed low- and high-frequency driver ﬁlters
+are then: For n = 0, 1, · · · , N − 1
+
+!
+
+hLP (n) = w(n)dLP (n − M)= w(n)
+!
+
+π(n − M)
+
+hHP (n) = w(n)dHP (n − M)= w(n) δ(n − M)−
+= δ(n − M)−hLP (n)
+
+"
+
+
+
+sin ωc (n − M)
+
+
+
+"
+
+sin ωc (n − M)
+
+π(n − M)
+
+=
+
+10. FIR DIGITAL FILTER DESIGN
+
+550
+
+where w(n) is the Kaiser window given by Eq. (10.2.8). The magnitude responses of the
+designed ﬁlters are shown in Fig. 10.2.6, plotted both in absolute scales, |H(ω)|, and in
+decibels, 20 log10 |H(ω)|.
+
+Fig. 10.2.6 Low- and high-frequency magnitude responses.
+The complementarity relationship between the impulse responses implies in the z-domain:
+
+HHP (z)= z−M − HLP (z)
+It leads to the realization of Fig. 10.2.7. Instead of realizing the lowpass and highpass
+ﬁlters separately, it requires only the lowpass ﬁlter and one multiple delay.
+
+audio in
+
+woofer
+
+HLP(z)
+z-M
+
++
+
+tweeter
+
+Fig. 10.2.7 Complementary implementation of two-way crossover ﬁlters.
+
+Example 10.2.4: Three-Way Crossover Filters. In this example, the audio input must be split
+into its low-, mid-, and high-frequency components. The crossover frequencies are chosen
+to be fa = 3 kHz and fb = 7 kHz. The midpass ﬁlter will be a bandpass ﬁlter with these
+cutoff frequencies. The designed impulse responses will be:
+
+!
+hLP (n) = w(n)dLP (n − M)= w(n)
+
+
+
+"
+
+sin ωa (n − M)
+
+π(n − M)
+
+
+
+"
+sin ωb (n − M) − sin ωa (n − M)
+hMP (n) = w(n)dMP (n − M)= w(n)
+π(n − M)
+!
+
+"
+sin ωb (n − M)
+hHP (n) = w(n)dHP (n − M)= w(n) δ(n − M)−
+π(n − M)
+!
+
+10.2. KAISER WINDOW
+
+551
+
+where, ωa = 2πfa /fs = 0.136π and ωb = 2πfb /fs = 0.317π. Adding the three impulse
+responses, we ﬁnd
+
+hLP (n)+hMP (n)+hHP (n)= δ(n − M)
+and, in the z-domain
+
+HLP (z)+HMP (z)+HHP (z)= z−M
+which allows us to express one of them in terms of the other two, for example
+
+HHP (z)= z−M − HLP (z)−HMP (z)
+The magnitude responses of the designed ﬁlters are shown in Fig. 10.2.8. A realization
+that uses the above complementarity property and requires only two ﬁltering operations
+instead of three is shown in Fig. 10.2.9.
+
+Fig. 10.2.8 Lowpass, midpass, and highpass magnitude responses.
+
+audio in
+
+HLP(z)
+
+woofer
+
+HMP(z)
+
+mid-range
+
+z-M
+
+- +
+
+tweeter
+
+Fig. 10.2.9 Complementary implementation of three-way crossover ﬁlters.
+
+Example 10.2.5: Five-Band Graphic Equalizer. Present-day graphic equalizers typically employ
+second-order IIR ﬁlters. However, there is no reason not to use FIR ﬁlters, if the computational cost is manageable. In this example, we choose the crossover frequencies of the ﬁve
+bands to be fa = 3 kHz, fb = 7 kHz, fc = 11 kHz, fd = 15 kHz, deﬁning the ﬁve frequency
+bands:
+
+10. FIR DIGITAL FILTER DESIGN
+
+552
+
+[0, fa ]
+[fa , fb ]
+[fb , fc ]
+[fc , fd ]
+[fd , fs /2]
+
+band 1
+band 2
+band 3
+band 4
+band 5
+
+The designed ﬁlter impulse responses will be:
+
+!
+h1 (n) = w(n)
+
+
+
+"
+
+sin ωa (n − M)
+
+π(n − M)
+
+
+
+"
+sin ωb (n − M) − sin ωa (n − M)
+h2 (n) = w(n)
+π(n − M)
+!
+
+
+
+"
+sin ωc (n − M) − sin ωb (n − M)
+h3 (n) = w(n)
+π(n − M)
+!
+
+
+
+"
+sin ωd (n − M) − sin ωc (n − M)
+h4 (n) = w(n)
+π(n − M)
+!
+
+"
+sin ωd (n − M)
+h5 (n) = w(n) δ(n − M)−
+π(n − M)
+!
+
+where, ωa = 2πfa /fs = 0.136π, ωb = 2πfb /fs = 0.317π, ωc = 2πfc /fs = 0.499π,
+ωd = 2πfd /fs = 0.680π. Adding the ﬁve ﬁlters we ﬁnd the relationship:
+
+h1 (n)+h2 (n)+h3 (n)+h4 (n)+h5 (n)= δ(n − M)
+and, in the z-domain
+
+H1 (z)+H2 (z)+H3 (z)+H4 (z)+H5 (z)= z−M
+It can be solved for one of the transfer functions in terms of the other ones:
+
+H5 (z)= z−M − H1 (z)−H2 (z)−H3 (z)−H4 (z)
+The magnitude responses are shown in Fig. 10.2.10. A realization that uses the above
+complementarity property and requires only four ﬁltering operations instead of ﬁve is
+shown in Fig. 10.2.11.
+The outputs of the ﬁve ﬁlters are weighted by the user-selectable gains Gi and then summed
+up to form the “equalized” audio signal. The overall transfer function from the input to
+the overall output is:
+
+H(z)= G1 H1 (z)+G2 H2 (z)+G3 H3 (z)+G4 H4 (z)+G5 H5 (z)
+In practice, the crossover frequencies are chosen to follow standard ISO (International Standards Organization) frequencies, dividing the 20 kHz audio range into octaves or fractions
+of octaves.
+
+10.2. KAISER WINDOW
+
+553
+
+Fig. 10.2.10 Graphic equalizer magnitude responses.
+
+variable gains
+audio in
+
+G1
+
+H1(z)
+
+G2
+
+H2(z)
+
+G3
+
+H3(z)
+
+G4
+
+H4(z)
+
+z-M
+
+audio out
+
+-
+
+G5
+
++
+
+Fig. 10.2.11 Complementary implementation of graphic equalizer.
+
+The above three examples are special cases of parallel filter banks in which the input is split into several non-overlapping frequency bands covering the Nyquist interval.
+Applications include multirate ﬁlter banks and subband coding of speech, audio, and
+picture signals in which the outputs of the bank ﬁlters are quantized with fewer number of bits and at the same time their sampling rates are dropped, such that the overall
+bit rate required for the digital transmission or storage of the signal is substantially reduced [275]. For example, in the recent DCC audio cassette system, the allocation of bits
+in each band is governed by psychoacoustic perceptual criteria in which fewer bits are
+assigned to bands that will be less audible [295–300]. Wavelets and the discrete wavelet
+transform are also examples of ﬁlter banks [275].
+Finally, we consider the deﬁnition and computation of the Bessel function I0 (x). It
+is deﬁned by its Taylor series expansion:
+
+10. FIR DIGITAL FILTER DESIGN
+
+554
+
+!
+
+∞
+
+I0 (x)=
+k=0
+
+(x/2)k
+k!
+
+"2
+(10.2.23)
+
+The Kaiser window (10.2.8) requires the evaluation of I0 (x) over the range of argument 0 ≤ x ≤ α. The following C function I0.c evaluates I0 (x) for any x. The routine
+is essentially a C version of the Fortran routine given by Kaiser in [247].
+/* I0.c - Modified Bessel Function I0(x)
+*
+2
+$∞ 
+k
+* I0 (x) =
+k=0 (x/2) / k!
+*
+*/
+#include <math.h>
+#define eps
+
+ = 10−9
+
+(1.E-9)
+
+double I0(x)
+double x;
+{
+int n = 1;
+double S = 1, D = 1, T;
+
+usage: y = I0(x)
+
+while (D > eps * S) {
+T = x / (2 * n++);
+D *= T * T;
+S += D;
+}
+return S;
+}
+
+The routine is based on the following recursions, which evaluate the power series
+(10.2.23) by keeping enough terms in the expansion. We deﬁne the partial sum of the
+series (10.2.23):
+n
+
+Sn =
+k=0
+
+!
+
+(x/2)k
+k!
+
+"2
+
+It is initialized to S0 = 1 and satisﬁes the recursion, for n ≥ 1:
+
+Sn = Sn−1 + Dn ,
+
+where Dn =
+
+(x/2)n
+n!
+
+2
+
+In turn, Dn itself satisﬁes a recursion, for n ≥ 1:
+
+Dn =
+
+x
+2n
+
+2
+
+Dn−1 = Tn2 Dn−1 ,
+
+where Tn =
+
+x
+2n
+
+and it is initialized to D0 = 1. The iteration stops when the successive Dn terms become
+much smaller than the accumulated terms Sn , that is, when
+
+Sn − Sn−1
+Dn
+=
+<
+Sn
+Sn
+
+10.2. KAISER WINDOW
+
+555
+
+where  is a small number, such as,  = 10−9 . The Kaiser window itself may be calculated
+by invoking the routine I0.c; for example:
+I0a = I0(alpha);
+for (n=0; n<N; n++)
+w[n]= I0(alpha * sqrt(n*(2*M-n)) / M) / I0a;
+
+10.2.2 Kaiser Window for Spectral Analysis
+We saw in Section 9.1 that one of the main issues in spectral analysis was the tradeoff
+between frequency resolution and leakage. The more one tries to suppress the sidelobes,
+the wider the mainlobe of the window becomes, reducing the amount of achievable
+resolution.
+For example, the Hamming window provides about 40 dB sidelobe suppression at
+the expense of doubling the mainlobe width of the rectangular window. Recall from
+Eq. (9.1.18) that the mainlobe width Δfw of a window depends inversely on the data
+record length L:
+
+Δfw =
+
+cfs
+L−1
+
+
+
+L−1=
+
+cfs
+Δfw
+
+(10.2.24)
+
+where the factor c depends on the window used. For the Kaiser window, we use the more
+accurate denominator L − 1, instead of L of Eq. (9.1.18); the difference is insigniﬁcant
+in spectral analysis where L is large.
+The more the sidelobe suppression, the larger the factor c. Thus, to maintain a
+certain required value for the resolution width Δfw , one must increase the data length
+L commensurately with c.
+Most windows have ﬁxed values for the amount of sidelobe suppression and width
+factor c. Table 10.2.2 shows these values for the rectangular and Hamming windows.
+Adjustable windows, like the Kaiser window, have a variable sidelobe level R that can
+be chosen as the application requires.
+Window
+
+R
+
+c
+
+Rectangular
+Hamming
+Kaiser
+
+−13 dB
+−40 dB
+variable R
+
+1
+2
+6(R + 12)/155
+
+Table 10.2.2 Relative sidelobe levels.
+
+Kaiser and Schafer [221] have developed simple design equations for the use of the
+Kaiser window in spectral analysis. Given a desired relative sidelobe level R in dB and
+a desired amount of resolution Δfw , the design equations determine the length L and
+shape parameter α of the window. The length is determined from Eq. (10.2.24), where
+c is given in terms of R by:
+
+10. FIR DIGITAL FILTER DESIGN
+
+556
+
+c=
+
+6(R + 12)
+155
+
+(10.2.25)
+
+Note that our values for c given in Eq. (10.2.25) and Table 10.2.2 are smaller by a
+factor of 2 than in most texts, because we deﬁne Δfw to be half the base of the mainlobe,
+instead of the base itself. The window shape parameter α can be calculated also in terms
+of R by:
+
+⎧
+⎪
+⎨ 0,
+0.76609(R − 13.26)0.4 +0.09834(R − 13.26),
+α=
+⎪
+⎩ 0.12438(R + 6.3),
+
+R < 13.26
+13.26 < R < 60
+60 < R < 120
+
+(10.2.26)
+
+Once the window parameters {L, α} have been determined, the window may be calculated by:
+
+w(n)=
+
+ 
+
+I0 α 1 − (n − M)2 /M2
+I0 (α)
+
+n = 0, 1, . . . , L − 1
+
+,
+
+(10.2.27)
+
+where M = (L − 1)/2, and then applied to a length-L data record by
+
+xL (n)= w(n)x(n),
+
+n = 0, 1, . . . , L − 1
+
+(10.2.28)
+
+The sidelobe level R must be distinguished from the attenuation A of the ﬁlter design
+case. There, the attenuation A and ripple δ arise from the integrated window spectrum
+W(ω), as in Eq. (10.1.22), whereas R arises from W(ω) itself.
+Because of the adjustable sidelobe level R, the Kaiser window can be used to pull very
+weak sinusoids out of the DFT spectrum of a windowed signal, whereas another type of
+window, such as a Hamming window, might fail. The following example illustrates this
+remark.
+Example 10.2.6: The following analog signal consisting of three sinusoids of frequencies f1 = 2
+kHz, f2 = 2.5 kHz, and f3 = 3 kHz is sampled at a rate of fs = 10 kHz:
+x(t)= A1 cos(2πf1 t)+A2 cos(2πf2 t)+A3 cos(2πf3 t)
+where t is in msec. The relative amplitudes are
+
+A1 = A3 = 1,
+
+A2 = 10−50/20 = 0.0032
+
+so that the middle sinusoid is 50 dB below the other two. A ﬁnite duration portion of
+length L is measured and the DFT spectrum is computed for the purpose of detecting the
+presence of the sinusoids by their peaks.
+If we use a length-L Hamming window on the time data, the f2 -component will be lost
+below the 40 dB sidelobes of the window. Thus, we must use a window whose sidelobe
+level is well below 50 dB. We choose a Kaiser window with R = 70 dB. Moreover, to make
+the peaks clearly visible, we choose the resolution width to be Δf = (f2 − f1 )/3 = 0.167
+kHz. The Kaiser window parameters are calculated as follows:
+
+10.2. KAISER WINDOW
+
+557
+
+α = 0.12438(R + 6.3)= 9.490,
+L=1+
+
+cfs
+= 191.45
+Δf
+
+⇒
+
+c=
+
+6(R + 12)
+= 3.174
+155
+
+L = 193,
+
+M=
+
+1
+(L − 1)= 96
+2
+
+The length-L sampled signal is, for n = 0, 1, . . . , L − 1:
+
+x(n)= A1 cos(2πf1 n/fs )+A2 cos(2πf2 n/fs )+A3 cos(2πf3 n/fs )
+The Kaiser and Hamming windowed signals will be, for n = 0, 1, . . . , L − 1:
+
+ 
+
+I0 α n(2M − n)/M
+xK (n) = w(n)x(n)=
+· x(n)
+I0 (α)
+ 2πn 
+xH (n) = w(n)x(n)= 0.54 − 0.46 cos
+· x(n)
+L−1
+The corresponding spectra are:
+L−1
+
+L−1
+
+xK (n)e−2πjf n/fs ,
+
+XK (f )=
+n=0
+
+xH (n)e−2πjf n/fs
+
+XH (f )=
+n=0
+
+Figure 10.2.12 shows these spectra in dB, that is, 20 log10 |XK (f )|, computed at 256 equally
+spaced frequencies in the interval [0, fs /2]. (This can be done by the MATLAB function
+dtft.m of Appendix D.)
+
+Fig. 10.2.12 Kaiser and Hamming spectra.
+Both spectra are normalized to 0 dB at their maximum value. The Kaiser spectrum shows
+three clearly separated peaks, with the middle one being 50 dB below the other two. The
+sidelobes are suppressed by at least 70 dB and do not swamp the middle peak, as they do
+in the Hamming spectrum. That spectrum, on the other hand, has narrower peaks because
+the length L is somewhat larger than required to resolve the given Δf . The width of the
+Hamming peaks is Δf = cfs /(L − 1) with c = 2, or, Δf = 0.104 kHz.
+
+10. FIR DIGITAL FILTER DESIGN
+
+558
+
+10.3 Frequency Sampling Method
+The window method is very convenient for designing ideally shaped ﬁlters, primarily
+because the frequency integral in Eq. (10.1.7) can be carried out in closed form.
+For arbitrary frequency responses D(ω), we may use the frequency sampling method,
+in which the integral (10.1.7) is replaced by the approximate sum:
+M
+
+1
+#
+d(k)=
+D(ωi )ejωi k ,
+N i=−M
+
+−M ≤ k ≤ M
+
+(10.3.1)
+
+where N = 2M + 1. The approximation is essentially an inverse N-point DFT, with the
+DFT frequencies ωi spanning equally the interval [−π, π], instead of the standard DFT
+interval [0, 2π]:
+
+ωi =
+
+2πi
+
+N
+
+−M ≤ i ≤ M
+
+,
+
+(10.3.2)
+
+The forward DFT applied to Eq. (10.3.1) gives:
+M
+
+D(ωi )=
+
+−jωi k
+#
+d(k)e
+
+(10.3.3)
+
+k=−M
+
+The rest of the window method may be applied as before, that is, given an appropriate length-N window w(n), the ﬁnal designed ﬁlter will be the delayed and windowed
+#
+version of d(k)
+:
+
+h(n)= w(n) #
+d(n − M),
+
+n = 0, 1, . . . , N − 1
+
+(10.3.4)
+
+We will discuss some examples of the frequency sampling method in Section 12.4.3,
+where we will design FIR ﬁlters for equalizing the slight passband droop of D/A converters and imperfect analog anti-image postﬁlters.
+
+10.4 Other FIR Design Methods
+The Kaiser window method is simple and ﬂexible and can be applied to a variety of ﬁlter
+design problems. However, it does not always result in the smallest possible ﬁlter length
+N, which may be required in some very stringent applications.
+The Parks-McClellan method [2–8] based on the so-called optimum equiripple Chebyshev approximation generally results in shorter ﬁlters. Kaiser [247] has shown that the
+ﬁlter length can be estimated in such cases
+ by a variant of Eq. (10.2.12) that uses the
+geometric mean of the two ripples, δg =
+
+N−1=
+
+Dfs
+,
+Δf
+
+D=
+
+δpass δstop :
+
+Ag − 13
+,
+14.6
+
+Ag = −20 log10 (δg )
+
+(10.4.1)
+
+Moreover, it may be desirable at times to design ﬁlters that have additional properties, such as convexity constraints, monotonicity constraints in the passband, or a
+
+

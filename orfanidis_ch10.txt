@@ -1,0 +1,1580 @@
+9. DFT/FFT ALGORITHMS
+
+528
+
+9.32 Let A(k) be the N-point DFT of a real-valued signal a(n), n = 0, 1, . . . , N − 1. Prove the
+symmetry property:
+
+A(k)∗ = A(N − k),
+
+k = 0, 1, . . . , N − 1
+
+If we think of A(k) as an N-dimensional array, then how can we state the above relationship
+at k = 0?
+9.33 Two Real-Valued Signals at a Time. Let x(n)= a(n)+jb(n) be a length-N complex-valued
+signal and let X(k) be its N-point DFT. Let A(k) and B(k) denote the N-point DFTs of the
+real and imaginary parts a(n) and b(n) of x(n). Show that they can be recovered from
+X(k) by
+
+A(k)=
+
+
+1
+X(k)+X(N − k)∗ ,
+2
+
+B(k)=
+
+
+1
+X(k)−X(N − k)∗
+2j
+
+for k = 0, 1, . . . , N − 1. If we think of X(k) as an N-dimensional array, then how can we
+state the above relationships at k = 0?
+Thus, the DFTs of real-valued signals can be computed two at a time by computing the DFT
+of a single complex-valued signal.
+9.34 FFT of Real-Valued Signal. Using the results of Problem 9.33, show that the N-point FFT
+X(k) of an N-point real-valued signal x(n), n = 0, 1, . . . , N − 1 can be computed efﬁciently
+as follows: First, pack the even and odd parts of x(n) into a complex-valued signal of length
+N/2, that is, deﬁne
+
+y(n)= x(2n)+jx(2n + 1)≡ g(n)+jh(n),
+
+n = 0, 1, . . . ,
+
+N
+2
+
+−1
+
+Then, compute the N/2-point FFT of y(n), say, Y(k), k = 0, 1, . . . , N/2 − 1, and extract the
+N/2-point FFTs of g(n) and h(n) by
+
+G(k)=
+
+
+1
+N
+Y(k)+Y( − k)∗ ,
+2
+2
+
+H(k)=
+
+
+1
+N
+Y(k)−Y( − k)∗
+2j
+2
+
+for k = 0, 1, . . . , N/2 − 1. And ﬁnally, construct the desired N-point FFT by
+k
+X(k)= G(k)+WN
+H(k),
+
+X(k +
+
+N
+2
+
+k
+)= G(k)−WN
+H(k)
+
+for k = 0, 1, . . . , N/2 − 1. What happens at k = 0?
+Determine the relative computational savings of this method versus performing the N-point
+FFT of x(n) directly.
+9.35 Computer Experiment: FFT of Real-Valued Signal. Write a C routine fftreal.c that implements the method of Problem 9.34. The routine must have inputs/output declarations:
+void fftreal(N, x, X)
+int N;
+double *x;
+complex *X;
+
+must be a power of 2
+real-valued N-dimensional time data
+complex N-dimensional FFT array
+
+The routine must invoke the routine fft.c once on the time-decimated, complexiﬁed, input.
+In rebuilding the ﬁnal DFT X(k), special care must be exercised at k = 0.
+Write a small main program to test the routine by comparing its output to the output of fft
+called on the full input array as usual.
+
+9.10. PROBLEMS
+
+529
+
+9.36 Consider the following N-point signal and its reverse:
+x = [x0 , x1 , . . . , xN−1 ]
+xR = [xN−1 , . . . , x1 , x0 ]
+Show that the z-transform and N-point DFT of the reversed signal can be expressed as:
+
+XR (z) = z−(N−1) X(z−1 )
+−k
+XR (k) = WN
+X(N − k),
+
+k = 0, 1, . . . , N − 1
+
+Show that in the time domain the reversal process is equivalent to a two-step process of ﬁrst
+reﬂecting the signal around the origin n = 0, and then delaying it by N − 1 units.
+9.37 Discrete Cosine Transform (DCT). Consider a length-N real-valued signal x and its reverse as
+deﬁned in Problem 9.36. Construct the concatenated signal of length 2N:
+y = [x, xR ]= [x0 , x1 , . . . , xN−1 , xN−1 , . . . , x1 , x0 ]
+a. Show that its z-transform can be expressed in terms of the z-transform of x:
+
+Y(z)= X(z)+z−N XR (z)= X(z)+z−(2N−1) X(z−1 )
+b. Let Yk be the (2N)-point DFT of y. Show that it can be expressed in the form:
+
+Yk = 2ejωk /2 Ck ,
+
+k = 0, 1, . . . , 2N − 1
+
+where ωk = 2πk/(2N)= πk/N is the kth frequency for the (2N)-point DFT and Ck
+is one form of the discrete cosine transform of xn given by:
+N−1
+
+Ck =
+
+
+
+xn cos ωk (n + 1/2)
+
+(9.10.1)
+
+n=0
+
+[Hint: Evaluate part (a) at the (2N)th roots of unity and multiply by z−1/2 .]
+c. Using the results of Problem 9.32, show that Ck satisﬁes the symmetry property:
+
+C2N−k = −Ck ,
+
+k = 0, 1, . . . , 2N − 1
+
+In particular, show CN = 0.
+d. Applying the inverse DFT equation on Yk , show the inverse DCT:
+
+xn =
+
+1
+
+2N−1
+
+N k=0
+
+Ck ejωk (n+1/2) ,
+
+n = 0, 1, . . . , N − 1
+
+Using the symmetry property of part (c), show the alternative inverse DCT, which uses
+only the ﬁrst N DCT coefﬁcients Ck , k = 0, 1, . . . , N − 1:
+
+⎡
+xn =
+
+N−1
+
+1 ⎣
+
+N
+
+C0 + 2
+
+
+
+⎤
+
+
+
+Ck cos ωk (n + 1/2) ⎦ ,
+
+n = 0, 1, . . . , N − 1
+
+(9.10.2)
+
+k=1
+
+Together, Eqs. (9.10.1) and (9.10.2) form a forward/inverse DCT pair. The relationship
+to the doubled signal y allows an efﬁcient calculation using (2N)-point FFTs [238–240].
+
+530
+
+9. DFT/FFT ALGORITHMS
+
+9.38
+
+a. Let XN (k) denote the N-point DFT of a length-L sequence x(n), n = 0, 1, . . . , L − 1.
+Show the relationships:
+
+k = 0, 1, . . . , N − 1
+
+XN (k)= X2N (2k),
+
+b. In particular, we have X4 (k)= X8 (2k), for k = 0, 1, 2, 3. That is, the 4-point DFT of
+a sequence can be obtained by keeping every other entry of the 8-point DFT of that
+sequence.
+9.39 Consider a length-5 sequence and its “circular shifts”
+x0 = [x0 , x1 , x2 , x3 , x4 ]
+x1 = [x4 , x0 , x1 , x2 , x3 ]
+x2 = [x3 , x4 , x0 , x1 , x2 ]
+x3 = [x2 , x3 , x4 , x0 , x1 ]
+x4 = [x1 , x2 , x3 , x4 , x0 ]
+Show that the 5-point DFT Xi (k) of xi is related to the 5-point DFT X0 (k) of x0 by
+
+Xi (k)= W5ik X0 (k),
+
+for i = 1, 2, 3, 4
+
+Explain this result in terms of ordinary “linear” shifts of the original sequence x0 .
+9.40 Show that the following, successively shorter, signals all have the same 4-point DFT:
+
+⎡
+
+⎤
+x0
+⎢ x ⎥
+⎢ 1 ⎥
+⎢
+⎥
+⎢ x2 ⎥
+⎢
+⎥
+⎢ x ⎥
+⎢ 3 ⎥
+⎢
+⎥,
+⎢ x4 ⎥
+⎢
+⎥
+⎢ x ⎥
+⎢ 5 ⎥
+⎢
+⎥
+⎣ x6 ⎦
+x7
+
+⎡
+
+⎤
+x0
+⎢ x
+⎥
+⎢ 1
+⎥
+⎢
+⎥
+⎢ x2
+⎥
+⎢
+⎥
+⎢ x +x ⎥
+⎢ 3
+7 ⎥
+⎢
+⎥,
+⎢ x4
+⎥
+⎢
+⎥
+⎢ x
+⎥
+⎢ 5
+⎥
+⎢
+⎥
+⎣ x6
+⎦
+0
+
+⎡
+
+⎤
+x0
+⎢ x
+⎥
+⎢ 1
+⎥
+⎢
+⎥
+⎢ x2 + x6 ⎥
+⎢
+⎥
+⎢ x +x ⎥
+⎢ 3
+7 ⎥
+⎢
+⎥,
+⎢ x4
+⎥
+⎢
+⎥
+⎢ x
+⎥
+⎢ 5
+⎥
+⎢
+⎥
+⎣ 0
+⎦
+
+⎡
+
+⎤
+x0
+⎢ x +x ⎥
+⎢ 1
+5 ⎥
+⎢
+⎥
+⎢ x2 + x6 ⎥
+⎢
+⎥
+⎢ x +x ⎥
+⎢ 3
+7 ⎥
+⎢
+⎥,
+⎢ x4
+⎥
+⎢
+⎥
+⎢ 0
+⎥
+⎢
+⎥
+⎢
+⎥
+⎣ 0
+⎦
+
+⎡
+
+⎤
+x0 + x4
+⎢ x +x ⎥
+⎢ 1
+5 ⎥
+⎢
+⎥
+⎢ x2 + x6 ⎥
+⎢
+⎥
+⎢ x +x ⎥
+⎢ 3
+7 ⎥
+⎢
+⎥
+⎢ 0
+⎥
+⎢
+⎥
+⎢ 0
+⎥
+⎢
+⎥
+⎢
+⎥
+⎣ 0
+⎦
+
+0
+
+0
+
+0
+
+9.41 Using the overlap-save method of fast convolution implemented in the time domain using
+length-8 circular convolutions, compute the ordinary convolution of the “long” signal
+x = [1, 1, 1, 1, 3, 3, 3, 3, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1]
+with the “short” ﬁlter
+h = [1, −1, −1, 1]
+and explain any discrepancies from the correct answer. Repeat using the overlap-add method.
+9.42 A periodic triangular waveform of period T0 = 1 sec is deﬁned over one period 0 ≤ t ≤ 1
+sec as follows (see also Fig. 1.8.1):
+
+⎧
+⎪
+⎨ t,
+0.5 − t,
+x(t)=
+⎪
+⎩
+t − 1,
+
+if 0 ≤ t ≤ 0.25
+if 0.25 ≤ t ≤ 0.75
+if 0.75 ≤ t ≤ 1
+
+9.10. PROBLEMS
+
+531
+
+The signal x(t) is sampled at a rate of 8 Hz and the sampled signal x(nT) is immediately
+reconstructed into analog form using an ideal reconstructor. Because x(t) is not bandlimited, aliasing effects will cause the reconstructed signal to be different from x(t). Show that
+the aliased reconstructed signal will have the form:
+
+xal (t)= A sin(2πf1 t)+B sin(2πf2 t)
+What are the frequencies f1 and f2 ? Determine the amplitudes A and B by performing
+an appropriate 8-point FFT by hand. Explain how the negative frequencies in xal (t) are
+represented in this FFT.
+9.43 A length-L input signal is to be ﬁltered by an order-M FIR ﬁlter using the overlap-save method
+of fast convolution, implemented via N-point FFTs. Assume that L  N and N > M.
+a. Derive an expression for the total number of multiplications required to compute the
+output, in terms of L, N, and M.
+b. Repeat part (a) if the overlap-add method is used.
+9.44 Computer Experiment: Overlap-Save Method. Write a stand-alone C or MATLAB program,
+say ovsave.c, that implements the overlap-save method of fast convolution. The program
+must have usage:
+ovsave h.dat N < x.dat > y.dat
+
+Like the program firfilt.c of Problem 4.10, it must read dynamically the impulse response
+coefﬁcients from a ﬁle h.dat. It must keep reading the input samples in blocks of length
+N (overlapped by M points), processing each block, and writing the output block. The processing of each block must be implemented by N-point FFTs, that is,
+
+
+
+
+
+y
+# = IFFT H · FFT(x)
+
+where the FFT of the ﬁlter H = FFT(h) may be computed once and used in processing all
+the input blocks.
+Care must be exercised in handling the ﬁrst M inputs, where M zeros must be padded to
+the beginning of the input. When the end-of-ﬁle of the input is detected, the program must
+calculate correctly the input-off output transients. (The output of this program and that of
+firfilt.c must be identical, up to perhaps some last zeros.)
+
+10
+FIR Digital Filter Design
+
+The filter design problem is the problem of constructing the transfer function of a ﬁlter
+that meets prescribed frequency response speciﬁcations.
+The input to any ﬁlter design method is the set of desired speciﬁcations and the
+output is the ﬁnite impulse response coefﬁcient vector h = [h0 , h1 , . . . , hN−1 ] in the case
+of FIR ﬁlters, or the numerator and denominator coefﬁcient vectors b = [b0 , b1 , . . . , bM ],
+a = [1, a1 , . . . , aM ] in the case of IIR ﬁlters.
+The subject of FIR and IIR digital ﬁlter design is very extensive [2–8]. In this and the
+next chapter, we present only a small cross section of available design methods—our
+objective being to give the ﬂavor of the subject, while at the same time presenting some
+practical methods.
+The two main advantages of FIR ﬁlters are their linear phase property and their
+guaranteed stability because of the absence of poles. Their potential disadvantage is
+that the requirement of sharp ﬁlter speciﬁcations can lead to long ﬁlter lengths N, consequently increasing their computational cost. Recall from Chapter 4 that modern DSP
+chips require N MACs per output point computed.
+The main advantages of IIR ﬁlters are their low computational cost and their efficient
+implementation in cascade of second-order sections. Their main disadvantage is the
+potential for instabilities introduced when the quantization of the coefﬁcients pushes
+the poles outside the unit circle. For IIR ﬁlters, linear phase cannot be achieved exactly
+over the entire Nyquist interval, but it can be achieved approximately over the relevant
+passband of the ﬁlter, for example, using Bessel ﬁlter designs.
+
+10.1 Window Method
+10.1.1 Ideal Filters
+The window method is one of the simplest methods of designing FIR digital ﬁlters. It
+is well suited for designing ﬁlters with simple frequency response shapes, such as ideal
+lowpass ﬁlters. Some typical ﬁlter shapes that can be designed are shown in Figs. 10.1.1
+and 10.1.2. For arbitrary shapes, a variant of the method, known as frequency sampling
+method, may be used; it will be discussed in Section 10.3.
+
+532
+
+10.1. WINDOW METHOD
+
+lowpass
+
+533
+
+D(ω)
+
+highpass
+
+1
+
+D(ω)
+
+1
+
+ω
+−π
+
+−ωc
+
+bandpass
+
+ω
+
+π
+
+ωc
+
+0
+
+−π
+
+−ωc
+
+bandstop
+
+D(ω)
+
+D(ω)
+
+1
+
+1
+
+π
+
+ωc
+
+0
+
+ω
+−π −ωb −ωa
+
+ωb
+
+ωa
+
+0
+
+ω
+
+π
+
+−π
+
+−ωb −ωa
+
+ωa
+
+0
+
+ωb
+
+π
+
+Fig. 10.1.1 Ideal lowpass, highpass, bandpass, and bandstop ﬁlters.
+
+D(ω)/j
+
+D(ω)/j
+1
+
+differentiator
+−π
+
+ω
+0
+
+ω
+−π
+
+π
+
+0
+
+Hilbert
+transformer
+
+π
+
+−1
+
+Fig. 10.1.2 Ideal differentiator and Hilbert transformer ﬁlters.
+
+A given desired ideal frequency response, say D(ω), being periodic in ω with period
+2π, need only be speciﬁed over one complete Nyquist interval −π ≤ ω ≤ π. The
+corresponding impulse response, say d(k), is related to D(ω) by the DTFT and inverse
+DTFT relationships:
+∞
+
+D(ω)=
+
+d(k)e−jωk
+
+π
+
+
+d(k)=
+
+k=−∞
+
+−π
+
+D(ω)ejωk
+
+dω
+2π
+
+(10.1.1)
+
+In general, the impulse response d(k) will be double-sided and infinite. For many
+ideal ﬁlter shapes, the ω-integration in Eq. (10.1.1) can be done in closed form. For
+example, for the lowpass filter shown in Fig. 10.1.1, the quantity D(ω) is deﬁned over
+the Nyquist interval by
+
+
+
+1,
+0,
+
+D(ω)=
+
+if −ωc ≤ ω ≤ ωc
+if −π ≤ ω < −ωc , or ωc < ω ≤ π
+
+Therefore, Eq. (10.1.1) gives:
+
+π
+d(k) =
+
+−π
+
+!
+=
+
+D(ω)ejωk
+
+ejωk
+2πjk
+
+"ω c
+=
+−ωc
+
+dω
+=
+2π
+
+ ωc
+−ωc
+
+1 · ejωk
+
+ejωc k − e−jωc k
+2πjk
+
+dω
+2π
+
+10. FIR DIGITAL FILTER DESIGN
+
+534
+which can be rewritten as
+(lowpass ﬁlter)
+
+d(k)=
+
+sin(ωc k)
+
+πk
+
+−∞ < k < ∞
+
+,
+
+(10.1.2)
+
+For computational purposes, the case k = 0 must be handled separately. Taking the
+limit k → 0, we ﬁnd from Eq. (10.1.2):
+
+d(0)=
+
+ωc
+π
+
+(10.1.3)
+
+Similarly, we ﬁnd for the highpass, bandpass, and bandstop ﬁlters of Fig. 10.1.1,
+deﬁned over −∞ < k < ∞
+(highpass ﬁlter)
+
+d(k)= δ(k)−
+
+(bandpass ﬁlter)
+
+d(k)=
+
+(bandstop ﬁlter)
+
+d(k)= δ(k)−
+
+sin(ωc k)
+
+πk
+
+sin(ωb k)− sin(ωa k)
+
+(10.1.4)
+
+πk
+sin(ωb k)− sin(ωa k)
+
+πk
+
+Note that for the same values of the cutoff frequencies ωc , ωa , ωb , the lowpass/highpass
+and bandpass/bandstop ﬁlters are complementary, that is, their impulse responses add
+up to a unit impulse δ(k) and their frequency responses add up to unity (as can also be
+seen by inspecting Fig. 10.1.1):
+
+dLP (k)+dHP (k)= δ(k)
+
+
+
+DLP (ω)+DHP (ω)= 1
+
+dBP (k)+dBS (k)= δ(k)
+
+
+
+DBP (ω)+DBS (ω)= 1
+
+(10.1.5)
+
+As we see below, such complementarity properties can be exploited to simplify the
+implementation of loudspeaker cross-over networks and graphic equalizers.
+The ideal differentiator ﬁlter of Fig. 10.1.2 has frequency response D(ω)= jω, deﬁned over the Nyquist interval. The ideal Hilbert transformer response can be expressed
+compactly as D(ω)= −jsign(ω), where sign(ω) is the signum function which is equal
+to ±1 depending on the algebraic sign of its argument. The ω-integrations in Eq. (10.1.1)
+give the impulse responses:
+(differentiator)
+
+d(k)=
+
+(Hilbert transformer)
+
+d(k)=
+
+cos(πk)
+
+k
+
+−
+
+sin(πk)
+
+1 − cos(πk)
+
+πk2
+
+(10.1.6)
+
+πk
+
+Both ﬁlters have d(0)= 0, as can be veriﬁed by carefully taking the limit k → 0.
+Both impulse responses d(k) are real-valued and odd (antisymmetric) functions of k.
+By contrast, the ﬁlters of Fig. 10.1.1 all have impulse responses that are real and even
+(symmetric) in k. We will refer to the two classes of ﬁlters of Figs. 10.1.1 and 10.1.2 as
+the symmetric and antisymmetric classes.
+In the frequency domain, the symmetric types are characterized by a frequency response D(ω) which is real and even in ω; the antisymmetric ones have D(ω) which is
+imaginary and odd in ω. One of the main consequences of these frequency properties
+is the linear phase property of the window designs.
+
+10.1. WINDOW METHOD
+
+535
+
+10.1.2 Rectangular Window
+The window method consists of truncating, or rectangularly windowing, the doublesided d(k) to a ﬁnite length. For example, we may keep only the coefﬁcients:
+
+π
+d(k)=
+
+−π
+
+dω
+,
+2π
+
+D(ω)ejωk
+
+−M ≤ k ≤ M
+
+(10.1.7)
+
+Because the coefﬁcients are taken equally for positive and negative k’s, the total
+number of coefﬁcients will be odd, that is, N = 2M + 1 (even values of N are also
+possible, but not discussed in this text). The resulting N-dimensional coefﬁcient vector
+is the FIR impulse response approximating the inﬁnite ideal response:
+d = [d−M , . . . , d−2 , d−1 , d0 , d1 , d2 , . . . , dM ]
+
+(10.1.8)
+
+The time origin k = 0 is at the middle d0 of this vector. To make the ﬁlter causal we
+may shift the time origin to the left of the vector and re-index the entries accordingly:
+h = d = [h0 , . . . , hM−2 , hM−1 , hM , hM+1 , hM+2 , . . . , h2M ]
+
+(10.1.9)
+
+where we deﬁned h0 = d−M , h1 = d−M+1 , . . . , hM = d0 , . . . , h2M = dM . Thus, the
+vectors d and h are the same, with the understanding that d’s origin is in its middle and
+h’s at its left. The deﬁnition of h may be thought of as time-delaying the double-sided
+sequence d(k), −M ≤ k ≤ M, by M time units to make it causal:
+
+h(n)= d(n − M),
+
+n = 0 , 1, . . . , N − 1
+
+(10.1.10)
+
+The operations of windowing and delaying are shown in Fig. 10.1.3. To summarize,
+the steps of the rectangular window method are simply:
+1. Pick an odd length N = 2M + 1, and let M = (N − 1)/2.
+2. Calculate the N coefﬁcients d(k) from Eq. (10.1.7), and
+3. Make them causal by the delay (10.1.10).
+
+rectangular
+window
+
+d(k)
+
+h(n)
+
+... -5 -4 -3 -2 -1 0 1 2 3 4 5 ... k
+
+rectangular
+window
+w(n)
+
+-2 -1 0 1 2 3 4 5 6 7 8 9 ... n
+
+Fig. 10.1.3 Rectangularly windowed impulse response, with N = 9, M = 4.
+
+For example, the N-dimensional approximation to the ideal lowpass ﬁlter of Eq. (10.1.2)
+will be:
+
+
+
+h(n)= d(n − M)=
+
+
+
+sin ωc (n − M)
+
+π(n − M)
+
+, n = 0, . . . , M, . . . , N − 1
+
+(10.1.11)
+
+10. FIR DIGITAL FILTER DESIGN
+
+536
+
+where we must calculate separately h(M)= d(0)= ωc /π. For other ideal ﬁlter shapes,
+we can use the functions d(k) of Eqs. (10.1.4) or (10.1.6). Once the impulse response
+coefﬁcients are calculated, the ﬁlter may be implemented by its FIR ﬁltering equation,
+using the routines fir or cfir of Chapter 4:
+N−1
+
+yn =
+
+hm xn−m
+
+(10.1.12)
+
+m=0
+
+Example 10.1.1: Determine the length-11, rectangularly windowed impulse response that approximates (a) an ideal lowpass ﬁlter of cutoff frequency ωc = π/4, (b) the ideal differentiator ﬁlter, and (c) the ideal Hilbert transformer ﬁlter.
+
+Solution: With N = 11, we have M = (N − 1)/2 = 5. For the lowpass ﬁlter, we evaluate
+Eq. (10.1.2), that is,
+
+d(k)=
+
+sin(πk/4)
+
+πk
+
+,
+
+for −5 ≤ k ≤ 5
+
+We ﬁnd the numerical values:
+
+!
+h=d=
+
+√
+
+−
+
+√
+
+√
+
+√
+
+√
+
+√
+
+2
+2 1
+2 1
+2 1
+2
+2
+, 0,
+,
+,
+, ,
+,
+,
+, 0, −
+10π
+6π 2π 2π 4 2π 2π 6π
+10π
+
+"
+
+For the differentiator ﬁlter, the second term, sin(πk)/πk2 , vanishes for all values k = 0.
+Therefore, we ﬁnd:
+1
+1 1
+1
+1
+1 1
+1
+, − , , − , 1, 0, −1, , − , , −
+5
+4 3
+2
+2
+3 4
+5
+
+h=d=
+
+And, for the Hilbert transformer:
+h=d= −
+
+2
+2
+2
+2
+2
+2
+, 0, −
+, 0, − , 0, , 0,
+, 0,
+5π
+3π
+π
+π
+3π
+5π
+
+Note that the lowpass ﬁlter’s impulse response is symmetric about its middle, whereas the
+differentiator’s and Hilbert transformer’s are antisymmetric. Note also that because of the
+presence of the factor 1 − cos(πk), every other entry of the Hilbert transformer vanishes.
+This property can be exploited to reduce by half the total number of multiplications required in the convolutional equation Eq. (10.1.12).
+
+In the frequency domain, the FIR approximation to D(ω) is equivalent to truncating
+the DTFT Fourier series expansion (10.1.1) to the ﬁnite sum:
+M
+
+
+D(ω)=
+
+d(k)e−jωk
+
+(10.1.13)
+
+k=−M
+
+Replacing z = ejω , we may also write it as the double-sided z-transform:
+
+
+D(z)=
+
+M
+
+d(k)z−k
+k=−M
+
+(10.1.14)
+
+10.1. WINDOW METHOD
+
+537
+
+The ﬁnal length-N ﬁlter obtained by Eq. (10.1.10) will have transfer function:
+M
+
+D(z)= z−M
+H(z)= z−M 
+
+d(k)z−k
+
+(10.1.15)
+
+k=−M
+
+and frequency response:
+
+
+H(ω)= e−jωM D(ω)=
+e−jωM
+
+M
+
+d(k)e−jωk
+
+(10.1.16)
+
+k=−M
+
+Example 10.1.2: To illustrate the deﬁnition of H(z), consider a case with N = 7 and M = (N −
+1)/2 = 3. Let the FIR ﬁlter weights be d = [d−3 , d−2 , d−1 , d0 , d1 , d2 , d3 ] with truncated
+z-transform:
+
+D(z)= d−3 z3 + d−2 z2 + d−1 z + d0 + d1 z−1 + d2 z−2 + d3 z−3
+Delaying it by M = 3, we get the causal transfer function:
+
+
+
+D(z) = z−3 d−3 z3 + d−2 z2 + d−1 z + d0 + d1 z−1 + d2 z−2 + d3 z−3
+H(z)= z−3 
+= d−3 + d−2 z−1 + d−1 z−2 + d0 z−3 + d1 z−4 + d2 z−5 + d3 z−6
+= h0 + h1 z−1 + h2 z−2 + h3 z−3 + h4 z−4 + h5 z−5 + h6 z−6
+where we deﬁned h(n)= d(n − 3), n = 0, 1, 2, 3, 4, 5, 6.
+
+The linear phase property of the window design is a direct consequence of Eq. (10.1.16).
+
+The truncated D(ω)
+has the same symmetry/antisymmetry properties as D(ω). Thus,
+
+in the symmetric case, D(ω)
+will be real and even in ω. It follows from Eq. (10.1.16)
+that the designed FIR ﬁlter will have linear phase, arising essentially from the delay fac
+tor e−jωM . More precisely, we may write the real factor D(ω)
+in terms of its positive
+magnitude and its sign:
+
+
+
+
+
+
+
+sign D(ω)
+|D(ω)|
+= ejπβ(ω) |D(ω)|
+D(ω)=
+
+
+
+
+
+
+where β(ω)= 1 − sign 
+D(ω) /2, which is zero or one depending on the sign of
+
+D(ω). It follows that H(ω) will be:
+
+
+
+e−jωM+jπβ(ω) |D(ω)|
+H(ω)= e−jωM D(ω)=
+Thus, its magnitude and phase responses will be:
+
+
+|H(ω)| = |D(ω)|
+,
+
+arg H(ω)= −ωM + π β(ω)
+o
+
+(10.1.17)
+
+making the phase response piece-wise linear in ω with 180 jumps at those ω where
+
+D(ω) changes sign. For the antisymmetric case, 
+D(ω) will be pure imaginary, that is,
+of the form 
+D(ω)= jA(ω). The factor j may be made into a phase by writing it as
+j = ejπ/2 . Thus, we have
+
+10. FIR DIGITAL FILTER DESIGN
+
+538
+
+D(ω)= e−jωM ejπ/2 A(ω)= e−jωM ejπ/2 ejπα(ω) |A(ω)|
+H(ω)= e−jωM 
+where α(ω)=
+sponses:
+
+
+
+
+
+
+
+1 − sign A(ω)
+
+|H(ω)| = |A(ω)| ,
+
+/2, which gives for the magnitude and phase re-
+
+arg H(ω)= −ωM +
+
+π
+2
+
++ π α(ω)
+
+(10.1.18)
+
+How good is the rectangular window design? How well does the truncated 
+D(ω)
+represent the desired response D(ω)? In other words, how good is the approximation
+
+D(ω) D(ω)?
+Intuitively one would expect that 
+D(ω)→ D(ω) as N increases. This is true for any
+ω which is a point of continuity of D(ω), but it fails at points of discontinuity, such as
+at the transition edges from passband to stopband. Around these edges one encounters
+the celebrated Gibbs phenomenon of Fourier series, which causes the approximation to
+be bad regardless of how large N is.
+To illustrate the nature of the approximation 
+D(ω) D(ω), we consider the design
+of an ideal lowpass ﬁlter of cutoff frequency ωc = 0.3π, approximated by a rectangularly windowed response of length N = 41 and then by another one of length N = 121.
+For the case N = 41, we have M = (N − 1)/2 = 20. The designed impulse response is
+given by Eq. (10.1.10):
+
+
+
+
+
+sin 0.3π(n − 20)
+,
+h(n)= d(n − 20)=
+π(n − 20)
+
+n = 0, 1, . . . , 40
+
+and in particular, h(20)= d(0)= ωc /π = 0.3. The second design has N = 121 and
+M = 60. Its impulse response is, with h(60)= d(0)= 0.3:
+
+
+sin 0.3π(n − 60)
+h(n)= d(n − 60)=
+,
+n = 0, 1, . . . , 120
+π(n − 60)
+The two impulse responses are plotted in Fig. 10.1.4. Note that the portion of the
+second response extending ±20 samples around the central peak at n = 60 coincides
+numerically with the ﬁrst response. The corresponding magnitude responses are shown
+in Fig. 10.1.5. An intermediate case having N = 81 is shown in Figs. 10.1.6 and 10.1.7.
+In Fig. 10.1.5, the magnitude responses were computed by evaluating:
+N−1
+
+h(n)e−jωn
+
+H(ω)=
+
+(10.1.19)
+
+n=0
+
+The length-N impulse response h(n) deﬁned in Eq. (10.1.10) may be thought of
+formally as the rectangularly windowed double-sided sequence deﬁned by
+
+h(n)= w(n)d(n − M) ,
+
+−∞ < n < ∞
+
+(10.1.20)
+
+where w(n) is the length-N rectangular window. In the frequency domain, this translates to the convolution of the corresponding spectra, as in Eq. (9.1.8):
+
+10.1. WINDOW METHOD
+
+539
+
+Fig. 10.1.4 Rectangularly windowed impulse responses for N = 41 and N = 121.
+
+Fig. 10.1.5 Rectangularly windowed magnitude responses for N = 41 and N = 121.
+
+π
+H(ω)=
+
+
+
+−π
+
+W(ω − ω )e−jω M D(ω )
+
+dω
+2π
+
+(10.1.21)
+
+
+
+where the e−jω M arises from the delay in d(n − M).
+The spectrum W(ω) of the rectangular window was given in Eq. (9.1.9) (with L = N).
+Thus, the designed ﬁlter H(ω) will be a smeared version of the desired shape D(ω).
+In particular, for the ideal lowpass case, because D(ω ) is nonzero and unity only over
+the subinterval −ωc ≤ ω ≤ ωc , the frequency convolution integral becomes:
+
+ ωc
+H(ω)=
+
+−ωc
+
+
+
+W(ω − ω )e−jω M
+
+dω
+2π
+
+(10.1.22)
+
+The ripples in the frequency response H(ω), observed in Fig. 10.1.5, arise from the
+(integrated) ripples of the rectangular window spectrum W(ω). As N increases, we
+observe three effects in Fig. 10.1.5:
+1. For ω’s that lie well within the passband or stopband (i.e., points of continuity), the
+ripple size decreases as N increases, resulting in ﬂatter passband and stopband.
+
+For such ω, we have D(ω)→
+D(ω) as N → ∞.
+
+10. FIR DIGITAL FILTER DESIGN
+
+540
+
+2. The transition width decreases with increasing N. Note also that for any N, the
+windowed response H(ω) is always equal to 0.5 at the cutoff frequency ω = ωc .
+(This is a standard property of Fourier series.)
+3. The largest ripples tend to cluster near the passband-to-stopband discontinuity
+(from both sides) and do not get smaller with N. Instead, their size remains
+approximately constant, about 8.9 percent, independent of N. Eventually, as N →
+∞, these ripples get squeezed onto the discontinuity at ω = ωc , occupying a set
+of measure zero. This behavior is the Gibbs phenomenon.
+
+10.1.3 Hamming Window
+To eliminate the 8.9% passband and stopband ripples, we may replace the rectangular
+window w(n) in Eq. (10.1.20) by a non-rectangular one, which tapers off gradually at
+its endpoints, thus reducing the ripple effect. There exist dozens of windows [219–222]
+and among these the Hamming window is a popular choice; it is deﬁned by:
+
+
+w(n)= 0.54 − 0.46 cos
+
+2πn
+N−1
+
+
+,
+
+n = 0, 1, . . . , N − 1
+
+(10.1.23)
+
+In particular, the Hamming windowed impulse response for a length-N lowpass ﬁlter
+will be, where N = 2M + 1 and n = 0, 1, . . . , N − 1:
+
+h(n)= w(n)d(n − M)= 0.54 − 0.46 cos
+
+ 2πn 
+N−1
+
+
+
+·
+
+
+
+sin ωc (n − M)
+
+π(n − M)
+
+(10.1.24)
+
+As an example, consider the design of a length N = 81 lowpass ﬁlter with cutoff
+frequency ωc = 0.3π. Fig. 10.1.6 shows the rectangularly and Hamming windowed
+impulse responses. Note how the Hamming impulse response tapers off to zero more
+gradually. It was computed by Eq. (10.1.24) with N = 81 and M = 40. Fig. 10.1.7 shows
+the corresponding magnitude responses.
+
+Fig. 10.1.6 Rectangular and Hamming windowed impulse responses for N = 81.
+
+10.2. KAISER WINDOW
+
+541
+
+Fig. 10.1.7 Rectangular and Hamming windowed magnitude responses for N = 81.
+
+The passband/stopband ripples of the rectangular window design are virtually eliminated from the Hamming window design. Actually, there are small ripples with maximum overshoot of about 0.2%, but they are not visible in the scale of Fig. 10.1.7. The
+price for eliminating the ripples is loss of resolution, which is reﬂected into a wider
+transition width.
+
+10.2 Kaiser Window
+10.2.1 Kaiser Window for Filter Design
+The rectangular and Hamming window designs are very simple, but do not provide
+good control over the ﬁlter design speciﬁcations. With these windows, the amount of
+overshoot is always ﬁxed to 8.9% or 0.2% and cannot be changed to a smaller value if so
+desired.
+A ﬂexible set of speciﬁcations is shown in Fig. 10.2.1 in which the designer can
+arbitrarily specify the amount of passband and stopband overshoot δpass , δstop , as well
+as the transition width Δf .
+The passband/stopband frequencies {fpass , fstop } are related to the ideal cutoff frequency fc and transition width Δf by
+
+fc =
+
+1
+(fpass + fstop ) ,
+2
+
+Δf = fstop − fpass
+
+(10.2.1)
+
+Thus, fc is chosen to lie exactly in the middle between fpass and fstop . Eqs. (10.2.1)
+can be inverted to give:
+
+fpass = fc −
+
+1
+Δf ,
+2
+
+fstop = fc +
+
+1
+Δf
+2
+
+(10.2.2)
+
+The normalized versions of the frequencies are the digital frequencies:
+
+ωpass =
+
+2πfpass
+
+fs
+
+,
+
+ωstop =
+
+2πfstop
+
+fs
+
+,
+
+ωc =
+
+2πfc
+
+fs
+
+,
+
+Δω =
+
+2πΔf
+
+fs
+
+10. FIR DIGITAL FILTER DESIGN
+
+542
+
+In practice, the passband and stopband overshoots are usually expressed in dB:
+
+
+Apass = 20 log10
+
+1 + δpass
+
+
+Astop = −20 log10 δstop
+
+,
+
+1 − δpass
+
+(10.2.3)
+
+A simpliﬁed version of the passband equation can be obtained by expanding it to
+ﬁrst order in δpass , giving:
+
+Apass = 17.372δpass
+
+(10.2.4)
+
+which is valid for small values of δpass . Eqs. (10.2.3) can be inverted to give:
+
+δpass =
+
+10Apass /20 − 1
+,
+10Apass /20 + 1
+
+δstop = 10−Astop /20
+
+(10.2.5)
+
+Thus, one can pass back and forth between the speciﬁcation sets:
+
+{fpass , fstop , Apass , Astop }
+
+designed
+filter |H( f )|
+
+
+
+desired ideal
+filter |D( f )|
+
+1+δpass
+1−δpass
+
+{fc , Δf , δpass , δstop }
+
+Apass
+
+1
+
+Astop
+
+Δf = transition
+width
+
+1/2
+
+f
+
+δstop
+0
+
+fstop
+
+fpass
+
+passband
+
+fs /2
+
+stopband
+
+fc
+
+Fig. 10.2.1 Magnitude response speciﬁcations for a lowpass ﬁlter.
+
+Although δpass and δstop can be speciﬁed independently of each other, it is a property of all window designs that the ﬁnal designed ﬁlter will have equal passband and
+stopband ripples. Therefore, we must design the ﬁlter on the basis of the smaller of the
+two ripples, that is,
+
+δ = min(δpass , δstop )
+
+(10.2.6)
+
+The designed ﬁlter will have passband and stopband ripple equal to δ. The value of
+
+δ can also be expressed in dB:
+A = −20 log10 δ ,
+
+δ = 10−A/20
+
+(10.2.7)
+
+10.2. KAISER WINDOW
+
+543
+
+In practice, the design is usually based on the stopband ripple δstop . This is so
+because any reasonably good choices for the passband and stopband attenuations (e.g.,
+Apass = 0.1 dB and Astop = 60 dB) will almost always result into δstop < δpass , and
+therefore, δ = δstop , and in dB, A = Astop . Thus, it is useful to think of A as the
+stopband attenuation.
+The main limitation of most windows is that they have a fixed value of δ, which
+depends on the particular window shape. Such windows limit the achievable passband
+and stopband attenuations {Apass , Astop } to only certain speciﬁc values.
+For example, Table 10.2.1 shows the attenuations achievable by the rectangular and
+Hamming windows, calculated from Eq. (10.2.3) with the values δ = δpass = δstop =
+0.089 and δ = δpass = δstop = 0.002, respectively. The table also shows the corresponding value of the transition width parameter D of Eq. (10.2.11).
+The only windows that do not suffer from the above limitation are the Kaiser window
+[245–247], the Dolph-Chebyshev window [248–253], and the Saramäki windows [254].
+These windows have an adjustable shape parameter that allows the window to achieve
+any desired value of ripple δ or attenuation A.
+Window
+
+δ
+
+Astop
+
+Apass
+
+D
+
+Rectangular
+Hamming
+Kaiser
+
+8.9%
+0.2%
+variable δ
+
+−21 dB
+−54 dB
+
+1.55 dB
+0.03 dB
+17.372δ
+
+0.92
+3.21
+(A − 7.95)/14.36
+
+−20 log10 δ
+
+Table 10.2.1 Speciﬁcations for rectangular, Hamming, and Kaiser windows.
+
+The Kaiser window is unique in the above class in that it has near-optimum performance (in the sense of minimizing the sidelobe energy of the window), as well as
+having the simplest implementation. It depends on two parameters: its length N and
+the shape parameter α. Assuming odd length N = 2M + 1, the window is deﬁned, for
+n = 0, 1, . . . , N − 1, as follows:
+
+(Kaiser window)
+
+w(n)=
+
+ 
+
+I0 α 1 − (n − M)2 /M2
+I0 (α)
+
+(10.2.8)
+
+where I0 (x) is the modified Bessel function of the first kind and 0th order. This function
+and its evaluation by the routine I0.c are discussed at the end of this section. The numerator in Eq. (10.2.8) can be rewritten in the following form, which is more convenient
+for numerical evaluation:
+
+ 
+
+I0 α n(2M − n)/M
+,
+w(n)=
+I0 (α)
+
+n = 0, 1, . . . , N − 1
+
+(10.2.9)
+
+Like all window functions, the Kaiser window is symmetric about its middle, n = M,
+and has the value w(M)= 1 there. At the endpoints, n = 0 and n = N − 1, it has the
+value 1/I0 (α) because I0 (0)= 1.
+Figure 10.2.2 compares a Hamming window of length N = 51 to the Kaiser windows
+of the same length and shape parameters α = 7 and α = 5. For α = 5 the Kaiser and
+
+

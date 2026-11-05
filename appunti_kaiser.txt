@@ -1,0 +1,136 @@
+ENSS 2020-21 | Martina Palmucci
+Finestra di Hann
+La finestra di Hann è definita come
+2𝜋𝑛
+)) 0 ≤ 𝑛 ≤ 𝐿 − 1
+𝐿−1
+0
+otherwise
+
+𝑤[𝑛] = { 0.5 (1 − cos (
+
+ed il valore di attenuazione 𝑅 dei lobi laterali vale 32 dB.
+Di seguito vediamo la rappresentazione della finestra di Hann nel dominio del tempo
+e nel dominio della frequenza, rispettivamente a sinistra e a destra.
+
+5.1.1.3
+
+Finestre regolabili
+
+Abbiamo appena visto che uno dei problemi principali nell’analisi spettrale riguardava il compromesso tra risoluzione in frequenza e dispersione di frequenze spurie. Più
+si cerca di sopprimere i lobi laterali, più ampio diventa il lobo principale della finestra, riducendo la quantità di risoluzione ottenibile.
+La maggior parte delle finestre ha valori fissi per il valore di riduzione 𝑅 dei lobi laterali e per il fattore di larghezza 𝑐. In questo corso abbiamo visto finestre con parametri fissati quali la finestra rettangolare, la finestra di Hamming e la finestra di
+Hann.
+Tuttavia, esistono anche funzioni finestra i cui parametri possono essere scelti a seconda delle esigenze dell’applicazione.
+
+95
+
+ENSS 2020-21 | Martina Palmucci
+Finestra di Kaiser
+Kaiser e Schafer svilupparono nel 1980 le equazioni per progettare la finestra parametrica, nota come finestra di Kaiser, nell’analisi spettrale. (Esiste un’altra finestra di
+Kaiser utilizzata per i filtri FIR le cui equazioni sono differenti.)
+Dato un livello 𝑅 di attenuazione dei lobi laterali in dB ed un valore desiderato di risoluzione in frequenza 𝛥𝑓𝑤 , le equazioni progettuali illustrate di seguito determinano la lunghezza 𝐿 del record dei dati ed il parametro di forma 𝛼 della finestra. La
+lunghezza è determinata dall’equazione
+𝐿 ≥ 𝐿𝑚𝑖𝑛 =
+
+𝑐 ⋅ 𝑓𝑐
+Δ𝑓𝑤
+
+dove 𝑐 è dato in termini di 𝑅 da:
+𝑐=
+
+(𝑅 + 12)6
+155
+
+Anche il parametro di forma 𝛼 della finestra può essere calcolato in termini di 𝑅 dalle seguenti equazioni:
+0,
+𝑅 < 13.26
+𝛼 = { 0.76609(𝑅 − 13.26) + 0.09834(𝑅 − 13.26), 13.26 < 𝑅 < 60
+0.12438(𝑅 + 6.3),
+60 < 𝑅 < 120
+0.4
+
+Maggiore sarà il parametro 𝑅, maggiore sarà l’operazione di schiacciamento ai bordi
+della finestra, maggiore sarà l’allungamento del lobo principale. Notiamo che per
+𝑅 < 13.26 automaticamente ottengo la finestra rettangolare. Notiamo anche che
+non possiamo utilizzare Kaiser per valori di 𝑅 superiori a 120 dB; si tratta di un valore di attenuazione limite della finestra per cui, tuttavia, il livello dei lobi laterali rispetto al principale risulta estremamente basso e più che sufficiente per portare a
+termine lo studio spettrale con successo.
+Una volta che i parametri della finestra {𝐿, 𝛼} sono stati determinati, la finestra può
+essere calcolata da:
+𝑤[𝑛] =
+
+𝐼0 (𝛼√1 − (𝑛 − 𝑀)2 ⁄𝑀2 )
+𝐼0 (𝛼)
+
+96
+
+,
+
+𝑛 = 0, 1, … , 𝐿 − 1
+
+ENSS 2020-21 | Martina Palmucci
+dove 𝐼0 è la funzione di Bessel modificata del primo tipo e di ordine zero e dove 𝑀 =
+(𝐿 − 1)⁄2. Notiamo che 𝐿 dovrebbe essere dispari per Kaiser.
+Di seguito vediamo un esempio della configurazione della finestra di Kaiser per determinati valori dei parametri. Più avanti descrivere ampiamente questa finestra.
+
+A questo punto, non resta altro che applicare:
+𝑥𝐿 [𝑛] = 𝑤[𝑛] ⋅ 𝑥[𝑛],
+
+𝑛 = 0, 1, … , 𝐿 − 1
+
+per ottenere una sequenza di record di dati accorciata alla lunghezza 𝐿 ed avente le
+specifiche richieste dal problema.
+
+Finestra di Dolph – Chebyshev
+La finestra di Dolph – Chebyshev è sempre una finestra regolabile ma l’attenuazione
+dei lobi laterali rispetto al lobo principale è costante su tutto l’intervallo.
+
+5.1.2
+
+Risoluzione fisica e computazionale
+
+La larghezza 𝛥𝑓𝑏𝑖𝑛 = 𝑓𝑠 ⁄𝑁 rappresenta la spaziatura tra le frequenze della DFT su
+cui viene calcolata la DTFT e non deve essere confusa con la larghezza Δ𝑓 = 𝑓𝑠 ⁄𝐿
+della risoluzione di frequenza, che si riferisce alla minima separazione di frequenza
+97
+
+ENSS 2020-21 | Martina Palmucci
+risolvibile tra due componenti sinusoidali. Per evitare confusione, faremo riferimento alla prima come risoluzione computazionale della frequenza e alla seconda come
+risoluzione fisica di frequenza:
+Δ𝑓𝑤 =
+Δ𝑓𝑏𝑖𝑛 =
+
+5.1.3
+
+𝑓𝑠
+𝑁
+
+𝑓𝑠
+𝐿
+
+(𝑟𝑖𝑠𝑜𝑙𝑢𝑧𝑖𝑜𝑛𝑒 𝑓𝑖𝑠𝑖𝑐𝑎)
+
+(𝑟𝑖𝑠𝑜𝑙𝑢𝑧𝑖𝑜𝑛𝑒 𝑐𝑜𝑚𝑝𝑢𝑡𝑎𝑧𝑖𝑜𝑛𝑎𝑙𝑒)
+
+Esempi didattici
+
+Ricapitolando, va scelta la risoluzione fisica e la forma della finestra secondo un trade off in linea con le specifiche del problema. Successivamente, si pensa alla risoluzione computazionale.
+
+5.1.3.1
+
+Esempio 1: relazione Δ𝑓𝑤 − Δ𝑓𝑏𝑖𝑛
+
+• Il seguente segnale analogico costituito da tre sinusoidi di uguale intensità
+avente frequenze rispettivamente 𝑓1 = 2 𝑘𝐻𝑧, 𝑓2 = 2.5 𝑘𝐻𝑧 e 𝑓3 = 3 𝑘𝐻𝑧:
+𝑥(𝑡) = cos(2𝜋𝑓1 𝑡) + cos(2𝜋𝑓2 𝑡) + cos(2𝜋𝑓3 𝑡)
+dove 𝑡 è in millisecondi, viene campionato a una frequenza di 10 𝑘𝐻𝑧. Consideriamo quattro record di dati di lunghezze 𝐿 = 10, 20, 40, 100 campioni.
+Corrispondono alle durate di 1, 2, 4, 10 𝑚𝑠𝑒𝑐.
+Per il primo record di dati composto di 10 campioni calcoliamo due diverse
+DFT, una su un numero di punti pari a 32 ed un’altra su un numero di punti
+pari a 64, utilizzando una finestra rettangolare.
+(Ricordiamo che il calcolo della DFT su un numero di punti 𝑁 superiore alla
+lunghezza della sequenza è reso possibile grazie all’operazione di zero padding, aggiungendo un numero di zeri pari ad 𝑁 − 𝐿.)
+
+98
+
+

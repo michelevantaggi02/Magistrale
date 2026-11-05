@@ -1,0 +1,538 @@
+ENSS 2020-21 | Martina Palmucci
+• comparsa di frequenze spurie assenti nel segnale originale.
+L’ultimo fenomeno è simile all’introduzione del rumore a seguito della quantizzazione del segnale. L’unica differenza sta nel fatto che il rumore di quantizzazione si trova perlopiù distribuito in maniera uniforme lungo tutto l’asse delle frequenze mentre il rumore introdotto a seguito della finestratura tende a concentrarsi in prossimità di discontinuità dello spettro reale.
+Il calcolo della trasformata (4) non produce distorsione tranne al più un rumore di
+calcolo, il cui effetto risulta paragonabile ad un rumore di fondo distribuito sull’asse
+delle ampiezze e sull’asse delle frequenze. Nonostante tutto, se si implementano sistemi in virgola fissa può essere ritenuto trascurabile perché molto piccolo. Invece,
+se i sistemi che implementano il calcolo sono in virgola fissa può diventare non trascurabile.
+
+5.1.1
+
+Funzione finestra
+06 e 11/11/2020
+
+Concentriamoci sul blocco funzionale numero (3): il blocco della finestratura. Si
+tratta di un’operazione di limitazione del segnale nel dominio del tempo attraverso
+l’applicazione di una funzione finestra, ovvero una funzione che vale zero al di fuori
+di un certo intervallo. Durante il calcolo della DFT si rende discreto il segnale nel
+dominio delle frequenze, contemporaneamente nel dominio del tempo il segnale
+diventa periodico. Senza l’operazione di finestratura che precede il blocco (4) del
+calcolo della DFT, si rischierebbe di ottenere repliche sovrapposte del segnale nel
+dominio del tempo.
+In questo caso, l’analogia tra il blocco (3) della finestratura ed il blocco (1) del filtro
+antialiasing risulta evidente. Proprio come la funzione finestra evita la formazione di
+repliche nel dominio del tempo, repliche che sono un’eventuale conseguenza di
+un’operazione di discretizzazione del dominio duale, così anche il filtro antialiasing
+preserva il segnale dalla formazione di repliche nel dominio delle frequenze, repliche che sono un’eventuale conseguenza della discretizzazione del segnale nel dominio duale del tempo.
+
+85
+
+ENSS 2020-21 | Martina Palmucci
+Per capire gli effetti di distorsione, quali perdita di risoluzione in frequenza e comparsa di frequenze spurie, per semplicità e senza perdita di generalità ragioniamo
+sulla trasformata tempo-discreto di Fourier. Successivamente, passare ad applicare
+quanto dedotto alla trasformata discreta risulterà semplice.
+Ricorda:
++∞
+
+𝐷𝑇𝐹𝑇 ∶ 𝑋(𝜔) = ∑ 𝑥[𝑛]𝑒 −𝑗𝜔𝑛
+𝑛=−∞
+𝐿−1
+
+𝐷𝐹𝑇 ∶ 𝑋[𝜔𝑘 ] = ∑ 𝑥[𝑛]𝑒 −𝑗𝜔𝑘 𝑛
+𝑛=0
+
+Come abbiamo detto, la funzione finestra 𝑤[𝑛] limita la lunghezza del segnale in ingresso ad avere un numero di campioni diversi da zero al più pari ad 𝐿, dove 𝐿 ≤ 𝑁
+ed 𝑁 corrisponde al numero di punti su cui si calcola da DTFT.
+Per iniziare a ragionare, prendiamo in esame la funzione finestra rettangolare perché rappresenta il caso più semplice. Successivamente, potremmo sfruttare questo
+esempio per ricondurci ad altre tipologie di funzione finestra modificando alcuni parametri che vedremo in seguito.
+
+5.1.1.1
+
+Finestra rettangolare
+
+La funzione finestra rettangolare è definita
+𝑤[𝑛] = {
+
+1 0≤𝑛 ≤𝐿−1
+0
+otherwise
+
+Ciò che si fa per ottenere il segnale 𝑥𝐿 [𝑛] limitato nel tempo a partire dal segnale in
+ingresso 𝑥[𝑛] corrisponde alla seguente operazione prodotto:
+𝑥𝐿 [𝑛] = 𝑥[𝑛] ⋅ 𝑤[𝑛]
+
+86
+
+ENSS 2020-21 | Martina Palmucci
+
+Dunque, nella sequenza finestrata 𝑥𝐿 i primi 𝐿 campioni restano invariati rispetto alla sequenza originale 𝑥, mentre i campioni che si trovano al di fuori dell’intervallo
+[0, 𝐿 − 1] valgono zero.
+Questo è semplicemente ciò che accade nel dominio del tempo. Tuttavia, ci interessa analizzare questo fenomeno del dominio duale delle frequenze dove risiedono gli
+effetti di distorsione.
+Allora, si scrive
+𝜋
+
+𝑋𝐿 (𝜔) = 𝑋(𝜔) ∗ 𝑊(𝜔) = ∫ 𝑋(𝜔)𝑊(𝜔 − 𝜔′ )
+−𝜋
+
+𝑑𝜔
+2𝜋
+
+Cerchiamo di capire come è fatta la DTFT della funzione finestra:
++∞
+
+𝐿−1
+
+𝐿−1
+
+𝑊(𝜔) = ∑ 𝑤[𝑛]𝑒 −𝑗𝜔𝑛 = ∑ 𝑤[𝑛]𝑒 −𝑗𝜔𝑛 = ∑ 𝑒 −𝑗𝜔𝑛
+𝑛=−∞
+
+𝑛=0
+
+𝑛=0
+
+applicando la formula della serie geometrica
+𝑛
+
+1 − 𝑥 𝑛+1
+∑𝑥 =
+1−𝑥
+𝑘
+
+𝑘=0
+
+dove, in questo caso, 𝑥 = 𝑒 −𝑗𝜔 otteniamo
+1 − 𝑒 −𝑗𝜔𝐿 𝑒 −𝑗𝜔𝐿⁄2 𝑒 𝑗𝜔𝐿⁄2 − 𝑒 −𝑗𝜔𝐿⁄2
+𝑊(𝜔) =
+= −𝑗𝜔⁄2 ⋅ 𝑗𝜔⁄2
+1 − 𝑒 −𝑗𝜔
+𝑒
+𝑒
+− 𝑒 −𝑗𝜔⁄2
+Il primo rapporto può essere compresso come
+87
+
+ENSS 2020-21 | Martina Palmucci
+𝑗𝜔
+𝑒 −𝑗𝜔𝐿⁄2
+− (𝐿−1)
+=𝑒 2
+𝑒 −𝑗𝜔⁄2
+
+mentre, per il secondo rapporto, trattiamo numeratore e denominatore in maniera
+distinta con la seguente formula
+𝑒 𝑖𝜃 − 𝑒 −𝑖𝜃
+sin(𝜃) =
+2𝑖
+conseguenza diretta della formula di Eulero.
+Al numeratore pongo 𝜃 = 𝜔𝐿⁄2, ottenendo
+𝑒 𝑗𝜔𝐿⁄2 − 𝑒 −𝑗𝜔𝐿⁄2 = 𝑒 𝑗𝜃 − 𝑒 −𝑗𝜃
+= 2𝑗 ⋅ sin(𝜃)
+= 2𝑗 ⋅ sin(𝜔𝐿⁄2)
+Al denominatore pongo 𝜃 ′ = 𝜔⁄2, ottenendo
+′
+
+𝑒 𝑗𝜔⁄2 − 𝑒 −𝑗𝜔⁄2 = 𝑒 𝑗𝜃 − 𝑒 −𝑗𝜃
+
+′
+
+= 2𝑗 ⋅ sin(𝜃 ′ )
+= 2𝑗 ⋅ sin(𝜔⁄2)
+Dunque,
+𝑊(𝜔) =
+
+sin(𝜔𝐿⁄2) −𝑗𝜔(𝐿−1)⁄2
+⋅ 𝑒⏟
+sin(𝜔⁄2)
+⏟
+𝑗𝜃
+𝑒
+
+𝜌
+
+dove 𝜌, 𝜃 rappresentano rispettivamente modulo e fase.
+In particolare, il modulo di 𝑊(𝜔) può essere ricondotto alla rappresentazione di un
+qualcosa molto simile ad un 𝑠𝑖𝑛𝑐 in valore assoluto di periodicità 2𝜋, per cui la prima replica si colloca nell’intervallo di Nyquist [−𝜋, 𝜋].
+
+88
+
+ENSS 2020-21 | Martina Palmucci
+
+Stiamo parlando di una rappresentazione costituita da un lobo principale di altezza 𝐿
+e larghezza di base 4𝜋⁄𝐿 centrato in 𝜔 = 0, insieme ad una serie di lobi laterali più
+piccoli che attenuano la loro altezza via via che si allontanano dal lobo principale.
+L’intercalare dei lobi laterali è scandito dagli zeri di 𝑊(𝜔):
+𝑊(𝜔) = 0
+
+⇔
+
+sin(𝜔𝐿⁄2) = 0
+
+⇔
+
+𝜔𝐿
+= 𝑘𝜋
+2
+
+ovvero per 𝜔 = 2𝜋𝑘⁄𝐿 , 𝑘 = ±1, ±2, … (con 𝑘 = 0 escluso). Inoltre, la distanza in
+ampiezza tra il lobo principale e il primo lobo laterale vale sempre 13 dB, qualunque
+funzione finestra rettangolare si applichi.
+È chiaro che avremmo voluto che gli spettri del segnale in ingresso 𝑋(𝜔) e del segnale in uscita 𝑋𝐿 (𝜔) fossero uguali o al più con lievi distorsioni. Sarebbero stato così solamente nel caso in cui la funzione finestra avesse coinciso con l’impulso unitario, allora in quel caso la risposta in frequenza 𝑊[𝑛] sarebbe stata piatta su tutto il
+dominio delle frequenze e non avrebbe introdotto distorsioni di alcun tipo sul segnale in ingresso. Tuttavia, applicare una finestra che preservi un solo campione non è
+plausibile ai fini del nostro studio.
+Cerchiamo di capire da cosa dipendono gli effetti che abbiamo illustrato precedentemente. Supponiamo di avere come segnale in ingresso una funzione definita da
+due impulsi in 𝑓0 e in 𝑓1 = 𝑓0 + Δ𝑓, per cui la frequenza di campionamento 𝑓𝑠 >
+2𝑓𝑚𝑎𝑥 , come vediamo di seguito:
+𝑥(𝑡) = cos(2𝜋𝑓0 𝑡) + cos(2𝜋(𝑓0 + Δ𝑓)𝑡)|𝑡=𝑛𝑇
+
+89
+
+ENSS 2020-21 | Martina Palmucci
+
+Se eseguiamo la convoluzione con lo spettro della finestra rettangolare illustrato
+precedentemente (spettro con lobo principale centrale e lobi laterali più piccoli),
+quello che otteniamo è uno spettro 𝑋𝐿 (𝜔) del seguente tipo:
+
+Quello che si verifica è un “inspessimento” delle due frequenze principali, insieme
+alla comparsa di una serie di frequenze spurie che prima non erano presenti. I due
+effetti di distorsione sono proprio questi.
+Per quanto riguarda l’effetto di perdita di risoluzione in frequenza (in inglese, frequency resolution reduction), nell’esempio della figura sopra le due frequenze principali sono ancora distinguibili ma se fossero state più vicine tra loro sarebbe accaduto una cosa di questo genere: i due lobi principali dovuti alla convoluzione con i
+due impulsi del segnale in ingresso si sarebbero avvicinati a tal punto da fondersi e
+non poterli più distinguere.
+
+90
+
+ENSS 2020-21 | Martina Palmucci
+
+Il concetto di risoluzione in frequenza si può descrivere come la capacità di distinguere quantità diverse anche se vicine tra loro. In particolare, la risoluzione rappresenta la distanza minima alla quale le componenti frequenziali possono trovarsi per
+poterle continuare a distinguere.
+In questo caso, ci interessa distinguere i lobi principali nello spettro 𝑋𝐿 del segnale in
+uscita perciò definiamo il minimo che vogliamo distinguere come almeno la metà
+della larghezza di base del lobo principale, ovvero
+Δ𝜔𝑤 =
+
+2𝜋
+𝐿
+
+in radianti. Inoltre, dal momento che Δ𝜔𝑤 = 2𝜋Δ𝑓𝑤 ⁄𝑓𝑠 , possiamo ricavare una relazione analoga espressa in Hertz definita come:
+Δ𝑓𝑤 =
+
+𝑓𝑠
+1 1
+1
+= ⋅ ≔
+𝐿 𝑇𝑠 𝐿
+𝑇𝐿
+
+dove 𝑇𝐿 è la durata in tempo del segnale in uscita.
+Dunque, possiamo concludere che la capacità di risoluzione (di distinguere le frequenze principali che formavano lo spettro del segnale in ingresso) viene preservata
+se e solo se
+Δω ≥ Δ𝜔𝑤 =
+
+2𝜋
+𝐿
+
+Δ𝑓 ≥ Δ𝑓𝑤 =
+
+𝑓𝑠
+𝐿
+
+91
+
+ENSS 2020-21 | Martina Palmucci
+L’ampiezza del lobo principale di 𝑊(𝜔) determina i limiti di risoluzione in frequenza
+dello spettro della finestra. All’aumentare della lunghezza 𝐿 del record dei dati,
+l’altezza del lobo principale aumenta mentre la sua larghezza Δ𝜔𝑤 (o, equivalentemente, Δ𝑓𝑤 ), ovvero a capacità di risoluzione in frequenza che si può ottenere, si restringe perché il lobo principale si concentra maggiormente attorno all’impulso.
+Queste equazioni possono essere riscritte per fornire il numero minimo di campioni
+necessari per ottenere la risoluzione di frequenza desiderata 𝛥𝑓. A parità di 𝑓𝑠 , minore è la richiesta di separazione Δ𝑓 tra le componenti frequenziali, più lungo deve
+essere il record di dati:
+𝐿≥
+
+𝑓𝑠
+2𝜋
+=
+Δ𝑓 Δ𝜔
+
+Se invece si guarda alla durata del record dei dati a seguito dell’operazione di finestratura, a parità di 𝑓𝑠 , tanto più breve sarà la durata 𝑇𝐿 del record dei dati tanto
+maggiore sarà la risoluzione in frequenza che si potrà ottenere:
+𝑇𝐿 ≥
+
+1
+Δ𝑓
+
+A parità di 𝑓𝑠 , se desideriamo una risoluzione in frequenza di Δ𝑓𝑤 dobbiamo avere
+un record di dati della durata di 𝑇𝐿 . Ad esempio:
+•
+•
+•
+
+Δ𝑓𝑤 = 1 𝐻𝑧
+⇒
+Δ𝑓𝑤 = 2 𝐻𝑧
+⇒
+Δ𝑓𝑤 = 10 𝐻𝑧 ⇒
+
+𝑇𝐿 = 1 𝑠
+𝑇𝐿 = 2 𝑠
+𝑇𝐿 = 0.1 𝑠
+
+Più corto è il segnale in uscita, maggiore è la risoluzione in frequenza.
+Per quanto riguarda l’effetto di distorsione dovuto alla comparsa di frequenze spurie (in inglese, frequency leakage), bisogna dire che la reale causa di questo risultato
+risiede sia nel numero sia nell’altezza dei lobi laterali. Aumentando la lunghezza 𝐿
+del record dei dati, aumenta l’altezza del lobo principale e diminuisce l’effetto di
+perdita di risoluzione. Contemporaneamente, il numero di lobi laterali diminuisce
+quindi potrebbe apparentemente sembrare che aggiustando un solo parametro abbiamo risolto due problemi insieme. In realtà, accade anche che l’altezza dei lobi laterali aumenta e l’altezza relativa tra il lobo principale e il primo lobo laterale rimane
+approssimativamente 13 dB.
+92
+
+ENSS 2020-21 | Martina Palmucci
+Il fenomeno dell’arricchimento spettrale potrebbe essere diminuito in modo significativo solamente andando ad attenuare la forte discontinuità tra i campioni della
+funzione finestra. Nella finestra rettangolare esiste una forte discontinuità tra i
+campioni all’interno dell’intervallo [0, 𝐿 − 1] e quelli al di fuori dell’intervallo: si passa senza alcuna gradualità da 0 ad 1, e viceversa. Se invece utilizzassimo una funzione finestra dall’andamento gaussiano o similari, potremmo attenuare fortemente le
+altezze dei lobi laterali, diminuendo in questo modo l’effetto di frequency leakage.
+
+L’unico sconveniente di questa soluzione è che la larghezza del lobo principale si allarga, rispetto al caso della finestra rettangolare. Infatti, per qualsiasi tipo di finestra,
+la larghezza del lobo principale è sempre inversamente proporzionale alla larghezza
+della finestra secondo la regola:
+Δ𝑓𝑤 = 𝑐
+
+𝑓𝑐
+1
+=𝑐
+𝐿
+𝑇𝐿
+
+oppure, in radianti:
+Δ𝜔𝑤 = 𝑐
+
+2𝜋
+𝐿
+
+dove la costante 𝑐 dipende dalla finestra utilizzata ed è sempre 𝑐 ≥ 1. Nel caso della
+finestra rettangolare, la costa 𝑐 = 1. Dunque, otteniamo con essa la maggiore risoluzione in frequenza, mentre per tutte le altre finestre vale 𝑐 > 1.
+Quindi, un miglioramento del frequency leakage ottenuto cambiando funzione finestra viene pagato con una perdita di risoluzione in frequenza. La cosa migliore da fare è sempre valutare il tipo di applicazione e le richieste per decidere quale tipo di
+trade-off introdurre.
+
+93
+
+ENSS 2020-21 | Martina Palmucci
+
+5.1.1.2
+
+Finestre sinusoidali
+
+Finestra di Hamming
+Un esempio di finestra diversa dalla finestra rettangolare è la finestra di Hamming,
+definita come segue:
+𝑤[𝑛] = { 0.54 − 0.46 cos (
+0
+
+2𝜋𝑛
+) 0≤𝑛 ≤𝐿−1
+𝐿−1
+otherwise
+
+Nel centro dell’intervallo, per 𝑛 = (𝐿 − 1)⁄2, il valore di 𝑤[𝑛] = 0.54 + 0.46 = 1
+mentre ai suoi estremi, per 𝑛 = 0, 𝑛 = 𝐿 − 1, il suo valore è 0.54 − 0.46 = 0.08.
+Grazie al passaggio graduale verso lo zero, le alte frequenze introdotte dal processo
+di windowing vengono ridotte. I lobi laterali sono ancora presenti, ma sono appena
+visibili perché attenuati rispetto al lobo principale di 𝑅 = 40 dB.
+Per la finestra di Hamming, la risoluzione in frequenza vale
+Δ𝑓𝑤 =
+
+2 ⋅ 𝑓𝑐
+2
+= ,
+𝐿
+𝑇𝐿
+
+Δ𝜔𝑤 =
+
+4𝜋
+𝐿
+
+dove la costante 𝑐 = 2.
+Di seguito vediamo la rappresentazione della finestra di Hamming nel dominio del
+tempo e nel dominio della frequenza, rispettivamente a sinistra e a destra.
+
+94
+
+ENSS 2020-21 | Martina Palmucci
+Finestra di Hann
+La finestra di Hann è definita come
+2𝜋𝑛
+)) 0 ≤ 𝑛 ≤ 𝐿 − 1
+𝐿−1
+0
+otherwise
+
+𝑤[𝑛] = { 0.5 (1 − cos (
+
+ed il valore di attenuazione 𝑅 dei lobi laterali vale 32 dB.
+Di seguito vediamo la rappresentazione della finestra di Hann nel dominio del tempo
+e nel dominio della frequenza, rispettivamente a sinistra e a destra.
+
+5.1.1.3
+
+Finestre regolabili
+
+Abbiamo appena visto che uno dei problemi principali nell’analisi spettrale riguardava il compromesso tra risoluzione in frequenza e dispersione di frequenze spurie. Più
+si cerca di sopprimere i lobi laterali, più ampio diventa il lobo principale della finestra, riducendo la quantità di risoluzione ottenibile.
+La maggior parte delle finestre ha valori fissi per il valore di riduzione 𝑅 dei lobi laterali e per il fattore di larghezza 𝑐. In questo corso abbiamo visto finestre con parametri fissati quali la finestra rettangolare, la finestra di Hamming e la finestra di
+Hann.
+Tuttavia, esistono anche funzioni finestra i cui parametri possono essere scelti a seconda delle esigenze dell’applicazione.
+
+95
+
+ENSS 2020-21 | Martina Palmucci
+Finestra di Kaiser
+Kaiser e Schafer svilupparono nel 1980 le equazioni per progettare la finestra parametrica, nota come finestra di Kaiser, nell’analisi spettrale. (Esiste un’altra finestra di
+Kaiser utilizzata per i filtri FIR le cui equazioni sono differenti.)
+Dato un livello 𝑅 di attenuazione dei lobi laterali in dB ed un valore desiderato di risoluzione in frequenza 𝛥𝑓𝑤 , le equazioni progettuali illustrate di seguito determinano la lunghezza 𝐿 del record dei dati ed il parametro di forma 𝛼 della finestra. La
+lunghezza è determinata dall’equazione
+𝐿 ≥ 𝐿𝑚𝑖𝑛 =
+
+𝑐 ⋅ 𝑓𝑐
+Δ𝑓𝑤
+
+dove 𝑐 è dato in termini di 𝑅 da:
+𝑐=
+
+(𝑅 + 12)6
+155
+
+Anche il parametro di forma 𝛼 della finestra può essere calcolato in termini di 𝑅 dalle seguenti equazioni:
+0,
+𝑅 < 13.26
+𝛼 = { 0.76609(𝑅 − 13.26) + 0.09834(𝑅 − 13.26), 13.26 < 𝑅 < 60
+0.12438(𝑅 + 6.3),
+60 < 𝑅 < 120
+0.4
+
+Maggiore sarà il parametro 𝑅, maggiore sarà l’operazione di schiacciamento ai bordi
+della finestra, maggiore sarà l’allungamento del lobo principale. Notiamo che per
+𝑅 < 13.26 automaticamente ottengo la finestra rettangolare. Notiamo anche che
+non possiamo utilizzare Kaiser per valori di 𝑅 superiori a 120 dB; si tratta di un valore di attenuazione limite della finestra per cui, tuttavia, il livello dei lobi laterali rispetto al principale risulta estremamente basso e più che sufficiente per portare a
+termine lo studio spettrale con successo.
+Una volta che i parametri della finestra {𝐿, 𝛼} sono stati determinati, la finestra può
+essere calcolata da:
+𝑤[𝑛] =
+
+𝐼0 (𝛼√1 − (𝑛 − 𝑀)2 ⁄𝑀2 )
+𝐼0 (𝛼)
+
+96
+
+,
+
+𝑛 = 0, 1, … , 𝐿 − 1
+
+ENSS 2020-21 | Martina Palmucci
+dove 𝐼0 è la funzione di Bessel modificata del primo tipo e di ordine zero e dove 𝑀 =
+(𝐿 − 1)⁄2. Notiamo che 𝐿 dovrebbe essere dispari per Kaiser.
+Di seguito vediamo un esempio della configurazione della finestra di Kaiser per determinati valori dei parametri. Più avanti descrivere ampiamente questa finestra.
+
+A questo punto, non resta altro che applicare:
+𝑥𝐿 [𝑛] = 𝑤[𝑛] ⋅ 𝑥[𝑛],
+
+𝑛 = 0, 1, … , 𝐿 − 1
+
+per ottenere una sequenza di record di dati accorciata alla lunghezza 𝐿 ed avente le
+specifiche richieste dal problema.
+
+Finestra di Dolph – Chebyshev
+La finestra di Dolph – Chebyshev è sempre una finestra regolabile ma l’attenuazione
+dei lobi laterali rispetto al lobo principale è costante su tutto l’intervallo.
+
+5.1.2
+
+Risoluzione fisica e computazionale
+
+La larghezza 𝛥𝑓𝑏𝑖𝑛 = 𝑓𝑠 ⁄𝑁 rappresenta la spaziatura tra le frequenze della DFT su
+cui viene calcolata la DTFT e non deve essere confusa con la larghezza Δ𝑓 = 𝑓𝑠 ⁄𝐿
+della risoluzione di frequenza, che si riferisce alla minima separazione di frequenza
+97
+
+ENSS 2020-21 | Martina Palmucci
+risolvibile tra due componenti sinusoidali. Per evitare confusione, faremo riferimento alla prima come risoluzione computazionale della frequenza e alla seconda come
+risoluzione fisica di frequenza:
+Δ𝑓𝑤 =
+Δ𝑓𝑏𝑖𝑛 =
+
+5.1.3
+
+𝑓𝑠
+𝑁
+
+𝑓𝑠
+𝐿
+
+(𝑟𝑖𝑠𝑜𝑙𝑢𝑧𝑖𝑜𝑛𝑒 𝑓𝑖𝑠𝑖𝑐𝑎)
+
+(𝑟𝑖𝑠𝑜𝑙𝑢𝑧𝑖𝑜𝑛𝑒 𝑐𝑜𝑚𝑝𝑢𝑡𝑎𝑧𝑖𝑜𝑛𝑎𝑙𝑒)
+
+Esempi didattici
+
+Ricapitolando, va scelta la risoluzione fisica e la forma della finestra secondo un trade off in linea con le specifiche del problema. Successivamente, si pensa alla risoluzione computazionale.
+
+5.1.3.1
+
+Esempio 1: relazione Δ𝑓𝑤 − Δ𝑓𝑏𝑖𝑛
+
+• Il seguente segnale analogico costituito da tre sinusoidi di uguale intensità
+avente frequenze rispettivamente 𝑓1 = 2 𝑘𝐻𝑧, 𝑓2 = 2.5 𝑘𝐻𝑧 e 𝑓3 = 3 𝑘𝐻𝑧:
+𝑥(𝑡) = cos(2𝜋𝑓1 𝑡) + cos(2𝜋𝑓2 𝑡) + cos(2𝜋𝑓3 𝑡)
+dove 𝑡 è in millisecondi, viene campionato a una frequenza di 10 𝑘𝐻𝑧. Consideriamo quattro record di dati di lunghezze 𝐿 = 10, 20, 40, 100 campioni.
+Corrispondono alle durate di 1, 2, 4, 10 𝑚𝑠𝑒𝑐.
+Per il primo record di dati composto di 10 campioni calcoliamo due diverse
+DFT, una su un numero di punti pari a 32 ed un’altra su un numero di punti
+pari a 64, utilizzando una finestra rettangolare.
+(Ricordiamo che il calcolo della DFT su un numero di punti 𝑁 superiore alla
+lunghezza della sequenza è reso possibile grazie all’operazione di zero padding, aggiungendo un numero di zeri pari ad 𝑁 − 𝐿.)
+
+98
+
+ENSS 2020-21 | Martina Palmucci
+
+Ora, facciamo lo stesso con il secondo record di dati composto di 20 campioni: calcoliamo una DFT di 32 punti ed un’altra di 64 punti, sempre utilizzando
+una finestra rettangolare.
+
+Possiamo osservare che nel secondo record di dati siamo in grado di distinguere le tre componenti frequenziali 𝑓1 = 0.2, 𝑓2 = 0.25, 𝑓3 = 0.3, sia nel
+caso in cui calcoliamo la trasformata su 32 punti sia nel caso in cui calcoliamo
+la trasformata su 64 punti.
+Invece, nel primo record di dati non riuscivamo a distinguere assolutamente
+nulla in entrambe le trasformate.
+Questo risultato era sicuramente prevedibile. Infatti, la separazione minima di
+frequenza sul segnale è Δ𝑓 = 2.5 − 2 = 3 − 2.5 = 0.5 𝑘𝐻𝑧. Secondo il criterio di risoluzione della frequenza, la lunghezza minima 𝐿 per risolvere tutte e
+tre le componenti frequenziali dovrebbe essere
+
+99
+
+ENSS 2020-21 | Martina Palmucci
+𝐿≥𝑐⋅
+
+𝑓𝑐
+10
+=1⋅
+= 20
+Δ𝑓
+0.5
+
+campioni per la finestra rettangolare.
+Nel caso 𝐿 = 10, il segnale non ha lunghezza sufficiente per separare le componenti frequenziali, che appaiono fuse in un ampio picco.
+È quindi evidente che se la lunghezza 𝐿 del segnale non è abbastanza grande
+da fornire una risoluzione fisica sufficiente, non c’è motivo di aumentare la
+lunghezza 𝑁 del DFT – ciò metterebbe solo più punti sulla curva sbagliata.
+Invece, per 𝐿 = 20, corrispondente alla lunghezza minima accettabile, le
+componenti frequenziali (per la finestra rettangolare) iniziano ad essere separate. In questo caso, ha senso aumentare il numero di punti su cui viene calcolata la DFT al fine di aumentare la risoluzione computazionale.
+Se, al posto della finestra rettangolare, avessimo utilizzato una funzione finestra diversa come quella di Hamming, avremmo ottenuto come risultato che
+né per 𝐿 = 10 né per 𝐿 = 20 avremmo distinto le tre componenti frequenziali. Infatti, la lunghezza minima per Hamming risulta 𝐿 ≥ 2 ⋅ 𝑓𝑐 ⁄Δ𝑓 = 40.
+
+Per gli ultimi due record di dati, prima di tutto dobbiamo precisare che la DFT
+va calcolata sicuramente su un numero di punti differenti da quelli considerati
+finora, dal momento che deve valere 𝐿 ≤ 𝑁. Dunque, assumiamo di calcolare
+la trasformata su un numero di punti pari, ad esempio, ad 𝑁 = 256. Per 𝐿 =
+100
+
+

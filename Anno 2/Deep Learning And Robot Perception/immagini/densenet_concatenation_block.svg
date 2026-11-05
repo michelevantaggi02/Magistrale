@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="100%">
+  <defs>
+    <!-- Stili e gradienti -->
+    <linearGradient id="grad-input" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="grad-conv" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#6d28d9" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="grad-concat1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#047857" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="grad-concat2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#b45309" stop-opacity="0.4"/>
+    </linearGradient>
+    
+    <!-- Marker frecce -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrow-grad" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 10 1 L 0 5 L 10 9 z" fill="#f43f5e"/>
+    </marker>
+    
+    <!-- Filtro ombra leggera -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Sfondo dark container -->
+  <rect width="100%" height="100%" rx="16" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Titolo e Sottotitolo -->
+  <text x="460" y="38" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">
+    DenseNet: Meccanismo di Concatenazione delle Feature e Flusso Diretto del Gradiente
+  </text>
+  <text x="460" y="60" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" fill="#94a3b8">
+    Accumulo progressivo dei canali [x₀, x₁, x₂] ed eliminazione del collo di bottiglia informativo
+  </text>
+
+  <!-- 1. BLOCCO INPUT: x0 (3 canali) -->
+  <g transform="translate(40, 160)" filter="url(#shadow)">
+    <rect width="90" height="130" rx="10" fill="url(#grad-input)" stroke="#38bdf8" stroke-width="2"/>
+    <!-- Rappresentazione volumetrica canali 3D -->
+    <path d="M 15 25 L 75 25 L 75 105 L 15 105 Z" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+    <path d="M 22 20 L 82 20 L 82 100 L 22 100 Z" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="1"/>
+    <path d="M 29 15 L 89 15 L 89 95 L 29 95 Z" fill="#0369a1" fill-opacity="0.5" stroke="#38bdf8" stroke-width="1"/>
+    <text x="45" y="118" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#e0f2fe">Input x₀</text>
+    <text x="45" y="148" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#38bdf8">3 canali (RGB)</text>
+  </g>
+
+  <!-- Freccia da x0 a H1 -->
+  <path d="M 130 225 L 180 225" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 2. BLOCCO CONV H1 -->
+  <g transform="translate(185, 175)" filter="url(#shadow)">
+    <rect width="105" height="100" rx="10" fill="url(#grad-conv)" stroke="#a855f7" stroke-width="2"/>
+    <text x="52" y="32" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#f3e8ff">Blocco H₁</text>
+    <text x="52" y="52" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#d8b4fe">BN + ReLU</text>
+    <text x="52" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#d8b4fe">Conv 3×3</text>
+    <text x="52" y="88" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#c084fc">Output: 64 f.m.</text>
+  </g>
+
+  <!-- Freccia da H1 a Concat 1 -->
+  <path d="M 290 225 L 340 225" stroke="#a855f7" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- SHORTCUT 1: da x0 a Concat 1 (salto in alto) -->
+  <path d="M 85 160 L 85 105 Q 85 95 95 95 L 375 95 Q 385 95 385 105 L 385 155" 
+        fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <rect x="180" y="82" width="125" height="24" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="242" y="98" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#7dd3fc">
+    Skip x₀ (3 canali)
+  </text>
+
+  <!-- 3. PRIMA CONCATENAZIONE: [x0, x1] (3 + 64 = 67 canali) -->
+  <g transform="translate(345, 160)" filter="url(#shadow)">
+    <rect width="90" height="130" rx="10" fill="url(#grad-concat1)" stroke="#34d399" stroke-width="2"/>
+    <!-- Stack canali: 3 blu + 64 verdi -->
+    <rect x="15" y="20" width="60" height="15" rx="3" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+    <text x="45" y="32" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#ffffff">x₀ (3 ch)</text>
+    <rect x="15" y="40" width="60" height="50" rx="3" fill="#059669" stroke="#34d399" stroke-width="1"/>
+    <text x="45" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="600" fill="#ffffff">x₁ (64 ch)</text>
+    <text x="45" y="105" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#d1fae5">[x₀, x₁]</text>
+    <text x="45" y="148" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#34d399">67 Canali</text>
+  </g>
+
+  <!-- Freccia da Concat 1 a H2 -->
+  <path d="M 435 225 L 485 225" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+
+  <!-- 4. BLOCCO CONV H2 -->
+  <g transform="translate(490, 175)" filter="url(#shadow)">
+    <rect width="105" height="100" rx="10" fill="url(#grad-conv)" stroke="#a855f7" stroke-width="2"/>
+    <text x="52" y="32" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#f3e8ff">Blocco H₂</text>
+    <text x="52" y="52" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#d8b4fe">BN + ReLU</text>
+    <text x="52" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#d8b4fe">Conv 3×3</text>
+    <text x="52" y="88" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#c084fc">Output: 64 f.m.</text>
+  </g>
+
+  <!-- Freccia da H2 a Concat 2 -->
+  <path d="M 595 225 L 650 225" stroke="#a855f7" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- SHORTCUT 2: da [x0, x1] a Concat 2 (salto in alto) -->
+  <path d="M 390 160 L 390 120 Q 390 110 400 110 L 685 110 Q 695 110 695 120 L 695 155" 
+        fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arrow-green)"/>
+  <rect x="500" y="98" width="135" height="24" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="567" y="114" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#a7f3d0">
+    Skip [x₀, x₁] (67 canali)
+  </text>
+
+  <!-- 5. SECONDA CONCATENAZIONE: [x0, x1, x2] (67 + 64 = 131 canali) -->
+  <g transform="translate(655, 150)" filter="url(#shadow)">
+    <rect width="100" height="150" rx="10" fill="url(#grad-concat2)" stroke="#f59e0b" stroke-width="2"/>
+    <!-- Stack canali: 3 blu + 64 verdi + 64 arancioni -->
+    <rect x="15" y="15" width="70" height="12" rx="3" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+    <text x="50" y="24" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="8.5" fill="#ffffff">x₀ (3 ch)</text>
+    <rect x="15" y="31" width="70" height="42" rx="3" fill="#059669" stroke="#34d399" stroke-width="1"/>
+    <text x="50" y="55" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#ffffff">x₁ (64 ch)</text>
+    <rect x="15" y="77" width="70" height="42" rx="3" fill="#d97706" stroke="#f59e0b" stroke-width="1"/>
+    <text x="50" y="101" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#ffffff">x₂ (64 ch)</text>
+    <text x="50" y="135" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#fef3c7">[x₀, x₁, x₂]</text>
+    <text x="50" y="168" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#fbbf24">131 Canali</text>
+  </g>
+
+  <!-- Freccia verso il blocco successivo -->
+  <path d="M 755 225 L 820 225" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrow-amber)"/>
+  <text x="850" y="222" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#94a3b8">Al blocco H₃</text>
+  <text x="850" y="238" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">o Transition</text>
+
+  <!-- SEZIONE RETROPROPAGAZIONE / GRADIENT HIGHWAY -->
+  <g transform="translate(100, 360)">
+    <rect width="720" height="85" rx="10" fill="#1e293b" stroke="#e11d48" stroke-width="1.2" stroke-dasharray="6,4"/>
+    <text x="25" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="700" fill="#fb7185">
+      ★ Autostrada del Gradiente tramite Concatenazione (Backpropagation Highway)
+    </text>
+    <text x="25" y="48" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" fill="#cbd5e1">
+      • A differenza della somma in ResNet, la concatenazione preserva le identità dei canali: ∂L/∂x₀ e ∂L/∂x₁ fluiscono
+    </text>
+    <text x="25" y="66" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" fill="#cbd5e1">
+      • direttamente senza passare per le trasformazioni H₂ o H₁, garantendo supervisione immediata anche ai primissimi strati.
+    </text>
+  </g>
+
+  <!-- Frecce flusso gradiente inverse (in rosso) -->
+  <path d="M 680 325 C 680 350, 410 350, 410 325" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-grad)"/>
+  <path d="M 370 325 C 370 350, 105 350, 105 325" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-grad)"/>
+  <text x="545" y="342" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#fb7185">∂L / ∂[x₀, x₁]</text>
+  <text x="237" y="342" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#fb7185">∂L / ∂x₀</text>
+
+</svg>
