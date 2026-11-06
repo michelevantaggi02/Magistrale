@@ -1,0 +1,1786 @@
+4. Linear Regression
+
+69
+
+standardized version of these residuals is known as Studentized deleted residuals or
+Externally studentized residuals (ESR).
+The deleted residuals are defined as:
+(i)
+
+d(i) = t(i) − t̂(i)
+
+(4.68)
+
+(i)
+
+where with the subscript on t̂(i) we indicate that the estimate is computed with a trained
+model excluding the i-th sample. Instead, externally studentized residuals are defined
+as:
+
+d(i)
+(i)
+dESR = q
+2 (1 − h )
+σ̂ϵ,(i)
+i,i
+
+(4.69)
+
+2 , the subscript (i) indicates that it is computed by
+where even for the variance σ̂ϵ,(i)
+
+excluding the i-th sample.
+As a rule of thumb, identify a point as an outlier if the absolute value of its ESR is
+greater than 3:
+x(i) is an outlier if
+
+(i)
+
+dESR > 3
+
+(4.70)
+
+Identifying HIF
+In general, a point identified both as an HLP and as an Outlier affects both the parameter
+estimate and the relative standard error, while a point identified only as an Outlier
+typically impacts only the standard error. A sample that is only an HLP instead, in
+most cases, has no impact on the solution. However, it is possible to introduce a criterion
+to directly identify a point as HIF, without first checking if it is HLP or outlier. We
+specifically introduce the metric Difference in fits (DFFITS):
+(i)
+
+t̂(i) − t̂(i)
+DF F IT Si = q
+2 h
+σ̂ϵ,(i)
+i,i
+
+(4.71)
+
+The numerator measures the difference between the estimate obtained by including and
+excluding the i-th sample. In practice, this metric measures how much the prediction
+for the i-th sample changes when it is included or not during training, and thus gives
+us a direct measure of its influence. A possible rule of thumb for determining whether a
+point is HIF is as follows:
+r
+(i)
+
+x is an HIF if
+
+DF F IT Si > 2
+
+D+1
+N −D−1
+
+(4.72)
+
+This relationship gives us an indication of whether a sample is a HIF. In general, it
+is still good practice to try to figure out whether that point has the characteristics of an
+HLP, an outlier, or both, to ultimately decide whether to exclude or include it during
+optimization.
+
+4. Linear Regression
+
+70
+
+(a) No Collinearity between the features Age and(b) Collinearity between the features Limit and RatLimit
+ing
+
+Figure 4.10: Loss function countours in the presence and in absence of collinearity.
+
+A word of caution! The final decision should still be made by the designer, as
+these are empirical metrics and do not provide absolute criteria.
+
+4.11
+
+Collinearity and Multi-collinearity
+
+Collinearity indicates the close correlation between two features as input to the model.
+If two features are collinear, it is difficult to distinguish the importance and effect of
+those on the output. In practice, this translates into a ”hypersensitivity” to noise of
+the model parameters associated with the two collinear features. Let’s see it with an
+example: we compare the contour lines of a cost function that depends on two features
+in the case of collinearity and non-collinearity. We consider three features: Age, Limit
+and Rating, which refer to a regression problem that tries to estimate the card credit
+that can be granted to a customer based on his age, credit rating and the limit imposed
+on the card.
+Figure 4.10a depicts the loss contours as a function of the features Age and Limit.
+These two features are not collinear: this can be seen by calculating their correlation, but
+also intuitively we can say that the credit card limit is not strictly related to the person’s
+age. In this case, the contour plot is characterized by curves close to the circumference
+as a shape.
+The features Limit and Rating, on the other hand, are intuitively related, since a
+customer with a high rating will also have a larger limit on the credit card. The contour
+lines shown in Figure 4.10b, are more elongated and narrower. This means that as
+the parameter associated with Limit wLIM varies, the parameter associated with Rating
+wRAT IN G can vary greatly without changing the cost function. Said differently, for small
+fluctuations of wLIM , there are many possible values of wRAT IN G that guarantee the
+same loss. All this causes a large uncertainty in the determination of the parameters
+
+4. Linear Regression
+
+71
+
+of the LR (thus the standard error increases). The solution is very simple: if two
+features have a high direct or inverse correlation, typically greater in modulus than
+0.85-0.9 (the correlation between pairs of features can be easily analyzed by looking
+at the Correlation Matrix), simply remove one of them. Intuitively, we can do this
+safely because, being strongly correlated, the two features bring, in practice, the same
+information for regression purposes.
+Unfortunately, however, collinearity can also exist between more than two features,
+and in this case it cannot be identified with the correlation matrix (this does not tell
+us whether two features are correlated with a third one). This phenomenon is called
+Multicollinearity and one technique to figure out if one feature is multicollinear with
+the others is to use the Variance Inflation Factor (VIF):
+V IF (wj ) =
+
+1
+1 − Rx2 j |x−j
+
+(4.73)
+
+The VIF is computed with respect to the j-th parameter relative to the j-th feature and
+depends on the R2 score computed by regressing the j-th feature (considering this as
+the output of our model), using all the others (thus excluding the j-th feature). A high
+R2 then indicates that the other features ”explain” well the j-th feature. Therefore, it
+is collinear or multicollinear with the others and can be excluded. As a rule of thumb,
+a feature is collinear or multicollinear to the others if the VIF is greater than 4-5.
+
+Chapter 5
+
+Classification Algorithms
+ML algorithms for classification aim to optimize models that can estimate categorical
+output variables, i.e., t that take values in a discrete, finite set. For example, an algorithm
+for object recognition allows to classify the content of an image with respect to the
+category of object it depicts (e.g., chair, table, person, bottle, ...). In practice, regardless
+of the meaning associated with a given category, labels are provided to ML algorithms in
+numerical form, specifically as integers. It is important to note that, although numerical
+encoding naturally creates an order between classes (e.g., ”Chair” → 1, ”Person” → 2,
+”Bottle” → 3), this should not be understood as such. The fact that t ∈ {1, 2, 3, . . . , C}
+only indicates that the output can take one value among the possible C.
+Often throughout the course, we will consider binary problems, i.e., scenarios where
+t can only take on two values, e.g., t ∈ {Object detected, Object not detected} or t ∈
+{spam, not spam}. In these cases, it is common to encode t with the values {0, 1}
+or {−1, 1}. Assume, for the discussion that follows, that our dataset, in the case of
+classification problems, is defined as:
+D = {(x(i) , t(i) ) : t(i) ∈ {0, 1}, x(i) ∈ RD , i = 0, 1, . . . , N − 1}
+
+5.1
+
+(5.1)
+
+Loss function for classification
+
+In the case of classification problems, the quadratic loss we used for LR is not appropriate.
+The computation of residuals in the case of regression problems, in fact, has the form
+(t(i) − t̂(i) )2 , which measures the error based on the Euclidean distance between the
+prediction and the supervision label. This difference has little significance in classification
+problems. Assuming, for example, that the correct class for the i-th sample is t(i) = 3,
+if the prediction of the model were t̂(i) = 4 we would have a smaller error than if the
+prediction were t̂(i) = 5: in fact we are saying that an incorrect prediction that estimates
+class 4 as the output is less severe than being confused with class 5, which does not
+necessarily reflect reality.
+We then introduce a loss that simply detects if there has been a misclassification,
+
+5. Classification Algorithms
+
+73
+
+regardless of which class was incorrectly predicted. This loss is called Error Rate and
+is defined as follows:
+N −1
+
+ER =
+
+1 X
+I(t(i) ̸= t̂(i) )
+N
+
+(5.2)
+
+i=0
+
+where I(·, ·) is the Indicator Function, which is 1 if the condition in parentheses
+is verified and 0 otherwise. The error function then simply sums all misclassified or
+misclassified samples. Intuitively, our classification algorithm (or classifier) will need
+to minimize the expected value of the error function with respect to the distribution of
+the output:
+min Et∼p(y) [I(t(i) ̸= t̂(i) )]
+
+5.1.1
+
+(5.3)
+
+Error Rate Lower Bound: Bayesian Error Rate
+
+From a probabilistic point of view, the goal of the classifier is to model the (unknown)
+distribution of the output variables (the classes) of our dataset given their respective
+input feature vectors, i.e.:
+p(t|X)
+
+(5.4)
+
+If we consider the distribution for the single sample, i.e., p(t(i) = j|x(i) ), which models
+the probability that the class of the i-th sample, given the features, is the j-th (among
+the C possible classes), the classifier is simply the model that chooses the j class that
+guarantees the highest p(t(i) = j|x):
+argmax p(t(i) = j|x(i) )
+
+(5.5)
+
+j
+
+It is the clear that, given the probabilistic nature of the model, even if we know the
+true distribution p(t|X), there is always the probability of making an error: the correct
+class will have the highest probability, but the others still have non-zero probability and
+therefore, in a sampling process, errors will be made.
+In practice, we do not have access to p(t|X), but instead we try to approximate it with
+a p̂(t|X). However, it is clear that, at best, we will have p̂(t|X) = p(t|X) and, therefore,
+we always commit an error at least as large as that of the ideal classifier. Consequently,
+it is reasonable to introduce the concept of lower bound on the classification error,
+i.e., , the minimum error we expect to experience:
+Bayesian Error Rate (BER)
+
+= 1 − Ex∼p(x) [max p(t = j|x)]
+j
+
+(5.6)
+
+5. Classification Algorithms
+
+74
+
+or, more explicitly:
+=1−
+
+BER
+
+C
+X
+
+Z
+p(x, t = j)dx
+x∈Cj
+
+j=1
+
+|
+{z
+}
+prob. of correct classification i.e. p(t=j)
+C Z
+X
+=1−
+p(x|t = j)p(t = j)dx
+j=1
+
+(5.7)
+
+x∈Cj
+
+where with C we denote the number of classes and with Cj the portion of the space of x
+in which assigning to the sample the class j is correct. In the binary case we can write:
+Z
+
+Z
+
+BER = 1 −
+
+p(x|t = 1)p(t = 1)dx −
+x∈C1
+
+p(x|t = 2)p(t = 2)dx
+
+(5.8)
+
+p(x|C2 )p(C2 )dx
+
+(5.9)
+
+x∈C2
+
+Or, more compactly:
+Z
+BER = 1 −
+
+Z
+p(x|C1 )p(C1 )dx −
+
+x∈C1
+
+5.2
+
+x∈C2
+
+K-NN Classifier
+
+Let us now look at the first classification algorithm of the course: K-Nearest Neighbor. The model assumed by this algorithm, i.e., , the assumption it makes about the
+distribution of the output variable of the sample under analysis known the dataset and
+features of that sample (p(t(i) = j|X, x(i) )), is as follows:
+p(t(i) = j|X, x(i) ) =
+
+1 X
+I(t = j)
+K
+
+(5.10)
+
+t∈Nx(i)
+
+Specifically, given a point in the feature space x(i) and a dataset D = {t, X}, and
+denoting by Nx(i) the neighborhood of x(i) that contains the K points in the dataset
+closest to x(i) , the probability that the class t(i) of the sample under consideration is
+equal to j is given by the number of samples in Nx(i) associated with class j, divided by
+the number of total samples in the neighborhood (i.e., K). K-NN in fact uses a voting
+mechanism to compute the probability of a certain class.
+This algorithm assumes that there is a metric with which to compute distances
+in the feature space x.
+
+The algorithm is computationally expensive in the case of very large datasets,
+since, in order to determine Nx(i) , without exploiting more efficient data structures, it is necessary to compute N distance functions (with N size of the dataset).
+
+5. Classification Algorithms
+
+75
+
+Figure 5.1: Prediction line with the model wT x. With the cross marks we highlight the
+class label, that are either 0 or 1.
+
+K-NN does not have a real training phase, as there are no parameters to learn.
+In fact the training consists in ”saving” the dataset. All the computation takes
+place in the test phase, where for each new sample it is necessary to calculate the
+samples near the point for which you want to estimate the class.
+
+5.3
+
+Logistic Regression
+
+Logistic regression is one of the most popular learning algortims for classification. In its
+basic form (which we will see below) it solves binary classification problems (nonetheless,
+it can be extended for multi-class problems).
+At first, we might think of using a model analogous to Linear Regression, where
+the output is obtained as a linear combination of the input features with respect to the
+parameters: wT x. However, this strategy is not appropriate for classification problems.
+From Figure 5.1, two problems can indeed immediately observed:
+• The output of a linear regression model is continuous and can take on values in
+] − ∞, +∞[, whereas the output of a binary classification problem only takes on
+values 0 and 1.
+• The output of the linear regression model does not provide probability values and
+therefore we cannot use it to estimate the p(t(i) = j|x(i) .
+N.B. In linear regression, to have a probability distribution in fact we needed to
+also estimate the precision of the noise on the labels and compute the predictive distribution (using the MLE solution), or estimate both the precision of the
+noise and the precision of the prior on the parameters and compute the posterior
+predictive distribution (using the full Bayesian formulation).
+The first problem could be solved simply by imposing a threshold on the model output
+wT x, i.e., if wT x > γ =⇒ t = 1, otherwise t = 0. In this way we would have a binary
+output, but without an estimate of the relative confidence (probability). To overcome
+
+5. Classification Algorithms
+
+76
+
+Figure 5.2: Logistic function
+this problem and thus also solve the second point, instead of the threshold strategy we
+could directly use a nonlinear transformation f (·) of wT x so that:
+f (wT x) ∈ [0, 1]
+
+(5.11)
+
+and in this case, the decision strategy might be:
+f (wT x) ≥ 0.5 =⇒ t = 1
+
+(5.12)
+
+What function can guarantee this effect? One possible choice is the function Sigmoid,
+also called, Logistic Function (see Figure 5.2):
+g(z) =
+
+1
+ez
+=
+1 + e−z
+1 + ez
+
+(5.13)
+
+With this transformation, we can introduce the hypothesis function of logistic regression as the application of the sigmid function to the linear combination of the input
+features:
+hw (x) = g(wT x) =
+
+1
+∈ [0, 1]
+1 + e−wT x
+
+(5.14)
+
+Because of the way it is constructed and its properties, it is therefore reasonable to use
+hw (x) as the conditional probability estimate of the classes:
+p(t = 1|x) = hw (x) = g(wT x)
+
+(5.15)
+
+5. Classification Algorithms
+
+77
+
+N.B. hw (x) estimates the probability that the class is equal to 1. The probability
+that the class is 0 is the complementary event, so p(t = 0|x) = 1 − p(t = 1|x) =
+1 − hw (x). We must then distinguish between the hypothesis function (which
+returns a probability) and the decision function, who ”chooses” the class. The
+decision function chooses by comparing the probability provided by hw (x) with a
+threshold (which is often set to 0.5, but can also take different values depending
+on the ”uncertainty” one wants to have in predicting class 1 or class 0).
+With this choice of hw (x) we have lost the direct linear relationship with the features.
+However, it is possible to see that:
+T
+
+ew x
+p(t = 1|x)
+1+ewT x
+=
+wT x
+p(t = 0|x)
+1 − e wT x
+1+e
+
+T
+
+= ew x
+
+(5.16)
+
+The previous relation is known as Odds and is another way of measuring probability
+(specifically as the ratio of the probabilities of the two complementary events). If we
+calculate its logarithm, we get the Log-odds:
+T
+
+Log-odds = log(ew x ) = wT x
+
+(5.17)
+
+We then see that there is still a linear relationship between the features and a probability
+measure (in this case log-odds).
+We have therefore defined our hypothesis function. However, we must now determine
+the optimal w parameters with respect to the classification task.
+
+5.3.1
+
+Maximum Likelihood Estimation for Logistic Regression
+
+In the case of linear regression, to find the optimal parameters we had identified the
+PN −1 (i)
+function 12 i=0
+(t − hw (x(i) )) as the loss function for training. However, at the
+beginning of this chapter we saw how this function is not adequate for classification
+problems and introduced the error rate:
+N −1
+
+ER =
+
+1 X
+I(t(i) ̸= t̂(i) )
+N
+
+(5.18)
+
+i=0
+
+We could then consider using this function in the optimization procedure for logistic
+regression. However, this function is not easily derivable and is therefore not appropriate
+for parameter optimization. We therefore follow the maxmum likelihood estimation
+framework to find a suitable procedure for the logistic regression case. To do so, we need
+to define the shape of the probability distributions involved and, in particular, of the
+likelihood.
+
+5. Classification Algorithms
+
+78
+
+Let’s assume we have a dataset
+D = {(x(i) , t(i) ) , i = 0, 1, . . . , N − 1 , x(i) ∈ RD , t(i) ∈ {0, 1}}
+
+(5.19)
+
+it is reasonable to assume that the class distribution of the output variable given the
+features is a Bernoulli random variable. In fact, the bernoulli distribution is adequate
+for modeling binary random variables.
+Bernoulli distribution
+It models binary random variables:
+p(y = 1) = µ
+
+(5.20)
+
+p(y = 0) = 1 − µ
+
+(5.21)
+
+The distribution depends on only one parameter µ. Moreover, by encoding the
+two classes with 0 and 1, it is possible to express the distribution in a compact
+form:
+p(y) = Ber(y) = µy (1 − µ)1−y
+
+(5.22)
+
+It can also be shown that:
+EBer [y] = µ
+
+(5.23)
+
+V arBer [y] = µ(1 − µ)
+
+(5.24)
+
+Given the considerations made earlier with respect to the logistic hypothesis function,
+it is reasonable to assume that the latter corresponds to the parameter µ of the Bernoulli
+distribution: in fact, we have seen how hw (x) =
+
+1
+expresses the probability that
+1+e−wT x
+
+the output class is equal to 1. Similarly, the parameter µ of the Bernoulli distribution
+encodes the proability that the described random variable is equal to 1. Consequently,
+for the i-th sample:
+µ(i) = hw (x(i) ) =
+
+1
+1 + e−wT x
+
+(5.25)
+
+(i)
+
+At this point we can write the likelihood. Assuming, as with linear regression, that
+the samples in the dataset are i.i.d. we have:
+p(t|X) =
+
+N
+−1
+Y
+
+p(t(i) |x(i) ) =
+
+i=0
+
+=
+
+N
+−1
+Y
+
+(i)
+
+(i)
+
+(µ(i) )t (1 − µ(i) ))1−t
+
+i=0
+N
+−1
+Y
+
+(i)
+
+=
+(i)
+
+(hw (x(i) ))t (1 − hw (x(i) )))1−t
+
+i=0
+
+(5.26)
+
+5. Classification Algorithms
+
+79
+
+We then calculate the log-likelihood:
+l(w) = log p(t|X) =
+
+N
+−1
+X
+
+t(i) log hw (x(i) ) + (1 − t(i) ) log(1 − hw (x(i) ))
+
+(5.27)
+
+i=0
+
+To find the optimal parameters wM L , we compute the gradient of the log-likelihood
+with respect to w and use it to update the weights iteratively through, as an instance,
+gradient ascent (or descent):
+w ← w + α∇w l(w)
+
+(5.28)
+
+N.B. for logistic regression there is no closed form solution, but it is necessary to
+use iterative methods for training.
+
+N.B.2 To calculate the gradient, it is useful to first calculate the derivative of the
+sigmoid:
+ z 
+d
+e
+ez
+ez
+g (z) =
+=
+−
+ez =
+dz 1 + ez
+1 + ez
+(1 + ez )2
+ez
+ez
+=
+(1
+−
+) = g(z)(1 − g(z))
+1 + ez
+1 + ez
+′
+
+(5.29)
+
+We then calculate the individual elements of the gradient ∇w l(w):
+N
+−1
+X
+
+∂l(w)
+∂
+=
+∂wj
+∂wj
+
+i=0
+N
+−1
+X
+
+∂
+=
+∂wj
+=
+
+t(i) log hw (x(i) ) + (1 − t(i) ) log(1 − hw (x(i) ))
+!
+t
+
+(i)
+
+T
+
+(i)
+
+(i)
+
+T
+
+(i)
+
+log g(w x ) + (1 − t ) log(1 − g(w x ))
+
+i=0
+
+N
+−1 
+X
+
+t
+
+i=0
+
+!
+
+(i)
+
+1
+1
+− (1 − t(i) )
+(i)
+T
+g(w x )
+1 − g(wT x(i) )
+
+
+
+∂wT x(i)
+∂wj
+g(wT x(i) ))(1−g(wT x(i) ))) | {z }
+g ′ (wT x(i) )
+| {z }
+
+(i)
+
+xj
+
+=
+
+=
+
+N
+−1 
+X
+i=0
+N
+−1 
+X
+
+
+(i)
+t(i) (1 − g(wT x(i) )) − (1 − t(i) )g(wT x(i) ) xj
+N
+−1 
+
+
+X
+(i)
+(i)
+t(i) − g(wT x(i) ) xj =
+t(i) − hw (x(i) ) xj
+
+i=0
+
+(5.30)
+
+i=0
+
+from which we see that the gradient to update the j-th parameter is proportional to
+the difference between the supervised and estimated output values. The update with
+gradient ascent can then be written as:
+wj ← wj + α
+
+N
+−1 
+X
+i=0
+
+(i)
+
+t
+
+(i)
+
+− hw (x )
+
+
+
+!
+(i)
+xj
+
+∀j
+
+(5.31)
+
+5. Classification Algorithms
+
+80
+
+N.B. The final expression for the gradient is analogous to that of linear regression.
+The only thing that changes is the hypothesis function.
+
+5.3.2
+
+Decision Function
+
+As anticipated earlier, hw (x(i) ) represents the estimate of p(t(i) = 1|x(i) ). The decision
+function can then be derived simply by setting:
+p(t(i) = 1|x(i) ) > p(t(i) = 0|x(i) ) =⇒ t̂(i) = 1
+
+otherwise t̂(i) = 0
+
+(5.32)
+
+otherwise t̂(i) = 0
+
+(5.33)
+
+which corresponds to:
+p(t(i) = 1|x(i) ) = hw (x(i) ) ≥ 0.5 =⇒ t̂(i) = 1
+
+Depending on the specific case we could choose a threshold different from 0.5: for example, if we want to be more conservative with respect to class 1 we could raise the
+threshold and estimate as belonging to that class only samples for which the hypothesis
+function gives a high probability (a similar reasoning can be made with respect to class
+0 by decreasing the threshold).
+In any case, imposing a threshold on the hypothesis function translates into a threshold also with respect to its argument. This can be seen as follows: first consider that
+the inverse of the sigmoid function is:
+g −1 (σ) = log(
+
+σ
+)
+1−σ
+
+(5.34)
+
+Therefore, if we impose the threshold on the hypothesis function:
+hw (x(i) ) = g(wT x(i) ) ≥ 0.5
+
+(5.35)
+
+this implies that:
+g −1 (hw (x(i) )) = g −1 (g(wT x(i) )) ≥ g −1 (0.5) =⇒ wT x(i) ≥ log
+
+0.5
+=⇒ wT x(i) ≥ 0
+1 − 0.5
+(5.36)
+
+Which means that in the feature space we still have a linear separator (decision function).
+
+5. Classification Algorithms
+
+5.4
+
+81
+
+Classification Approaches
+
+In the previous chapter, we studied K-NN classifier and Logistic regression as possible
+solutions to classification problems. We now take a step back to study the more general
+categories of classification approaches. In general, three basic families of approaches can
+be distinguished, each of which may be more or less suitable depending on our design
+needs. The choice of one category of approaches over another is related to the interest
+we have in modeling certain process features, in the amount of data available and in the
+information needed to train the models.
+To study the characteristics of these families of approaches, we more formally define
+the concept of decision function. In particular, the decision function is a function
+f (·) : RD → St which, given an input feature vector x, provides as output the class
+estimate associated with x, i.e., t̂ = f (x), with t̂ ∈ St = {1, . . . , K}. In some situations,
+the decision function is sufficient for us. However, sometimes we may be interested not
+only in the predicted class, but also in the probability of that prediction, i.e. p(t|x).
+Finally, in some situations it is important to model not only the probability of the class
+given the input, but also the joint probability p(t, x). In general, if we are interested
+in estimating the statistical properties of the unknown distribution of interest from the
+data, we aim to perform Inference, and, with respect to what we want to infer, three
+families of approaches can be distinguished:
+• Discriminant Function: This family of approaches make use of discriminant
+functions. They do not aim to infer the statistical characteristics of the unknown
+distribution, but merely identify a decision function f (x) directly capable of predicting the category associated with the input. The decision function is clearly
+designed with respect to optimality criteria (loss functions).
+• Discriminative Model: Discriminative model approaches instead attempt to
+make inference about the a posteriori probability distribution p(t|x), i.e., the statistical process that describes how labels are generated from features. Logistic
+regression and K-NN classifier are two approaches that belong to this category.
+In the case of Logistic Regression, we modeled p(t|x) as:
+p(t|x) = σ(wT x)t (1 − σ(wT x))1−t
+
+(5.37)
+
+where σ(wT x) = g(wT x) (we used σ to make the sigmoid function explicit). Thus,
+in Logistic regression, once we have determined the optimal parameter vector, we
+are able to obtain an estimate of the probability of the output via the Bernoulli distribution. Furthermore, once we have estimated p(t|x), we can obtain the decision
+function by simply finding a threshold with which to compare the class probability,
+e.g.:
+
+5. Classification Algorithms
+
+82
+
+p(t = 1|x) = σ(wT x) ≥ 0.5
+
+(5.38)
+
+N.B. In this case, having available the posterior distribution of the classes, the
+decision function is easily modifiable simply choosing a new threshold. Instead,
+in the case of the discriminant functions, to change the decision function we need
+to perform the training from scratch.
+• Generative Model: Instead, these approaches aim at inferring the joint distribution p(t, x) by estimating the class-conditional distribution p(x|t) and the
+prior over classes p(t). Once the joint distribution is modeled, it is possible to
+obtain the posterior with Bayes’ theorem and, consequently, determine a decision
+function:
+p(t|x) =
+
+p(x|t)p(t)
+∝ p(x|t)p(t)
+p(x)
+
+(5.39)
+
+Clearly, in this case, we have to make a higher modeling effort, since we have to
+model the data generation process from the joint distribution. In particular, since
+p(t, x) = p(x|t)p(t), in this case we need to model both p(x|t) and p(t).
+Modeling the joint distribution means having the generation model of the data
+available. Consequently, this family of approaches is the most general possible and
+includes the other two categories. In addition, generative models make additional
+assumptions about the process that generates the features x given the classes and
+about the prior distribution over the classes. They are, thus, closer to Bayesian
+formulations and, in general, are more robust to overfitting.
+
+5.5
+
+Discriminant Function
+
+We now consider discriminant functions for binary classification. As we have already
+seen in the previous chapters, the simple linear model is not adequate for classification
+problems, since the output variable assumes only the values 0 and 1. For this reason, it
+is necessary to use a nonlinear function, called, in general, Activation Function (for
+the Logistic Regression, for example, we used the sigmoid):
+t̂ = f (wT x + w0 )
+
+(5.40)
+
+where f : RD → {0, 1} or, more generally, f : RD → [0, 1].
+Indicating for convenience with t̂ = y(x) = f (wT x + w0 ), to make a decision, we saw
+how, if the nonlinear function returns values in the range [0, 1], it is sufficient to choose
+
+5. Classification Algorithms
+
+83
+
+Figure 5.3: Decision Boundary on a two-dimensional example.
+a threshold γ:
+y(x) ≥ γ → t̂ = 1
+y(x) < γ → t̂ = 0
+
+(5.41)
+
+From this relation, we can see that y(x) = γ is a surface, or curve, in the space of x
+for which y(x) has a constant value. Furthermore, if f (·) is invertible, it is possible to
+translate this relation into a linear constraint (linear decision function):
+wT x + w0 = f −1 (γ)
+
+(5.42)
+
+Let us now try to contextualize these aspects in the case of discriminant functions.
+Consider the surface wT x + w0 = 0. This surface is called Decision Boundary, since,
+all points for which wT x + w0 ≥ 0 are points that belong to one class, while points for
+which wT x + w0 < 0 belong to the other class (see Figure 5.3). In general, if x ∈ RD ,
+then the plane identified by wT x + w0 = 0 is a hyperplane of dimension D − 1 and
+w/||w||2 is its versor. This is because if a point xA belongs to the hyperplane, then
+wT xA + w0 = 0, so given two points xA and xB belonging to the hyperplane, then:
+→
+
+wT xA + w0 = wT xB + w0 = 0 =⇒ wT (xA − xB ) = 0 =⇒ w⊥xAB
+
+(5.43)
+
+Furthermore, one can easily see that w0 is a measure of how far the hyperplane is from
+the origin. In fact, since the projection of the origin onto the hyperplane is identified
+by a vector x that belongs to the hyperplane itself, then wT x + w0 = 0, furthermore,
+since the vector is perpendicular to the hyperplane, it is also proportional to its versor,
+
+5. Classification Algorithms
+
+84
+
+Figure 5.4: Distance from the decision boundary.
+w
+so α ||w||
+= x. Consequently:
+
+αwT
+
+||w||2
+w0
+w
++ w0 = 0 =⇒ α
++ w0 = 0 =⇒ α = −
+||w||
+||w||
+||w||
+
+(5.44)
+
+Finally, even though the value of the function y(x) is not a probability measure
+(we are considering dicriminant functions that do not make inference), it still gives us
+information about the ”confidence” we have in classifying a point as belonging to a class,
+since it encodes the distance to the hyperplane. In fact, considering Figure 5.4, we can
+see that:
+x = x⊥ + r
+
+w
+||w||
+
+(5.45)
+
+multiplying both sides by wT and adding up w0 :
+||w||2
+
+z }| {
+T
+w
+w
+y(x)
+wT x + w0 = wT x⊥ + w0 +r
+=⇒ r =
+| {z } |
+{z
+}
+||w||
+||w||
+y(x)
+
+(5.46)
+
+=0
+
+In summary, if we have no interest in making inferences about the posterior distribution of the classes or the joint distribution, the linear separator seems to be a good
+strategy for classifying a point as belonging to one class or the other.
+
+5. Classification Algorithms
+
+5.5.1
+
+85
+
+Perceptron Algorithm
+
+The perceptron algorithm belongs to the Discriminant Function approaches and assumes
+a decision function as follows:
+y(x) = f (wT ϕ(x))
+
+(5.47)
+
+where
+• x → ϕ(x) is a feature transformation obtained via the basis function and where
+we assume, for convenience, that ϕ0 (x) = 1.
+• The activation function f (·) in the perceptron case is defined as follows:
+
++1 if a ≥ 0
+f (a) =
+−1 if a < 0
+
+(5.48)
+
+By encoding the output with +1 and -1, we are able to write the membership conditions
+on the two sides of the hyperplane as follows:
+
+wT ϕ(x) ≥ 0 =⇒ t = +1
+wT ϕ(x) < 0 =⇒ t = −1
+
+= t(wT ϕ(x)) ≥ 0
+
+(5.49)
+
+How can we train this decision function and identify the optimal parameters of w?
+P −1 (i)
+̸= t̂(i) ) is not easy to use since it
+As we have already mentioned, the loss N
+i=0 I(t
+has null gradient in most of the parameter space and has discontinuity points. To solve
+this problem, the perceptron algorithm uses the Perceptron Criterion: we assign zero
+error to each correctly classified sample and an error equal to
+−wT ϕ(x(i) )t(i)
+
+(5.50)
+
+to each misclassified sample. The error to be minimized is therefore:
+Ep (w) = −
+
+X
+
+wT ϕ(x(i) )t(i)
+
+(5.51)
+
+i∈M
+
+Where M denotes the misclassified samples. Ep (w) is a function of the parameters w
+that is piecewise linear, since it is the sum of linear functions whose number varies as
+w changes (as the number of samples in M changes). In this way, given a point in the
+parameter space, it is possible to calculate a non-zero gradient and then use gradient
+descent in its SGD (stochastic gradient descent) version. SGD updates the parameter
+values considering, at each iteration, only one sample and not the whole dataset as GD
+does:
+w ← w − α∇Ep (w) = w + αϕ(x(i) )t(i)
+
+(5.52)
+
+If the classes are linearly separable it is possible to show that the perceptron algorithm
+
+5. Classification Algorithms
+
+86
+
+always converges, even if it is not possible to guarantee the time of convergence (although
+if there is an upper bound). If, on the contrary, the classes are not linearly separable,
+then the algortim does not converge.
+
+5.6
+
+Quick Detour: Decision Boundaries for Multi-class Problems
+
+So far we have considered binary problems, where having a linear separator is intuitive
+and effective. What happens if the output can take more than two values? That is, how
+can we handle multiclass problems?
+We now see two very common and simple approaches to handling multiclass problems
+as a combination of binary classifiers. However, it is important to say that there are
+approaches that inherently handle multiclass problems.
+
+5.6.1
+
+One vs One classifier
+
+If t ∈ {C1 , C2 , . . . , CK }, we can think of training a binary classifier for each possible pair
+of classes, for a total of K(K − 1)/2 classifiers. For example:
+
+C1 vs C2 , C1 vs C3 , . . . C1 vs CK
+|
+{z
+}
+K−1 classifiers
+C2 vs C3 , C2 vs C4 , . . . C2 vs CK
+|
+{z
+}
+K−2 classifiers
+...
+CK−1 vs CK
+|
+{z
+}
+1 classifier
+In the testing phase, to estimate the class associated to a given sample, we process
+the latter with all K(K − 1)/2 classifiers and a ”voting” system is adopted: each class
+will receive a vote equal to the number of classifiers that predicted that class. The most
+voted class will then be the one selected at the end.
+
+5.6.2
+
+One vs All Classifier
+
+Unlike One vs One, in this case a binary classifier is trained for each class, considering
+the set of remaining classes as the alternative class. Thus, in this case we have a smaller
+number of classifiers (we have K of them). However, how do we, given these K classifiers,
+choose the class to associate with a sample? If we refer to the example in Figure 5.5,
+we can see that there are uncertainty zones, i.e., parts of the feature space shared
+among multiple classifiers. To resolve the ambiguity, it is sufficient to select as the final
+
+5. Classification Algorithms
+
+87
+
+Figure 5.5: One vs All uncertainty zone.
+class the one that guarantees a greater distance from the decision boundary (separating
+hyperplane):
+if wkT x + w0,k ≥ wjT x + w0,j
+
+∀j =⇒ t̂ = Ck
+
+(5.53)
+
+N.B. A similar ambiguity is also present for the One vs One classifier (see Figure
+5.6). However, in this case it is not possible to resolve it as for the One vs All
+case.
+
+5.7
+
+Quick Detour: Classification Metrics
+
+As with the loss function, the metrics introduced for regression problems are not adequate
+for classification problems and we must therefore introduce new ones.
+If we consider the case of binary classification, the output of the algorithm can be
+categorized with respect to 4 possible scenarios depending on the correctness of the
+classification. If we consider class ”1” as positive and class ”0” as negative, we can
+define the following 4 scenarios:
+• True Positive TP: In the case where the class estimated by the algorithm is the
+positive one and the sample is associated with a positive label (”1”);
+• True Negative TN: In the case where the class estimated by the algorithm is
+the negative class and the sample is associated with a negative label (”0”);
+• False Positive FP: In the case where the estimated class is positive, but the
+sample is actually associated with a negative label;
+
+5. Classification Algorithms
+
+88
+
+Figure 5.6: One vs One uncertainty zone.
+• False Negative FN: in the case where the estimated class is negative, but the
+sample is actually associated with a positive label.
+Clearly, we would prefer a model whose outputs fall in the true positive and true negative
+cases.
+By calculating the number of TP, TN, FP and FN it is possible to introduce some
+useful metrics to evaluate the performance of the classification algorithms:
+
+5.7.1
+
+Accuracy
+Accuracy =
+
+TP + TN
+# correct predictions
+=
+TP + TN + FP + FN
+# total predictions
+
+(5.54)
+
+Accuracy is the simplest metric used to evaluate classification algorithms. However,
+it is not always the most appropriate. Imagine we have a classifier that must predict the
+presence or absence of a tumor. We consider 100 samples, of which 90 are not tumors
+(positive class), while 10 are (we consider the class ”tumor” as the negative class). We
+further assume that the model trained with our algorithm predicts that all 100 samples
+are not tumors. If we calculate the accuracy we get: T P = 90, T N = 0, F P = 10 and
+F N = 0, so the accuracy is:
+Accuracy =
+
+90
+= 90%
+100
+
+(5.55)
+
+The accuracy value is very high and we might therefore think that our model is working
+well. In reality, the model was never able to detect a tumor when present, a very
+dangerous behavior in a real application!
+
+5. Classification Algorithms
+
+89
+
+Figure 5.7: Precision-recall curve.
+This effect occurred because we had only 10 samples related to the negative class
+and 90 related to the positive class. Our dataset is therefore said to be Unbalanced
+and accuracy is not a useful metric in this case. In unbalanced dataset situations, it is
+appropriate to use other metrics. In particular, it is very common to use Precision and
+Recall.
+
+5.7.2
+
+Precision and Recall
+
+Precision answers the question What is the proportion of correct positive predictions to
+all positive predictions? :
+Precision =
+
+TP
+TP + FP
+
+(5.56)
+
+while recall answers the question What is the proportion of correct positive predictions
+to all samples that are actually positive?
+Recall =
+
+TP
+TP + FN
+
+(5.57)
+
+We often need to trade-off between precision and recall: in general, if we want
+to increase precision (by raising the decision threshold to be ”more certain” that the
+sample is actually positive) we will inevitably classify as negative many ”more uncertain”
+samples that are actually positive. Conversely, if we lower the decision threshold to
+increase recall, we will have more incorrect positive classifications.
+This is why we often draw the precision-recall curve (see Figure 5.7) as the decision
+threshold varies (e.g., γ = 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9). With a threshold close to
+1, the decision function will only estimate the positive class with very high probabilities
+p(t = 1|x). We will then have very few TPs, but virtually no FPs, so the precision will
+
+5. Classification Algorithms
+
+90
+
+tend to 1. On the other hand, if the threshold is very low, there will be many FP, but
+also TP will increase compared to FN and consequently the recall tends to 1.
+The P-R curve allows to choose the optimal threshold value with respect to the
+problem at hand. It is, in fact, always important to ask ourselves if it is more problematic
+to make a mistake in predicting the positive class or if it is more important to ”find” as
+many positive samples as possible.
+
+5.7.3
+
+F1-Score
+
+With the precision (P) and recall (R) it is possible to define another metric that does
+not suffer from the problems of the accuracy in the case of unbalanced dataset: the
+F1-Score:
+F1-score = 2
+
+P ·R
+TP
+=
+1
+P +R
+T P + 2 (F P + F N )
+
+(5.58)
+
+The F1-score calculates a harmonic average between precision and recall and by
+maximizing it we are actually looking for a good compromise between the two (N.B. the
+compromise depends also on the choice of the decision threshold γ).
+Important!: The F1-score takes into account the unbalance of the dataset, but it
+is calculated with respect to the class considered positive! Its value will be high or low
+depending on the performance of the classifier with respect to the positive class, even if
+it is unbalanced. There is no information about the negative class! To see this effect,
+let’s take the example of the cancer dataset: we had 100 samples, 90 of which were cases
+without tumor and 10 with tumor. Suppose that our classifier predicts 99 samples as
+belonging to the class ”without tumor” and 1 sample as belonging to the class ”tumor”.
+Clearly, of the 99 samples predicted as ”without tumor”, 9 are incorrect and instead
+belong to the ”tumor” class.
+If we assume that the positive class is ”without tumor” we have:
+T P = 90
+
+TN = 1
+
+FP = 9
+
+FN = 0
+
+(5.59)
+
+TP
+= 1.0
+TP + FN
+
+(5.60)
+
+hence, we obtain:
+Precision =
+
+TP
+= 0.909
+TP + FP
+
+Recall =
+
+while the F1-Score is:
+F1-score = 2
+
+P ·R
+0.909 · 1.0
+=2
+= 0.9524
+P +R
+0.909 + 1.0
+
+(5.61)
+
+Thus we have a very high F1-Score and very close to accuracy:
+Accuracy =
+
+91
+# correct predictions
+=
+= 0.91
+# total predictions
+100
+
+(5.62)
+
+5. Classification Algorithms
+
+91
+
+Figure 5.8: Confusion matrix.
+Therefore, it seems that the F1-score is not able to capture the poor performance of
+the model with respect to the tumor class. However, if instead we calculate it considering
+the class ”tumor” as the positive one we obtain:
+TP = 1
+
+T N = 90
+
+FP = 0
+
+Precision = 1.0
+F1-score = 2
+
+FN = 9
+
+(5.63)
+
+Recall = 0.1
+
+(5.64)
+
+1 · 0.1
+= 0.1818
+1.0 + 0.1
+
+(5.65)
+
+In this case we see how the F1-score detects the fact that the classifier is not performing well with respect to the class ”tumor”.
+In general, the F1-score should be computed with respect to the class deemed most
+important. If both classes are of interest, then it is appropriate to consider the average
+of the calculated F1-scores by first considering one of the classes as positive and then
+recalculating it by considering the other as such.
+
+5.7.4
+
+Confusion Matrix
+
+Accuracy and recall can be visualized through the Confusion Matrix (see Figure 5.8).
+The confusion matrix can also be calculated in the multiclass case (see Figure 5.9),
+where, however, the concepts of TP, TN, FP and FN must be slightly revised: it is in
+fact necessary to calculate for each class the 4 values (and possibly the F1-score if of
+interest) considering the latter as positive and all the others as negative.
+
+5. Classification Algorithms
+
+92
+
+Figure 5.9: Confusion matrix for the multiclass case. In the cells with red dots the
+number of samples correctly classified for each class are reported. The blue dots indicate
+the cells containing the number of samples ”confused” with other classes.
+
+5.7.5
+
+Receiver Operator Characteristic Curve - ROC Curve
+
+The ROC curve depends on two quantities:
+True Positive Rate (TPR) =
+
+TP
+TP + FN
+
+(5.66)
+
+False Positive Rate (FPR) =
+
+FP
+FP + FN
+
+(5.67)
+
+The ROC then shows the trend of TPR and FPR as the decision threshold changes
+(see Figure 5.10). To have a metric associated with the ROC curve, we consider the
+Area Under the Curve (AUC). In general, the AUC can also be calculated for the
+P-R Curve.
+Normally we use the AUC of the P-R curve when we are more interested in the
+number of false positives with respect to the least represented class in the dataset, while
+the ROC curve is more useful to analyze the overall FP number. As a rule of thumb,
+it is good to use the P-R Curve on unbalanced datasets and where the class of interest
+is the one with fewer samples. On Balanced datasets, on the other hand, it is more
+appropriate to use the AUC of the ROC Curve.
+
+5. Classification Algorithms
+
+Figure 5.10: ROC Curve.
+
+93
+
+Chapter 6
+
+Generalized Linear Models
+(GLMs)*
+Before introducing generative models, let us pause for a moment to reflect on the relationship between linear regression and logistic regression. We have seen how the former
+solves regression problems, while, for classification problems, we have introduced logistic
+regression by making some changes to the linear regression hypothesis function.
+In fact, as we will see in this chapter, these two approaches refer to a common
+framework from which it is possible to derive both (and derive other models as well):
+the Generalized Linear Models (GLMs).
+
+6.1
+
+Exponential Family formulation
+
+All models that belong to the GLM family are characterized by distributions of the
+output variable of exponential type (below we express the distribution with respect to
+a single sample (x, t)):
+p(t|η(x, w)) = b(t) exp(η T T (t) − a(η))
+
+(6.1)
+
+In this formula, η is called natural parameter or canonical parameter of the distribution and binds the input and trainable parameters w to the output. In the formula,
+the relationship between η and x and w is not made explicit to keep the notation compact (for completeness, we should write η(x, w)). We will see in the next sections how
+η is obtained from the features and trainable parameters w.
+T (t) is a function of the random variable called sufficient statistic (we will clarify
+what we mean by sufficient statistic shortly). a(η) on the other hand is called log
+partition function, whose role is to act as a normalizer to ensure that p(t|η) is a valid
+pdf.
+By choosing T , a and b we can identify a family of distributions parameterized by
+the canonical parameter η and by varying the latter we can obtain specific distributions
+
+6. Generalized Linear Models (GLMs)*
+
+95
+
+within this family.
+We now see how the Gaussian and Bernoulli distributions are families of exponential
+distributions.
+
+6.1.1
+
+Bernoulli Distribution as special case of the exponential distribution
+
+Consider the Bernoulli distribution that we used in the previous chapter for Logistic Regression. This distribution models a binary random variable and, recalling the expression
+we saw in the previous chapter, the distribution is characterized by the parameter ϕ:
+p(t = 1|ϕ) = ϕ
+p(t = 0|ϕ) = 1 − ϕ
+
+(6.2)
+
+By varying ϕ we get different instances of the family of Bernoulli distributions (each
+with a different mean).
+What is the connection between the Bernoulli distribution and the exponential family? Also, we just said that by varying ϕ we get specific instances of the Bernoulli family.
+But what is the connection between the Bernoulli family-specific parameter ϕ and the
+canonical parameter η?
+To answer these questions, let’s see if there is an appropriate choice of T , a and b for
+which the Bernoulli distribution can be expressed in the exponential form:
+
+p(t|ϕ(x, w)) = ϕ(x, w)t (1 − ϕ(x, w))1−t = exp(t log ϕ(x, w) + (1 − t) log(1 − ϕ(x, w)))
+
+
+
+ϕ(x, w)
+= exp
+log
+t + log(1 − ϕ(x, w))
+(6.3)
+1 − ϕ(x, w)
+where we see that, by substituting
+T (t) = t
+a(η(x, w)) = − log(1 − ϕ(x, w)) = log(1 + eη (x, w))
+b(t) = 1
+η(x, w) = log(
+
+ϕ(x, w)
+)
+1 − ϕ(x, w)
+
+(6.4)
+
+we get the exponential form 6.1. Thus, we have answered the first question. To answer
+the second, it is sufficient to refer to the last equation of 6.4 (the one expressing the
+canonical parameter as a function of the parameter ϕ of the Bernoulli distribution). it
+is also interesting to see that by inverting the latter (i.e., expressing ϕ as a function of
+η) we get:
+ϕ=
+
+1
+1 + e−η
+
+(6.5)
+
+6. Generalized Linear Models (GLMs)*
+
+96
+
+that is, the parameter ϕ of the Bernoulli distribution is given by the sigmoid applied to
+the canonical parameter (we will see shortly how the canonical parameter binds to the
+input features). The choice of the sigmoid for the logistic regression is, therefore, not
+an arbitrary choice of design, but derives from the fact that the Bernoulli distribution
+belongs to the exponential family.
+
+6.1.2
+
+Gaussian Distribution as special case of the exponential distribution
+
+An analogous reasoning to that made for the Bernoulli distribution can be made for the
+Gaussian distribution. To do so, we first assume that its variance is σ 2 = 1. We set this
+arbitrary value to simplify the derivation and, in this way, we only refer to the parameter
+µ of the Gaussian. We can perform this simplification since, as we saw when deriving
+the MLE solution for linear regression, the optimal set of w does not depend on σ 2 . In
+any case, it is possible to show that the Gaussian belongs to the exponential family also
+considering σ 2 as a variable.
+
+
+
+1
+1
+2
+p(t|µ) =
+exp − (t − µ)
+2π
+2
+
+
+
+
+1
+1 2
+1 2
+=
+exp − t exp µt − µ
+2π
+2
+2
+
+(6.6)
+
+Equivalence with the general form of the exponential distribution can be obtained by
+choosing:
+T (t) = t
+µ2
+η2
+=
+2
+2
+
+1
+t2
+b(t) = √ exp −
+2
+2π
+a(η) =
+
+η=µ
+
+(6.7)
+
+In this case we see that the canonical parameter is just the same as the parameter
+controlling the Gaussian family µ. As already mentioned, the dependence between η
+and the input features and the trainable parameters w is not yet made explicit. We will
+see it in the next section.
+
+6.2
+
+Building GLM for Linear, Logistic and Softmax Regression
+
+Let’s see now how it is possible to build the models we introduced for linear and logistic
+regression from the general formulation of GLM. We will also see how, starting from this
+
+6. Generalized Linear Models (GLMs)*
+
+97
+
+general formulation, it is possible to introduce the Softmax Regression, the extension
+of logistic regression for the multiclass case.
+To do so, we first need to provide some more details about the concept of sufficient
+statistic.
+
+6.2.1
+
+Sufficient Statistic
+
+Definition 6.1. Sufficient Statistic: Consider a set X0 , X1 , . . . , XN −1 of random
+samples obtained from a distribution characterized by an unknown parameter w. Then
+the statistic:
+T = u(X0 , X1 , . . . , XN −1 )
+
+(6.8)
+
+is called sufficient for w if p(X0 , X1 , . . . , XN −1 |T )⊥w.
+This means that if the conditional distribution of the samples X0 , X1 , . . . , XN −1 given
+the statistic T does not depend on w then T is sufficient. In other words, T contains all
+the information needed to estimate the parameter w, i.e., T is a sufficient ”summary”
+of the data for the purpose of inference about w. If T is sufficient, in fact we have
+p(w|X0 , X1 , . . . , XN −1 , T ) = p(w|T ).
+A sufficient statistic is therefore an excellent tool to ”condense” the data without
+losing information for the subsequent inference step through, for example, MLE. However, following the definition, to figure out if a statistic is sufficient we need to compute
+the conditional distribution of X0 , X1 , . . . , XN −1 given T , which in practical cases, may
+not be a viable route. An easier alternative to figure out if a statistic is sufficient is to
+use the Factorization Theorem:
+Theorem 6.2. Factorization Theorem: Consider a set X0 , X1 , . . . , XN −1 with joint
+distribution p(X0 , X1 , . . . , XN −1 |w) conditioned on parameter w. Then the statistic T =
+u(X0 , X1 , . . . , XN −1 ) is sufficient for w if and only if p(X0 , X1 , . . . , XN −1 |w) can be
+factorized into two components, i.e., :
+p(X0 , X1 , . . . , XN −1 |w) = ψ[u(X0 , X1 , . . . , XN −1 )|w]h(X0 , X1 , . . . , XN −1 )
+= ψ[T |w]h(X0 , X1 , . . . , XN −1 )
+
+(6.9)
+
+where
+• ψ is a function that depends on data only through u(X0 , X1 , . . . , XN −1 ) and
+• the function h(X0 , X1 , . . . , XN −1 ) does not depend on w
+Looking at the expression of the exponential family 6.1:
+p(t|η(x, w)) =
+
+b(t)
+|{z}
+
+h(X0 ,X1 ,...,XN −1 )
+
+exp(η(x, w)T T (t) − a(η(x, w)))
+|
+{z
+}
+ψ[T |η(x,w)]
+
+(6.10)
+
+6. Generalized Linear Models (GLMs)*
+
+98
+
+it is possible to notice that it is already in factorized form, consequently, T (t) is a
+sufficient statistic for the parameter η(x, w).
+
+6.2.2
+
+GLM assumption
+
+In general, a classification or regression problem in which we want to estimate an output
+variable t given the feature vector x, can be solved through the GLM formulation. To
+construct the GLM model, it is necessary to make 3 assumptions:
+• Assumption 1 - Randomness Factor: The function p(t|x, γ) must belong to
+the exponential family. γ denotes the generic parameter controlling the particular
+exponential distribution family chosen (e.g., γ = ϕ in the Bernoulli case, or γ =
+µ in the Gaussian case). Furthermore, the hypothesis function is equal to the
+expected value of the sufficient statistic conditional on the features:
+hw (x) = E[T (t)|x]
+
+(6.11)
+
+This assumption is reasonable because the sufficient statistic ”summarizes” all the
+information necessary to estimate the unknown parameter γ of the distribution.
+The link between the expected value, the features and the parameters of the model
+w is made explicit through the following two assumptions;
+• Assumption 2: The link between the expected value E[T (t)|x] and the canonical
+parameter is obtained through the Canonical Response Function:
+γ = g(η) = E[T (t)|x]
+
+(6.12)
+
+The inverse of this function is known as Canonical Link Function:
+η = g −1 g(η) = g −1 E[T (t)|x]
+
+(6.13)
+
+• Assumption 3 - Systematic Factor: The canonical parameter is a linear combination of the features with respect to the w parameters being trained:
+η = wT x
+
+(6.14)
+
+These three assumptions create a chain of relationships between the hypothesis function (with which we estimate the expected value of the sufficient statistic), the parameter
+γ that controls the exponential family, the canonical parameter and, finally, the input
+features.
+Let’s see, as an example, the case of Linear Regression. In this case, we had modeled
+the p(t|x) as a Gaussian, so the first assumption is indeed met. In the Gaussian case, the
+parameter γ corresponds to the mean µ of the Gaussian, so we have γ = µ. Furthermore,
+
+6. Generalized Linear Models (GLMs)*
+
+99
+
+from the 6.7, we see that the canonical response function is µ = η so:
+hw (x) = E[T (t)|x] ← Since the Gaussian distribution belongs to the exponential family.
+= E[t|x] ← T (t) = t (see 6.7)
+= E[N (t|µ, σ 2 )] = µ ← µ is the mean of the Gaussian distribution
+= η ← using the canonical response function for the Gaussian
+= wT x ← using Assumption 3
+
+(6.15)
+
+We then found the Linear Regression hypothesis function that we introduced in previous chapters. The Linear Regression model is then a GLM with Gaussian distribution
+assumptions for p(t|x).
+Similarly, for Logitic regression, remembering that the parameter γ, in this case,
+corresponds to the mean ϕ of the Bernoulli distribution, we have γ = ϕ. Furthermore,
+from the 6.5, we see that the canonical response function is ϕ = 1+e1−η so:
+hw (x) = E[T (t)|x)] ← Since the Bernoulli distribution belongs to the exponential family.
+= E[t|x] ← T (t) = t (see 6.4)
+= E[Bernoulli(t|ϕ)] = ϕ ← ϕ is the mean of the Bernoulli distribution
+1
+=
+← using the canonical response function for the Bernoulli
+1 + e−η
+1
+=
+← using Assumption 3
+1 + e−wT x
+
+(6.16)
+
+We have therefore seen that both Linear and Logistic regression derive from the more
+general formulation of GLMs, in which the canonical parameter assumes a fundamental
+role to ”abstract” with respect to the particular form of the family of distributions chosen
+to solve the specific task (Gaussian for regression and Bernoulli for classification).
+
+6.2.3
+
+Softmax Regression
+
+Now that we understand how GLMs work, we use this framework to build a new learning
+model. In particular, we will derive the Softmax Regression, which extends Logistic
+Regression for multiclass classification problems.
+We then consider the scenario where we want to estimate an output variable t that
+takes values in the set {1, 2, . . . , K} from a feature vector x. We have already seen that
+multiclass problems can be handled with binary classifiers and One vs One or One vs All
+approaches. Softmax Regression, on the other hand, is a model that explicitly accounts
+for the multiclass nature of the output and thus directly provides predictions in the set
+{1, 2, . . . , K}.
+Because the output variable can take on more than two values, the Bernoulli distribution is not appropriate; instead, we will need to use a multinomial distribution. We
+
+

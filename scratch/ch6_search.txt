@@ -1,0 +1,1059 @@
+5. Classification Algorithms
+
+89
+
+Figure 5.7: Precision-recall curve.
+This effect occurred because we had only 10 samples related to the negative class
+and 90 related to the positive class. Our dataset is therefore said to be Unbalanced
+and accuracy is not a useful metric in this case. In unbalanced dataset situations, it is
+appropriate to use other metrics. In particular, it is very common to use Precision and
+Recall.
+
+5.7.2
+
+Precision and Recall
+
+Precision answers the question What is the proportion of correct positive predictions to
+all positive predictions? :
+Precision =
+
+TP
+TP + FP
+
+(5.56)
+
+while recall answers the question What is the proportion of correct positive predictions
+to all samples that are actually positive?
+Recall =
+
+TP
+TP + FN
+
+(5.57)
+
+We often need to trade-off between precision and recall: in general, if we want
+to increase precision (by raising the decision threshold to be ”more certain” that the
+sample is actually positive) we will inevitably classify as negative many ”more uncertain”
+samples that are actually positive. Conversely, if we lower the decision threshold to
+increase recall, we will have more incorrect positive classifications.
+This is why we often draw the precision-recall curve (see Figure 5.7) as the decision
+threshold varies (e.g., γ = 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9). With a threshold close to
+1, the decision function will only estimate the positive class with very high probabilities
+p(t = 1|x). We will then have very few TPs, but virtually no FPs, so the precision will
+
+5. Classification Algorithms
+
+90
+
+tend to 1. On the other hand, if the threshold is very low, there will be many FP, but
+also TP will increase compared to FN and consequently the recall tends to 1.
+The P-R curve allows to choose the optimal threshold value with respect to the
+problem at hand. It is, in fact, always important to ask ourselves if it is more problematic
+to make a mistake in predicting the positive class or if it is more important to ”find” as
+many positive samples as possible.
+
+5.7.3
+
+F1-Score
+
+With the precision (P) and recall (R) it is possible to define another metric that does
+not suffer from the problems of the accuracy in the case of unbalanced dataset: the
+F1-Score:
+F1-score = 2
+
+P ·R
+TP
+=
+1
+P +R
+T P + 2 (F P + F N )
+
+(5.58)
+
+The F1-score calculates a harmonic average between precision and recall and by
+maximizing it we are actually looking for a good compromise between the two (N.B. the
+compromise depends also on the choice of the decision threshold γ).
+Important!: The F1-score takes into account the unbalance of the dataset, but it
+is calculated with respect to the class considered positive! Its value will be high or low
+depending on the performance of the classifier with respect to the positive class, even if
+it is unbalanced. There is no information about the negative class! To see this effect,
+let’s take the example of the cancer dataset: we had 100 samples, 90 of which were cases
+without tumor and 10 with tumor. Suppose that our classifier predicts 99 samples as
+belonging to the class ”without tumor” and 1 sample as belonging to the class ”tumor”.
+Clearly, of the 99 samples predicted as ”without tumor”, 9 are incorrect and instead
+belong to the ”tumor” class.
+If we assume that the positive class is ”without tumor” we have:
+T P = 90
+
+TN = 1
+
+FP = 9
+
+FN = 0
+
+(5.59)
+
+TP
+= 1.0
+TP + FN
+
+(5.60)
+
+hence, we obtain:
+Precision =
+
+TP
+= 0.909
+TP + FP
+
+Recall =
+
+while the F1-Score is:
+F1-score = 2
+
+P ·R
+0.909 · 1.0
+=2
+= 0.9524
+P +R
+0.909 + 1.0
+
+(5.61)
+
+Thus we have a very high F1-Score and very close to accuracy:
+Accuracy =
+
+91
+# correct predictions
+=
+= 0.91
+# total predictions
+100
+
+(5.62)
+
+5. Classification Algorithms
+
+91
+
+Figure 5.8: Confusion matrix.
+Therefore, it seems that the F1-score is not able to capture the poor performance of
+the model with respect to the tumor class. However, if instead we calculate it considering
+the class ”tumor” as the positive one we obtain:
+TP = 1
+
+T N = 90
+
+FP = 0
+
+Precision = 1.0
+F1-score = 2
+
+FN = 9
+
+(5.63)
+
+Recall = 0.1
+
+(5.64)
+
+1 · 0.1
+= 0.1818
+1.0 + 0.1
+
+(5.65)
+
+In this case we see how the F1-score detects the fact that the classifier is not performing well with respect to the class ”tumor”.
+In general, the F1-score should be computed with respect to the class deemed most
+important. If both classes are of interest, then it is appropriate to consider the average
+of the calculated F1-scores by first considering one of the classes as positive and then
+recalculating it by considering the other as such.
+
+5.7.4
+
+Confusion Matrix
+
+Accuracy and recall can be visualized through the Confusion Matrix (see Figure 5.8).
+The confusion matrix can also be calculated in the multiclass case (see Figure 5.9),
+where, however, the concepts of TP, TN, FP and FN must be slightly revised: it is in
+fact necessary to calculate for each class the 4 values (and possibly the F1-score if of
+interest) considering the latter as positive and all the others as negative.
+
+5. Classification Algorithms
+
+92
+
+Figure 5.9: Confusion matrix for the multiclass case. In the cells with red dots the
+number of samples correctly classified for each class are reported. The blue dots indicate
+the cells containing the number of samples ”confused” with other classes.
+
+5.7.5
+
+Receiver Operator Characteristic Curve - ROC Curve
+
+The ROC curve depends on two quantities:
+True Positive Rate (TPR) =
+
+TP
+TP + FN
+
+(5.66)
+
+False Positive Rate (FPR) =
+
+FP
+FP + FN
+
+(5.67)
+
+The ROC then shows the trend of TPR and FPR as the decision threshold changes
+(see Figure 5.10). To have a metric associated with the ROC curve, we consider the
+Area Under the Curve (AUC). In general, the AUC can also be calculated for the
+P-R Curve.
+Normally we use the AUC of the P-R curve when we are more interested in the
+number of false positives with respect to the least represented class in the dataset, while
+the ROC curve is more useful to analyze the overall FP number. As a rule of thumb,
+it is good to use the P-R Curve on unbalanced datasets and where the class of interest
+is the one with fewer samples. On Balanced datasets, on the other hand, it is more
+appropriate to use the AUC of the ROC Curve.
+
+5. Classification Algorithms
+
+Figure 5.10: ROC Curve.
+
+93
+
+Chapter 6
+
+Generalized Linear Models
+(GLMs)*
+Before introducing generative models, let us pause for a moment to reflect on the relationship between linear regression and logistic regression. We have seen how the former
+solves regression problems, while, for classification problems, we have introduced logistic
+regression by making some changes to the linear regression hypothesis function.
+In fact, as we will see in this chapter, these two approaches refer to a common
+framework from which it is possible to derive both (and derive other models as well):
+the Generalized Linear Models (GLMs).
+
+6.1
+
+Exponential Family formulation
+
+All models that belong to the GLM family are characterized by distributions of the
+output variable of exponential type (below we express the distribution with respect to
+a single sample (x, t)):
+p(t|η(x, w)) = b(t) exp(η T T (t) − a(η))
+
+(6.1)
+
+In this formula, η is called natural parameter or canonical parameter of the distribution and binds the input and trainable parameters w to the output. In the formula,
+the relationship between η and x and w is not made explicit to keep the notation compact (for completeness, we should write η(x, w)). We will see in the next sections how
+η is obtained from the features and trainable parameters w.
+T (t) is a function of the random variable called sufficient statistic (we will clarify
+what we mean by sufficient statistic shortly). a(η) on the other hand is called log
+partition function, whose role is to act as a normalizer to ensure that p(t|η) is a valid
+pdf.
+By choosing T , a and b we can identify a family of distributions parameterized by
+the canonical parameter η and by varying the latter we can obtain specific distributions
+
+6. Generalized Linear Models (GLMs)*
+
+95
+
+within this family.
+We now see how the Gaussian and Bernoulli distributions are families of exponential
+distributions.
+
+6.1.1
+
+Bernoulli Distribution as special case of the exponential distribution
+
+Consider the Bernoulli distribution that we used in the previous chapter for Logistic Regression. This distribution models a binary random variable and, recalling the expression
+we saw in the previous chapter, the distribution is characterized by the parameter ϕ:
+p(t = 1|ϕ) = ϕ
+p(t = 0|ϕ) = 1 − ϕ
+
+(6.2)
+
+By varying ϕ we get different instances of the family of Bernoulli distributions (each
+with a different mean).
+What is the connection between the Bernoulli distribution and the exponential family? Also, we just said that by varying ϕ we get specific instances of the Bernoulli family.
+But what is the connection between the Bernoulli family-specific parameter ϕ and the
+canonical parameter η?
+To answer these questions, let’s see if there is an appropriate choice of T , a and b for
+which the Bernoulli distribution can be expressed in the exponential form:
+
+p(t|ϕ(x, w)) = ϕ(x, w)t (1 − ϕ(x, w))1−t = exp(t log ϕ(x, w) + (1 − t) log(1 − ϕ(x, w)))
+
+
+
+ϕ(x, w)
+= exp
+log
+t + log(1 − ϕ(x, w))
+(6.3)
+1 − ϕ(x, w)
+where we see that, by substituting
+T (t) = t
+a(η(x, w)) = − log(1 − ϕ(x, w)) = log(1 + eη (x, w))
+b(t) = 1
+η(x, w) = log(
+
+ϕ(x, w)
+)
+1 − ϕ(x, w)
+
+(6.4)
+
+we get the exponential form 6.1. Thus, we have answered the first question. To answer
+the second, it is sufficient to refer to the last equation of 6.4 (the one expressing the
+canonical parameter as a function of the parameter ϕ of the Bernoulli distribution). it
+is also interesting to see that by inverting the latter (i.e., expressing ϕ as a function of
+η) we get:
+ϕ=
+
+1
+1 + e−η
+
+(6.5)
+
+6. Generalized Linear Models (GLMs)*
+
+96
+
+that is, the parameter ϕ of the Bernoulli distribution is given by the sigmoid applied to
+the canonical parameter (we will see shortly how the canonical parameter binds to the
+input features). The choice of the sigmoid for the logistic regression is, therefore, not
+an arbitrary choice of design, but derives from the fact that the Bernoulli distribution
+belongs to the exponential family.
+
+6.1.2
+
+Gaussian Distribution as special case of the exponential distribution
+
+An analogous reasoning to that made for the Bernoulli distribution can be made for the
+Gaussian distribution. To do so, we first assume that its variance is σ 2 = 1. We set this
+arbitrary value to simplify the derivation and, in this way, we only refer to the parameter
+µ of the Gaussian. We can perform this simplification since, as we saw when deriving
+the MLE solution for linear regression, the optimal set of w does not depend on σ 2 . In
+any case, it is possible to show that the Gaussian belongs to the exponential family also
+considering σ 2 as a variable.
+
+
+
+1
+1
+2
+p(t|µ) =
+exp − (t − µ)
+2π
+2
+
+
+
+
+1
+1 2
+1 2
+=
+exp − t exp µt − µ
+2π
+2
+2
+
+(6.6)
+
+Equivalence with the general form of the exponential distribution can be obtained by
+choosing:
+T (t) = t
+µ2
+η2
+=
+2
+2
+
+1
+t2
+b(t) = √ exp −
+2
+2π
+a(η) =
+
+η=µ
+
+(6.7)
+
+In this case we see that the canonical parameter is just the same as the parameter
+controlling the Gaussian family µ. As already mentioned, the dependence between η
+and the input features and the trainable parameters w is not yet made explicit. We will
+see it in the next section.
+
+6.2
+
+Building GLM for Linear, Logistic and Softmax Regression
+
+Let’s see now how it is possible to build the models we introduced for linear and logistic
+regression from the general formulation of GLM. We will also see how, starting from this
+
+6. Generalized Linear Models (GLMs)*
+
+97
+
+general formulation, it is possible to introduce the Softmax Regression, the extension
+of logistic regression for the multiclass case.
+To do so, we first need to provide some more details about the concept of sufficient
+statistic.
+
+6.2.1
+
+Sufficient Statistic
+
+Definition 6.1. Sufficient Statistic: Consider a set X0 , X1 , . . . , XN −1 of random
+samples obtained from a distribution characterized by an unknown parameter w. Then
+the statistic:
+T = u(X0 , X1 , . . . , XN −1 )
+
+(6.8)
+
+is called sufficient for w if p(X0 , X1 , . . . , XN −1 |T )⊥w.
+This means that if the conditional distribution of the samples X0 , X1 , . . . , XN −1 given
+the statistic T does not depend on w then T is sufficient. In other words, T contains all
+the information needed to estimate the parameter w, i.e., T is a sufficient ”summary”
+of the data for the purpose of inference about w. If T is sufficient, in fact we have
+p(w|X0 , X1 , . . . , XN −1 , T ) = p(w|T ).
+A sufficient statistic is therefore an excellent tool to ”condense” the data without
+losing information for the subsequent inference step through, for example, MLE. However, following the definition, to figure out if a statistic is sufficient we need to compute
+the conditional distribution of X0 , X1 , . . . , XN −1 given T , which in practical cases, may
+not be a viable route. An easier alternative to figure out if a statistic is sufficient is to
+use the Factorization Theorem:
+Theorem 6.2. Factorization Theorem: Consider a set X0 , X1 , . . . , XN −1 with joint
+distribution p(X0 , X1 , . . . , XN −1 |w) conditioned on parameter w. Then the statistic T =
+u(X0 , X1 , . . . , XN −1 ) is sufficient for w if and only if p(X0 , X1 , . . . , XN −1 |w) can be
+factorized into two components, i.e., :
+p(X0 , X1 , . . . , XN −1 |w) = ψ[u(X0 , X1 , . . . , XN −1 )|w]h(X0 , X1 , . . . , XN −1 )
+= ψ[T |w]h(X0 , X1 , . . . , XN −1 )
+
+(6.9)
+
+where
+• ψ is a function that depends on data only through u(X0 , X1 , . . . , XN −1 ) and
+• the function h(X0 , X1 , . . . , XN −1 ) does not depend on w
+Looking at the expression of the exponential family 6.1:
+p(t|η(x, w)) =
+
+b(t)
+|{z}
+
+h(X0 ,X1 ,...,XN −1 )
+
+exp(η(x, w)T T (t) − a(η(x, w)))
+|
+{z
+}
+ψ[T |η(x,w)]
+
+(6.10)
+
+6. Generalized Linear Models (GLMs)*
+
+98
+
+it is possible to notice that it is already in factorized form, consequently, T (t) is a
+sufficient statistic for the parameter η(x, w).
+
+6.2.2
+
+GLM assumption
+
+In general, a classification or regression problem in which we want to estimate an output
+variable t given the feature vector x, can be solved through the GLM formulation. To
+construct the GLM model, it is necessary to make 3 assumptions:
+• Assumption 1 - Randomness Factor: The function p(t|x, γ) must belong to
+the exponential family. γ denotes the generic parameter controlling the particular
+exponential distribution family chosen (e.g., γ = ϕ in the Bernoulli case, or γ =
+µ in the Gaussian case). Furthermore, the hypothesis function is equal to the
+expected value of the sufficient statistic conditional on the features:
+hw (x) = E[T (t)|x]
+
+(6.11)
+
+This assumption is reasonable because the sufficient statistic ”summarizes” all the
+information necessary to estimate the unknown parameter γ of the distribution.
+The link between the expected value, the features and the parameters of the model
+w is made explicit through the following two assumptions;
+• Assumption 2: The link between the expected value E[T (t)|x] and the canonical
+parameter is obtained through the Canonical Response Function:
+γ = g(η) = E[T (t)|x]
+
+(6.12)
+
+The inverse of this function is known as Canonical Link Function:
+η = g −1 g(η) = g −1 E[T (t)|x]
+
+(6.13)
+
+• Assumption 3 - Systematic Factor: The canonical parameter is a linear combination of the features with respect to the w parameters being trained:
+η = wT x
+
+(6.14)
+
+These three assumptions create a chain of relationships between the hypothesis function (with which we estimate the expected value of the sufficient statistic), the parameter
+γ that controls the exponential family, the canonical parameter and, finally, the input
+features.
+Let’s see, as an example, the case of Linear Regression. In this case, we had modeled
+the p(t|x) as a Gaussian, so the first assumption is indeed met. In the Gaussian case, the
+parameter γ corresponds to the mean µ of the Gaussian, so we have γ = µ. Furthermore,
+
+6. Generalized Linear Models (GLMs)*
+
+99
+
+from the 6.7, we see that the canonical response function is µ = η so:
+hw (x) = E[T (t)|x] ← Since the Gaussian distribution belongs to the exponential family.
+= E[t|x] ← T (t) = t (see 6.7)
+= E[N (t|µ, σ 2 )] = µ ← µ is the mean of the Gaussian distribution
+= η ← using the canonical response function for the Gaussian
+= wT x ← using Assumption 3
+
+(6.15)
+
+We then found the Linear Regression hypothesis function that we introduced in previous chapters. The Linear Regression model is then a GLM with Gaussian distribution
+assumptions for p(t|x).
+Similarly, for Logitic regression, remembering that the parameter γ, in this case,
+corresponds to the mean ϕ of the Bernoulli distribution, we have γ = ϕ. Furthermore,
+from the 6.5, we see that the canonical response function is ϕ = 1+e1−η so:
+hw (x) = E[T (t)|x)] ← Since the Bernoulli distribution belongs to the exponential family.
+= E[t|x] ← T (t) = t (see 6.4)
+= E[Bernoulli(t|ϕ)] = ϕ ← ϕ is the mean of the Bernoulli distribution
+1
+=
+← using the canonical response function for the Bernoulli
+1 + e−η
+1
+=
+← using Assumption 3
+1 + e−wT x
+
+(6.16)
+
+We have therefore seen that both Linear and Logistic regression derive from the more
+general formulation of GLMs, in which the canonical parameter assumes a fundamental
+role to ”abstract” with respect to the particular form of the family of distributions chosen
+to solve the specific task (Gaussian for regression and Bernoulli for classification).
+
+6.2.3
+
+Softmax Regression
+
+Now that we understand how GLMs work, we use this framework to build a new learning
+model. In particular, we will derive the Softmax Regression, which extends Logistic
+Regression for multiclass classification problems.
+We then consider the scenario where we want to estimate an output variable t that
+takes values in the set {1, 2, . . . , K} from a feature vector x. We have already seen that
+multiclass problems can be handled with binary classifiers and One vs One or One vs All
+approaches. Softmax Regression, on the other hand, is a model that explicitly accounts
+for the multiclass nature of the output and thus directly provides predictions in the set
+{1, 2, . . . , K}.
+Because the output variable can take on more than two values, the Bernoulli distribution is not appropriate; instead, we will need to use a multinomial distribution. We
+
+6. Generalized Linear Models (GLMs)*
+
+100
+
+begin by verifying that the multinomial distribution is a special case of the family of
+exponential distributions in order to use the GLM framework.
+In order to parameterize a multinomial distribution over K possible values of the
+output we could think of using K parameters, one describing the probability of each
+output: ϕ1 , ϕ2 , . . . , ϕK . However, since the sum of all these parameters must equal 1
+(the sum of the probabilities of all possible events must be 1):
+K
+X
+
+ϕi = 1
+
+(6.17)
+
+i=1
+
+one of these parameters is redundant because it is directly determined by the others.
+We therefore have K − 1 parameters ϕ1 , ϕ2 , . . . , ϕK−1 such that:
+ϕi = p(t = i|ϕ)
+and p(t = K|ϕ) = 1 −
+
+K−1
+X
+
+ϕi
+
+(6.18)
+(6.19)
+
+i=1
+
+The sufficient statistic must also be revised slightly in the multinomial case. In
+this case we do not have T (t) = t, but to express the multinomial distribution in the
+exponential form, we need to define T (t) ∈ RK−1 as follows:
+ 
+ 
+ 
+ 
+1
+0
+0
+0
+ 
+ 
+ 
+ 
+0
+1
+0
+0
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+T (1) = 0 , T (2) = 0 , . . . , T (K − 1) = 0 , T (K) = 0
+.
+.
+.
+.
+ .. 
+ .. 
+ .. 
+ .. 
+ 
+ 
+ 
+ 
+0
+0
+1
+0
+
+(6.20)
+
+where by (T (t))i we will denote the i-th element of the vector and, by using the indicator
+function, we can write for convenience (T (t))i = I{t = i}. We also have that :
+E[(T (t))i ] = 1 · p((T (t))i = 1|ϕ) + 0 · p((T (t))i = 0|ϕ)
+= p((T (t))i = 1|ϕ) = p(t = i|ϕ) = ϕi
+
+(6.21)
+
+At this point we write the standard form of the multinomial distribution and starting
+
+6. Generalized Linear Models (GLMs)*
+
+101
+
+from this we modify it to obtain the exponential form:
+I{t=1} I{t=2}
+I{t=K}
+ϕ2
+. . . ϕK
+P
+1− K−1 I{t=i}
+I{t=1} I{t=2}
+= ϕ1
+ϕ2
+. . . ϕK i=1
+P
+1− K−1 (T (t))i
+(T (t))1 (T (t))2
+= ϕ1
+ϕ2
+. . . ϕK i=1
+
+p(t|ϕ) = ϕ1
+
+"
+= exp (T (t))1 log(ϕ1 ) + (T (t))2 log(ϕ2 ) + · · · + (1 −
+
+K−1
+X
+
+#
+
+(T (t))i ) log(ϕK )
+
+i=1
+
+= exp [(T (t))1 log(ϕ1 /ϕK ) + (T (t))2 log(ϕ2 /ϕK ) + · · · + log(ϕK−1 /ϕK ) + log(ϕK )]
+(6.22)
+The last equation is equivalent to the 6.1 if we define the canonical parameter, a(η) e
+b(t) as follows:
+
+
+log(ϕ1 /ϕK )
+
+
+
+
+
+ log(ϕ2 /ϕK ) 
+
+
+η=
+..
+
+.
+
+
+log(ϕK−1 /ϕK )
+a(η) = − log(ϕK )
+b(t) = 1
+
+(6.23)
+
+So the canonical link function is given by:
+ηi = log
+ηK = log
+
+ϕi
+ϕK
+
+ϕK
+=0
+ϕK
+
+(6.24)
+
+while to get the canonical response function, we first note that:
+eηi =
+
+K
+
+K
+
+i=1
+
+i=1
+
+X
+X
+1
+ϕi
+ϕi = 1 =⇒ ϕK = PK
+eηi =
+=⇒ ϕK eηi = ϕi =⇒ ϕK
+ηi
+ϕK
+i=1 e
+
+(6.25)
+
+hence, substituting in eηi = ϕϕKi we get:
+eηi
+ϕi = PK
+
+j=1 e
+
+ηj
+
+(6.26)
+
+The canonical response function expressed in 6.26 is named Softmax Function.
+To complete the derivation of the GLM, we use Assumption 3 by positing ηi = wiT x,
+where w1 , . . . , wK−1 are the trainable parameter vectors, one for each class, excluding
+T x = 0 as
+the K-th one for which, for convenience, we place wK = 0 to have ηK = wK
+
+already seen in 6.24.
+
+6. Generalized Linear Models (GLMs)*
+
+One can easily see that
+ηi
+PKe ηj
+j=1 e
+
+PK
+
+i=1 p(t
+
+102
+
+= i|x, w) =
+
+eηi
+i=1 PK eηj
+
+PK
+
+= 1 and that
+
+j=1
+
+≤ 1. This is why 6.26 is called Softmax Function: it is a ”softened
+
+max”, which does not give a net prediction of the class, but gives a probability.
+Consequently, the parameter of the multinomial distribution (which corresponds to
+the conditional distribution of the output variable) is given by:
+T
+
+eηi
+p(t = i|x, w) = ϕi = PK
+
+ηj
+j=1 e
+
+=P
+
+ewi x
+
+K
+wjT x
+j=1 e
+
+(6.27)
+
+The hypothesis function, following the GLM approach we saw earlier, is given by:
+hW = E[T (t)|x, W]
+
+
+ϕ1
+
+
+ ϕ2 
+
+=
+ .. 
+ . 
+ϕK−1
+
+
+wT x
+e
+
+1
+
+wT x
+ PK
+e j 
+
+ j=1
+ ew2T x 
+
+P
+ K wT x 
+=  j=1 e j 
+
+
+..
+
+
+.
+
+
+T
+ ewK−1 x 
+
+(6.28)
+
+wT x
+j
+j=1 e
+
+PK
+
+Thus, the probability of a particular class p(t = i|x, W) is given by the related softmax
+wT x
+
+function P e i wT x .
+K
+j
+j=1 e
+
+To find the optimal parameter set for softmax regression, we can again exploit maximum likelihood estimation. Assuming we have a dataset of N i.i.d. samples, we can
+write the likelihood function as:
+l(W) =
+
+=
+
+N
+−1
+X
+i=0
+N
+−1
+X
+
+log p(t(i) |x(i) , W)
+
+log ϕ1 ϕ2 . . . ϕK
+
+i=0
+
+=
+
+N
+−1
+X
+i=0
+
+log
+
+K
+Y
+l=1
+
+!I{t(i) =l}
+
+T
+
+ewl x
+PK
+
+T
+
+wj x
+j=1 e
+
+(6.29)
+
+and computing the gradient, we can train the parameters W using an iterative method
+such as gradient descent.
+
+Chapter 7
+
+Generative Models for
+Classification
+As we mentioned in Chapter 5, generative models attempt to make inferences directly on
+the joint distribution of features and classes. In this way, by applying Bayes’ theorem, it
+is then possible to compute the posterior distribution and estimate the class by setting
+a decision threshold on the latter. The probability that the class relative to the feature
+vector x is the k-th can be calculated as:
+p(x|t = Ck )p(t = Ck )
+p(t = Ck |x) = PK
+j=1 p(x|t = Cj )p(t = Cj )
+
+(7.1)
+
+For simplicity of notation, below we will use p(t = Ck |x) = p(Ck |x).
+If we refer to the binary case and write the previous equation with respect to the
+class C1 :
+p(x|C1 )p(C1 )
+p(x|C1 )p(C1 ) + p(x|C2 )p(C2 )
+(
+((
+p(x|C
+)p(C
+((1(
+1)
+(
+
+
+=
+(
+p(x|C2 )p(C2 )
+((
+(
+(
+p(x|C
+)p(C
+)
+1
++
+(
+1
+1
+(
+p(x|C1 )p(C1 )
+
+p(C1 |x) =
+
+=
+|{z}
+
+1 )p(C1 )
+by setting a=log p(x|C
+p(x|C2 )p(C2 )
+
+1
+= σ(a)
+1 + e−a
+
+(7.2)
+
+Thus we see that, even if we start from the joint distribution, the conditional probability
+of the output class is still given by an expression that depends on the sigmoid. This is in
+line with what we have already seen with GLMs and is reasonable, since although generative models start from the joint distribution, they still use the posterior distribution for
+prediction. The difference with discriminative models, however, lies in the fact that the
+posterior is modeled from the class conditional distribution and the prior: this allows us
+to explicitly integrate our possible knowledge about the process into the model.
+In the multiclass case, if we apply the exponential identity eak = elog(p(x|Ck )p(Ck )) to
+
+7. Generative Models for Classification
+the expression 7.1 we obtain:
+
+104
+
+eak
+p(Ck |x) = PK
+
+(7.3)
+
+aj
+j=1 e
+
+that is, for the multiclass case, even if we start from the joint distribution, the posterior
+distribution of the class is given by the softmax function. Again, this result is expected,
+since it corresponds to that obtained for the softmax regression, i.e., the discriminative
+model we introduced to handle multiclass problems.
+Let us now see what are some possible structural choices for the class-conditional
+distributions p(x|Ck ) and for the prior p(Ck ). The choices we make with respect to
+these distributions are crucial, since they lead to different generative models.
+
+7.1
+
+Gaussian Class Conditional Densities
+
+Under the assumption that our features take on continuous values (i.e., ∈ R), a reasonable choice for the family of distributions with which to encode the class-conditional
+distribution is the Gaussian. The family of models obtained with this choice are referred to as Gaussian Discriminant Analysis (GDA) models. In the following, we
+will introduce two of them: Linear Discriminant Analysis (LDA) and Quadratic
+Discriminant Analysis (QDA).
+
+7.1.1
+
+Linear Discriminant Analysis (LDA)
+
+Let’s first assume that the class-conditional distribution is Gaussian with the following
+form:
+p(x|Ck ) =
+
+1
+(2π)D/2 |Σ|1/2
+
+1
+
+T
+
+−1 (x−µ )
+k
+
+e− 2 (x−µk ) Σ
+
+(7.4)
+
+In the equation, it is important to note that we have assumed that the averages µk are
+different for each class, while the covariance Σ is the same for all classes. We will see in a
+moment how this last assumption will allow us to make simplifications in the derivation
+of the model.
+The averages µk are vectors, since the Gaussian is multivariate (the feature vector
+x ∈ RD×1 ).
+We now try to compute the posterior distribution in the binary case for class C1
+assuming that the class-conditional distribution has a Gaussian form. From the 7.2 we
+have that:
+
+
+
+p(x|C1 )p(C1 )
+p(C1 |x) = σ(a) = σ log
+p(x|C2 )p(C2 )
+
+(7.5)
+
+

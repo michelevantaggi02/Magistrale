@@ -4,21 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "b5506c1cd6154188",
+        "id": "16630a535f5ce4fc",
         "type": "tabs",
         "children": [
           {
-            "id": "418a3b717db1afb1",
+            "id": "5c934a07f2f2e063",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/B. Sistemi Multi-Rate.md",
-                "mode": "source",
-                "source": false
+                "file": "Anno 1/Machine Learning/immagini/fig_ex_4_tassonomia_approcci_classificazione.png"
               },
-              "icon": "lucide-file",
-              "title": "B. Sistemi Multi-Rate"
+              "icon": "lucide-image",
+              "title": "fig_ex_4_tassonomia_approcci_classificazione"
             }
           }
         ]
@@ -195,26 +193,28 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "418a3b717db1afb1",
+  "active": "5c934a07f2f2e063",
   "lastOpenFiles": [
-    "Anno 1/Information and Estimation Theory/immagini/lz77_sliding_window_parsing.svg",
-    "Anno 1/Information and Estimation Theory/immagini/reverse_water_filling_geometry.svg",
-    "Anno 1/Information and Estimation Theory/immagini/water_filling_gaussian_channels.svg",
+    "scratch/ch5_img-016.png",
+    "scratch/ch5_img-013.png",
+    "scratch/ch5_img-010.png",
+    "scratch/ch5_img-007.png",
+    "scratch/ch5_img-004.png",
+    "scratch/ch5_img-002.png",
+    "scratch/ch5_img-001.png",
+    "Anno 2/Deep Learning And Robot Perception/note/lezione_16.md",
     "Anno 1/Information and Estimation Theory/immagini/bsc_vs_bec_capacity_curves.svg",
-    "Anno 1/Information and Estimation Theory/immagini/huffman_canonical_codebook.svg",
     "Anno 1/Information and Estimation Theory/immagini/entropy_rate_sandwich_bounds.svg",
-    "Anno 1/Information and Estimation Theory/immagini/typical_set_hyperdimensional_concentration.svg",
-    "Anno 1/Information and Estimation Theory/immagini/fano_inequality_bound_curve.svg",
+    "Anno 1/Information and Estimation Theory/immagini/blue_heteroscedastic_weights.svg",
+    "Anno 1/Information and Estimation Theory/0. Fondamenti di Stima Classica e Limite di Cramer-Rao.md",
+    "Anno 1/Digital Signal Processing/B. Sistemi Multi-Rate.md",
+    "Anno 1/Information and Estimation Theory/immagini/lz77_sliding_window_parsing.svg",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
-    "Anno 1/Information and Estimation Theory/immagini/roc_geometry_tangent_curvature.svg",
-    "Anno 1/Information and Estimation Theory/immagini/neyman_pearson_test_distributions.svg",
-    "Anno 1/Information and Estimation Theory/immagini/line_fitting_lever_arm.svg",
     "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
     "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
-    "Anno 1/Information and Estimation Theory/0. Fondamenti di Stima Classica e Limite di Cramer-Rao.md",
     "Anno 1/Information and Estimation Theory/LMMSE[Stimatore LMMSE: θ̂_LMMSE = a_N + aᵀx<br>• Minimo BMSE nella classe affine<br>• Richiede solo media e covarianza (1° e 2° momento)<br>• Proiezione ortogonale nello spazio di Hilbert L²]",
     "Anno 1/Information and Estimation Theory/MMSE[Stimatore MMSE: θ̂_MMSE = E[θ|x]<br>• Minimo assoluto del Bayesian MSE globale<br>• Media condizionata a posteriori<br>• Spesso non lineare per modelli non Gaussiani]",
     "Anno 1/Information and Estimation Theory/Post[Stato di Conoscenza Aggiornato: Posterior PDF f_θ|x(θ|x)]",
@@ -232,7 +232,6 @@
     "Anno 1/Information and Estimation Theory/4. Prestazioni del Ricevitore e Rilevatori Bayesiani.md",
     "Anno 1/Information and Estimation Theory/3. Teoria della Decisione e Criterio di Neyman-Pearson.md",
     "Anno 1/Information and Estimation Theory/2. Stima Bayesiana - MMSE e LMMSE.md",
-    "Anno 2/Deep Learning And Robot Perception/note/lezione_16.md",
     "Anno 1/Information and Estimation Theory/zz. Argomenti extra.md",
     "Anno 1/Information and Estimation Theory/GUIDA_APPUNTI_INFORMATION_AND_ESTIMATION_THEORY.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_14.md",
@@ -242,7 +241,6 @@
     "Anno 2/Deep Learning And Robot Perception/note/lezione_15.md",
     "Anno 1/export/md/Digital Signal Processing-merged.md",
     "Anno 1/Digital Signal Processing/9. Filtri IIR - Fondamenti e Trasformata Z.md",
-    "Anno 1/Digital Signal Processing/A. Filtri IIR - Risposta e Progettazione.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Senza nome.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"

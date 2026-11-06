@@ -55,3 +55,17 @@ slide 53: Abbiamo sempre il vanishing gradient, quindi si prende da resnet le co
 slide 55: il transformer usa anche layer densi.
 
 slide 65: il sample delle probabilità è il motivo per cui per lo stesso input gli llm producono risposte diverse.
+
+slide 75: Una volta estratta e vettorizzata la patch abbiamo un equivalente dell'embedding vector, che può essere quindi mandato al visual transformer.
+
+slide 76: possiamo utilizzare un layer convoluzionale con kernel della stessa dimensione della patch.
+
+/// tornato a slide 69
+
+slide 77: il ruolo del class token è quello di contenere le informazioni semantiche per effettuare la classificazione.
+
+slide 87: questi metodi forniscono un grosso effetto di regolarizzazione, diminuendo la probabilità di overfitting.
+
+slide 88: Si inizia addestrando il transformer con meno token (usando patch più grandi) e si effettua poi fine tuning con patch più piccole, e quindi un numero di token maggiore.
+
+slide 89: l'attention layer può decidere quante informazioni locali utilizzare ad ogni layer.
