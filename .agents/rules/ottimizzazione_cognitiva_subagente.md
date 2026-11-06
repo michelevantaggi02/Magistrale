@@ -71,7 +71,16 @@ Il subagente applica rigorosamente i seguenti principi:
   - `> [!EXAMPLE]`: per problemi svolti ed esempi numerici/analitici dettagliati.
 
 ### 4.3 Generazione Immagini e Schemi Grafici (Pienamente Autorizzata)
-- [ ] **Diagrammi di flusso e architetture a blocchi**: implementati direttamente nel corpo del testo tramite blocchi nativi **Mermaid** (`flowchart LR` o `flowchart TD`). È vietato l'uso di diagrammi in testo ASCII.
+- [ ] **Sviluppo Orizzontale dei Grafici (Ottimizzazione Spazi di Stampa)**:
+  - Diagrammi cartesiani, pipeline e architetture a blocchi devono svilupparsi **prioritariamente in orizzontale** (layout panoramico / landscape, aspect ratio $16:9$, $2:1$, $5:2$ o $3:1$), mantenendo altezze compatte (es. 180–320 px).
+  - Nei diagrammi a più stadi o confronti tra metodi, organizzare i contenuti in **pannelli o card affiancate orizzontalmente** (colonne da sinistra a destra), evitando sequenze verticali che consumano l'intera pagina A4 e forzano salti pagina.
+  - Per diagrammi di flusso nativi, usare di default **Mermaid `flowchart LR`** (da sinistra a destra), limitando `flowchart TD` ai soli casi di gerarchie discendenti strette. È vietato l'uso di diagrammi in testo ASCII.
+- [ ] **Tema Chiaro Tipografico (Requisito Tassativo Print-Ready per PDF e Stampa)**:
+  - Divieto assoluto di temi scuri (`#0f172a`, `#1e293b`, `#1e1e2e`, Catppuccin Mocha, ecc.) per evitare sprechi massivi di inchiostro e cattivo contrasto su carta.
+  - **Sfondo**: sempre bianco puro (`#ffffff`) o neutro chiarissimo (`#f8fafc`).
+  - **Testi, assi ed etichette**: scuri ad altissimo contrasto (`#0f172a`, `#1e293b`, `#334155`).
+  - **Griglie e bordi**: grigio neutro tenue e sottile (`#cbd5e1`, `#e2e8f0`).
+  - **Dati, curve e card**: curve nitide e brillanti (`#2563eb`, `#059669`, `#dc2626`, `#d97706`, `#7c3aed`), card e aree di riempimento a tinte pastello delicate (`#eff6ff`, `#ecfdf5`, `#fef3c7`, `#fef2f2`).
 - [ ] **Grafici cartesiani e curve matematiche (SVG)**:
   - Generati come file vettoriali dedicati `.svg` salvati nella cartella **`immagini/`** della materia corrente.
   - Inclusi nel Markdown **esclusivamente** tramite la sintassi nativa degli allegati Obsidian:

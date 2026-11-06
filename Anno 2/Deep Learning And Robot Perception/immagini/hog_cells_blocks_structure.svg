@@ -235,8 +235,8 @@
       <text x="8" y="165" class="text bold" fill="#0f172a">Vettore Feature h:</text>
       <text x="8" y="183" class="text">Concatena tutti i blocchi:</text>
       <text x="8" y="202" class="text bold">49 blocchi × 36 valori</text>
-      <rect x="8" y="212" width="154" height="22" fill="#1e293b" rx="4" />
-      <text x="85" y="227" text-anchor="middle" font-size="11" font-weight="bold" fill="#38bdf8">dim(h) = 1764 float</text>
+      <rect x="8" y="212" width="154" height="22" fill="#e0f2fe" stroke="#0284c7" stroke-width="1" rx="4" />
+      <text x="85" y="227" text-anchor="middle" font-size="11" font-weight="bold" fill="#0369a1">dim(h) = 1764 float</text>
     </g>
   </g>
 </svg>

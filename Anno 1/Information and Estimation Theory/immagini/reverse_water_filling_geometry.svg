@@ -1,28 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 540" width="100%" height="100%">
   <defs>
     <style>
-      .bg { fill: #1e1e2e; }
-      .axis-line { stroke: #a6adc8; stroke-width: 2; stroke-linecap: round; }
-      .grid-line { stroke: #313244; stroke-width: 1; stroke-dasharray: 4 4; }
-      .water-line { stroke: #f9e2af; stroke-width: 3; stroke-dasharray: 8 5; }
-      .rate-fill { fill: #89b4fa; fill-opacity: 0.75; stroke: #b4befe; stroke-width: 2; }
-      .dist-fill { fill: #eba0ac; fill-opacity: 0.55; stroke: #f38ba8; stroke-width: 2; }
-      .discard-fill { fill: #45475a; fill-opacity: 0.6; stroke: #6c7086; stroke-width: 2; stroke-dasharray: 4 3; }
-      .label-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 20px; font-weight: 700; fill: #cdd6f4; text-anchor: middle; }
-      .label-axis { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #bac2de; }
-      .label-channel { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 600; fill: #cdd6f4; text-anchor: middle; }
-      .label-value { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 700; fill: #cdd6f4; text-anchor: middle; }
+      .bg { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; }
+      .axis-line { stroke: #334155; stroke-width: 2; stroke-linecap: round; }
+      .grid-line { stroke: #e2e8f0; stroke-width: 1; stroke-dasharray: 4 4; }
+      .water-line { stroke: #d97706; stroke-width: 3; stroke-dasharray: 8 5; }
+      .rate-fill { fill: #38bdf8; fill-opacity: 0.55; stroke: #0284c7; stroke-width: 2; }
+      .dist-fill { fill: #fda4af; fill-opacity: 0.55; stroke: #e11d48; stroke-width: 2; }
+      .discard-fill { fill: #fecaca; fill-opacity: 0.65; stroke: #dc2626; stroke: #6c7086; stroke-width: 2; stroke-dasharray: 4 3; }
+      .label-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 20px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+      .label-axis { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #334155; }
+      .label-channel { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 600; fill: #0f172a; text-anchor: middle; }
+      .label-value { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
       .label-value-dark { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 700; fill: #11111b; text-anchor: middle; }
-      .label-water { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #f9e2af; }
-      .label-off { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 700; fill: #f38ba8; text-anchor: middle; }
-      .box-bg { fill: #181825; stroke: #45475a; stroke-width: 1.5; rx: 10; }
-      .box-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #89b4fa; }
-      .box-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #bac2de; }
-      .box-highlight { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 700; fill: #a6e3a1; }
-      .box-warn { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 600; fill: #f9e2af; }
+      .label-water { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #b45309; }
+      .label-off { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 700; fill: #dc2626; text-anchor: middle; }
+      .box-bg { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 10; }
+      .box-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #1d4ed8; }
+      .box-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #334155; }
+      .box-highlight { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 700; fill: #059669; }
+      .box-warn { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 600; fill: #b45309; }
     </style>
     <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#bac2de"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155"/>
     </marker>
   </defs>
 
@@ -60,7 +60,7 @@
   <rect x="125" y="260" width="74" height="160" class="dist-fill"/>
   <rect x="125" y="110" width="74" height="150" class="rate-fill"/>
   <text x="162" y="185" class="label-value-dark">R₁ &gt; 0</text>
-  <text x="162" y="202" class="box-text" text-anchor="middle" font-size="11px" fill="#11111b">(Codificata)</text>
+  <text x="162" y="202" class="box-text" text-anchor="middle" font-size="11px" fill="#0f172a">(Codificata)</text>
   <text x="162" y="345" class="label-value">D₁ = θ</text>
   <text x="162" y="100" class="box-highlight" text-anchor="middle">σ₁²</text>
   <text x="162" y="442" class="label-channel">Comp. 1</text>
@@ -72,7 +72,7 @@
   <rect x="225" y="260" width="74" height="160" class="dist-fill"/>
   <rect x="225" y="170" width="74" height="90" class="rate-fill"/>
   <text x="262" y="215" class="label-value-dark">R₂ &gt; 0</text>
-  <text x="262" y="232" class="box-text" text-anchor="middle" font-size="11px" fill="#11111b">(Codificata)</text>
+  <text x="262" y="232" class="box-text" text-anchor="middle" font-size="11px" fill="#0f172a">(Codificata)</text>
   <text x="262" y="345" class="label-value">D₂ = θ</text>
   <text x="262" y="160" class="box-highlight" text-anchor="middle">σ₂²</text>
   <text x="262" y="442" class="label-channel">Comp. 2</text>
@@ -111,22 +111,22 @@
   <text x="660" y="128" class="box-title">Equazioni di Karush-Kuhn-Tucker</text>
 
   <text x="660" y="156" class="box-highlight">Allocazione Distorsione:</text>
-  <text x="660" y="178" class="label-value" text-anchor="start" fill="#f38ba8">Dᵢ* = min(θ, σᵢ²)</text>
+  <text x="660" y="178" class="label-value" text-anchor="start" fill="#dc2626">Dᵢ* = min(θ, σᵢ²)</text>
 
   <text x="660" y="206" class="box-highlight">Allocazione Rate (bit):</text>
-  <text x="660" y="228" class="label-value" text-anchor="start" fill="#89b4fa">Rᵢ* = max(0, ½ log₂(σᵢ²/θ))</text>
+  <text x="660" y="228" class="label-value" text-anchor="start" fill="#0284c7">Rᵢ* = max(0, ½ log₂(σᵢ²/θ))</text>
 
-  <line x1="660" y1="245" x2="905" y2="245" stroke="#45475a" stroke-width="1"/>
+  <line x1="660" y1="245" x2="905" y2="245" stroke="#cbd5e1" stroke-width="1"/>
 
   <text x="660" y="268" class="box-title">Bilancio del Budget Totale:</text>
   <text x="660" y="292" class="label-water">∑ᵢ min(θ, σᵢ²) = D</text>
 
-  <line x1="660" y1="310" x2="905" y2="310" stroke="#45475a" stroke-width="1"/>
+  <line x1="660" y1="310" x2="905" y2="310" stroke="#cbd5e1" stroke-width="1"/>
 
   <text x="660" y="333" class="box-title">Contrasto col Water-Filling Canale:</text>
   <text x="660" y="356" class="box-text">• <tspan font-weight="700" fill="#a6e3a1">Canale</tspan>: versa potenza Pᵢ*</text>
   <text x="670" y="374" class="box-text">nei canali a MINIMO rumore.</text>
-  <text x="660" y="396" class="box-text">• <tspan font-weight="700" fill="#89b4fa">Sorgente (Reverse)</tspan>: assegna rate</text>
+  <text x="660" y="396" class="box-text">• <tspan font-weight="700" fill="#0284c7">Sorgente (Reverse)</tspan>: assegna rate</text>
   <text x="670" y="414" class="box-text">alle componenti a MAX energia,</text>
   <text x="670" y="432" class="box-text">pareggiando la distorsione a θ.</text>
   <text x="660" y="454" class="box-text">• Se σᵢ² ≤ θ: componente spenta</text>

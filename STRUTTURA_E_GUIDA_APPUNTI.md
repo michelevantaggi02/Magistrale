@@ -37,7 +37,7 @@ Magistrale/
 │   │   ├── ...
 │   │   ├── 3. Trasformata di Fourier.md
 │   │   └── immagini/
-│   ├── Machine Learning/                # [IN CORSO] 5 capitoli completati (0..4: Notazione, Supervised, Probabilita, Regressione Lineare, Algoritmi di Classificazione)
+│   ├── Machine Learning/                # [IN CORSO] 6 capitoli completati (0..5: Notazione, Supervised, Probabilita, Regressione Lineare, Algoritmi di Classificazione, Modelli Generativi)
 │   │   ├── 0. Notazione e Concetti Fondamentali.md
 │   │   ├── 1. Introduzione al Supervised Learning.md
 │   │   ├── 2. Teoria della Probabilita.md
@@ -271,6 +271,31 @@ Quando nelle presentazioni, nei file sorgente o nelle lezioni sono presenti anim
        > [!note] [Guarda il video completo della dimostrazione](https://...)
        ```
 
+#### 3.3.6 Tema Chiaro e Stampabilità delle Immagini (Requisito Tassativo Print-Ready per PDF e Stampa Cartacea)
+> [!IMPORTANT] Divieto Assoluto di Temi Scuri nelle Immagini Generate
+> Gli appunti del vault hanno come finalità primaria la consultazione a video, ma soprattutto la **generazione di documenti PDF pronti alla stampa cartacea** (tramite il plugin `better-export-pdf` o compilatori equivalenti).
+> Di conseguenza, tutte le immagini vettoriali (SVG), i diagrammi cartesiani generati programmaticamente (matplotlib, script Python) o gli schemi concettuali ad-hoc **devono obbligatoriamente utilizzare un tema chiaro ad altissima leggibilità tipografica (Print-Ready)**:
+> 
+> 1. **Sfondo del canvas**:
+>    - Sempre bianco puro (`#ffffff`) o neutro chiarissimo (`#f8fafc`).
+>    - È **severamente vietato** l'uso di sfondi scuri, neri o antracite (es. `#0f172a`, `#1e293b`, `#1e1e2e`, Catppuccin Mocha, ecc.), che su carta provocherebbero un consumo massivo e insensato di inchiostro, imbarcamento dei fogli stampati e bordi poco nitidi.
+> 2. **Testi, etichette e formule nel diagramma**:
+>    - Rigorosamente scuri ad alto contrasto: nero tipografico (`#0f172a`, `#1e293b`) o ardesia scuro (`#334155`, `#475569`).
+>    - Vietato usare testi chiari o bianchi (`#ffffff`, `#f8fafc`, `#cdd6f4`) su sfondo trasparente o chiaro; il testo bianco è consentito unicamente all'interno di piccoli badge o pillole riempite con colore saturo (es. verde `#16a34a`, blu `#2563eb`).
+> 3. **Assi cartesiani, marker e griglie**:
+>    - Assi, frecce di direzione e tick mark in grigio scuro nitido (`#334155`).
+>    - Linee di griglia sottili in grigio neutro tenue (`#e2e8f0` o `#cbd5e1`), senza appesantire il disegno.
+> 4. **Palette cromatica di curve, regioni e card**:
+>    - **Curve e dati**: tratti netti e brillanti (`#2563eb` per il dato primario, `#059669` per il dato alternativo, `#dc2626` per errori/scarti, `#d97706` per soglie/iperparametri, `#7c3aed` per trasformazioni).
+>    - **Card, blocchi e aree di sfondo**: riempimenti a tinte pastello delicate (`#eff6ff`, `#ecfdf5`, `#fef3c7`, `#fef2f2`, `#f5f3ff`) con bordi semantici a contrasto (`#bfdbfe`, `#a7f3d0`, `#fed7aa`, `#fecaca`, `#ddd6fe`).
+> 5. **Grafici trasparenti e raster**:
+>    - Qualora un'immagine abbia sfondo trasparente, tutti i suoi elementi visibili (tracciati, curve, glifi) devono avere tonalità scure, cosicché renderizzati su pagina bianca risultino nitidi e perfettamente leggibili.
+> 6. **Sviluppo Orizzontale dei Grafici e Ottimizzazione degli Spazi di Stampa (Layout Landscape)**:
+>    - I diagrammi vettoriali (SVG), i grafici cartesiani e gli schemi a blocchi **devono svilupparsi prioritariamente in orizzontale** (aspect ratio panoramico o widescreen, es. $16:9$, $2:1$, $5:2$ o $3:1$).
+>    - **Motivazione tipografica per la stampa**: Nei documenti PDF impaginati in formato verticale (A4 standard), una figura con sviluppo marcatamente verticale ruba spazio prezioso al testo, crea voragini bianche ai lati e forza interruzioni o salti pagina ingiustificati. Un layout orizzontale compatto (con altezza contenuta, indicativamente 180–320 px su larghezze di 600–1100 px) si incastona perfettamente tra i paragrafi senza spezzare il flusso di lettura.
+>    - **Multi-Pannello e Confronti**: Se lo schema illustra più fasi, proprietà o algoritmi a confronto, organizzare i blocchi come **colonne o card affiancate orizzontalmente da sinistra verso destra** (es. 2, 3 o 4 pannelli laterali), evitando tassativamente sequenze verticali chilometriche.
+>    - **Diagrammi Mermaid**: Impostare di default la direzione orizzontale da sinistra a destra (`flowchart LR`), riservando `flowchart TD` solo a gerarchie strettamente discendenti o ad alberi sintattici.
+
 ### 3.4 Callout di Obsidian
 I callout arricchiscono il testo dividendo le nozioni teoriche da esempi ed evidenze:
 - `>[!example]`: per esempi pratici, casi applicativi o esercizi svolti.
@@ -499,6 +524,8 @@ Prima di concludere qualsiasi sessione di scrittura o refactoring di un appunto:
 - [ ] **Risoluzione Immagini**: Tutte le immagini referenziate esistono nella sottocartella `immagini/` della materia.
 - [ ] **Centratura e Ridimensionamento Immagini**: Ogni singola immagine include obbligatoriamente `center` e la classe di dimensione appropriata (priorità a `|center small`), senza mai lasciare link grafici privi di modificatori.
 - [ ] **Affiancamento Immagini Small Consecutive**: Le immagini `small` che compaiono in sequenza sono posizionate sulla stessa riga (separate da uno spazio) per comparire affiancate orizzontalmente anziché impilate verticalmente.
+- [ ] **Tema Chiaro delle Immagini (Print-Ready)**: Tutte le immagini generate sinteticamente (SVG, grafici matplotlib, schemi) adottano rigorosamente un tema chiaro su sfondo bianco (`#ffffff`), con testi e assi scuri ad alto contrasto (`#0f172a`, `#334155`), per garantire un'esportazione PDF pulita e una stampa cartacea perfetta senza spreco di inchiostro né blocchi neri.
+- [ ] **Sviluppo Orizzontale dei Grafici**: I grafici, i diagrammi vettoriali e gli schemi concettuali sono progettati con orientamento orizzontale/panoramico (aspect ratio landscape es. 16:9 o multi-pannello a colonne affiancate, `flowchart LR` per Mermaid) per ottimizzare lo spazio verticale della pagina A4 ed evitare salti pagina indesiderati.
 - [ ] **Formule Matematiche**: Tutte le formule matematiche sono bilanciate e conformi a KaTeX.
 - [ ] **Sintassi Tipografica Linter**: I termini chiave usano il doppio underscore `__termine__` e il corsivo usa il singolo `_termine_`.
 - [ ] **Integrità degli Elenchi**: Gli elenchi puntati o numerati non sono spezzati da immagini, callout o altri blocchi intermedi; ogni elenco viene concluso prima di inserire figure o callout di approfondimento.

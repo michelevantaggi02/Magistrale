@@ -2,35 +2,34 @@
   <defs>
     <!-- Gradiente per la regione H(X|Y) -->
     <linearGradient id="gradX" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.2"/>
+      <stop offset="0%" stop-color="#eff6ff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#dbeafe" stop-opacity="0.6"/>
     </linearGradient>
 
     <!-- Gradiente per la regione H(Y|X) -->
     <linearGradient id="gradY" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.2"/>
+      <stop offset="0%" stop-color="#fffbeb" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#fef3c7" stop-opacity="0.6"/>
     </linearGradient>
 
     <!-- Gradiente per l'intersezione I(X; Y) -->
     <linearGradient id="gradI" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#10b981" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#34d399" stop-opacity="0.35"/>
+      <stop offset="0%" stop-color="#ecfdf5" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#d1fae5" stop-opacity="0.75"/>
     </linearGradient>
 
-    <!-- Clip Path per l'intersezione: Cerchio 1 intersecato con Cerchio 2 -->
+    <!-- Clip Path per l'intersezione -->
     <clipPath id="circleXClip">
       <circle cx="275" cy="160" r="125" />
     </clipPath>
-
-    <filter id="shadowVenn" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.35"/>
-    </filter>
   </defs>
 
+  <!-- Sfondo bianco tipografico -->
+  <rect width="100%" height="100%" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+
   <!-- Sfondo / Area Unione: Entropia Congiunta H(X, Y) tratteggiata -->
-  <rect x="70" y="22" width="560" height="276" rx="16" fill="#0f172a" fill-opacity="0.2" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,4" />
-  <text x="615" y="44" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#94a3b8">Unione: H(X, Y)</text>
+  <rect x="70" y="22" width="560" height="266" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4" />
+  <text x="615" y="44" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#475569">Unione: H(X, Y)</text>
 
   <!-- Cerchio X (Incertezza totale di X) -->
   <circle cx="275" cy="160" r="125" fill="url(#gradX)" stroke="#0284c7" stroke-width="2.5" />
@@ -38,46 +37,46 @@
   <!-- Cerchio Y (Incertezza totale di Y) -->
   <circle cx="425" cy="160" r="125" fill="url(#gradY)" stroke="#d97706" stroke-width="2.5" />
 
-  <!-- Intersezione I(X; Y): Disegniamo il cerchio Y ritagliato dentro il cerchio X -->
+  <!-- Intersezione I(X; Y): Cerchio Y ritagliato dentro Cerchio X -->
   <circle cx="425" cy="160" r="125" clip-path="url(#circleXClip)" fill="url(#gradI)" stroke="#059669" stroke-width="2.5" />
 
   <!-- Etichette Principali dei Cerchi Superiori -->
   <!-- H(X) -->
   <g transform="translate(230, 20)">
-    <rect x="-40" y="-14" width="80" height="26" rx="6" fill="#0369a1" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1.2"/>
-    <text x="0" y="4" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="bold" fill="#38bdf8">H(X)</text>
+    <rect x="-40" y="-14" width="80" height="26" rx="6" fill="#eff6ff" stroke="#0284c7" stroke-width="1.2"/>
+    <text x="0" y="4" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="bold" fill="#0369a1">H(X)</text>
   </g>
 
   <!-- H(Y) -->
   <g transform="translate(470, 20)">
-    <rect x="-40" y="-14" width="80" height="26" rx="6" fill="#b45309" fill-opacity="0.3" stroke="#fbbf24" stroke-width="1.2"/>
-    <text x="0" y="4" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="bold" fill="#fbbf24">H(Y)</text>
+    <rect x="-40" y="-14" width="80" height="26" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="1.2"/>
+    <text x="0" y="4" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="bold" fill="#92400e">H(Y)</text>
   </g>
 
   <!-- Etichetta Centrale: Informazione Mutua I(X; Y) -->
   <g transform="translate(350, 140)">
-    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="bold" fill="#ecfdf5">I(X; Y)</text>
-    <text x="0" y="20" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#a7f3d0">Informazione</text>
-    <text x="0" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#a7f3d0">Condivisa</text>
+    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="bold" fill="#065f46">I(X; Y)</text>
+    <text x="0" y="20" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#047857">Informazione</text>
+    <text x="0" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#047857">Condivisa</text>
   </g>
 
   <!-- Etichetta Lunetta Sinistra: H(X | Y) -->
   <g transform="translate(210, 150)">
-    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="bold" fill="#e0f2fe">H(X | Y)</text>
-    <text x="0" y="20" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#7dd3fc">Incertezza residua</text>
-    <text x="0" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#7dd3fc">di X noto Y</text>
+    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="bold" fill="#0369a1">H(X | Y)</text>
+    <text x="0" y="20" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#0284c7">Incertezza residua</text>
+    <text x="0" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#0284c7">di X noto Y</text>
   </g>
 
   <!-- Etichetta Lunetta Destra: H(Y | X) -->
   <g transform="translate(490, 150)">
-    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="bold" fill="#fef3c7">H(Y | X)</text>
-    <text x="0" y="20" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#fde68a">Incertezza residua</text>
-    <text x="0" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#fde68a">di Y noto X</text>
+    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="bold" fill="#92400e">H(Y | X)</text>
+    <text x="0" y="20" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#b45309">Incertezza residua</text>
+    <text x="0" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#b45309">di Y noto X</text>
   </g>
 
   <!-- Riquadro Formule di Chiusura Inferiore -->
   <g transform="translate(350, 316)">
-    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#cbd5e1">
+    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">
       H(X, Y) = H(X | Y) + I(X; Y) + H(Y | X) = H(X) + H(Y) − I(X; Y)
     </text>
   </g>

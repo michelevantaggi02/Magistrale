@@ -4,19 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "16630a535f5ce4fc",
+        "id": "d4be180494516468",
         "type": "tabs",
         "children": [
           {
-            "id": "5c934a07f2f2e063",
+            "id": "af56f4afe6380512",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "Anno 1/Machine Learning/immagini/fig_ex_4_tassonomia_approcci_classificazione.png"
+                "file": "Anno 2/Deep Learning And Robot Perception/12. Architetture CNN Avanzate, Modelli Efficienti e ConvNeXt.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "fig_ex_4_tassonomia_approcci_classificazione"
+              "icon": "lucide-file",
+              "title": "12. Architetture CNN Avanzate, Modelli Efficienti e ConvNeXt"
             }
           }
         ]
@@ -193,22 +195,25 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5c934a07f2f2e063",
+  "active": "af56f4afe6380512",
   "lastOpenFiles": [
-    "scratch/ch5_img-016.png",
-    "scratch/ch5_img-013.png",
-    "scratch/ch5_img-010.png",
-    "scratch/ch5_img-007.png",
-    "scratch/ch5_img-004.png",
-    "scratch/ch5_img-002.png",
-    "scratch/ch5_img-001.png",
+    "Anno 1/Machine Learning/5. Modelli Generativi per la Classificazione.md",
+    "Anno 1/Machine Learning/immagini/fig_ex_5_lda_vs_qda_confronto.png",
+    "scratch/make_lda_qda_comparison.py",
+    "Anno 1/Machine Learning/immagini/fig_7_3_bag_of_words_vocabolario.png",
+    "Anno 1/Machine Learning/immagini/fig_7_2_sigmoide_lda_superficie.png",
+    "Anno 1/Machine Learning/immagini/fig_7_1_lda_decision_boundary.png",
+    "scratch/page_ch7_123-123.png",
+    "scratch/page_ch7_107_108-108.png",
+    "scratch/page_ch7_107_108-107.png",
+    "scratch/ch7_img-005.png",
+    "scratch/ch7_img-004.png",
+    "scratch/ch7_img-003.png",
+    "scratch/ch7_full.txt",
+    "scratch/ch7_text.txt",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_16.md",
-    "Anno 1/Information and Estimation Theory/immagini/bsc_vs_bec_capacity_curves.svg",
-    "Anno 1/Information and Estimation Theory/immagini/entropy_rate_sandwich_bounds.svg",
-    "Anno 1/Information and Estimation Theory/immagini/blue_heteroscedastic_weights.svg",
     "Anno 1/Information and Estimation Theory/0. Fondamenti di Stima Classica e Limite di Cramer-Rao.md",
     "Anno 1/Digital Signal Processing/B. Sistemi Multi-Rate.md",
-    "Anno 1/Information and Estimation Theory/immagini/lz77_sliding_window_parsing.svg",
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
@@ -224,9 +229,6 @@
     "orfanidis_ch12_part1.txt",
     "Anno 2/Deep Learning And Robot Perception/note/piano_implementazione_lezioni_12_13.md",
     "appunti_kaiser.txt",
-    "orfanidis_ch10.txt",
-    "appunti_finestre.txt",
-    "orfanidis_kaiser.txt",
     "Anno 2/Deep Learning And Robot Perception/9. Reti Convoluzionali: Convoluzione, Receptive Field e Volumi 3D.md",
     "Anno 1/Information and Estimation Theory/5. Rilevazione Multipla e Test di Ipotesi Composte (GLRT).md",
     "Anno 1/Information and Estimation Theory/4. Prestazioni del Ricevitore e Rilevatori Bayesiani.md",

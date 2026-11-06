@@ -1,27 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="100%">
   <defs>
     <style>
-      .bg { fill: #1e1e2e; }
-      .title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 19px; font-weight: 700; fill: #cdd6f4; text-anchor: middle; }
-      .subtitle { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #a6adc8; text-anchor: middle; }
-      .card-bg { fill: #181825; stroke: #45475a; stroke-width: 1.5; rx: 10; }
-      .card-header { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #89b4fa; }
-      .card-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #cdd6f4; }
-      .card-subtext { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #a6adc8; }
+      .bg { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; }
+      .title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 19px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+      .subtitle { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #475569; text-anchor: middle; }
+      .card-bg { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 10; }
+      .card-header { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #1d4ed8; }
+      .card-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #1e293b; }
+      .card-subtext { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #64748b; }
       .code-mono { font-family: "Fira Code", "JetBrains Mono", Consolas, monospace; font-size: 12px; font-weight: 600; }
-      .flow-arrow { stroke: #fab387; stroke-width: 2; fill: none; stroke-linecap: round; }
-      .accent-blue { fill: #89b4fa; }
-      .accent-green { fill: #a6e3a1; }
-      .accent-peach { fill: #fab387; }
-      .accent-yellow { fill: #f9e2af; }
-      .accent-mauve { fill: #cba6f7; }
-      .border-highlight { stroke: #cba6f7; stroke-width: 2; }
+      .flow-arrow { stroke: #d97706; stroke-width: 2; fill: none; stroke-linecap: round; }
+      .accent-blue { fill: #2563eb; }
+      .accent-green { fill: #059669; }
+      .accent-peach { fill: #d97706; }
+      .accent-yellow { fill: #b45309; }
+      .accent-mauve { fill: #7c3aed; }
+      .border-highlight { stroke: #7c3aed; stroke-width: 2; }
     </style>
     <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fab387"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706"/>
     </marker>
     <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#89b4fa"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb"/>
     </marker>
   </defs>
 
@@ -40,43 +40,43 @@
 
   <!-- Table input -->
   <g transform="translate(38, 150)">
-    <rect x="0" y="0" width="202" height="24" fill="#313244" rx="4"/>
+    <rect x="0" y="0" width="202" height="24" fill="#f1f5f9" rx="4"/>
     <text x="12" y="16" class="code-mono accent-yellow">Simbolo</text>
     <text x="90" y="16" class="code-mono accent-yellow">p(x)</text>
     <text x="160" y="16" class="code-mono accent-yellow">lᵢ (bit)</text>
 
     <!-- Row 1 -->
-    <text x="18" y="44" class="code-mono" fill="#cdd6f4">x₁</text>
-    <text x="88" y="44" class="code-mono" fill="#a6adc8">0.25</text>
+    <text x="18" y="44" class="code-mono" fill="#1e293b">x₁</text>
+    <text x="88" y="44" class="code-mono" fill="#64748b">0.25</text>
     <text x="168" y="44" class="code-mono accent-blue">2</text>
-    <line x1="0" y1="54" x2="202" y2="54" stroke="#313244" stroke-width="1"/>
+    <line x1="0" y1="54" x2="202" y2="54" stroke="#e2e8f0" stroke-width="1"/>
 
     <!-- Row 2 -->
-    <text x="18" y="74" class="code-mono" fill="#cdd6f4">x₂</text>
-    <text x="88" y="74" class="code-mono" fill="#a6adc8">0.25</text>
+    <text x="18" y="74" class="code-mono" fill="#1e293b">x₂</text>
+    <text x="88" y="74" class="code-mono" fill="#64748b">0.25</text>
     <text x="168" y="74" class="code-mono accent-blue">2</text>
-    <line x1="0" y1="84" x2="202" y2="84" stroke="#313244" stroke-width="1"/>
+    <line x1="0" y1="84" x2="202" y2="84" stroke="#e2e8f0" stroke-width="1"/>
 
     <!-- Row 3 -->
-    <text x="18" y="104" class="code-mono" fill="#cdd6f4">x₃</text>
-    <text x="88" y="104" class="code-mono" fill="#a6adc8">0.20</text>
+    <text x="18" y="104" class="code-mono" fill="#1e293b">x₃</text>
+    <text x="88" y="104" class="code-mono" fill="#64748b">0.20</text>
     <text x="168" y="104" class="code-mono accent-blue">2</text>
-    <line x1="0" y1="114" x2="202" y2="114" stroke="#313244" stroke-width="1"/>
+    <line x1="0" y1="114" x2="202" y2="114" stroke="#e2e8f0" stroke-width="1"/>
 
     <!-- Row 4 -->
-    <text x="18" y="134" class="code-mono" fill="#cdd6f4">x₄</text>
-    <text x="88" y="134" class="code-mono" fill="#a6adc8">0.15</text>
+    <text x="18" y="134" class="code-mono" fill="#1e293b">x₄</text>
+    <text x="88" y="134" class="code-mono" fill="#64748b">0.15</text>
     <text x="168" y="134" class="code-mono accent-mauve">3</text>
-    <line x1="0" y1="144" x2="202" y2="144" stroke="#313244" stroke-width="1"/>
+    <line x1="0" y1="144" x2="202" y2="144" stroke="#e2e8f0" stroke-width="1"/>
 
     <!-- Row 5 -->
-    <text x="18" y="164" class="code-mono" fill="#cdd6f4">x₅</text>
-    <text x="88" y="164" class="code-mono" fill="#a6adc8">0.15</text>
+    <text x="18" y="164" class="code-mono" fill="#1e293b">x₅</text>
+    <text x="88" y="164" class="code-mono" fill="#64748b">0.15</text>
     <text x="168" y="164" class="code-mono accent-mauve">3</text>
   </g>
 
   <!-- Metadata overhead callout -->
-  <rect x="36" y="340" width="206" height="98" fill="#11111b" stroke="#313244" rx="6"/>
+  <rect x="36" y="340" width="206" height="98" fill="#ffffff" stroke="#e2e8f0" rx="6"/>
   <text x="46" y="360" class="code-mono accent-green" font-size="11px">Trasmissione Compatta:</text>
   <text x="46" y="378" class="card-subtext">Basta inviare le frequenze</text>
   <text x="46" y="392" class="card-subtext">delle lunghezze:</text>
@@ -92,33 +92,33 @@
   
   <!-- Step 1 -->
   <g transform="translate(296, 115)">
-    <rect x="0" y="0" width="313" height="52" fill="#11111b" stroke="#45475a" rx="6"/>
-    <text x="10" y="18" class="card-text"><tspan font-weight="700" fill="#89b4fa">Inizializzazione:</tspan> prima parola ha l₁ zeri</text>
+    <rect x="0" y="0" width="313" height="52" fill="#ffffff" stroke="#cbd5e1" rx="6"/>
+    <text x="10" y="18" class="card-text"><tspan font-weight="700" fill="#2563eb">Inizializzazione:</tspan> prima parola ha l₁ zeri</text>
     <text x="10" y="38" class="code-mono accent-green">V₁ = 0 → C(x₁) = 00₂ (2 bit)</text>
   </g>
 
   <!-- Step 2 & 3 -->
   <g transform="translate(296, 175)">
-    <rect x="0" y="0" width="313" height="74" fill="#11111b" stroke="#45475a" rx="6"/>
-    <text x="10" y="18" class="card-text"><tspan font-weight="700" fill="#f9e2af">Pari Lunghezza (Δl = 0):</tspan> incremento unitario</text>
+    <rect x="0" y="0" width="313" height="74" fill="#ffffff" stroke="#cbd5e1" rx="6"/>
+    <text x="10" y="18" class="card-text"><tspan font-weight="700" fill="#b45309">Pari Lunghezza (Δl = 0):</tspan> incremento unitario</text>
     <text x="10" y="36" class="code-mono accent-peach">V₂ = V₁ + 1 = 1 → C(x₂) = 01₂</text>
     <text x="10" y="56" class="code-mono accent-peach">V₃ = V₂ + 1 = 2 → C(x₃) = 10₂</text>
   </g>
 
   <!-- Step 4 (Jump) -->
   <g transform="translate(296, 257)">
-    <rect x="0" y="0" width="313" height="96" fill="#11111b" stroke="#cba6f7" stroke-width="1.8" rx="6"/>
-    <text x="10" y="18" class="card-text"><tspan font-weight="700" fill="#cba6f7">Salto di Lunghezza (Δl = l₄ - l₃ = 1 bit):</tspan></text>
+    <rect x="0" y="0" width="313" height="96" fill="#ffffff" stroke="#7c3aed" stroke-width="1.8" rx="6"/>
+    <text x="10" y="18" class="card-text"><tspan font-weight="700" fill="#7c3aed">Salto di Lunghezza (Δl = l₄ - l₃ = 1 bit):</tspan></text>
     <text x="10" y="36" class="card-subtext">Incrementa e shifta a sinistra di Δl posizioni:</text>
-    <text x="10" y="56" class="code-mono" fill="#f38ba8">V₄ = (V₃ + 1) &lt;&lt; 1 = (2 + 1) &lt;&lt; 1 = 6</text>
+    <text x="10" y="56" class="code-mono" fill="#dc2626">V₄ = (V₃ + 1) &lt;&lt; 1 = (2 + 1) &lt;&lt; 1 = 6</text>
     <text x="10" y="76" class="code-mono accent-green">C(x₄) = 110₂ (3 bit)</text>
-    <text x="10" y="90" class="card-subtext" fill="#a6adc8">(Garantisce che nessun codice sia prefisso!)</text>
+    <text x="10" y="90" class="card-subtext" fill="#64748b">(Garantisce che nessun codice sia prefisso!)</text>
   </g>
 
   <!-- Step 5 -->
   <g transform="translate(296, 361)">
-    <rect x="0" y="0" width="313" height="64" fill="#11111b" stroke="#45475a" rx="6"/>
-    <text x="10" y="18" class="card-text"><tspan font-weight="700" fill="#f9e2af">Pari Lunghezza (l₅ = l₄ = 3):</tspan> incremento unitario</text>
+    <rect x="0" y="0" width="313" height="64" fill="#ffffff" stroke="#cbd5e1" rx="6"/>
+    <text x="10" y="18" class="card-text"><tspan font-weight="700" fill="#b45309">Pari Lunghezza (l₅ = l₄ = 3):</tspan> incremento unitario</text>
     <text x="10" y="38" class="code-mono accent-peach">V₅ = V₄ + 1 = 6 + 1 = 7</text>
     <text x="10" y="56" class="code-mono accent-green">C(x₅) = 111₂ (3 bit)</text>
   </g>
@@ -134,43 +134,43 @@
 
   <!-- Table Output -->
   <g transform="translate(665, 150)">
-    <rect x="0" y="0" width="217" height="24" fill="#313244" rx="4"/>
+    <rect x="0" y="0" width="217" height="24" fill="#f1f5f9" rx="4"/>
     <text x="10" y="16" class="code-mono accent-yellow">xᵢ</text>
     <text x="65" y="16" class="code-mono accent-yellow">Valore</text>
     <text x="140" y="16" class="code-mono accent-yellow">Codeword</text>
 
     <!-- Row 1 -->
-    <text x="12" y="44" class="code-mono" fill="#cdd6f4">x₁</text>
-    <text x="75" y="44" class="code-mono" fill="#a6adc8">0</text>
+    <text x="12" y="44" class="code-mono" fill="#1e293b">x₁</text>
+    <text x="75" y="44" class="code-mono" fill="#64748b">0</text>
     <text x="145" y="44" class="code-mono accent-green">00</text>
-    <line x1="0" y1="54" x2="217" y2="54" stroke="#313244" stroke-width="1"/>
+    <line x1="0" y1="54" x2="217" y2="54" stroke="#e2e8f0" stroke-width="1"/>
 
     <!-- Row 2 -->
-    <text x="12" y="74" class="code-mono" fill="#cdd6f4">x₂</text>
-    <text x="75" y="74" class="code-mono" fill="#a6adc8">1</text>
+    <text x="12" y="74" class="code-mono" fill="#1e293b">x₂</text>
+    <text x="75" y="74" class="code-mono" fill="#64748b">1</text>
     <text x="145" y="74" class="code-mono accent-green">01</text>
-    <line x1="0" y1="84" x2="217" y2="84" stroke="#313244" stroke-width="1"/>
+    <line x1="0" y1="84" x2="217" y2="84" stroke="#e2e8f0" stroke-width="1"/>
 
     <!-- Row 3 -->
-    <text x="12" y="104" class="code-mono" fill="#cdd6f4">x₃</text>
-    <text x="75" y="104" class="code-mono" fill="#a6adc8">2</text>
+    <text x="12" y="104" class="code-mono" fill="#1e293b">x₃</text>
+    <text x="75" y="104" class="code-mono" fill="#64748b">2</text>
     <text x="145" y="104" class="code-mono accent-green">10</text>
-    <line x1="0" y1="114" x2="217" y2="114" stroke="#313244" stroke-width="1"/>
+    <line x1="0" y1="114" x2="217" y2="114" stroke="#e2e8f0" stroke-width="1"/>
 
     <!-- Row 4 -->
-    <text x="12" y="134" class="code-mono" fill="#cdd6f4">x₄</text>
-    <text x="75" y="134" class="code-mono" fill="#a6adc8">6</text>
+    <text x="12" y="134" class="code-mono" fill="#1e293b">x₄</text>
+    <text x="75" y="134" class="code-mono" fill="#64748b">6</text>
     <text x="145" y="134" class="code-mono accent-mauve">110</text>
-    <line x1="0" y1="144" x2="217" y2="144" stroke="#313244" stroke-width="1"/>
+    <line x1="0" y1="144" x2="217" y2="144" stroke="#e2e8f0" stroke-width="1"/>
 
     <!-- Row 5 -->
-    <text x="12" y="164" class="code-mono" fill="#cdd6f4">x₅</text>
-    <text x="75" y="164" class="code-mono" fill="#a6adc8">7</text>
+    <text x="12" y="164" class="code-mono" fill="#1e293b">x₅</text>
+    <text x="75" y="164" class="code-mono" fill="#64748b">7</text>
     <text x="145" y="164" class="code-mono accent-mauve">111</text>
   </g>
 
   <!-- Hardware efficiency callout -->
-  <rect x="663" y="340" width="221" height="98" fill="#11111b" stroke="#313244" rx="6"/>
+  <rect x="663" y="340" width="221" height="98" fill="#ffffff" stroke="#e2e8f0" rx="6"/>
   <text x="673" y="360" class="code-mono accent-blue" font-size="11px">Vantaggi Ingegneristici:</text>
   <text x="673" y="378" class="card-subtext">✓ Zero puntatori albero in RAM</text>
   <text x="673" y="394" class="card-subtext">✓ Decodifica via array offsets</text>

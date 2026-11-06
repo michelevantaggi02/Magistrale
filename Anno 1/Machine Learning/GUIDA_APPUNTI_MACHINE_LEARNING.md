@@ -84,11 +84,11 @@ flowchart TD
     F -- "No" --> I["4. Stesura Incrementale in Italiano del Singolo Capitolo"]
     E --> I
     H --> I
-    I --> L["Applicazione Stile Autore (Pragmatismo, Paragrafi Snelli, KaTeX)"]
-    L --> R["5. Loop Iterativo di Revisione Automatica con Subagente Indipendente"]
+    I --> L["5. Ottimizzazione Cognitiva e Visuale (Subagente 'cognitive-study-editor-v3')"]
+    L --> R["6. Loop Iterativo di Revisione Accademica con Subagente Indipendente"]
     R --> S["Applicazione Correzioni Rilevate dal Subagente"]
     S --> R
-    R -- "CONFORME" --> M["6. Chiusura Capitolo & Validazione con l'Utente"]
+    R -- "CONFORME" --> M["7. Chiusura Capitolo & Validazione con l'Utente"]
 ```
 
 ### 3.1 Flusso Incrementale: Un Capitolo per Volta
@@ -98,6 +98,7 @@ Per massimizzare l'efficacia dello studio e consentire una revisione puntuale:
    - Si seleziona un capitolo (es. `0. Notazione e Concetti Fondamentali.md`).
    - Si estraggono le relative figure e si creano gli eventuali grafici didattici integrativi.
    - Si redige il testo completo in italiano, verificando la coerenza delle formule.
+   - Si esegue l'**Ottimizzazione Cognitiva e Visuale** con il subagente dedicato `cognitive-study-editor-v3` per ritmo serrato, paragrafi snelli (1-4 righe), schemi Mermaid/SVG e memorabilità d'esame.
    - Si esegue il **Loop Iterativo di Revisione Automatica con Subagente Indipendente** a convergenza (`CONFORME`).
    - Si conclude la sessione presentando il lavoro all'utente per la revisione, prima di passare al capitolo successivo.
 
@@ -143,10 +144,20 @@ La dispensa del professore è rigorosa ma in alcuni passaggi teorici manca di su
      ```
    - Esempio: `fig_ex_4_geometria_hat_matrix.png`, `schema_12_backprop_flusso.svg`, `fig_ex_10_lasso_vs_ridge_vincoli.png`.
 
-### 3.4 Loop Iterativo di Revisione Automatica con Subagente Indipendente (Regola Vault)
+### 3.4 Ottimizzazione Cognitiva e Visuale tramite Subagente (`cognitive-study-editor-v3`)
+In conformità alla regola generale definita in `[[.agents/rules/ottimizzazione_cognitiva_subagente.md|ottimizzazione_cognitiva_subagente.md]]`:
+1. Prima della validazione finale, si invoca il subagente dedicato `cognitive-study-editor-v3` (`Role: "Cognitive Study Editor (Vault Compliant)"`).
+2. Il subagente interviene sul testo per:
+   - Massimizzare la fluidità e il ritmo di lettura, eliminando preamboli burocratici e adottando paragrafi compatti (1–4 righe) con voce attiva naturale da ingegnere.
+   - Strutturare il chunking logico orientato all'esame (*Obiettivo concettuale $\to$ Sviluppo analitico motivato $\to$ Takeaway operativo*), esplicitando sempre il significato fisico di ogni cancellazione o trasformazione algebrica.
+   - Introdurre callout semantici mirati (`> [!IMPORTANT]`, `> [!TIP]`, `> [!WARNING]`, `> [!EXAMPLE]`).
+   - Arricchire concetti astratti con dual coding visivo (schemi nativi Mermaid o grafici SVG chiari in tema chiaro print-ready).
+3. **Vincoli Tassativi**: zero perdita di contenuti teorico-matematici, conformità rigorosa al linter del vault (`__grassetto__`, `_corsivo_`, `…`, no `---`, solo H1 numerato, elenchi continui) e **divieto assoluto di meta-commenti o callout correttivi**.
+
+### 3.5 Loop Iterativo di Revisione Automatica con Subagente Indipendente (Regola Vault)
 In ossequio alla regola generale del vault definita in `[[.agents/rules/revisione_automatica_subagente.md|revisione_automatica_subagente.md]]`:
-1. Subito dopo la stesura del capitolo, si invoca obbligatoriamente un subagente indipendente (`TypeName: "research"`, `Role: "Independent Academic Reviewer"`).
-2. Il reviewer confronta il capitolo con `ML_Notes.pdf` verificando:
+1. Subito dopo l'ottimizzazione cognitiva, si invoca obbligatoriamente un subagente indipendente estraneo (`TypeName: "research"`, `Role: "Independent Academic Reviewer"`).
+2. Il reviewer confronta il testo rifinito riga per riga con `ML_Notes.pdf` verificando:
    - Rigore matematico, algebrico e notazionale (segni, indici, dimensioni vettori/matrici).
    - Fedeltà al perimetro didattico della dispensa e assenza di allucinazioni/teorie esterne non trattate dal docente.
    - **Assenza totale di meta-commenti o callout su correzioni o refusi delle note/slide** (il testo deve esporre solo e direttamente la teoria corretta e definitiva).

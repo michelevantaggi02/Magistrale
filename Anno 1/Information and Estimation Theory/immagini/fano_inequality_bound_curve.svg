@@ -1,22 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 500" width="100%" height="100%">
   <defs>
     <style>
-      .bg { fill: #1e1e2e; }
-      .axis-line { stroke: #a6adc8; stroke-width: 2; stroke-linecap: round; }
-      .grid-line { stroke: #313244; stroke-width: 1; stroke-dasharray: 4 4; }
-      .fano-curve { fill: none; stroke: #89b4fa; stroke-width: 3.5; stroke-linecap: round; }
-      .linear-bound { fill: none; stroke: #f38ba8; stroke-width: 2.5; stroke-dasharray: 6 4; }
-      .threshold-line { fill: none; stroke: #fab387; stroke-width: 2; stroke-dasharray: 4 4; }
-      .region-forbidden { fill: rgba(243, 139, 168, 0.12); }
-      .region-achievable { fill: rgba(166, 227, 161, 0.08); }
-      .label-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 18px; font-weight: 700; fill: #cdd6f4; text-anchor: middle; }
-      .label-axis { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #bac2de; }
-      .label-tick { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #a6adc8; text-anchor: middle; }
+      .bg { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; }
+      .axis-line { stroke: #334155; stroke-width: 2; stroke-linecap: round; }
+      .grid-line { stroke: #e2e8f0; stroke-width: 1; stroke-dasharray: 4 4; }
+      .fano-curve { fill: none; stroke: #2563eb; stroke-width: 3.5; stroke-linecap: round; }
+      .linear-bound { fill: none; stroke: #dc2626; stroke-width: 2.5; stroke-dasharray: 6 4; }
+      .threshold-line { fill: none; stroke: #d97706; stroke-width: 2; stroke-dasharray: 4 4; }
+      .region-forbidden { fill: rgba(220, 38, 38, 0.08); }
+      .region-achievable { fill: rgba(5, 150, 105, 0.08); }
+      .label-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+      .label-axis { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #334155; }
+      .label-tick { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #64748b; text-anchor: middle; }
       .label-tag { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 600; }
-      .legend-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #cdd6f4; }
+      .legend-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #0f172a; }
     </style>
     <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#bac2de"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155"/>
     </marker>
   </defs>
 
@@ -69,11 +69,11 @@
 
   <!-- Critical Threshold H(X|Y) = 1 bit -->
   <line x1="100" y1="310" x2="740" y2="310" class="threshold-line"/>
-  <circle cx="100" cy="310" r="5" fill="#fab387"/>
+  <circle cx="100" cy="310" r="5" fill="#d97706"/>
 
   <!-- Maximum entropy point (1 - 1/M, log2 M) -->
-  <circle cx="580" cy="88" r="6" fill="#89b4fa"/>
-  <circle cx="100" cy="420" r="5" fill="#a6e3a1"/>
+  <circle cx="580" cy="88" r="6" fill="#2563eb"/>
+  <circle cx="100" cy="420" r="5" fill="#059669"/>
 
   <!-- Axes -->
   <line x1="100" y1="420" x2="750" y2="420" class="axis-line" marker-end="url(#arrow)"/>
@@ -97,26 +97,26 @@
 
   <!-- Annotations on Graph -->
   <!-- Critical insight: Pe > 0 if H(X|Y) > 1 -->
-  <rect x="110" y="325" width="220" height="42" rx="6" fill="#313244" stroke="#fab387" stroke-width="1.2"/>
-  <text x="120" y="343" class="label-tag" fill="#fab387">Soglia Critica H(X|Y) &gt; 1</text>
-  <text x="120" y="358" font-family="system-ui" font-size="11" fill="#cdd6f4">Impossibile avere P<tspan dy="2" font-size="9">e</tspan><tspan dy="-2"> = 0</tspan></text>
+  <rect x="110" y="325" width="220" height="42" rx="6" fill="#f8fafc" stroke="#d97706" stroke-width="1.2"/>
+  <text x="120" y="343" class="label-tag" fill="#d97706">Soglia Critica H(X|Y) &gt; 1</text>
+  <text x="120" y="358" font-family="system-ui" font-size="11" fill="#0f172a">Impossibile avere P<tspan dy="2" font-size="9">e</tspan><tspan dy="-2"> = 0</tspan></text>
 
   <!-- Region Labels -->
-  <text x="230" y="115" class="label-tag" fill="#f38ba8" opacity="0.9">REGIONE PROIBITA (Non realizzabile)</text>
-  <text x="480" y="280" class="label-tag" fill="#a6e3a1" opacity="0.9">REGIONE AMMISSIBILE</text>
+  <text x="230" y="115" class="label-tag" fill="#dc2626" opacity="0.9">REGIONE PROIBITA (Non realizzabile)</text>
+  <text x="480" y="280" class="label-tag" fill="#059669" opacity="0.9">REGIONE AMMISSIBILE</text>
 
   <!-- Curve tags -->
-  <text x="350" y="165" class="label-tag" fill="#89b4fa">H<tspan dy="2" font-size="10">B</tspan><tspan dy="-2">(P</tspan><tspan dy="2" font-size="10">e</tspan><tspan dy="-2">) + P</tspan><tspan dy="2" font-size="10">e</tspan><tspan dy="-2"> log₂(|𝒳| - 1)</tspan></text>
-  <text x="270" y="235" class="label-tag" fill="#f38ba8">1 + P<tspan dy="2" font-size="10">e</tspan><tspan dy="-2"> log₂|𝒳|</tspan> (Limite lineare indebolito)</text>
+  <text x="350" y="165" class="label-tag" fill="#2563eb">H<tspan dy="2" font-size="10">B</tspan><tspan dy="-2">(P</tspan><tspan dy="2" font-size="10">e</tspan><tspan dy="-2">) + P</tspan><tspan dy="2" font-size="10">e</tspan><tspan dy="-2"> log₂(|𝒳| - 1)</tspan></text>
+  <text x="270" y="235" class="label-tag" fill="#dc2626">1 + P<tspan dy="2" font-size="10">e</tspan><tspan dy="-2"> log₂|𝒳|</tspan> (Limite lineare indebolito)</text>
 
   <!-- Legend Box -->
-  <rect x="530" y="320" width="280" height="85" rx="8" fill="#181825" stroke="#45475a" stroke-width="1.5"/>
-  <line x1="545" y1="340" x2="575" y2="340" stroke="#89b4fa" stroke-width="3"/>
+  <rect x="530" y="320" width="280" height="85" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="545" y1="340" x2="575" y2="340" stroke="#2563eb" stroke-width="3"/>
   <text x="585" y="344" class="legend-text">Limite esatto di Fano</text>
 
-  <line x1="545" y1="362" x2="575" y2="362" stroke="#f38ba8" stroke-width="2.5" stroke-dasharray="6 3"/>
+  <line x1="545" y1="362" x2="575" y2="362" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 3"/>
   <text x="585" y="366" class="legend-text">Limite lineare rilassato</text>
 
-  <line x1="545" y1="384" x2="575" y2="384" stroke="#fab387" stroke-width="2" stroke-dasharray="4 3"/>
+  <line x1="545" y1="384" x2="575" y2="384" stroke="#d97706" stroke-width="2" stroke-dasharray="4 3"/>
   <text x="585" y="388" class="legend-text">Soglia d'errore certo (1 bit)</text>
 </svg>
