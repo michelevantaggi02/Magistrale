@@ -55,8 +55,9 @@ L'agente principale invoca il subagente tramite il tool nativo `invoke_subagent`
 Il subagente applica rigorosamente i seguenti principi:
 
 ### 4.1 Fluidità, Ritmo e Voce Narrativa
-- [ ] **Voce in prima persona naturale da ingegnere**: alternare singolare e plurale spontanei (*"abbiamo visto"*, *"se calcoliamo la varianza troviamo"*, *"organizziamo i campioni in un vettore"*).
+- [ ] **Voce in prima persona naturale da ingegnere**: alternare singolare e plurale spontanei (*"imponiamo"*, *"se calcoliamo la varianza troviamo"*, *"organizziamo i campioni in un vettore"*).
 - [ ] **Eliminazione dei preamboli gonfiati**: andare dritti al punto del problema ingegneristico, eliminando formule burocratiche o accademiche passive (*"si procede ora all'esplicitazione della derivazione"* $\to$ *"deriviamo ora rispetto a $\theta$"*).
+- [ ] **Divieto assoluto di formule metanarrative di transizione**: eliminare tassativamente formule quali *"nel capitolo precedente abbiamo visto"*, *"nei capitoli precedenti abbiamo trattato"*, *"in questo capitolo vedremo/esploreremo"*, *"il presente capitolo si propone di"*. I capitoli confluiscono in un PDF unico concatenato: l'apertura deve entrare immediatamente ed assertivamente nel vivo del problema fisico o matematico.
 - [ ] **Paragrafi snelli**: blocchi di testo compatti (1–4 righe) intervallati da equazioni isolate e figure per garantire una lettura riposante e ritmata.
 
 ### 4.2 Struttura Mnemonicamente Orientata all'Esame

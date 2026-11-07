@@ -386,6 +386,11 @@ Gli appunti del vault non devono sembrare un'enciclopedia asettica o un manuale 
   - Costo computazionale concreto (numero di MACs, ordine di grandezza $O(N)$, complessità con filtri separabili $k^2 \to 2k$).
   - Compromessi fisici (rumore dei sensori, aliasing, clipping, overflow fixed point vs floating point).
 
+#### 7. Divieto di Formule Metanarrative di Transizione ("Nel capitolo precedente...", "In questo capitolo vedremo...")
+- **Divieto Assoluto di Retrospettive e Anticipazioni**: È **severamente vietato** aprire o intervallare i capitoli con frasi quali *"Nel capitolo precedente abbiamo visto/studiato..."*, *"Nei capitoli precedenti abbiamo trattato..."*, *"In questo capitolo vedremo/esploreremo..."*, *"Il presente capitolo si propone di..."*.
+- **Motivazione Tecnica e Tipografica (Concatenazione in PDF Unificato)**: Tutti i file markdown di ciascuna materia vengono concatenati sequenzialmente tramite plugin di merge (`advanced-merger`) in un unico testo fluido che viene poi compilato nel PDF della dispensa completa (`<Materia>-merged.pdf`). All'interno di un volume continuo, i riferimenti a capitoli precedenti o futuri risultano ridondanti, artificiali e spezzano la naturalezza della lettura.
+- **Attacco Diretto al Problema**: Ogni capitolo deve entrare **immediatamente e direttamente nel cuore del tema ingegneristico, matematico o fisico**, con un incipit assertivo e focalizzato sul problem solving (es. *"La teoria della stima bayesiana modella il parametro incognito come una variabile aleatoria con densità a priori nota..."* anziché *"Nei capitoli precedenti abbiamo visto la stima classica, ora in questo capitolo vedremo la stima bayesiana..."*). Le transizioni devono fluire spontaneamente attraverso la logica dei concetti.
+
 ### 3.11 Revisione Critica delle Note e Segnalazione Errori Concettuali
 > [!IMPORTANT] Regola Tassativa: Analisi Critica, Divieto Assoluto di Meta-Commenti e Segnalazione Post-Stesura
 > Quando vengono fornite o analizzate le note della lezione (appunti scritti a mano, trascrizioni orali, schemi veloci o formule ricopiate):

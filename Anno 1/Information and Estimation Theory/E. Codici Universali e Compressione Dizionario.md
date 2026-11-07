@@ -1,6 +1,6 @@
-# E. Codici Universali e Compressione Dizionario
+# E. Codici Universali E Compressione Dizionario
 
-Nei capitoli precedenti abbiamo costruito la teoria fondamentale della codifica di sorgente senza perdita (_lossless_), culminata nell'algoritmo di Huffman e nei codici ottimi di Shannon. Tuttavia, l'efficienza teorica di tali schemi poggia su un'ipotesi restrittiva: la perfetta e preliminare conoscenza della funzione di massa di probabilità (PMF) $p(x)$ che governa la sorgente.
+La teoria canonica della codifica di sorgente senza perdita (_lossless_), culminata nell'algoritmo di Huffman e nei codici ottimi di Shannon, raggiunge l'efficienza teorica ideale sotto un'ipotesi restrittiva: la perfetta e preliminare conoscenza della funzione di massa di probabilità (PMF) $p(x)$ che governa la sorgente.
 
 Nelle applicazioni ingegneristiche reali, nei moderni sistemi informatici e nelle telecomunicazioni, questa condizione è quasi sempre inapplicabile:
 1. La statistica dei dati non è nota a priori: si pensi a un archivio contenente codice sorgente, testo formattato, eseguibili binari e matrici numeriche eterogenee.
@@ -38,7 +38,7 @@ flowchart TD
     G1 & H1 & I1 --> J["Teorema di Asintotica Ottimalità di Ziv-Lempel<br/>l(Xⁿ)/n → H(𝒳) quasi certamente (Teorema di Kac)"]
 ```
 
-## Limiti Epistemologici dei Codici Statistici Classici
+## Limiti Epistemologici Dei Codici Statistici Classici
 
 Perché Huffman e Shannon-Fano falliscono nei contesti industriali moderni? Quando progettiamo un codice prefisso assumendo una distribuzione nominale $q(x)$ differente dalla vera distribuzione di sorgente $p(x)$, paghiamo una penalità inevitabile denominata __costo di mismatch__.
 
@@ -64,7 +64,7 @@ $$
 
 Su blocchi di dati medio-piccoli, questo overhead annulla qualsiasi beneficio di compressione. Da qui nasce la necessità di costruire algoritmi universali che comprimano senza richiedere né stimare esplicitamente $p(x)$.
 
-## Definizione Formale di Codice Universale
+## Definizione Formale Di Codice Universale
 
 Diamo una definizione rigorosa di universalità nel senso della teoria dell'informazione.
 
@@ -82,7 +82,7 @@ $$
 
 Né il trasmettitore né il ricevitore necessitano di conoscere la PMF della sorgente o i parametri di transizione: il codice estrae l'informazione comprimibile unicamente dalle correlazioni e dalle ricorrenze lessicali del testo.
 
-## Codici di Golomb e Rice per Distribuzioni Geometriche
+## Codici Di Golomb E Rice per Distribuzioni Geometriche
 
 Nei contesti applicativi in cui i dati da comprimere sono numeri interi non negativi $x \in \mathbb{N}_0 = \{0, 1, 2, \dots\}$ con probabilità monotona decrescente, l'alfabeto di sorgente è infinito numerabile. La costruzione di un classico albero di Huffman richiederebbe una tabella infinita, risultando impraticabile.
 
@@ -93,7 +93,7 @@ Questo scenario si riscontra regolarmente:
 
 La famiglia dei __codici di Golomb__ (Solomon Golomb, 1966) e la sua specializzazione binaria, i __codici di Rice__ (Robert Rice, 1979), risolvono il problema con un modello parametrico analitico a complessità minima.
 
-### Modello di Sorgente e Decomposizione Euclidea
+### Modello Di Sorgente E Decomposizione Euclidea
 
 Consideriamo una variabile aleatoria discreta $X \in \mathbb{N}_0$ con distribuzione geometrica unificata di parametro $\theta \in (0, 1)$ (indicato talvolta con $p$):
 
@@ -149,7 +149,7 @@ La lunghezza della parola di codice è $l(q) = q + 1$ bit:
 
 Il codice unario coincide con il codice di Huffman ottimo per una sorgente geometrica avente parametro diadico $\theta = 1/2$, la cui probabilità vale $p(q) = 2^{-(q+1)}$. Poiché $l(q) = -\log_2 p(q)$, l'efficienza è identicamente pari al $100\%$ e il codice raggiunge l'entropia della sorgente.
 
-### Struttura del Codice di Golomb e Teorema di Gallager-Van Voorhis
+### Struttura Del Codice Di Golomb E Teorema Di Gallager-Van Voorhis
 
 Robert Gallager e David Van Voorhis (1975) hanno dimostrato che il codice di Huffman ottimo su alfabeto infinito per una distribuzione geometrica coincide con il codice di Golomb se e solo se il parametro $M$ è l'unico intero che soddisfa la relazione:
 
@@ -178,7 +178,7 @@ $$
 C_M(x) = \big[ C_{\text{unario}}(q) \big] \, \big[ C_{\text{troncato}}(r) \big]
 $$
 
-### Esempio Operativo Dettagliato: Golomb con Parametro $M = 5$
+### Esempio Operativo Dettagliato: Golomb Con Parametro $M = 5$
 
 Progettiamo il codice di Golomb per $M = 5$:
 - $k = \lfloor \log_2 5 \rfloor = 2$
@@ -215,7 +215,7 @@ $$
 
 che ordina i numeri secondo la sequenza $0, -1, +1, -2, +2, -3, +3, \dots \to 0, 1, 2, 3, 4, 5, 6, \dots$.
 
-### Codici di Rice ed Efficienza di Calcolo Hardware
+### Codici Di Rice Ed Efficienza Di Calcolo Hardware
 
 Quando vincoliamo il parametro $M$ ad essere una potenza intera di due:
 
@@ -238,11 +238,11 @@ Questo conferisce ai codici di Rice un vantaggio hardware enorme nei sistemi emb
 
 La dimostrazione dell'ottimalità asintotica dei codici di Golomb-Rice è approfondita in [[zz. Argomenti extra#Dimostrazione dell'Ottimalità dei Codici di Golomb per Distribuzioni Geometriche]]. Grazie a questa efficienza, i codici di Rice costituiscono il cuore algoritmico del codec audio lossless FLAC, dello standard per immagini JPEG-LS (ITU-T T.87), della compressione dati per sonde spaziali CCSDS 121.0-B-3 e dei residui di moto nei profili video H.264/MPEG-4 AVC.
 
-## Codifica Aritmetica ad Intervalli Continui
+## Codifica Aritmetica Ad Intervalli Continui
 
 L'algoritmo di Huffman assegna a ciascun simbolo un numero intero di bit di codice ($l_i \in \mathbb{N}$). Sebbene ottimo tra i codici a blocchi prefissati, questo vincolo introduce una severa perdita di efficienza quando la sorgente presenta probabilità sbilanciate.
 
-### Superamento del Vincolo di Lunghezza Intera dei Simboli
+### Superamento Del Vincolo Di Lunghezza Intera Dei Simboli
 
 Consideriamo una sorgente binaria con simboli fortemente asimmetrici: $p(0) = 0.95$ e $p(1) = 0.05$. L'auto-informazione associata al simbolo più probabile è:
 
@@ -254,7 +254,7 @@ Poiché qualsiasi codice prefisso deve allocare almeno 1 bit per ogni parola di 
 
 La __codifica aritmetica__ (_Arithmetic Coding_, Jorma Rissanen 1976; Richard Pasco 1976; Witten, Neal & Cleary 1987) supera radicalmente questo limite: invece di associare una stringa di bit a ciascun simbolo isolato, mappa l'intera sequenza di simboli $x_1 x_2 \dots x_n$ in un unico sotto-intervallo del segmento reale unitario $[0, 1)$.
 
-### Fondamento Matematico: La Trasformata Integrale di Probabilità
+### Fondamento Matematico: La Trasformata Integrale Di Probabilità
 
 La codifica aritmetica trae la sua giustificazione analitica dal codice di Shannon-Fano-Elias e dal __Lemma della Trasformata Integrale di Probabilità__:
 Sia $Y$ una variabile aleatoria continua con funzione di distribuzione cumulativa $F(y)$. Allora la variabile aleatoria trasformata $U = F(Y)$ è distribuita uniformemente sull'intervallo continuo:
@@ -265,7 +265,7 @@ $$
 
 Se interpretiamo una sequenza infinita di simboli discreti $X_1 X_2 \dots$ come la parte frazionaria di un numero reale $0.X_1 X_2 \dots$, la CDF progressiva mappa tale successione in una variabile uniforme $U \in [0, 1]$. La rappresentazione in base 2 di una variabile distribuita uniformemente su $[0, 1)$ produce una sequenza di bit indipendenti ed equiprobabili ($\text{Bernoulli}(1/2)$). Tali bit possiedono entropia massima pari a 1 bit/simbolo e sono pertanto del tutto incomprimibili: essi costituiscono già la rappresentazione compressa ottima della sequenza.
 
-### Algoritmo di Partizione Progressiva dell'Intervallo
+### Algoritmo Di Partizione Progressiva dell'Intervallo
 
 La codifica aritmetica opera ricorsivamente partizionando l'intervallo unitario:
 1. Inizializziamo l'intervallo corrente:
@@ -295,7 +295,7 @@ Qualsiasi numero reale all'interno del sotto-intervallo finale $[L^{(n)}, H^{(n)
 
 ![[slide_16_arithmetic_coding_3ary_example.png|center mid]]
 
-### Generazione del Bitstream e Dimostrazione dell'Efficienza
+### Generazione Del Bitstream E Dimostrazione dell'Efficienza
 
 Per trasformare l'intervallo finale in un flusso binario univocamente decodificabile:
 1. Selezioniamo il punto medio dell'intervallo:
@@ -414,23 +414,29 @@ $$
 
 Il decodificatore confronta il valore frazionario binario $0.01010011_2 \approx 0.3242$ con le soglie cumulative dell'alfabeto, ricostruendo univocamente i simboli $A, C, A, A$.
 
-### Rinormalizzazione e Gestione della Precisione Finita
+### Rinormalizzazione E Gestione Della Precisione Finita
 
 L'algoritmo teorico presuppone precisione aritmetica infinita. Su un processore reale con registri a 32 o 64 bit, man mano che $n$ cresce l'intervallo si restringe esponenzialmente e i registri collassano per __underflow aritmetico__.
 
 Per consentire l'elaborazione in streaming su registri a dimensione finita, si adottano tre operazioni di __rinormalizzazione dinamica__ (Witten-Neal-Cleary):
 1. __Condizione E1 (Entrambi i limiti nella metà inferiore, $H < 0.5$)__: Il bit più significativo (MSB) dei due estremi è identicamente '0'. Il codificatore emette subito il bit '0' nel bitstream e riscala l'intervallo verso l'alto:
+
    $$
    L \leftarrow 2L, \quad H \leftarrow 2H
    $$
+
 2. __Condizione E2 (Entrambi i limiti nella metà superiore, $L \ge 0.5$)__: Il bit MSB di entrambi gli estremi è identicamente '1'. Il codificatore emette subito il bit '1' e riscala l'intervallo:
+
    $$
    L \leftarrow 2(L - 0.5), \quad H \leftarrow 2(H - 0.5)
    $$
+
 3. __Condizione E3 (Straddle / Underflow: $L \ge 0.25$ e $H < 0.75$)__: I due estremi convergono verso il centro $0.5$ senza condividere il bit MSB ($L = 0.01\dots_2$ e $H = 0.10\dots_2$). In questo caso l'intervallo collasserebbe senza che possiamo determinare il bit immediato. Si rimuove il secondo bit sottraendo $0.25$ e raddoppiando:
+
    $$
    L \leftarrow 2(L - 0.25), \quad H \leftarrow 2(H - 0.25)
    $$
+
    incrementando un contatore interno `underflow_bits`. Non appena si verifica un evento E1 o E2, il codificatore emette il bit principale seguito da `underflow_bits` bit opposti di compensazione.
 
 Grazie a questo meccanismo di scaling, la codifica aritmetica opera indefinitamente con registri interi a 16 o 32 bit. È il principio alla base di CABAC (_Context-Adaptive Binary Arithmetic Coding_) impiegato negli standard video H.264, H.265/HEVC e nelle immagini JPEG 2000.
@@ -445,7 +451,7 @@ L'algoritmo __LZ77__ (Jacob Ziv & Abraham Lempel, 1977) mantiene in memoria una 
 
 ![[lz77_sliding_window_parsing.svg|center mid]]
 
-### Regola di Matching ed Emissione dei Token
+### Regola Di Matching Ed Emissione Dei Token
 
 Il codificatore analizza i simboli nel lookahead buffer e cerca all'interno del search buffer la più lunga sottostringa identica (_Longest Match_):
 - Sia $o$ l'__offset__ (distanza a ritroso rispetto al cursore corrente, $1 \le o \le S_B$) in cui comincia la corrispondenza;
@@ -465,7 +471,7 @@ dove:
 
 Dopo l'emissione del token, la finestra di scansione avanza di $l + 1$ posizioni lungo il flusso del testo.
 
-### La Proprietà di Overlap Ciclico per Pattern Periodici
+### La Proprietà Di Overlap Ciclico per Pattern Periodici
 
 Una proprietà algebrica fondamentale di LZ77 è la capacità di gestire corrispondenze con __lunghezza superiore all'offset__ ($l > o$).
 
@@ -476,7 +482,7 @@ Se la sequenza da codificare è un pattern periodico (ad esempio `ABABABAB…` c
 
 ![[slide_24_lz77_sliding_window_example.png|center mid]]
 
-### Esempio Operativo Dettagliato di LZ77
+### Esempio Operativo Dettagliato Di LZ77
 
 Codifichiamo la stringa di 16 caratteri su alfabeto binario $\mathcal{X} = \{A, B\}$:
 
@@ -512,7 +518,7 @@ $$
 \underbrace{00}_{(0,A)} \quad \underbrace{01}_{(0,B)} \quad \underbrace{100000}_{(1,1,1)} \quad \underbrace{110101}_{(1,3,6)} \quad \underbrace{111001}_{(1,4,2)} \quad \underbrace{100000}_{(1,1,1)} \quad \underbrace{110001}_{(1,3,2)} \quad \underbrace{101001}_{(1,2,2)}
 $$
 
-### Varianti Industriali: LZSS e DEFLATE
+### Varianti Industriali: LZSS E DEFLATE
 
 Nella formulazione originaria di LZ77, l'emissione del carattere innovatore $c$ in ogni token comporta uno spreco di bit quando incontriamo corrispondenze molto lunghe. Al contempo, emettere un puntatore $(o, l)$ per un match di 1 solo carattere occupa più bit del carattere grezzo stesso.
 
@@ -522,7 +528,7 @@ Per risolvere queste inefficienze sono nate due evoluzioni fondamentali:
    - Token Puntatore $(1, o, l)$: emesso quando il match è conveniente ($l \ge 2$), omettendo il carattere letterale esplicito.
 2. __DEFLATE (Phil Katz, 1991)__: È lo standard industriale che muove l'archiviazione dati mondiale (`ZIP`, `GZIP`, `tar.gz`, file `.png` e compressione HTTP/HTTPS). DEFLATE combina LZSS con una finestra $S_B = 32\text{ KB}$ e $L_B = 258\text{ byte}$, e sottopone i token emessi a una successiva compressione mediante codici di Huffman canonici bivariati: un albero per i simboli letterali e le lunghezze dei match, e un secondo albero per le distanze di offset.
 
-### Fondamento Analitico: Il Teorema del Tempo di Ricorrenza di Kac
+### Fondamento Analitico: Il Teorema Del Tempo Di Ricorrenza Di Kac
 
 Perché LZ77 è asintoticamente universale? L'ottimalità asintotica globale di LZ77 è stata dimostrata da Wyner e Ziv (1989) sfruttando il __Lemma del Tempo di Ritorno di Kac__ (1947).
 
@@ -546,11 +552,11 @@ $$
 
 La derivazione integrale è disponibile in [[zz. Argomenti extra#Teorema del Tempo di Ricorrenza di Kac e Ottimalità Asintotica di LZ77]].
 
-## Compressione ad Albero di Prefissi: L'Algoritmo LZ78
+## Compressione Ad Albero Di Prefissi: L'Algoritmo LZ78
 
 Mentre LZ77 effettua ricerche all'interno di un buffer lineare a memoria limitata, l'algoritmo __LZ78__ (Ziv & Lempel 1978) memorizza le frasi incontrate in un __dizionario dinamico indicizzato ad albero__. In questo modo, l'algoritmo non soffre della perdita di memoria dovuta allo scorrimento della finestra.
 
-### Meccanismo di Parsing Incrementale ad Albero Dinamico
+### Meccanismo Di Parsing Incrementale Ad Albero Dinamico
 
 La sequenza di dati entrante viene segmentata in modo incrementale in una successione di $c(n)$ frasi distinte:
 
@@ -581,7 +587,7 @@ Subito dopo l'emissione del token, la nuova frase $w_k$ viene registrata nel diz
 
 ![[slide_27_lz78_tree_structure.png|center mid]]
 
-### Struttura del Token ed Esempio Operativo Completo
+### Struttura Del Token Ed Esempio Operativo Completo
 
 Applichiamo LZ78 alla medesima sequenza di 17 caratteri su alfabeto $\mathcal{X} = \{A, B\}$:
 
@@ -613,7 +619,7 @@ $$
 \underbrace{0000}_{(0,A)} \quad \underbrace{0001}_{(0,B)} \quad \underbrace{0100}_{(2,A)} \quad \underbrace{0101}_{(2,B)} \quad \underbrace{0011}_{(1,B)} \quad \underbrace{1000}_{(4,A)} \quad \underbrace{1010}_{(5,A)} \quad \underbrace{0110}_{(3,A)} \implies 32 \text{ bit}
 $$
 
-### Dimostrazione dell'Ottimalità Asintotica e Bound Combinatorio di Ziv-Lempel
+### Dimostrazione dell'Ottimalità Asintotica E Bound Combinatorio Di Ziv-Lempel
 
 L'ottimalità universale di LZ78 si fonda sulla limitazione superiore del numero di frasi distinte $c(n)$ ottenibili dal parsing di una sequenza di $n$ simboli.
 
@@ -666,7 +672,7 @@ Il ricevitore possiede lo stesso dizionario iniziale pre-popolato (indici $0\tex
 
 I due dizionari si aggiornano in perfetto sincronismo (_lockstep_) senza che sia necessario inviare stringhe esplicite sul canale di comunicazione.
 
-### Esempio Operativo Dettagliato di LZW
+### Esempio Operativo Dettagliato Di LZW
 
 Comprimiamo la medesima sequenza di 17 caratteri `ABBABBABBBAABABAA` sull'alfabeto binario $\{A, B\}$.
 - Pre-popolazione: Indice 1 = `A`, Indice 2 = `B`.
@@ -697,7 +703,7 @@ $$
 
 otteniamo un costo di soli __29 bit__, a fronte dei 40 bit di LZ77 e dei 32 bit di LZ78 sulla stessa stringa.
 
-### Risoluzione del Caso Limite Eccezionale di Decodifica
+### Risoluzione Del Caso Limite Eccezionale Di Decodifica
 
 Nell'algoritmo LZW esiste una singolarità di decodifica ben nota che si verifica quando la sorgente genera un pattern del tipo $c \cdot s \cdot c \cdot s \cdot c$ (dove $c$ è un carattere e $s$ una sottostringa, es. `ABABABA`):
 1. Il codificatore legge una stringa già presente nel dizionario, incontra un carattere, inserisce la nuova stringa $S$ nel dizionario ed emette il relativo indice.
@@ -712,7 +718,7 @@ $$
 
 Applicando questa regola di deduzione logica, il decodificatore inserisce la stringa corretta nel dizionario senza richiedere alcuna informazione aggiuntiva dal trasmettitore.
 
-### Standard Applicativi di LZW
+### Standard Applicativi Di LZW
 
 L'algoritmo LZW è stato impiegato nelle più diffuse tecnologie informatiche:
 - Lo storico comando di sistema `compress` degli ambienti UNIX;
@@ -721,7 +727,7 @@ L'algoritmo LZW è stato impiegato nelle più diffuse tecnologie informatiche:
 - La compressione dei flussi vettoriali e testuali nei file `PDF`;
 - Lo standard per comunicazioni modem su linea commutata `ITU-T V.42bis`.
 
-## Quadro Sinottico Comparativo dei Metodi di Compressione
+## Quadro Sinottico Comparativo Dei Metodi Di Compressione
 
 Mettiamo a confronto l'intero spettro delle tecnologie di codifica analizzate nel corso:
 
@@ -734,7 +740,7 @@ Mettiamo a confronto l'intero spettro delle tecnologie di codifica analizzate ne
 | __LZ78__ | Nessuna (Universale, 1-pass) | Parsing incrementale ad albero dinamico $(j, c)$ | $\to H(\mathcal{X})$ per $n \to \infty$ | Crescente con la lunghezza del file (albero _trie_) | Modem ITU-T V.42bis, compressione testuale |
 | __LZW__ | Nessuna (Universale, 1-pass) | Dizionario pre-popolato; soli indici interi $(i)$ | $\to H(\mathcal{X})$ per $n \to \infty$ | Controllata (dizionari a $2^{12}$ o $2^{16}$ ingressi con reset) | UNIX `compress`, immagini `GIF`, `TIFF`, `PDF` |
 
-## Takeaway d'Esame e Trabocchetti Operativi
+## Takeaway d'Esame E Trabocchetti Operativi
 
 Nelle prove d'esame e nelle applicazioni numeriche, prestiamo particolare attenzione a questi punti critici:
 
@@ -752,9 +758,11 @@ Nelle prove d'esame e nelle applicazioni numeriche, prestiamo particolare attenz
    - In __LZW__, il dizionario parte già popolato con tutti i singoli caratteri dell'alfabeto (indici $0 \dots |\mathcal{X}|-1$). Il token emesso è UNICAMENTE un indice numerico intero $(i)$. Non vengono mai trasmessi caratteri letterali espliciti.
 5. __La Singolarità $c \cdot s \cdot c \cdot s \cdot c$ in LZW__:
    - Se in un esercizio di decodifica LZW il ricevitore incontra un indice che corrisponde all'ingresso non ancora inserito nel dizionario, applica immediatamente la formula:
+
      $$
      S_{\text{ignota}} = S_{\text{precedente}} \cdot S_{\text{precedente}}[0]
      $$
+
    - Il simbolo mancante è sempre la prima lettera della frase decodificata al passo precedente.
 6. __Assunzioni del Teorema di Asintotica Ottimalità__:
    - Gli algoritmi di Ziv-Lempel sono universali perché comprimono senza conoscere la PMF $p(x)$. Tuttavia, la convergenza quasi certa a $H(\mathcal{X})$ richiede che il processo stocastico sottostante sia __stazionario ed ergodico__. Se la sorgente è non ergodica, l'entropy rate oscilla tra diversi regimi e la convergenza si attesta sull'entropia condizionata al regime macroscopico osservato.

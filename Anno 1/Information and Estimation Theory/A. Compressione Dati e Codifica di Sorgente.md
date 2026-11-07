@@ -1,12 +1,12 @@
-# A. Compressione Dati e Codifica di Sorgente
+# A. Compressione Dati E Codifica Di Sorgente
 
 La compressione dei dati rappresenta l'applicazione ingegneristica più diretta e pervasiva della teoria dell'informazione di Claude Shannon. L'obiettivo primario della codifica di sorgente senza perdita (__lossless data compression__) consiste nel convertire una sequenza di simboli emessa da una sorgente aleatoria in una sequenza binaria di lunghezza media attesa minima, garantendo al contempo che il decodificatore possa ricostruire la sequenza originale in modo deterministico, esatto e privo di ambiguità.
 
-In questo capitolo formalizziamo il modello matematico della codifica di sorgente, analizziamo la tassonomia delle classi di codici e dimostriamo i teoremi fondamentali di Kraft e McMillan. Esaminiamo poi il limite teorico di Shannon, l'algoritmo ottimo di David Huffman, le architetture canoniche impiegate negli standard industriali (Deflate, JPEG, PNG), la codifica di Shannon-Fano-Elias e i criteri di dominanza stocastica nell'ottimalità competitiva.
+La formalizzazione della codifica di sorgente si fonda sulla tassonomia rigorosa delle classi di codici e sui teoremi strutturali di Kraft e McMillan. Tale impalcatura stabilisce il limite teorico invalicabile di Shannon, apre la strada alla sintesi ottima di David Huffman, fonda le architetture canoniche impiegate negli standard industriali (Deflate, JPEG, PNG) e introduce la codifica di Shannon-Fano-Elias con i criteri di dominanza stocastica nell'ottimalità competitiva.
 
-## Architettura Concettuale della Codifica di Sorgente
+## Architettura Concettuale Della Codifica Di Sorgente
 
-Il diagramma seguente sintetizza la mappa delle dipendenze concettuali e matematiche sviluppate nel capitolo:
+Il diagramma seguente sintetizza la mappa delle dipendenze concettuali e matematiche della codifica di sorgente:
 
 ```mermaid
 flowchart TD
@@ -28,7 +28,7 @@ flowchart TD
     O --> Q["Ottimalità Competitiva: Bound al 50%"]
 ```
 
-## Modello Matematico della Codifica di Sorgente
+## Modello Matematico Della Codifica Di Sorgente
 
 Consideriamo una sorgente discreta senza memoria (__Discrete Memoryless Source__, DMS) modellata come una variabile aleatoria discreta $X$ definita su un alfabeto finito $\mathcal{X} = \{x_1, x_2, \dots, x_m\}$.
 
@@ -42,7 +42,7 @@ $$
 \mathcal{D}^* = \bigcup_{k=1}^\infty \mathcal{D}^k = \mathcal{D} \cup \mathcal{D}^2 \cup \mathcal{D}^3 \cup \dots
 $$
 
-### Definizione Formale di Codice di Sorgente
+### Definizione Formale Di Codice Di Sorgente
 
 Un __codice di sorgente__ $C$ per la variabile aleatoria $X$ è una mappa deterministica che associa a ciascun simbolo dell'alfabeto di sorgente una sequenza finita di simboli di codice:
 
@@ -54,7 +54,7 @@ L'immagine $C(x)$ prende il nome di __parola di codice__ (__codeword__) assegnat
 
 La __lunghezza__ della parola di codice $C(x)$, misurata come numero di simboli di codice (bit se $D = 2$), è indicata con la notazione scalare $l(x)$ oppure $l_i = l(x_i)$ per $i = 1, \dots, m$.
 
-### Lunghezza Media Attesa del Codice
+### Lunghezza Media Attesa Del Codice
 
 La prestazione di un codice di sorgente si misura attraverso la sua __lunghezza media attesa__ $L(C)$, definita come il valore atteso della lunghezza delle parole rispetto alla distribuzione di probabilità della sorgente:
 
@@ -64,7 +64,7 @@ $$
 
 Il problema fondamentale della compressione senza perdita consiste nel minimizzare $L(C)$ selezionando opportunamente le lunghezze $l_i$, sotto il vincolo inderogabile che il ricevitore possa decodificare ogni sequenza senza equivoci.
 
-## Tassonomia e Classi Fondamentali di Codici
+## Tassonomia E Classi Fondamentali Di Codici
 
 Non tutte le funzioni di mappa $C: \mathcal{X} \to \mathcal{D}^*$ consentono una decodifica affidabile. Quando trasmettiamo simboli isolati o flussi continui privi di spaziatori, dobbiamo imporre condizioni di invertibilità via via più restrittive.
 
@@ -82,7 +82,7 @@ La non singolarità garantisce l'iniettività della mappa $C$ per singoli simbol
 
 Tuttavia, la non singolarità non è sufficiente quando la sorgente emette una sequenza continua di simboli nel tempo.
 
-### Estensione di un Codice
+### Estensione Di Un Codice
 
 Nella trasmissione di flussi continui, la sorgente emette stringhe composte da più simboli $x_{i_1} x_{i_2} \dots x_{i_n} \in \mathcal{X}^*$. L'__estensione di codice__ $C^*$ è la funzione definita dalla concatenazione diretta delle parole di codice corrispondenti:
 
@@ -108,7 +108,7 @@ $$
 
 La mappa è iniettiva sui singoli simboli, dunque il codice è non singolare. Tuttavia, ricevendo la sequenza binaria $010$, il decodificatore si trova davanti a un'ambiguità insanabile: la sequenza può rappresentare il singolo simbolo $2$, oppure la coppia $14$ (cioè $0$ seguito da $10$), oppure la coppia $31$ (cioè $01$ seguito da $0$). Il codice non è univocamente decodificabile.
 
-### Codici Istantanei o Codici Prefisso
+### Codici Istantanei O Codici Prefisso
 
 Un codice $C$ si definisce __istantaneo__ o __codice a prefisso__ (__prefix-free code__) se nessuna parola di codice valida costituisce il prefisso di un'altra parola di codice dello stesso insieme:
 
@@ -118,7 +118,7 @@ $$
 
 Nei codici istantanei la delimitazione di ciascuna parola è intrinseca: non appena il decodificatore riconosce una sequenza di bit corrispondente a una parola di codice valida, può emettere immediatamente il simbolo decodificato. Non occorre attendere i bit successivi (zero ritardo di decodifica) né inserire caratteri di spaziatura.
 
-### Gerarchia Insiemistica delle Classi
+### Gerarchia Insiemistica Delle Classi
 
 Le quattro classi formano una catena di inclusioni proprie:
 
@@ -130,13 +130,13 @@ $$
 
 Ogni codice istantaneo è univocamente decodificabile, ogni codice univocamente decodificabile è non singolare, ma i viceversa non valgono.
 
-### Il Caso Storico del Codice Morse
+### Il Caso Storico Del Codice Morse
 
 Nel codice telegrafico ideato da Samuel Morse, le lettere sono rappresentate da sequenze di punti e linee: la lettera $E$ corrisponde a un punto $(\cdot)$ e la lettera $A$ a un punto seguito da una linea $(\cdot -)$. Poiché la sequenza per $E$ è prefisso esatto di quella per $A$, il codice Morse binario non sarebbe né istantaneo né univocamente decodificabile.
 
 Nella pratica telegrafica il sistema opera in modo affidabile perché introduce una __pausa di silenzio__ tra lettere consecutive e una pausa più lunga tra parole. L'alfabeto di codice reale non è binario ma ternario: $\mathcal{D} = \{\text{punto}, \text{linea}, \text{pausa}\}$, dove la pausa funge da delimitatore esplicito di fine parola.
 
-### Confronto Operativo tra le Classi di Codici
+### Confronto Operativo Tra Le Classi Di Codici
 
 Consideriamo una sorgente a quattro simboli $\mathcal{X} = \{1, 2, 3, 4\}$. La tabella seguente illustra il comportamento delle quattro classi:
 
@@ -153,11 +153,11 @@ Analizziamo il terzo codice della tabella: la parola $C(3) = 11$ è prefisso di 
 
 La decodifica è esatta ma richiede ritardo e ispezione dei bit futuri (__lookahead__). Nel quarto codice, invece, nessuna parola è prefisso di un'altra: la lettura di uno $0$ identifica univocamente $1$, la stringa $10$ identifica $2$, $110$ identifica $3$ e $111$ identifica $4$, istantaneamente e a zero memoria.
 
-## La Disuguaglianza di Kraft per Codici Istantanei
+## La Disuguaglianza Di Kraft per Codici Istantanei
 
 La richiesta che nessun codice sia prefisso di un altro impone un vincolo geometrico e algebrico stringente sulle lunghezze delle parole: non possiamo assegnare stringhe corte a troppi simboli contemporaneamente. Tale limite è sancito dalla celebre __disuguaglianza di Kraft__ (1949).
 
-### Enunciato del Teorema di Kraft
+### Enunciato Del Teorema Di Kraft
 
 Sia dato un codice istantaneo definito su un alfabeto di codice di dimensione $D$, avente parole di codice con lunghezze intere $l_1, l_2, \dots, l_m$. Allora le lunghezze soddisfano necessariamente la disuguaglianza:
 
@@ -167,7 +167,7 @@ $$
 
 Viceversa, assegnato un qualsiasi insieme di interi positivi $l_1, l_2, \dots, l_m$ che soddisfi tale disuguaglianza, esiste sempre un codice istantaneo su alfabeto $D$-ario con esattamente tali lunghezze di parola.
 
-### Dimostrazione Geometrica tramite Albero D-ario
+### Dimostrazione Geometrica Tramite Albero D-ario
 
 Rappresentiamo le parole di codice come nodi all'interno di un albero $D$-ario completo di profondità massima:
 
@@ -215,7 +215,7 @@ $$
 \sum_{i=1}^m D^{-l_i} \le 1
 $$
 
-### Dimostrazione della Condizione Sufficiente
+### Dimostrazione Della Condizione Sufficiente
 
 Assumiamo che un insieme di interi positivi $\{l_1, l_2, \dots, l_m\}$, ordinati in senso non decrescente ($l_1 \le l_2 \le \dots \le l_m$), soddisfi la condizione $\sum_{i=1}^m D^{-l_i} \le 1$.
 
@@ -233,7 +233,7 @@ All'ultimo livello rimane sempre almeno una foglia libera. Risalendo l'albero fi
 
 L'algoritmo costruttivo assegna tutti gli $m$ simboli senza conflitti di prefisso, dimostrando la sufficienza della condizione.
 
-### Estensione ad Alfabeti Numerabili Infiniti
+### Estensione Ad Alfabeti Numerabili Infiniti
 
 Se l'alfabeto di sorgente è infinito numerabile ($\mathcal{X} = \{x_1, x_2, \dots\}$ con $m \to \infty$), la disuguaglianza di Kraft mantiene la propria validità nella forma di serie convergente:
 
@@ -243,13 +243,13 @@ $$
 
 Se la serie diverge o supera l'unità, non può esistere alcun codice istantaneo con tali lunghezze.
 
-## Il Teorema di McMillan per Codici Univocamente Decodificabili
+## Il Teorema Di McMillan per Codici Univocamente Decodificabili
 
 Sorge spontaneo un quesito ingegneristico fondamentale: se rinunciamo alla decodifica istantanea e ammettiamo un ritardo temporale (utilizzando codici univocamente decodificabili con lookahead), possiamo violare la disuguaglianza di Kraft e ottenere parole di codice più corte?
 
 Il __Teorema di McMillan__ (1956) risponde negativamente: la medesima disuguaglianza governa l'intera classe dei codici univocamente decodificabili.
 
-### Enunciato del Teorema di McMillan
+### Enunciato Del Teorema Di McMillan
 
 Sia $C$ un codice univocamente decodificabile definito su un alfabeto di codice di dimensione $D$, con lunghezze delle parole $l_1, l_2, \dots, l_m$. Allora le lunghezze soddisfano necessariamente la disuguaglianza di Kraft:
 
@@ -257,7 +257,7 @@ $$
 \sum_{i=1}^m D^{-l_i} \le 1
 $$
 
-### Dimostrazione Algebrica tramite Bound Combinatorio
+### Dimostrazione Algebrica Tramite Bound Combinatorio
 
 Dimostriamo il teorema elevando la sommatoria a una potenza intera arbitraria $k \ge 1$:
 
@@ -265,7 +265,7 @@ $$
 \left( \sum_{i=1}^m D^{-l_i} \right)^k = \sum_{i_1=1}^m \sum_{i_2=1}^m \dots \sum_{i_k=1}^m D^{-(l_{i_1} + l_{i_2} + \dots + l_{i_k})}
 $$
 
-La somma a secondo membro scorre su tutte le $m^k$ possibili sequenze di $k$ simboli di sorgente. 
+La somma a secondo membro scorre su tutte le $m^k$ possibili sequenze di $k$ simboli di sorgente.
 
 Raggruppiamo i termini in base alla lunghezza complessiva della sequenza di codice concatenata:
 
@@ -327,7 +327,7 @@ $$
 
 Per la trattazione analitica estesa e ulteriori note storiche rimandiamo all'[[zz. Argomenti extra#Dimostrazione Integrale del Teorema di McMillan per Codici Univocamente Decodificabili|approfondimento analitico di McMillan]].
 
-### Conseguenza Fondamentale: Nessun Vantaggio dal Ritardo
+### Conseguenza Fondamentale: Nessun Vantaggio Dal Ritardo
 
 Poiché i codici istantanei sono un sottoinsieme proprio dei codici univocamente decodificabili, ed entrambe le classi condividono esattamente il medesimo vincolo algebrico $\sum D^{-l_i} \le 1$:
 
@@ -337,7 +337,7 @@ $$
 
 Ammettere un ritardo di decodifica o una complessità di parsing retrogrado non consente di guadagnare nemmeno una frazione di bit nella lunghezza media attesa. Ai fini della compressione ottima possiamo quindi restringere l'attenzione esclusivamente ai codici prefissi.
 
-## Lunghezza Media Ottima e Limite di Shannon
+## Lunghezza Media Ottima E Limite Di Shannon
 
 Avendo dimostrato che ogni codice ammissibile deve rispettare il vincolo di Kraft, il problema della progettazione ottima si traduce nel problema di ottimizzazione matematica vincolata:
 
@@ -345,7 +345,7 @@ $$
 \min_{l_1, \dots, l_m \in \mathbb{N}^+} \sum_{i=1}^m p_i l_i \quad \text{soggetto a} \quad \sum_{i=1}^m D^{-l_i} \le 1
 $$
 
-### Rilassamento Continuo e Ottimizzazione Lagrangiana
+### Rilassamento Continuo E Ottimizzazione Lagrangiana
 
 Rilassiamo momentaneamente il vincolo di interezza, ammettendo che le lunghezze possano assumere valori reali continui $l_i \in \mathbb{R}^+$.
 
@@ -387,7 +387,7 @@ $$
 
 L'entropia di sorgente $H_D(X)$ costituisce il limite inferiore invalicabile per la lunghezza media attesa di qualsiasi codice di sorgente decodificabile senza ambiguità.
 
-### Distribuzioni Diadiche e Compressione Ideale
+### Distribuzioni Diadiche E Compressione Ideale
 
 Una distribuzione di probabilità si definisce __diadica__ (o $D$-adica) se ogni probabilità è una potenza intera negativa della base dell'alfabeto di codice:
 
@@ -405,7 +405,7 @@ $$
 
 Non vi è alcuno spreco di bit, e il codice è perfetto.
 
-### Teorema del Limite di Shannon per Sorgenti Generiche
+### Teorema Del Limite Di Shannon per Sorgenti Generiche
 
 Nelle sorgenti reali le probabilità non sono generalmente potenze negative di $D$, per cui i valori $-\log_D p_i$ non risultano interi.
 
@@ -457,7 +457,7 @@ $$
 
 L'inefficienza dovuta all'arrotondamento all'intero non supera mai $1$ simbolo di codice per simbolo di sorgente ($1$ bit per simbolo se $D = 2$).
 
-### Abbattimento del Sovraccarico tramite Codifica a Blocchi
+### Abbattimento Del Sovraccarico Tramite Codifica a Blocchi
 
 Un sovraccarico fino a $1$ bit/simbolo può risultare inaccettabile quando l'entropia della sorgente è molto bassa (ad esempio se $H(X) = 0.2$ bit/simbolo, pagare $1.2$ bit significa introdurre una ridondanza percentuale del $500\%$).
 
@@ -499,7 +499,7 @@ $$
 
 La codifica a blocchi consente di avvicinarsi all'entropia con precisione arbitraria, al prezzo di una complessità combinatoria crescente esponenzialmente con la dimensione del blocco ($m^n$).
 
-### Il Costo della Statistica Errata: Mismatched Code e Divergenza KL
+### Il Costo Della Statistica Errata: Mismatched Code E Divergenza KL
 
 Supponiamo che un progettista ottimizzi un codice prefisso assumendo un modello teorico errato $q(x)$, mentre la realtà fisica della sorgente è governata dalla distribuzione $p(x)$.
 
@@ -541,7 +541,7 @@ $$
 
 Il prezzo esatto, misurato in bit sprecati per simbolo, pagato per aver formulato un modello statistico errato coincide con la __divergenza di Kullback-Leibler__ $D(p \parallel q) \ge 0$. La divergenza KL quantifica l'inefficienza intrinseca di compressione derivante dall'adozione del modello $q$ al posto della realtà $p$.
 
-## Algoritmo di Huffman Ottimo
+## Algoritmo Di Huffman Ottimo
 
 Mentre il codice di Shannon assegna lunghezze teoriche $l_i = \lceil \log(1/p_i) \rceil$ senza garantire l'ottimalità globale a blocchi finiti, David Huffman (1952) ideò una procedura deterministica greedy che costruisce il codice prefisso a minima lunghezza media attesa assoluta.
 
@@ -554,7 +554,7 @@ L'algoritmo di Huffman costruisce l'albero di codice partendo dalle foglie (i si
 3. __Ricorsione__: Riordiniamo la lista ridotta di $m-1$ elementi e iteriamo la fusione fino a ottenere un unico nodo radice di probabilità $1.00$.
 4. __Backtracking e Assegnazione Bit__: Partendo dalla radice, assegniamo a ciascuna diramazione un bit binario ('0' al ramo superiore, '1' al ramo inferiore). Ripercorrendo l'albero dalla radice alle foglie, ricaviamo le parole di codice definitive.
 
-### Sviluppo Analitico Completo su Esempio a Cinque Simboli
+### Sviluppo Analitico Completo Su Esempio a Cinque Simboli
 
 Consideriamo una sorgente a 5 simboli $\mathcal{X} = \{1, 2, 3, 4, 5\}$ caratterizzata dal seguente vettore di probabilità:
 
@@ -605,7 +605,7 @@ $$
 \eta = \frac{H(X)}{L(C_{\text{Huff}})} = \frac{2.2855}{2.30} \approx 99.37\%
 $$
 
-### Codici di Huffman D-ari e Calcolo dei Simboli Dummy
+### Codici Di Huffman D-ari E Calcolo Dei Simboli Dummy
 
 Quando l'alfabeto di codice ha cardinalità $D > 2$ (ad esempio ternario con $D = 3$), a ciascun passo di riduzione dobbiamo fondere $D$ nodi anziché $2$.
 
@@ -631,7 +631,7 @@ $$
 
 I simboli fittizi vengono collocati in fondo alla lista ordinata e assorbiti immediatamente nella primissima fusione, garantendo la perfetta simmetria dell'albero $D$-ario.
 
-### Dimostrazione di Ottimalità tramite Forma Canonica
+### Dimostrazione Di Ottimalità Tramite Forma Canonica
 
 L'ottimalità globale dell'algoritmo di Huffman poggia sulle tre proprietà necessarie di un codice prefisso ottimo in forma canonica:
 1. __Inversione dell'ordine__: se $p_j > p_k$, allora $l_j \le l_k$ (simboli più frequenti hanno parole non più lunghe).
@@ -682,19 +682,19 @@ $$
 
 Il codice di Huffman è rigorosamente ottimo per ogni $m$. Per i dettagli completi si veda la [[zz. Argomenti extra#Dimostrazione Formale del Teorema di Ottimalità dei Codici di Huffman tramite Riduzione Canonica|dimostrazione formale di ottimalità di Huffman]].
 
-## Codici di Huffman Canonici e Standard Industriali
+## Codici Di Huffman Canonici E Standard Industriali
 
 In un'applicazione ingegneristica reale (come la decompressione di un archivio ZIP o la riproduzione di un flusso JPEG), trasmettere l'albero di Huffman esplicito comporterebbe un overhead di metadati inaccettabile: salvare la topologia dei nodi e i puntatori per un alfabeto di $256$ byte richiederebbe svariate centinaia di byte aggiuntivi.
 
 I __Codici di Huffman Canonici__ risolvono il problema alla radice standardizzando l'assegnazione delle parole di codice a partire dalla sola conoscenza della lista ordinata delle lunghezze $\{l_1, l_2, \dots, l_m\}$.
 
-### Il Problema dell'Overhead dei Metadati
+### Il Problema dell'Overhead Dei Metadati
 
 Un albero di Huffman non è univoco: a ogni fusione possiamo scambiare arbitrariamente l'assegnazione dello '0' e dell' '1' sui due rami, generando decine di codici equivalenti con la medesima lunghezza media $L$.
 
 Nei sistemi industriali vogliamo eliminare questa ambiguità imponendo una convenzione deterministica universale nota sia al codificatore sia al decodificatore.
 
-### Algoritmo Deterministico di Assegnazione Canonica
+### Algoritmo Deterministico Di Assegnazione Canonica
 
 L'algoritmo di canonizzazione opera secondo due regole fondamentali:
 
@@ -720,7 +720,7 @@ $$
 
 Lo shift a sinistra garantisce che il nuovo valore occupi un sottoalbero distinto e che nessuna parola precedente possa diventarne prefisso.
 
-### Generazione Dettagliata del Codebook Canonico
+### Generazione Dettagliata Del Codebook Canonico
 
 Applichiamo la procedura al vettore delle lunghezze ricavato nell'esempio a 5 simboli: $l = [2, 2, 2, 3, 3]$.
 
@@ -734,18 +734,18 @@ Il diagramma vettoriale seguente illustra il flusso deterministico di generazion
 
 ![[huffman_canonical_codebook.svg|center mid]]
 
-### Vantaggi Hardware e Implementazioni nei Formati Reali
+### Vantaggi Hardware E Implementazioni Nei Formati Reali
 
 Questa formulazione offre vantaggi ingegneristici straordinari:
 - __Minimo overhead nel file compresso__: il trasmettitore non deve inviare l'albero né le parole di codice; è sufficiente trasmettere il conteggio di quante parole esistono per ciascuna lunghezza. Per un alfabeto di $256$ byte bastano poche decine di byte di header.
 - __Decodifica hardware istantanea__: il ricevitore memorizza unicamente due array compatti (`base_code[len]` e `symbol_offset[len]`). La decodifica si riduce a un semplice confronto numerico e a un accesso indicizzato in tabella (__lookup table__), senza alcun puntatore ad albero in memoria RAM.
 - __Standard industriali__: i codici canonici di Huffman costituiscono il nucleo di compressione di formati universali come __Deflate (ZIP, gzip, zlib)__, __PNG__, __JPEG__, __MP3__ e __Brotli__.
 
-## Equivalenza con il Gioco delle Venti Domande
+## Equivalenza Con Il Gioco Delle Venti Domande
 
 Un'elegante interpretazione della codifica di sorgente risiede nella sua equivalenza formale con il gioco logico delle "20 Domande", in cui un giocatore deve identificare un oggetto incognito $X \sim p(x)$ formulando domande binarie a risposta esclusiva (Sì / No).
 
-### Strategia Ottima con Domande Binarie Libere
+### Strategia Ottima Con Domande Binarie Libere
 
 Sia $Q$ il numero di domande necessarie per individuare con certezza l'oggetto $X$. Ogni domanda corrisponde a partizionare lo spazio $\mathcal{X}$ in due insiemi complementari $A$ e $A^c$, chiedendo «$X \in A$ ?».
 
@@ -765,7 +765,7 @@ $$
 H(X) \le \mathbb{E}[Q_{\text{ottimo}}] < H(X) + 1
 $$
 
-### Domande Vincolate all'Ordine e Codici a Fetta
+### Domande Vincolate all'Ordine E Codici a Fetta
 
 Consideriamo ora una variante in cui gli elementi di $\mathcal{X} = \{1, 2, \dots, m\}$ possiedono un ordinamento intrinseco e le uniche domande ammissibili sono della forma «$X > a$ ?» per una data soglia $a$ (__slice questions__ o domande a fetta).
 
@@ -792,7 +792,7 @@ $$
 
 Il vincolo d'ordine costa al più $1$ bit aggiuntivo rispetto a Huffman.
 
-## Confronto Prestazionale: Shannon, Fano e Huffman
+## Confronto Prestazionale: Shannon, Fano E Huffman
 
 Prima dell'algoritmo di Huffman, Claude Shannon (1948) e Robert Fano (1949) avevano proposto due approcci indipendenti di codifica a prefisso.
 
@@ -802,7 +802,7 @@ Prima dell'algoritmo di Huffman, Claude Shannon (1948) e Robert Fano (1949) avev
 - __Codice di Fano (Top-Down Greedy)__: ordina i simboli per probabilità decrescente e li partiziona ricorsivamente in due sottoinsiemi contigui di massa probabilistica il più vicina possibile a $0.5$. Assegna il bit '0' al primo gruppo e '1' al secondo, procedendo dall'alto verso il basso.
 - __Codice di Huffman (Bottom-Up Esatto)__: fonde i nodi minimi dal basso verso l'alto, garantendo l'ottimalità globale matematica.
 
-### Il Controesempio di Cover e Thomas: Sub-Ottimalità di Fano
+### Il Controesempio Di Cover E Thomas: Sub-Ottimalità Di Fano
 
 L'approccio greedy top-down di Fano è intuitivo ma soffre di miopia algoritmica: una decisione localmente ottima alla radice può vincolare le partizioni successive a configurazioni complessivamente inefficienti.
 
@@ -846,11 +846,11 @@ $$
 L_{\text{Huff}} = 2.30 \quad \text{bit} < L_{\text{Fano}} = 2.31 \quad \text{bit}
 $$
 
-## Codifica di Shannon-Fano-Elias e Fondamenti della Codifica Aritmetica
+## Codifica Di Shannon-Fano-Elias E Fondamenti Della Codifica Aritmetica
 
 La codifica di __Shannon-Fano-Elias__ riveste un'importanza concettuale primaria perché stabilisce il legame matematico diretto tra la codifica a simboli discreti e la moderna __codifica aritmetica__.
 
-### Funzione di Ripartizione Cumulativa Modificata
+### Funzione Di Ripartizione Cumulativa Modificata
 
 Sia $\mathcal{X} = \{1, 2, \dots, m\}$ un alfabeto discreto ordinato con probabilità $p(x) > 0$. Definiamo la funzione di distribuzione cumulativa (CDF):
 
@@ -876,7 +876,7 @@ Il numero reale $\bar{F}(x) \in [0, 1)$ identifica univocamente il simbolo $x$.
 
 ![[slide_28_shannon_fano_elias_interval.png|center mid]]
 
-### Troncamento Binario ed Estrazione della Codeword
+### Troncamento Binario Ed Estrazione Della Codeword
 
 Essendo un numero reale continuo in $[0, 1)$, $\bar{F}(x)$ richiederebbe in linea di principio un numero infinito di bit. Per ricavare una parola finita, consideriamo il suo sviluppo binario:
 
@@ -892,7 +892,7 @@ $$
 
 La sequenza finita di bit $b_1 b_2 \dots b_{l(x)}$ costituisce la parola di codice $C(x)$.
 
-### Dimostrazione Rigorosa della Proprietà Prefissa
+### Dimostrazione Rigorosa Della Proprietà Prefissa
 
 Scegliendo come lunghezza di troncamento:
 
@@ -930,7 +930,7 @@ Poiché i gradini associati a simboli differenti sono mutuamente disgiunti, anch
 
 Nessun intervallo diadico può contenerne un altro. In termini di stringhe binarie, ciò implica che nessuna sequenza troncata può essere prefisso di un'altra. Il codice è rigorosamente prefisso.
 
-### Delimitazione della Lunghezza Media Attesa
+### Delimitazione Della Lunghezza Media Attesa
 
 Calcoliamo il valore atteso della lunghezza del codice di Shannon-Fano-Elias:
 
@@ -958,7 +958,7 @@ $$
 
 Il codice di Shannon-Fano-Elias richiede tra $1$ e $2$ bit in più rispetto all'entropia teorica della sorgente.
 
-### Connessione Architetturale con la Codifica Aritmetica
+### Connessione Architetturale Con la Codifica Aritmetica
 
 La codifica di Shannon-Fano-Elias paga un prezzo di circa $1$ bit di sovraccarico in più rispetto a Huffman sul singolo simbolo. Tuttavia, essa presenta un vantaggio concettuale decisivo: non richiede la costruzione di alberi combinatori.
 
@@ -966,7 +966,7 @@ Quando la applichiamo a una sequenza di $n$ simboli consecutivi, l'intervallo $[
 
 Il sovraccarico di $2$ bit viene così spalmato sull'intera sequenza di $n$ simboli, riducendo l'overhead a soli $2/n$ bit per simbolo. Questo principio costituisce il fondamento matematico diretto della __Codifica Aritmetica__, impiegata nei moderni standard di compressione video (H.264/AVC, H.265/HEVC tramite CABAC) e immagini (JPEG 2000, JPEG XL).
 
-## Teorema sull'Ottimalità Competitiva della Codifica di Sorgente
+## Teorema sull'Ottimalità Competitiva Della Codifica Di Sorgente
 
 La formulazione classica di ottimalità mira a minimizzare la lunghezza media attesa:
 
@@ -978,7 +978,7 @@ Tuttavia, in uno scenario di teoria dei giochi o di decisione competitiva, possi
 
 Il __Teorema dell'Ottimalità Competitiva__ (Thomas Cover e Joy Thomas, Sez. 5.10) dimostra che ciò è matematicamente impossibile: il codice ottimo domina stocasticamente qualsiasi concorrente anche nel confronto a coppie.
 
-### Il Modello del Gioco a Somma Zero tra Codificatori
+### Il Modello Del Gioco a Somma Zero Tra Codificatori
 
 Consideriamo due progettisti che competono per codificare la medesima variabile aleatoria $X \sim p(x)$. Il primo giocatore assegna le lunghezze $l(x)$ previste dal codice di Shannon, mentre il secondo adotta un qualsiasi codice alternativo univocamente decodificabile con lunghezze $l'(x)$.
 
@@ -988,7 +988,7 @@ $$
 W = \begin{cases} +1 & \text{se } l(X) < l'(X) \quad (\text{Shannon vince}) \\ 0 & \text{se } l(X) = l'(X) \quad (\text{Parità}) \\ -1 & \text{se } l(X) > l'(X) \quad (\text{Shannon perde}) \end{cases}
 $$
 
-### Enunciato e Dimostrazione del Teorema di Cover e Thomas
+### Enunciato E Dimostrazione Del Teorema Di Cover E Thomas
 
 Sia $l(x) = \lceil \log_2(1/p(x)) \rceil$ la lunghezza assegnata dal codice di Shannon per una distribuzione $p(x)$, e sia $l'(x)$ la lunghezza assegnata da un qualsiasi codice concorrente univocamente decodificabile.
 
@@ -1032,7 +1032,7 @@ $$
 
 La disuguaglianza è pienamente dimostrata. Per ulteriori dettagli e generalizzazioni si veda la sezione dedicata in [[zz. Argomenti extra#Teorema sull'Ottimalità Competitiva della Codifica di Shannon e Huffman|approfondimento sull'ottimalità competitiva]].
 
-### Conseguenze Operative: Bound al Cinquanta Percento e Payoff Atteso
+### Conseguenze Operative: Bound Al Cinquanta Percento E Payoff Atteso
 
 Questo risultato comporta conseguenze decisive:
 
@@ -1058,7 +1058,7 @@ $$
 
 Ottimizzare la media attesa $\mathbb{E}[L]$ non espone a rischi occulti nella stragrande maggioranza delle realizzazioni individuali.
 
-## Quadro Sinottico Comparativo dei Metodi di Codifica
+## Quadro Sinottico Comparativo Dei Metodi Di Codifica
 
 La tabella seguente riassume le caratteristiche matematiche, algoritmiche e prestazionali degli schemi di codifica senza perdita analizzati nel capitolo:
 

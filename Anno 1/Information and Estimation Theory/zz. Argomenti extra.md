@@ -1,10 +1,10 @@
-# zz. Argomenti extra
+# Zz. Argomenti Extra
 
 Questo documento raccoglie dimostrazioni analitiche estese, passaggi algebrici dettagliati e modelli matematici collaterali del corso di __Information and Estimation Theory__ non presenti letteralmente nelle presentazioni sintetiche dei docenti, ma fondamentali nella letteratura scientifica di riferimento (Steven M. Kay, _Fundamentals of Statistical Signal Processing_, Vol. I & II; Thomas M. Cover & Joy A. Thomas, _Elements of Information Theory_).
 
 Ogni sezione è puntualmente richiamata dai capitoli primari di lezione tramite wikilink dedicati.
 
-## Dimostrazione del Limite Inferiore di Cramer-Rao (CRLB)
+## Dimostrazione Del Limite Inferiore Di Cramer-Rao (CRLB)
 
 La derivazione formale della disuguaglianza del CRLB scalare poggia sull'applicazione della __disuguaglianza di Cauchy-Schwarz__ a due variabili aleatorie opportune definite nello spazio delle osservazioni $\mathcal{X}$.
 
@@ -32,7 +32,7 @@ $$
 \text{Var}\{S(\mathbf{x}; \theta)\} = \mathbb{E}\left[ S^2(\mathbf{x}; \theta) \right] = I(\theta)
 $$
 
-### Calcolo della Covarianza tra Stimatore e Score
+### Calcolo Della Covarianza Tra Stimatore E Score
 
 Calcoliamo la covarianza tra lo stimatore $\hat{\theta}$ e la funzione di score $S(\mathbf{x}; \theta)$:
 
@@ -66,7 +66,7 @@ $$
 
 La covarianza tra un qualsiasi stimatore non polarizzato e la funzione di score vale identicamente $1$.
 
-### Applicazione della Disuguaglianza di Cauchy-Schwarz
+### Applicazione Della Disuguaglianza Di Cauchy-Schwarz
 
 Per due variabili aleatorie arbitrarie $U$ e $V$, la disuguaglianza di Cauchy-Schwarz stabilisce che il quadrato della loro covarianza è limitato superiormente dal prodotto delle loro varianze:
 
@@ -92,7 +92,7 @@ $$
 \text{Var}\{\hat{\theta}\} \ge \frac{1}{I(\theta)}
 $$
 
-### Condizione di Uguaglianza ed Efficienza
+### Condizione Di Uguaglianza Ed Efficienza
 
 La disuguaglianza di Cauchy-Schwarz diventa un'uguaglianza se e solo se le due variabili aleatorie $(U - \mathbb{E}[U])$ e $(V - \mathbb{E}[V])$ sono proporzionali tra loro con probabilità $1$, ovvero esiste una costante $k(\theta)$ non dipendente da $\mathbf{x}$ tale che:
 
@@ -120,7 +120,7 @@ $$
 
 Se riusciamo a esprimere la derivata prima della log-verosimiglianza come il prodotto di una funzione $I(\theta)$ per una differenza $(\hat{\theta} - \theta)$ in cui $\hat{\theta} = g(\mathbf{x})$ non dipende da $\theta$, allora $\hat{\theta} = g(\mathbf{x})$ è l'__MVU estimator efficiente__.
 
-## Identità tra la Prima e la Seconda Derivata dell'Informazione di Fisher
+## Identità Tra la Prima E la Seconda Derivata dell'Informazione Di Fisher
 
 Dimostriamo l'equivalenza fondamentale per il calcolo dell'Informazione di Fisher:
 
@@ -170,7 +170,7 @@ $$
 I(\theta) = \mathbb{E}\left[ \left( \frac{\partial \ln f_{\mathbf{x}}(\mathbf{x}; \theta)}{\partial \theta} \right)^2 \right] = -\mathbb{E}\left[ \frac{\partial^2 \ln f_{\mathbf{x}}(\mathbf{x}; \theta)}{\partial \theta^2} \right]
 $$
 
-## Disuguaglianza tra Elementi della FIM Inversa e Complemento di Schur
+## Disuguaglianza Tra Elementi Della FIM Inversa E Complemento Di Schur
 
 Nel caso vettoriale, la disuguaglianza fondamentale tra l'elemento diagonale della matrice di informazione di Fisher inversa e il reciproco dell'elemento della matrice originaria:
 
@@ -226,7 +226,7 @@ $$
 
 L'uguaglianza $[\mathbf{I}^{-1}]_{ii} = \frac{1}{[\mathbf{I}]_{ii}}$ si verifica se e solo se la colonna e la riga dei termini di accoppiamento sono nulle ($\mathbf{i}_{12} = \mathbf{0}$), ovvero quando la matrice di informazione di Fisher è diagonale a blocchi e i parametri non interferiscono statisticamente tra loro nella stima.
 
-## Dimostrazione del Teorema di Gauss-Markov per il BLUE Vettoriale
+## Dimostrazione Del Teorema Di Gauss-Markov per Il BLUE Vettoriale
 
 Consideriamo il modello lineare vettoriale per le osservazioni $\mathbf{x} \in \mathbb{R}^N$:
 
@@ -325,7 +325,7 @@ La differenza $\mathbf{C}_{\tilde{\boldsymbol{\theta}}} - \mathbf{C}_{\hat{\bold
 
 Questo dimostra in modo costruttivo e inequivocabile che $\hat{\boldsymbol{\theta}}_{\text{BLUE}}$ minimizza la varianza di qualsiasi combinazione lineare dei parametri $\mathbf{c}^T \boldsymbol{\theta}$, sancendo l'unicità e l'ottimalità globale del BLUE nella classe lineare.
 
-## Proprietà Geometriche della Matrice di Proiezione Ortogonale nei Minimi Quadrati
+## Proprietà Geometriche Della Matrice Di Proiezione Ortogonale Nei Minimi Quadrati
 
 Nel contesto della stima deterministica ai minimi quadrati per il modello lineare $\mathbf{x} = \mathbf{H}\boldsymbol{\theta} + \mathbf{e}$, con $\mathbf{H} \in \mathbb{R}^{N \times P}$ di rango colonna pieno $P \le N$, la stima del segnale utile $\hat{\mathbf{s}}$ è ottenuta proiettando il vettore delle osservazioni $\mathbf{x}$ sul sottospazio generato dalle colonne di $\mathbf{H}$ (indicato con $\mathcal{R}(\mathbf{H})$):
 
@@ -371,7 +371,7 @@ $$
 \mathbf{P}_{\mathbf{H}} \mathbf{P}_{\mathbf{H}}^\perp = \mathbf{P}_{\mathbf{H}} (\mathbf{I}_N - \mathbf{P}_{\mathbf{H}}) = \mathbf{P}_{\mathbf{H}} - \mathbf{P}_{\mathbf{H}}^2 = \mathbf{P}_{\mathbf{H}} - \mathbf{P}_{\mathbf{H}} = \mathbf{0}
 $$
 
-### Traccia e Rango
+### Traccia E Rango
 
 Sfruttando la proprietà ciclica dell'operatore traccia $\text{tr}(\mathbf{A}\mathbf{B}) = \text{tr}(\mathbf{B}\mathbf{A})$:
 
@@ -385,7 +385,7 @@ $$
 \text{rk}(\mathbf{P}_{\mathbf{H}}) = \text{tr}(\mathbf{P}_{\mathbf{H}}) = P \quad \text{e} \quad \text{rk}(\mathbf{P}_{\mathbf{H}}^\perp) = \text{tr}(\mathbf{I}_N - \mathbf{P}_{\mathbf{H}}) = N - P
 $$
 
-### Decomposizione dell'Energia (Teorema di Pitagora)
+### Decomposizione dell'Energia (Teorema Di Pitagora)
 
 Poiché il vettore delle osservazioni si decompone ortogonalmente nella componente di segnale e nel residuo:
 
@@ -411,7 +411,7 @@ $$
 J_{\min} = \|\hat{\mathbf{e}}\|^2 = \mathbf{x}^T \mathbf{P}_{\mathbf{H}}^\perp \mathbf{x} = \mathbf{x}^T (\mathbf{I}_N - \mathbf{P}_{\mathbf{H}}) \mathbf{x} = \|\mathbf{x}\|^2 - \mathbf{x}^T \mathbf{H}(\mathbf{H}^T\mathbf{H})^{-1}\mathbf{H}^T \mathbf{x}
 $$
 
-## Teorema di Zehna e Invarianza del MLE per Funzioni Non Biunivoche
+## Teorema Di Zehna E Invarianza Del MLE per Funzioni Non Biunivoche
 
 La proprietà di invarianza per trasformazioni continue è una delle caratteristiche distintive dello stimatore di massima verosimiglianza rispetto agli stimatori non polarizzati a minima varianza.
 
@@ -425,7 +425,7 @@ $$
 
 dove la mappa $\mathbf{g}$ non è necessariamente invertibile né biunivoca (ad esempio la funzione modulo, elevamento al quadrato, o proiezioni a dimensione inferiore $K < P$).
 
-### Definizione di Funzione di Verosimiglianza Indotta
+### Definizione Di Funzione Di Verosimiglianza Indotta
 
 Poiché la trasformazione può essere non iniettiva, a un generico valore $\boldsymbol{\alpha} \in \Omega$ può corrispondere un intero insieme di parametri $\boldsymbol{\theta}$ nella controimmagine:
 
@@ -439,7 +439,7 @@ $$
 \bar{L}(\boldsymbol{\alpha}) = \sup_{\boldsymbol{\theta} \in \mathbf{g}^{-1}(\boldsymbol{\alpha})} L(\boldsymbol{\theta}) = \sup_{\{ \boldsymbol{\theta} \in \Theta : \mathbf{g}(\boldsymbol{\theta}) = \boldsymbol{\alpha} \}} f_{\mathbf{x}}(\mathbf{x}; \boldsymbol{\theta})
 $$
 
-### Dimostrazione del Teorema di Invarianza
+### Dimostrazione Del Teorema Di Invarianza
 
 Lo stimatore di massima verosimiglianza di $\boldsymbol{\alpha}$ è definito per costruzione come il valore che massimizza la verosimiglianza indotta su $\Omega$:
 
@@ -479,7 +479,7 @@ $$
 
 Questo dimostra in piena generalità che per qualunque funzione $\mathbf{g}$, anche non biunivoca, la stima di massima verosimiglianza del parametro trasformato si ottiene applicando direttamente la trasformazione alla stima di massima verosimiglianza dei parametri originari.
 
-## Ottimalità della Media a Posteriori per il Criterio MMSE
+## Ottimalità Della Media a Posteriori per Il Criterio MMSE
 
 Nel paradigma bayesiano, il parametro da stimare $\theta$ è modellato come una variabile aleatoria avente densità di probabilità a priori $f_\theta(\theta)$. Il criterio di stima a minimo errore quadratico medio (__MMSE__, _Minimum Mean Square Error_) definisce la funzione di costo bayesiana (__BMSE__, _Bayesian Mean Square Error_):
 
@@ -489,7 +489,7 @@ $$
 
 Dimostriamo in modo rigoroso e costruttivo che lo stimatore che minimizza globalmente il $B_{\text{MSE}}$ per qualsiasi realizzazione campionaria $\mathbf{x}$ è la __media a posteriori__ $\mathbb{E}[\theta \mid \mathbf{x}]$.
 
-### Dimostrazione Tramite Decomposizione del Valore Atteso Condizionato
+### Dimostrazione Tramite Decomposizione Del Valore Atteso Condizionato
 
 Fattorizziamo la densità di probabilità congiunta secondo la regola di Bayes:
 
@@ -555,7 +555,7 @@ $$
 
 Nel caso vettoriale $\boldsymbol{\theta} \in \mathbb{R}^P$, la medesima minimizzazione applicata a ciascuna componente scalare conduce immediatamente a $\hat{\boldsymbol{\theta}}_{\text{MMSE}} = \mathbb{E}[\boldsymbol{\theta} \mid \mathbf{x}]$, con matrice di errore bayesiano pari al valor medio della matrice di covarianza a posteriori $\mathbf{C}_{\boldsymbol{\theta} \mid \mathbf{x}}$.
 
-## Aggiornamento Gaussiano e Completamento del Quadrato per la Stima Bayesiana DC
+## Aggiornamento Gaussiano E Completamento Del Quadrato per la Stima Bayesiana DC
 
 Consideriamo il modello di misura scalare con rumore bianco Gaussiano:
 
@@ -571,7 +571,7 @@ $$
 
 Vogliamo determinare la forma analitica esatta della PDF a posteriori $f_{\theta \mid \mathbf{x}}(\theta \mid \mathbf{x})$.
 
-### Derivazione dell'Esponente e Regola delle Precisioni
+### Derivazione dell'Esponente E Regola Delle Precisioni
 
 Applicando il teorema di Bayes, la densità a posteriori è proporzionale al prodotto tra la verosimiglianza condizionata e la prior:
 
@@ -631,11 +631,11 @@ $$
 
 La PDF a posteriori è pertanto una Gaussiana univariata esatta $\mathcal{N}(\mu_{\theta \mid \mathbf{x}}, \sigma_{\theta \mid \mathbf{x}}^2)$, e la media condizionata $\mu_{\theta \mid \mathbf{x}}$ è una combinazione convessa ottimale tra la media a priori $\mu_\theta$ e la media campionaria dei dati $\bar{x}$.
 
-## Lemma di Inversione Matriciale di Woodbury e Forme Duali dell'LMMSE
+## Lemma Di Inversione Matriciale Di Woodbury E Forme Duali dell'LMMSE
 
 Nel modello vettoriale lineare bayesiano $\mathbf{x} = \mathbf{H}\boldsymbol{\theta} + \mathbf{w}$, con $\boldsymbol{\theta} \in \mathbb{R}^P$ e $\mathbf{x} \in \mathbb{R}^N$ ($N \ge P$), dove $\boldsymbol{\theta}$ e $\mathbf{w}$ sono incorrelati con medie e covarianze $(\boldsymbol{\mu}_{\boldsymbol{\theta}}, \mathbf{C}_{\boldsymbol{\theta}\boldsymbol{\theta}})$ e $(\mathbf{0}, \mathbf{C}_{\mathbf{w}\mathbf{w}})$, lo stimatore lineare LMMSE assume due forme algebriche equivalenti che differiscono per la dimensione della matrice da invertire.
 
-### Dimostrazione dell'Identità di Woodbury
+### Dimostrazione dell'Identità Di Woodbury
 
 Il __Lemma di Inversione Matriciale__ (formula di Sherman-Morrison-Woodbury) stabilisce che per matrici di dimensioni compatibili:
 
@@ -673,7 +673,7 @@ $$
 
 L'identità è così rigorosamente dimostrata.
 
-### Applicazione alle Due Forme dell'LMMSE
+### Applicazione Alle Due Forme dell'LMMSE
 
 Nel modello lineare vettoriale:
 - Vettore valor medio osservato: $\boldsymbol{\mu}_{\mathbf{x}} = \mathbf{H}\boldsymbol{\mu}_{\boldsymbol{\theta}}$.
@@ -726,7 +726,7 @@ $$
 \mathbf{C}_{\boldsymbol{\epsilon}} = (\mathbf{C}_{\boldsymbol{\theta}\boldsymbol{\theta}}^{-1} + \mathbf{H}^T\mathbf{C}_{\mathbf{w}\mathbf{w}}^{-1}\mathbf{H})^{-1}
 $$
 
-### Vantaggi Computazionali e Connessione con il BLUE Classico
+### Vantaggi Computazionali E Connessione Con Il BLUE Classico
 
 1. __Efficienza Computazionale__: Quando il numero di osservazioni campionarie $N$ è molto maggiore del numero di parametri $P$ ($N \gg P$), calcolare l'inversa di ordine $P$ nella seconda forma richiede un costo $O(P^3)$ drasticamente inferiore al costo $O(N^3)$ della prima forma.
 2. __Connessione col Limite Classico__: Nel limite in cui la conoscenza a priori diventa infinitamente vaga (distribuzione non informativa o diffusa, $\mathbf{C}_{\boldsymbol{\theta}\boldsymbol{\theta}} \to \infty \implies \mathbf{C}_{\boldsymbol{\theta}\boldsymbol{\theta}}^{-1} \to \mathbf{0}$), la seconda forma collassa esattamente su:
@@ -737,7 +737,7 @@ $$
 
    e la matrice di BMSE converge alla matrice di covarianza del BLUE classico $(\mathbf{H}^T\mathbf{C}_{\mathbf{w}\mathbf{w}}^{-1}\mathbf{H})^{-1}$. L'approccio classico emerge dunque come il caso limite dell'approccio bayesiano privo di informazione a priori.
 
-## Dimostrazione Rigorosa del Teorema Fondamentale di Neyman-Pearson
+## Dimostrazione Rigorosa Del Teorema Fondamentale Di Neyman-Pearson
 
 Nel contesto della teoria della decisione binaria per ipotesi semplici, consideriamo due ipotesi statistiche:
 
@@ -753,7 +753,7 @@ $$
 
 dove $\mathcal{R}_1$ indica la regione di decisione in cui si accetta l'ipotesi $H_1$ ($\hat{H} = H_1$), mentre il complemento $\mathcal{R}_0 = \mathcal{X} \setminus \mathcal{R}_1$ corrisponde all'accettazione dell'ipotesi nulla $H_0$.
 
-### Dimostrazione Variazionale tramite Moltiplicatori di Lagrange
+### Dimostrazione Variazionale Tramite Moltiplicatori Di Lagrange
 
 Definiamo la funzione obiettivo lagrangiana introducendo il moltiplicatore scalare $\lambda$:
 
@@ -797,7 +797,7 @@ $$
 P_{\text{FA}} = \int_{\{\mathbf{x} : L(\mathbf{x}) > \gamma\}} f_{\mathbf{x}}(\mathbf{x}; H_0) \mathrm{d}\mathbf{x} = \alpha
 $$
 
-### Dimostrazione di Ottimalità Assoluta (Lemma di Neyman-Pearson)
+### Dimostrazione Di Ottimalità Assoluta (Lemma Di Neyman-Pearson)
 
 Dimostriamo che per qualunque altra regola di decisione concorrente definita da una regione $\mathcal{R}_1'$ avente probabilità di falso allarme ammissibile $P_{\text{FA}}' \le \alpha$, la probabilità di rilevazione $P_{\text{D}}'$ non può mai superare $P_{\text{D}}$.
 
@@ -843,7 +843,7 @@ $$
 
 Questo certifica in modo universale e incondizionato che nessun rilevatore binario avente probabilità di falso allarme minore o uguale ad $\alpha$ può conseguire una probabilità di rilevazione superiore a quella del Likelihood Ratio Test di Neyman-Pearson.
 
-## Derivazione Analitica della Funzione Q e Proprietà per il Calcolo delle Probabilità d'Errore
+## Derivazione Analitica Della Funzione Q E Proprietà per Il Calcolo Delle Probabilità d'Errore
 
 Nel calcolo analitico delle prestazioni dei rilevatori in presenza di rumore Gaussiano, la probabilità che una variabile normale standard superi una determinata soglia è espressa tramite la __funzione Q__ (nota anche come coda destra della distribuzione Gaussiana standard):
 
@@ -881,7 +881,7 @@ $$
 
    Di conseguenza, la funzione ammette funzione inversa $Q^{-1}: (0, 1) \to \mathbb{R}$ anch'essa strettamente decrescente e biunivoca.
 
-## Dimostrazione Analitica della Pendenza e Concavità della Curva ROC
+## Dimostrazione Analitica Della Pendenza E Concavità Della Curva ROC
 
 La curva ROC (_Receiver Operating Characteristic_) descrive la traiettoria parametrica della probabilità di rilevazione $P_{\text{D}}(\gamma)$ in funzione della probabilità di falso allarme $P_{\text{FA}}(\gamma)$ al variare della soglia decisionale $\gamma \in [0, +\infty)$ per il test del rapporto di verosimiglianza:
 
@@ -893,7 +893,7 @@ Dimostriamo in modo rigoroso due proprietà fondamentali della curva ROC per l'L
 1. La pendenza locale della retta tangente in ogni punto coincide esattamente con il valore della soglia $\gamma$: $\frac{\mathrm{d}P_{\text{D}}}{\mathrm{d}P_{\text{FA}}} = \gamma$.
 2. La curva ROC dell'LRT è strettamente concava verso il basso: $\frac{\mathrm{d}^2 P_{\text{D}}}{\mathrm{d}P_{\text{FA}}^2} \le 0$.
 
-### Identità Fondamentale tra le Distribuzioni del Rapporto di Verosimiglianza
+### Identità Fondamentale Tra Le Distribuzioni Del Rapporto Di Verosimiglianza
 
 Sia $l = L(\mathbf{x})$ la variabile aleatoria scalare corrispondente alla statistica di test LRT, avente densità di probabilità $f_l(l; H_0)$ sotto $H_0$ e $f_l(l; H_1)$ sotto $H_1$.
 Valutiamo il momento di ordine $n$ di $l$ sotto l'ipotesi alternativa $H_1$:
@@ -926,7 +926,7 @@ $$
 
 La densità del rapporto di verosimiglianza sotto $H_1$ è data dalla densità sotto $H_0$ riscalata linearmente per il valore $l$ stesso.
 
-### Calcolo della Pendenza della Curva ROC
+### Calcolo Della Pendenza Della Curva ROC
 
 Esprimiamo le probabilità operative come integrali della densità della statistica di test rispetto alla soglia $\gamma$:
 
@@ -960,7 +960,7 @@ $$
 P_{\text{D}} - \beta = \gamma (P_{\text{FA}} - \alpha) \implies P_{\text{D}} = \gamma P_{\text{FA}} + \beta - \gamma \alpha
 $$
 
-### Dimostrazione della Concavità
+### Dimostrazione Della Concavità
 
 Valutiamo la derivata seconda della curva ROC:
 
@@ -977,7 +977,7 @@ $$
 Questo dimostra che la curva ROC di qualsiasi test LRT è __strettamente concava verso il basso__.
 Al crescere di $P_{\text{FA}}$ (che corrisponde a diminuire la soglia $\gamma$ da $+\infty$ a $0$), la pendenza $\gamma$ decresce monotonicamente: per ogni incremento di falso allarme concesso, il guadagno marginale in rilevazione $\Delta P_{\text{D}}$ si riduce progressivamente (rendimenti marginali decrescenti).
 
-## Derivazione Completa del Rischio di Bayes e Struttura a Costo Minimo
+## Derivazione Completa Del Rischio Di Bayes E Struttura a Costo Minimo
 
 Nel problema di decisione bayesiana binaria, a ciascun esito decisionale è associato un costo economico o operativo $C_{ij} \in \mathbb{R}$, definito come il costo sostenuto decidendo per l'ipotesi $\hat{H} = H_i$ quando lo stato reale del sistema è $H_j$ ($i, j \in \{0, 1\}$).
 
@@ -993,7 +993,7 @@ $$
 C_{10} > C_{00} \quad \text{e} \quad C_{01} > C_{11}
 $$
 
-### Espressione del Rischio Medio
+### Espressione Del Rischio Medio
 
 Il __Rischio di Bayes__ $R$ è definito come il valore atteso del costo:
 
@@ -1029,7 +1029,7 @@ $$
 R = K + (C_{10} - C_{00}) P_{\text{FA}} \text{Pr}\{H_0\} - (C_{01} - C_{11}) P_{\text{D}} \text{Pr}\{H_1\}
 $$
 
-### Minimizzazione Integrale del Rischio
+### Minimizzazione Integrale Del Rischio
 
 Esplicitiamo le definizioni integrali di $P_{\text{FA}}$ e $P_{\text{D}}$ estese alla regione critica $\mathcal{R}_1$:
 
@@ -1073,7 +1073,7 @@ $$
 \gamma_{\text{Bayes}} = \frac{(C_{10} - C_{00}) \text{Pr}\{H_0\}}{(C_{01} - C_{11}) \text{Pr}\{H_1\}}
 $$
 
-### Relazione con la Probabilità a Posteriori (Odds a Posteriori)
+### Relazione Con la Probabilità a Posteriori (Odds a Posteriori)
 
 Moltiplicando ambo i membri della disuguaglianza per $\frac{\text{Pr}\{H_1\}}{\text{Pr}\{H_0\}}$:
 
@@ -1090,7 +1090,7 @@ $$
 Il rilevatore a minimo rischio di Bayes confronta il rapporto tra le probabilità a posteriori delle due ipotesi (_posterior odds_) con il rapporto tra i costi differenziali netti dei due tipi di errore.
 Nel caso particolare in cui le decisioni corrette siano a costo nullo ($C_{00} = C_{11} = 0$) e gli errori siano penalizzati con costo unitario uniforme ($C_{10} = C_{01} = 1$), la soglia vale $\frac{1 - 0}{1 - 0} = 1$, e la regola collassa esattamente sul rilevatore __MAP__ ($\text{Pr}\{H_1 \mid \mathbf{x}\} > \text{Pr}\{H_0 \mid \mathbf{x}\}$), dimostrando che la minimizzazione della probabilità d'errore è un caso speciale di rischio bayesiano simmetrico.
 
-## Ottimalità del Criterio MAP per Ipotesi Multiple e Partizione dello Spazio
+## Ottimalità Del Criterio MAP per Ipotesi Multiple E Partizione Dello Spazio
 
 Nel problema di decisione statistica tra $M > 2$ ipotesi alternative $H_0, H_1, \dots, H_{M-1}$, si dispone di una distribuzione a priori nota:
 
@@ -1130,7 +1130,7 @@ $$
 \mathbf{x} \in R_k \iff c_k(\mathbf{x}) < c_i(\mathbf{x}) \quad \forall i \neq k
 $$
 
-### Caso Speciale: Costi Uniformi 0-1 e Probabilità d'Errore
+### Caso Speciale: Costi Uniformi 0-1 E Probabilità d'Errore
 
 Nel caso in cui le decisioni corrette abbiano costo nullo e tutti gli errori siano equiparati a costo unitario:
 
@@ -1184,7 +1184,7 @@ $$
 
 La regola ottima seleziona l'ipotesi con la massima probabilità a posteriori (__MAP__), provando rigorosamente che il decisore a minima probabilità d'errore coincide sempre con il rilevatore MAP per qualunque numero arbitrario di ipotesi $M \ge 2$.
 
-## Teorema di Wilks e Proprietà Asintotiche del GLRT
+## Teorema Di Wilks E Proprietà Asintotiche Del GLRT
 
 Nel test di ipotesi composte, la densità di probabilità dei dati dipende da vettori di parametri incogniti:
 
@@ -1208,7 +1208,7 @@ $$
 T_{\text{GLRT}}(\mathbf{x}) = 2 \ln L_G(\mathbf{x}) = 2 \left[ \ln f(\mathbf{x}; \hat{\boldsymbol{\theta}}_1) - \ln f(\mathbf{x}; \hat{\boldsymbol{\theta}}_0) \right]
 $$
 
-### Dimostrazione del Teorema di Wilks
+### Dimostrazione Del Teorema Di Wilks
 
 Si espanda in serie di Taylor la log-verosimiglianza $\ln f(\mathbf{x}; \boldsymbol{\theta})$ attorno al vero valore del parametro $\boldsymbol{\theta}^* \in \boldsymbol{\Theta}_0$:
 
@@ -1251,7 +1251,7 @@ $$
 
 Questo risultato fondamentale è noto come __Teorema di Wilks__ (1938). Il parametro $r$ rappresenta la differenza tra il numero di parametri liberi sotto $H_1$ e sotto $H_0$.
 
-### Comportamento sotto l'Ipotesi Alternativa $H_1$
+### Comportamento Sotto l'Ipotesi Alternativa $H_1$
 
 Quando è vera l'ipotesi alternativa $H_1$ e il parametro reale $\boldsymbol{\theta}_1^* \notin \boldsymbol{\Theta}_0$, lo scostamento presenta un valore atteso non nullo rispetto alla restrizione vincolata $\boldsymbol{\Theta}_0$. In questo caso, la distribuzione asintotica della statistica GLRT è una variabile aleatoria chi-quadro non centrale:
 
@@ -1301,7 +1301,7 @@ $$
 
 Questo conferma come la teoria asintotica generale di Wilks coincida esattamente con la distribuzione esatta a campioni finiti per il modello gaussiano lineare.
 
-## Dimostrazione Assiomatica dell'Unicità dell'Entropia di Shannon-Khinchin
+## Dimostrazione Assiomatica dell'Unicità dell'Entropia Di Shannon-Khinchin
 
 Nel suo articolo fondativo del 1948, Claude Shannon pose il problema di determinare se esista un'unica misura funzionale che quantifichi l'incertezza associata a una distribuzione di probabilità discreta su un insieme finito di $m$ eventi mutuamente esclusivi. Successivamente Aleksandr Khinchin (1957) ne formalizzò la struttura assiomatica.
 
@@ -1332,11 +1332,11 @@ $$
 H_2\left(\frac{1}{2}, \, \frac{1}{2}\right) = 1 \quad \text{bit}
 $$
 
-### Dimostrazione del Teorema di Unicità
+### Dimostrazione Del Teorema Di Unicità
 
 La dimostrazione si articola in quattro passi costruttivi.
 
-#### Passo 1: Proprietà moltiplicativa per potenze di interi
+#### Passo 1: Proprietà Moltiplicativa per Potenze Di Interi
 
 Si consideri una distribuzione uniforme su un alfabeto di $s^k$ simboli equiprobabili, con $s, k \in \mathbb{N}_{\ge 2}$.
 Suddividendo gli $s^k$ elementi in $s$ gruppi disgiunti, ciascuno composto da $s^{k-1}$ elementi, per l'assioma di composizione l'incertezza totale è pari all'incertezza di selezionare uno degli $s$ gruppi, più l'incertezza condizionata di individuare l'elemento all'interno del gruppo selezionato (identica per tutti gli $s$ gruppi):
@@ -1351,7 +1351,7 @@ $$
 A(s^k) = k \, A(s)
 $$
 
-#### Passo 2: Derivazione della forma logaritmica per distribuzioni uniformi
+#### Passo 2: Derivazione Della Forma Logaritmica per Distribuzioni Uniformi
 
 Si considerino due interi arbitrari $m, l \ge 2$. Per ogni intero $n \ge 1$, esiste sempre un unico intero $k \ge 0$ tale per cui:
 
@@ -1409,7 +1409,7 @@ $$
 
 Imponendo l'assioma di normalizzazione $A(2) = H_2(1/2, 1/2) = 1$, si fissa univocamente la base del logaritmo a $b = 2$, ottenendo $A(m) = \log_2 m$.
 
-#### Passo 3: Estensione a distribuzioni con probabilità razionali
+#### Passo 3: Estensione a Distribuzioni Con Probabilità Razionali
 
 Si consideri una distribuzione di probabilità in cui tutte le probabilità $p_i$ sono numeri razionali:
 
@@ -1442,7 +1442,7 @@ $$
 H_m(p_1, \dots, p_m) = \sum_{i=1}^m p_i \left( \log_2 N - \log_2 n_i \right) = - \sum_{i=1}^m p_i \log_2 \left( \frac{n_i}{N} \right) = - \sum_{i=1}^m p_i \log_2 p_i
 $$
 
-#### Passo 4: Estensione a distribuzioni reali per continuità
+#### Passo 4: Estensione a Distribuzioni Reali per Continuità
 
 Poiché l'insieme dei numeri razionali $\mathbb{Q} \cap [0, 1]$ è denso nell'intervallo reale $[0, 1]$, per qualsiasi vettore di probabilità reale $\mathbf{p} \in \Delta_m$ esiste una successione di vettori a componenti razionali $\mathbf{p}^{(k)} \in \Delta_m \cap \mathbb{Q}^m$ tale che $\lim_{k \to \infty} \mathbf{p}^{(k)} = \mathbf{p}$.
 In virtù dell'assioma 1 (continuità di $H_m$ su $\Delta_m$), passando al limite per $k \to \infty$:
@@ -1453,7 +1453,7 @@ $$
 
 La forma $H(X) = -\sum_{i=1}^m p_i \log_2 p_i$ è pertanto l'unica funzione che soddisfa simultaneamente i requisiti assiomatici di una misura quantitativa di informazione.
 
-## Calcolo Asintotico dell'Entropia di Poisson con Approssimazione di Stirling
+## Calcolo Asintotico dell'Entropia Di Poisson Con Approssimazione Di Stirling
 
 Si consideri una variabile aleatoria discreta $X$ distribuita secondo una legge di Poisson con parametro di intensità $\lambda > 0$ ($X \sim \text{Pois}(\lambda)$):
 
@@ -1495,7 +1495,7 @@ $$
 H_e(X) = - \lambda \ln \lambda + \lambda + \mathbb{E}[\ln(X!)]
 $$
 
-### Sviluppo del Fattoriale tramite la Formula di Stirling
+### Sviluppo Del Fattoriale Tramite la Formula Di Stirling
 
 Per quantificare il termine $\mathbb{E}[\ln(X!)]$, si utilizza la formula asintotica di Stirling per il fattoriale:
 
@@ -1527,7 +1527,7 @@ $$
 H_e(X) = -\lambda \ln \lambda + \mathbb{E}[X \ln X] + \frac{1}{2}\mathbb{E}[\ln(2\pi X)] + O(1/\lambda)
 $$
 
-### Espansione in Serie di Taylor dei Valori Attesi
+### Espansione in Serie Di Taylor Dei Valori Attesi
 
 Si definisca lo scostamento aleatorio dalla media $\delta = X - \lambda$. Per le proprietà dei momenti della variabile di Poisson:
 
@@ -1597,9 +1597,9 @@ $$
 
 Poiché per il teorema del limite centrale $X \sim \text{Pois}(\lambda)$ converge per $\lambda \to \infty$ a una variabile gaussiana con media $\lambda$ e varianza $\sigma^2 = \lambda$, la cui entropia differenziale è esattamente $\frac{1}{2}\log_2(2\pi e \sigma^2)$, questo risultato prova analiticamente che l'entropia della distribuzione discreta di Poisson coincide asintoticamente con l'entropia della gaussiana equivalente.
 
-## Dimostrazione Analitica della Disuguaglianza Log-Sum e Convessità Congiunta della Divergenza KL
+## Dimostrazione Analitica Della Disuguaglianza Log-Sum E Convessità Congiunta Della Divergenza KL
 
-### Enunciazione della Disuguaglianza Log-Sum
+### Enunciazione Della Disuguaglianza Log-Sum
 
 Siano date due sequenze finite di numeri reali non negativi $a_1, a_2, \dots, a_n$ e $b_1, b_2, \dots, b_n$, con $a_i \ge 0$ e $b_i \ge 0$ per ogni $i \in \{1, \dots, n\}$. La __disuguaglianza log-sum__ afferma che:
 
@@ -1615,7 +1615,7 @@ Si adottano le usuali convenzioni di continuità fondate sul limite $\lim_{t \to
 - $a \log \frac{a}{0} = +\infty$ per ogni $a > 0$
 - $0 \log \frac{0}{b} = 0$ per ogni $b > 0$
 
-### Dimostrazione Analitica tramite la Disuguaglianza di Jensen
+### Dimostrazione Analitica Tramite la Disuguaglianza Di Jensen
 
 Senza perdita di generalità, si considerino inizialmente $a_i > 0$ e $b_i > 0$ per ogni $i$. Si definisce la funzione reale di variabile reale $f: (0, +\infty) \to \mathbb{R}$:
 
@@ -1699,7 +1699,7 @@ $$
 
 Se alcuni $a_i$ o $b_i$ sono nulli, la validità discende immediatamente considerando il supporto $\{i : a_i > 0\}$ ed estendendo per continuità tramite i limiti dichiarati.
 
-### Convessità Congiunta della Divergenza di Kullback-Leibler
+### Convessità Congiunta Della Divergenza Di Kullback-Leibler
 
 Siano $(p_1, q_1)$ e $(p_2, q_2)$ due coppie distinte di funzioni di massa di probabilità definite sul medesimo alfabeto discreto $\mathcal{X}$. Per ogni scalare $\lambda \in [0, 1]$, si definiscano le distribuzioni mistura:
 
@@ -1763,9 +1763,9 @@ $$
 
 Il risultato dimostra in modo rigoroso e autosufficiente la convessità congiunta della divergenza relativa.
 
-## Dimostrazione Rigorosa della Disuguaglianza di Fano
+## Dimostrazione Rigorosa Della Disuguaglianza Di Fano
 
-### Modello di Stima e Catena di Markov
+### Modello Di Stima E Catena Di Markov
 
 Si consideri una sorgente informativa discreta rappresentata da una variabile aleatoria $X$ a valori nell'alfabeto finito $\mathcal{X}$, con distribuzione di probabilità marginale $p(x) = \text{Pr}\{X = x\}$. La variabile $X$ viene trasmessa attraverso un canale o osservata mediante una variabile aleatoria correlata $Y \in \mathcal{Y}$ secondo la distribuzione condizionata $p(y \mid x)$.
 
@@ -1781,7 +1781,7 @@ $$
 P_e = \text{Pr}\{ \hat{X} \neq X \}
 $$
 
-### Variabile Indicatrice d'Errore ed Espansione dell'Entropia Congiunta
+### Variabile Indicatrice d'Errore Ed Espansione dell'Entropia Congiunta
 
 Per quantificare analiticamente la relazione tra l'entropia a posteriori $H(X \mid Y)$ e la probabilità d'errore $P_e$, si introduce la variabile aleatoria binaria indicatrice d'errore $E$:
 
@@ -1797,7 +1797,7 @@ $$
 
 Si considera l'entropia congiunta condizionata $H(E, X \mid \hat{X})$ e la si sviluppa in due modi distinti sfruttando la regola della catena per l'entropia condizionata.
 
-#### Primo Sviluppo della Catena
+#### Primo Sviluppo Della Catena
 
 Condizionando inizialmente rispetto a $X$ dato $\hat{X}$:
 
@@ -1817,7 +1817,7 @@ $$
 H(E, X \mid \hat{X}) = H(X \mid \hat{X})
 $$
 
-#### Secondo Sviluppo della Catena
+#### Secondo Sviluppo Della Catena
 
 Condizionando inizialmente rispetto a $E$ dato $\hat{X}$:
 
@@ -1862,7 +1862,7 @@ $$
 H(E, X \mid \hat{X}) \le H_B(P_e) + P_e \log_2(|\mathcal{X}| - 1)
 $$
 
-### Uguaglianza dei Due Sviluppi e Applicazione della DPI
+### Uguaglianza Dei Due Sviluppi E Applicazione Della DPI
 
 Uguagliando il primo e il secondo sviluppo di $H(E, X \mid \hat{X})$:
 
@@ -1900,7 +1900,7 @@ $$
 H(X \mid Y) \le H_B(P_e) + P_e \log_2 |\mathcal{X}|
 $$
 
-### Forme Indebolite e Limite Inferiore Esplicito su $P_e$
+### Forme Indebolite E Limite Inferiore Esplicito Su $P_e$
 
 Poiché l'entropia binaria soddisfa la limitazione universale $H_B(P_e) \le 1$ bit (raggiunta per $P_e = \frac{1}{2}$), si può maggiorare $H_B(P_e)$ con 1:
 
@@ -1916,7 +1916,7 @@ $$
 
 Tale limite inferiore stabilisce che se l'entropia equivoca $H(X \mid Y)$ supera 1 bit, è teoricamente impossibile annullare la probabilità d'errore, indipendentemente dalla complessità computazionale dello stimatore impiegato.
 
-### Condizione di Raggiungibilità dell'Uguaglianza
+### Condizione Di Raggiungibilità dell'Uguaglianza
 
 Si consideri lo scenario privo di osservazioni ($Y = \emptyset$), in cui la stima deve avvenire a priori. Sia $X \in \{1, 2, \dots, m\}$ con probabilità ordinate in modo decrescente $p_1 \ge p_2 \ge \dots \ge p_m$. La regola di decisione ottima a minima probabilità d'errore stima sistematicamente la classe più probabile $\hat{X} = 1$, ottenendo:
 
@@ -1948,12 +1948,12 @@ $$
 
 Ciò dimostra analiticamente la stretta ottimalità del limite di Fano nel caso peggiore.
 
-## Dimostrazione Analitica del Teorema AEP tramite Disuguaglianza di Chebyshev sulla Varianza della Sorpresa
+## Dimostrazione Analitica Del Teorema AEP Tramite Disuguaglianza Di Chebyshev Sulla Varianza Della Sorpresa
 
-> [!NOTE] Riferimento al Capitolo di Teoria
+> [!NOTE] Riferimento alla Trattazione Primaria
 > Trattazione teorica, intuizione ed esempi applicativi in [[8. Proprietà di Equipartizione Asintotica (AEP)]].
 
-### Enunciazione del Teorema
+### Enunciazione Del Teorema
 
 Siano date $n$ variabili aleatorie discrete $X_1, X_2, \dots, X_n$ indipendenti e identicamente distribuite (i.i.d.) secondo la funzione di massa di probabilità $p(x) = \text{Pr}\{X = x\}$ definita sull'alfabeto finito $\mathcal{X}$, con entropia di Shannon:
 
@@ -1995,7 +1995,7 @@ $$
 
 Poiché le $X_i$ sono i.i.d. e ogni $Y_i$ è una trasformazione deterministica misurabile della rispettiva variabile $X_i$, anche le variabili $Y_1, Y_2, \dots, Y_n$ costituiscono una sequenza di variabili aleatorie indipendenti e identicamente distribuite.
 
-#### Calcolo dei Momenti di Primo e Secondo Ordine
+#### Calcolo Dei Momenti Di Primo E Secondo Ordine
 
 Si valuta il valore atteso della variabile generica $Y_i$:
 
@@ -2015,7 +2015,7 @@ $$
 \sigma_Y^2 < \infty
 $$
 
-#### Statistica della Media Campionaria e Disuguaglianza di Chebyshev
+#### Statistica Della Media Campionaria E Disuguaglianza Di Chebyshev
 
 La quantità oggetto del teorema corrisponde alla media campionaria delle variabili $Y_i$:
 
@@ -2061,12 +2061,12 @@ $$
 
 La disuguaglianza di Chebyshev fornisce non solo la convergenza in probabilità, ma anche una delimitazione quantitativa della velocità di decadimento dell'errore asintotico nell'ordine di $O(1/n)$.
 
-## Dimostrazione del Teorema di Cardinalità Minima per Insiemi ad Alta Probabilità
+## Dimostrazione Del Teorema Di Cardinalità Minima per Insiemi Ad Alta Probabilità
 
-> [!NOTE] Riferimento al Capitolo di Teoria
+> [!NOTE] Riferimento alla Trattazione Primaria
 > Trattazione teorica, intuizione ed esempi applicativi in [[8. Proprietà di Equipartizione Asintotica (AEP)]].
 
-### Enunciazione del Teorema
+### Enunciazione Del Teorema
 
 Siano $X_1, X_2, \dots, X_n$ variabili aleatorie discrete i.i.d. $\sim p(x)$ con entropia $H(X)$. Per ogni $n$, sia $B_\delta^{(n)} \subset \mathcal{X}^n$ un sottoinsieme arbitrario dello spazio delle sequenze tale da concentrare una probabilità non inferiore a $1 - \delta$, con $\delta \in (0, 1/2)$:
 
@@ -2184,9 +2184,9 @@ $$
 
 Questo risultato dimostra in modo rigoroso e inconfutabile che l'insieme tipico $A_\epsilon^{(n)}$ possiede la cardinalità minima (al primo ordine dell'esponente) tra tutti i possibili sottoinsiemi ad alta probabilità dello spazio delle sequenze.
 
-## Dimostrazione Analitica della Convergenza di Cesàro e dell'Uguaglianza dei Tassi di Entropia
+## Dimostrazione Analitica Della Convergenza Di Cesàro E dell'Uguaglianza Dei Tassi Di Entropia
 
-### Lemma di Monotonia dell'Entropia Condizionata
+### Lemma Di Monotonia dell'Entropia Condizionata
 
 Sia $\{X_i\}_{i=-\infty}^{+\infty}$ un processo stocastico discreto stazionario a valori nell'alfabeto finito $\mathcal{X}$. Si definisce la sequenza delle entropie condizionate temporali:
 
@@ -2234,7 +2234,7 @@ $$
 H'(\mathcal{X}) = \lim_{n \to \infty} H(X_n \mid X_{n-1}, \dots, X_1)
 $$
 
-### Teorema delle Medie di Cesàro
+### Teorema Delle Medie Di Cesàro
 
 __Teorema (Cesàro)__: Sia data una successione di numeri reali $\{a_n\}_{n=1}^\infty$ convergente al limite $a \in \mathbb{R}$ per $n \to \infty$:
 
@@ -2329,9 +2329,9 @@ $$
 H(\mathcal{X}) = H'(\mathcal{X})
 $$
 
-## Derivazione Rigorosa della Distribuzione Stazionaria e dell'Entropy Rate per il Random Walk su Grafi
+## Derivazione Rigorosa Della Distribuzione Stazionaria E dell'Entropy Rate per Il Random Walk Su Grafi
 
-### Modello di Random Walk su Grafo Connesso Non Orientato
+### Modello Di Random Walk Su Grafo Connesso Non Orientato
 
 Sia $G = (V, E)$ un grafo finito, connesso e non orientato, privo di nodi isolati e privo di cappi ($W_{ii} = 0$). A ciascun ramo $(i, j) \in E$ è associato un peso non negativo simmetrico $W_{ij} = W_{ji} \ge 0$, con la convenzione $W_{ij} = 0$ se $(i, j) \notin E$.
 
@@ -2361,7 +2361,7 @@ $$
   \sum_{j \in V} P_{ij} = \sum_{j \in V} \frac{W_{ij}}{d_i} = \frac{1}{d_i} \sum_{j \in V} W_{ij} = \frac{d_i}{d_i} = 1
 $$
 
-### Determinazione della Distribuzione Stazionaria e Reversibilità
+### Determinazione Della Distribuzione Stazionaria E Reversibilità
 
 Si considera il vettore di probabilità $\boldsymbol{\mu} = [\mu_i]_{i \in V}$ proporzionale ai gradi pesati dei singoli nodi:
 
@@ -2369,7 +2369,7 @@ $$
 \mu_i = \frac{d_i}{2m} = \frac{d_i}{\sum_{k \in V} d_k}
 $$
 
-#### Verifica della Condizione di Punto Fisso $\boldsymbol{\mu} \mathbf{P} = \boldsymbol{\mu}$
+#### Verifica Della Condizione Di Punto Fisso $\boldsymbol{\mu} \mathbf{P} = \boldsymbol{\mu}$
 
 Si calcola la componente $j$-esima del prodotto vettore-matrice:
 
@@ -2391,7 +2391,7 @@ $$
 
 Ciò prova che $\boldsymbol{\mu}$ è una distribuzione stazionaria della catena di Markov.
 
-#### Condizione di Bilancio Dettagliato (Reversibilità)
+#### Condizione Di Bilancio Dettagliato (Reversibilità)
 
 Si valuta la probabilità del flusso stazionario tra lo stato $i$ e lo stato $j$:
 
@@ -2468,9 +2468,9 @@ $$
 
    A ciascun passo, la particella sceglie uniformemente tra i $d$ vicini disponibili, generando un'incertezza massima pari a $\log_2 d$ bit.
 
-## Delimitazione dell'Entropy Rate per Funzioni di Catene di Markov e Modelli Nascosti
+## Delimitazione dell'Entropy Rate per Funzioni Di Catene Di Markov E Modelli Nascosti
 
-### Enunciazione del Teorema del Sandwich
+### Enunciazione Del Teorema Del Sandwich
 
 Sia $\{X_i\}_{i=1}^\infty$ una catena di Markov stazionaria definita su alfabeto finito $\mathcal{X}$ con distribuzione stazionaria e matrice di transizione note. Sia $Y_i = \phi(X_i)$ un processo stocastico ottenuto applicando una funzione deterministica $\phi: \mathcal{X} \to \mathcal{Y}$ a ciascun stato della catena.
 
@@ -2536,7 +2536,7 @@ $$
 H(Y_n \mid Y_{n-1}, \dots, Y_1, X_1) \le H(\mathcal{Y})
 $$
 
-#### Convergenza a Cascata (Chiusura del Sandwich)
+#### Convergenza a Cascata (Chiusura Del Sandwich)
 
 La differenza tra il limite superiore e il limite inferiore corrisponde all'informazione mutua condizionata tra $X_1$ e $Y_n$ data la traiettoria intermedia:
 
@@ -2564,12 +2564,11 @@ $$
 
 I due rami convergono esattamente al medesimo valore $H(\mathcal{Y})$, consentendo di stimare numericamente l'entropy rate di processi a stati nascosti e modelli HMM con precisione arbitraria prefissata.
 
-
-## Dimostrazione Integrale del Teorema di McMillan per Codici Univocamente Decodificabili
+## Dimostrazione Integrale Del Teorema Di McMillan per Codici Univocamente Decodificabili
 
 Il Teorema di Kraft stabilisce che per qualsiasi codice istantaneo (o prefisso) su un alfabeto codice di dimensione $D$, le lunghezze delle parole di codice $l_1, l_2, \dots, l_m$ devono necessariamente soddisfare la disuguaglianza $\sum_{i=1}^m D^{-l_i} \le 1$. Il Teorema di McMillan (1956) estende tale risultato fondamentale all'intera classe, significativamente più ampia, dei codici univocamente decodificabili.
 
-### Enunciato del Teorema di McMillan
+### Enunciato Del Teorema Di McMillan
 
 Sia $C: \mathcal{X} \to \mathcal{D}^*$ un codice univocamente decodificabile definito su una sorgente a $m$ simboli con lunghezze delle parole di codice $l_1, l_2, \dots, l_m$ su un alfabeto di cardinalità $D$. Allora la sommatoria delle lunghezze soddisfa la disuguaglianza di Kraft:
 
@@ -2577,7 +2576,7 @@ $$
 \sum_{i=1}^m D^{-l_i} \le 1
 $$
 
-### Dimostrazione Analitica (Metodo delle Potenze Polinomiali di Karush)
+### Dimostrazione Analitica (Metodo Delle Potenze Polinomiali Di Karush)
 
 Si consideri la quantità $S = \sum_{i=1}^m D^{-l_i}$ elevata a una potenza intera arbitraria $k \ge 1$:
 
@@ -2615,7 +2614,7 @@ $$
 N_{k, j} \le D^j
 $$
 
-#### Maggiorazione e Passaggio al Limite
+#### Maggiorazione E Passaggio Al Limite
 
 Sostituendo la disuguaglianza $N_{k, j} \le D^j$ nell'espressione di $S^k$:
 
@@ -2649,17 +2648,17 @@ $$
 
 Il Teorema di McMillan è così integralmente dimostrato.
 
-#### Conseguenza Fondamentale sulla Progettazione dei Codici
+#### Conseguenza Fondamentale Sulla Progettazione Dei Codici
 
 Poiché la classe dei codici istantanei soddisfa la disuguaglianza di Kraft e la classe dei codici univocamente decodificabili è soggetta al medesimo vincolo $\sum D^{-l_i} \le 1$, l'insieme delle lunghezze delle parole di codice ammissibili per un codice univocamente decodificabile coincide esattamente con l'insieme delle lunghezze ammissibili per un codice istantaneo.
 
 Non esiste alcun codice univocamente decodificabile che possa raggiungere una lunghezza media di parola $\mathbb{E}[l(X)]$ strettamente inferiore a quella ottenibile dal miglior codice istantaneo (prefisso). I codici istantanei possiedono quindi efficienza di compressione pari a quella dei codici a ritardo di decodifica arbitrario, offrendo al contempo il vantaggio operativo di poter essere decodificati simbolo per simbolo in tempo reale senza memoria o lookahead.
 
-## Dimostrazione Formale del Teorema di Ottimalità dei Codici di Huffman tramite Riduzione Canonica
+## Dimostrazione Formale Del Teorema Di Ottimalità Dei Codici Di Huffman Tramite Riduzione Canonica
 
 L'algoritmo di Huffman (1952) costruisce un codice prefisso che minimizza la lunghezza media attesa $L = \sum_{i=1}^m p_i l_i$ tra tutti i possibili codici univocamente decodificabili su un assegnato insieme di probabilità di sorgente.
 
-### Proprietà di un Codice Prefisso Ottimo (Forma Canonica)
+### Proprietà Di Un Codice Prefisso Ottimo (Forma Canonica)
 
 Sia $\mathcal{X} = \{1, 2, \dots, m\}$ una sorgente discreta ordinata in senso decrescente di probabilità:
 
@@ -2682,14 +2681,15 @@ $$
 3. __I due simboli meno probabili sono fratelli nell'albero__: I simboli $m-1$ ed $m$ differiscono unicamente nell'ultimo bit binario, condividendo un prefisso comune di lunghezza $l_m - 1$.
    - _Dimostrazione_: Se $C(m-1)$ e $C(m)$ non fossero fratelli, poiché $l_{m-1} = l_m$, la foglia sorella di $m$ apparterrebbe a un nodo di profondità massima $l_m$. Scambiando tale foglia con il simbolo $m-1$, la lunghezza media rimane invariata poiché $p_{m-1}$ e la probabilità del fratello hanno la stessa lunghezza $l_m$, posizionando $m-1$ ed $m$ come nodi fratelli.
 
-### Procedura di Riduzione e Dimostrazione per Induzione
+### Procedura Di Riduzione E Dimostrazione per Induzione
 
 La dimostrazione di ottimalità procede per induzione sul numero di simboli dell'alfabeto $m$.
 
 #### Base dell'Induzione ($m = 2$)
+
 Per una sorgente binaria con $m = 2$, l'unico codice prefisso non degenere assegna un singolo bit a ciascun simbolo ($l_1 = l_2 = 1$). La lunghezza media è $L = 1$, che coincide con la costruzione di Huffman. La base dell'induzione è verificata.
 
-#### Passo Induttivo (Metodo Algebrico Diretto di Baruffa, Lucidi 25–26)
+#### Passo Induttivo (Metodo Algebrico Diretto Di Baruffa, Lucidi 25–26)
 
 Si assuma che l'algoritmo di Huffman generi un codice canonico ottimo per qualsiasi sorgente con $m-1$ simboli.
 
@@ -2743,9 +2743,9 @@ $$
 
 l'algoritmo di Huffman produce un codice rigorosamente ottimo per qualunque cardinalità $m$.
 
-## Teorema sull'Ottimalità Competitiva della Codifica di Shannon e Huffman
+## Teorema sull'Ottimalità Competitiva Della Codifica Di Shannon E Huffman
 
-Nella teoria classica della compressione, l'ottimalità dei codici viene generalmente formulata rispetto al valore atteso della lunghezza: $\min \mathbb{E}[l(X)]$. Tuttavia, in un'ottica decisionale o di teoria dei giochi competitiva, ci si potrebbe domandare: *è possibile che un codice alternativo $C'$ risulti migliore del codice ottimo nella maggioranza delle trasmissioni individuali, pur avendo una media leggermente peggiore a causa di parole molto lunghe assegnate a eventi rari?*
+Nella teoria classica della compressione, l'ottimalità dei codici viene generalmente formulata rispetto al valore atteso della lunghezza: $\min \mathbb{E}[l(X)]$. Tuttavia, in un'ottica decisionale o di teoria dei giochi competitiva, ci si potrebbe domandare: _è possibile che un codice alternativo $C'$ risulti migliore del codice ottimo nella maggioranza delle trasmissioni individuali, pur avendo una media leggermente peggiore a causa di parole molto lunghe assegnate a eventi rari?_
 
 Il Teorema dell'Ottimalità Competitiva (Cover & Thomas, Sez. 5.10; Lucido 32–33) inquadra il confronto tra codici prefissi come un gioco a somma zero tra due giocatori, stabilendo la dominanza stocastica intrinseca della codifica di Shannon e di Huffman.
 
@@ -2831,12 +2831,11 @@ $$
 
    Il codice di Shannon (e di conseguenza il codice di Huffman che minimizza globalmente la lunghezza attesa) è stocasticamente dominante nel confronto a coppie.
 
-
-## Dimostrazione del Teorema di Codifica di Canale (Diretta: Random Coding e Joint AEP)
+## Dimostrazione Del Teorema Di Codifica Di Canale (Diretta: Random Coding E Joint AEP)
 
 Il Secondo Teorema Fondamentale di Shannon stabilisce che per qualsiasi canale discreto senza memoria (DMC) con capacità di informazione $C = \max_{p(x)} I(X; Y)$, e per qualsiasi tasso di trasmissione $R < C$, esiste una sequenza di codici di blocco $(2^{nR}, n)$ avente probabilità massima d'errore asintoticamente nulla per $n \to \infty$.
 
-### Modello di Canale e Definizioni di Errore
+### Modello Di Canale E Definizioni Di Errore
 
 Un codice di canale $(2^{nR}, n)$ è costituito da:
 1. Un insieme di indici di messaggio $\mathcal{W} = \{1, 2, \dots, M\}$ con $M = \lceil 2^{nR} \rceil$.
@@ -2855,7 +2854,7 @@ $$
 \lambda^{(n)} = \max_{w \in \mathcal{W}} \lambda_w, \qquad P_e^{(n)} = \frac{1}{M} \sum_{w=1}^M \lambda_w
 $$
 
-### Tecnica di Codifica Casuale di Shannon (Random Coding)
+### Tecnica Di Codifica Casuale Di Shannon (Random Coding)
 
 Poiché determinare il codebook ottimo deterministico è un problema NP-difficile a ricerca esaustiva, Shannon introdusse la tecnica di mediare la probabilità d'errore su un intero ensemble probabilistico di codebook generati casualmente.
 
@@ -2868,7 +2867,7 @@ $$
 
 3. Il codebook $\mathcal{C}$ così generato viene reso noto sia al trasmettitore sia al ricevitore.
 
-### Regola di Decodifica tramite Insieme Congiuntamente Tipico
+### Regola Di Decodifica Tramite Insieme Congiuntamente Tipico
 
 Il decodificatore riceve la sequenza $Y^n$ ed esamina se esiste un unico messaggio $w$ la cui parola di codice $X^n(w)$ risulti congiuntamente tipica con $Y^n$ rispetto alla distribuzione congiunta $p(x, y) = p(x)p(y \mid x)$.
 
@@ -2878,7 +2877,7 @@ Il ricevitore dichiara $\hat{w} = w$ se e solo se:
 
 Se non esiste alcun indice congiuntamente tipico, oppure se ve ne sono due o più (ambiguità), il decodificatore dichiara errore.
 
-### Analisi della Probabilità d'Errore Media sull'Ensemble
+### Analisi Della Probabilità d'Errore Media sull'Ensemble
 
 Per la simmetria costruttiva della generazione casuale del codice, la probabilità d'errore media sull'ensemble $\mathbb{E}[P_e^{(n)}]$ è indipendente dal messaggio effettivamente inviato. Possiamo dunque assumere senza perdita di generalità che sia stato trasmesso il messaggio $W = 1$.
 
@@ -2940,7 +2939,7 @@ $$
 \mathbb{E}[P_e^{(n)}] < 2\epsilon
 $$
 
-### Dalla Media d'Ensemble al Codice Deterministico e Diserbo (Expurgation)
+### Dalla Media d'Ensemble Al Codice Deterministico E Diserbo (Expurgation)
 
 1. Poiché la probabilità d'errore media mediata su tutti i codebook è strettamente inferiore a $2\epsilon$, deve esistere almeno un codebook deterministico specifico $\mathcal{C}^*$ la cui probabilità d'errore media soddisfa $P_e^{(n)}(\mathcal{C}^*) < 2\epsilon$.
 2. Per passare dalla probabilità media $P_e^{(n)}$ alla probabilità d'errore massima $\lambda^{(n)}$, si applica la tecnica del __diserbo__ (__expurgation__): si eliminano dal codebook le $M/2$ parole di codice che presentano le probabilità d'errore condizionate $\lambda_w$ più elevate.
@@ -2949,11 +2948,11 @@ $$
 
 Poiché $\epsilon > 0$ è arbitrariamente piccolo e la scelta di $p(x)$ può essere effettuata massimizzando la mutua informazione, qualsiasi rate $R < C = \max_{p(x)} I(X; Y)$ è raggiungibile con probabilità massima d'errore arbitrariamente piccola.
 
-## Dimostrazione della Parte Inversa del Teorema di Codifica di Canale (Converse via Fano)
+## Dimostrazione Della Parte Inversa Del Teorema Di Codifica Di Canale (Converse via Fano)
 
 La parte inversa (__converse__) del teorema stabilisce che è fisicamente impossibile trasmettere informazione con probabilità d'errore asintoticamente nulla a un tasso superiore alla capacità di canale: se $R > C$, la probabilità d'errore è strettamente separata da zero per qualsiasi sequenza di codici di blocco.
 
-### Dimostrazione Analitica tramite la Disuguaglianza di Fano
+### Dimostrazione Analitica Tramite la Disuguaglianza Di Fano
 
 Si consideri una sequenza di codici $(2^{nR}, n)$ avente probabilità media d'errore $P_e^{(n)} = \text{Pr}\{\hat{W} \neq W\}$.
 
@@ -3037,11 +3036,11 @@ $$
 
 La probabilità d'errore è limitata inferiormente da una costante positiva invariabile. È impossibile rendere la trasmissione affidabile se il rate supera la capacità di canale $C$. La condizione $R \le C$ è pertanto necessaria oltre che sufficiente.
 
-## Dimostrazione del Teorema di Separazione Sorgente-Canale di Shannon
+## Dimostrazione Del Teorema Di Separazione Sorgente-Canale Di Shannon
 
 Il Teorema di Separazione Sorgente-Canale (Shannon 1948; Cover & Thomas, Sez. 7.13) stabilisce che la progettazione di un sistema di telecomunicazioni può essere scissa in due blocchi indipendenti (compressione di sorgente e codifica di canale) senza alcuna perdita di ottimalità complessiva.
 
-### Enunciato del Teorema di Separazione
+### Enunciato Del Teorema Di Separazione
 
 Sia $\{V_i\}$ un processo stocastico discreto stazionario ed ergodico avente entropy rate $H(\mathcal{V})$, e sia assegnato un canale discreto senza memoria avente capacità $C$.
 
@@ -3053,7 +3052,7 @@ $$
 
 2. Se $H(\mathcal{V}) > C$, non esiste alcun sistema di comunicazione (nemmeno integrando congiuntamente codifica di sorgente e di canale) in grado di trasmettere la sorgente con probabilità d'errore arbitrariamente piccola; per qualsiasi codice, la probabilità d'errore è limitata inferiormente lontano da zero.
 
-### Dimostrazione della Condizione Sufficiente (Architettura a Due Stadi)
+### Dimostrazione Della Condizione Sufficiente (Architettura a Due Stadi)
 
 Supponiamo che $H(\mathcal{V}) < C$. Fissiamo un tasso intermedio $R$ tale che:
 
@@ -3071,7 +3070,7 @@ $$
 
    L'architettura separata a due stadi raggiunge l'affidabilità perfetta.
 
-### Dimostrazione della Condizione Necessaria (Converse Congiunto)
+### Dimostrazione Della Condizione Necessaria (Converse Congiunto)
 
 Supponiamo per assurdo che esista uno schema congiunto arbitrario (non necessariamente separato) che mappa $V^n$ direttamente in $X^n$, e decodifica $Y^n$ producendo la stima $\hat{V}^n$ con $\lim_{n \to \infty} P_e^{(n)} = 0$.
 
@@ -3115,12 +3114,11 @@ Se valesse $H(\mathcal{V}) > C$, si avrebbe $P_e^{(n)} \ge \frac{H(\mathcal{V}) 
 
 Ciò dimostra l'universalità del principio di separazione: la progettazione separata della compressione dati e della codifica di canale è ottima in senso assoluto e non comporta alcun degrado prestazionale rispetto a schemi di codifica congiunta sorgente-canale.
 
-
-## Dimostrazione Variazionale dell'Ottimalità della PDF Gaussiana come Massimizzatore di Entropia Differenziale
+## Dimostrazione Variazionale dell'Ottimalità Della PDF Gaussiana come Massimizzatore Di Entropia Differenziale
 
 Il Teorema di Massima Entropia Differenziale (Shannon 1948; Cover & Thomas, Teorema 8.6.5) stabilisce che tra tutte le distribuzioni di probabilità continue multidimensionali aventi matrice di covarianza assegnata, la distribuzione Normale multivariata massimizza univocamente l'entropia differenziale.
 
-### Enunciato del Teorema
+### Enunciato Del Teorema
 
 Sia $\mathbf{X} \in \mathbb{R}^n$ un vettore aleatorio continuo a media nulla con matrice di covarianza assegnata e definita positiva:
 
@@ -3136,7 +3134,7 @@ $$
 
 con eguaglianza se e solo se $\mathbf{X}$ è distribuito secondo la densità Gaussiana multivariata $\mathbf{X} \sim \mathcal{N}_n(\mathbf{0}, \mathbf{K})$.
 
-### Dimostrazione Analitica tramite la Divergenza di Kullback-Leibler
+### Dimostrazione Analitica Tramite la Divergenza Di Kullback-Leibler
 
 Sia $\phi(\mathbf{x})$ la funzione di densità di probabilità Gaussiana multivariata a media nulla avente la medesima matrice di covarianza $\mathbf{K}$:
 
@@ -3226,11 +3224,11 @@ $$
 
 L'uguaglianza stretta è verificata se e solo se $D(g \parallel \phi) = 0$, il che implica $g(\mathbf{x}) = \phi(\mathbf{x})$ quasi ovunque. La distribuzione Gaussiana multivariata è l'unico massimizzatore di entropia differenziale a covarianza fissata.
 
-## Derivazione Rigorosa della Formula di Capacità di Shannon-Hartley
+## Derivazione Rigorosa Della Formula Di Capacità Di Shannon-Hartley
 
 La formula di Shannon-Hartley descrive la capacità di trasmissione di un canale analogico a tempo continuo a banda limitata $B$ perturbato da rumore additivo bianco gaussiano (AWGN).
 
-### Modello di Canale a Tempo Continuo
+### Modello Di Canale a Tempo Continuo
 
 Si consideri il canale a tempo continuo:
 
@@ -3251,7 +3249,7 @@ $$
    \mathcal{S}_Z(f) = \frac{N_0}{2} \quad \text{W/Hz}
 $$
 
-### Discretizzazione tramite il Teorema del Campionamento di Nyquist-Shannon
+### Discretizzazione Tramite Il Teorema Del Campionamento Di Nyquist-Shannon
 
 Per il Teorema del Campionamento, qualsiasi segnale a banda limitata $[-B, B]$ è univocamente e perfettamente rappresentato dalla sequenza dei suoi campioni discreti prelevati a frequenza di Nyquist $f_s = 2B$ campioni al secondo (intervallo di campionamento $T_s = \frac{1}{2B}$).
 
@@ -3289,7 +3287,7 @@ $$
    Z_i \sim \mathcal{N}(0, N_0 B) \quad \text{i.i.d.}
 $$
 
-### Calcolo della Capacità per Campione Discreto
+### Calcolo Della Capacità per Campione Discreto
 
 Per ciascun campione discreto, l'informazione mutua tra ingresso e uscita è:
 
@@ -3321,7 +3319,7 @@ $$
 C_{\text{campione}} = \max I(X_i; Y_i) = \frac{1}{2} \log_2 \left( 2\pi e (P + N_0 B) \right) - \frac{1}{2} \log_2(2\pi e N_0 B) = \frac{1}{2} \log_2 \left( 1 + \frac{P}{N_0 B} \right) \quad \text{bit/campione}
 $$
 
-### Formula Finale di Shannon-Hartley
+### Formula Finale Di Shannon-Hartley
 
 Poiché il canale mette a disposizione $2B$ campioni ortogonali al secondo, la capacità di canale complessiva espressa in bit al secondo (bit/s) è:
 
@@ -3353,7 +3351,7 @@ $$
 
 La capacità non diverge all'infinito, ma satura a un asintoto orizzontale finito. Aumentare la banda oltre una certa soglia incrementa proporzionalmente il rumore termico totale raccolto ($N_0 B$), bilanciando esattamente il guadagno dovuto al maggior numero di campioni per secondo.
 
-### Il Limite Ultimo di Shannon ($E_b / N_0 \ge -1.59$ dB)
+### Il Limite Ultimo Di Shannon ($E_b / N_0 \ge -1.59$ dB)
 
 Sia $R$ il tasso di trasmissione espresso in bit/s. La potenza media del segnale può essere riscritta come il prodotto tra l'energia spesa per singolo bit di informazione $E_b$ e il rate $R$:
 
@@ -3393,7 +3391,7 @@ $$
 
 Nessun sistema di comunicazione wireless o cablato potrà mai operare con probabilità d'errore tendente a zero se l'energia ricevuta per bit rispetto alla densità spettrale di rumore scende al di sotto della soglia universale di $-1.59$ dB.
 
-## Dimostrazione Informatica della Disuguaglianza di Hadamard
+## Dimostrazione Informatica Della Disuguaglianza Di Hadamard
 
 La Disuguaglianza di Hadamard (1893) è un risultato fondamentale dell'algebra lineare che stabilisce un limite superiore al determinante di matrici semidefinite positive.
 
@@ -3407,7 +3405,7 @@ $$
 
 con eguaglianza se e solo se $\mathbf{K}$ è una matrice diagonale ($K_{ij} = 0$ per ogni $i \neq j$).
 
-### Dimostrazione tramite Entropia Differenziale Multivariata
+### Dimostrazione Tramite Entropia Differenziale Multivariata
 
 Si consideri un vettore aleatorio gaussiano multivariato $\mathbf{X} = (X_1, X_2, \dots, X_n)^T \sim \mathcal{N}_n(\mathbf{0}, \mathbf{K})$.
 
@@ -3455,14 +3453,11 @@ $$
 
 L'uguaglianza si verifica se e solo se $h(X_i \mid X_1, \dots, X_{i-1}) = h(X_i)$ per ogni $i$, il che avviene se e solo se le variabili $X_1, \dots, X_n$ sono mutuamente indipendenti. Poiché per variabili congiuntamente gaussiane l'indipendenza equivale all'incorrelazione ($K_{ij} = 0$ per $i \neq j$), l'eguaglianza vale se e solo se la matrice $\mathbf{K}$ è puramente diagonale.
 
-
-
-
-## Teorema di Rate-Distortion per la Sorgente Gaussiana con Distorsione Quadratica
+## Teorema Di Rate-Distortion per la Sorgente Gaussiana Con Distorsione Quadratica
 
 Il Teorema di Rate-Distortion di Shannon (1959; Cover & Thomas, Teorema 10.3.2) caratterizza il limite teorico fondamentale alla compressione con perdita di una sorgente continua gaussiana unidimensionale sotto distorsione quadratica media (MSE).
 
-### Enunciato del Teorema
+### Enunciato Del Teorema
 
 Sia $X \sim \mathcal{N}(0, \sigma^2)$ una variabile aleatoria continua gaussiana a media nulla con varianza $\sigma^2 > 0$. Si adotti come misura di fedeltà l'errore quadratico:
 
@@ -3482,7 +3477,7 @@ $$
 D(R) = \sigma^2 2^{-2R}
 $$
 
-### Dimostrazione del Limite Inferiore (Parte Inversa / Converse)
+### Dimostrazione Del Limite Inferiore (Parte Inversa / Converse)
 
 Per qualsiasi distribuzione condizionata $p(\hat{x} \mid x)$ tale che $\mathbb{E}[(X - \hat{X})^2] \le D$, sviluppiamo l'informazione mutua tra la sorgente $X$ e la sua ricostruzione $\hat{X}$ tramite le entropie differenziali:
 
@@ -3539,7 +3534,7 @@ $$
 R(D) = \min_{p(\hat{x} \mid x): \, \mathbb{E}[(X-\hat{X})^2] \le D} I(X; \hat{X}) \ge \frac{1}{2} \log_2 \left( \frac{\sigma^2}{D} \right)
 $$
 
-### Dimostrazione della Raggiungibilità (Canale Test Inverso)
+### Dimostrazione Della Raggiungibilità (Canale Test Inverso)
 
 Per dimostrare che il limite inferiore è stringente e coincidente con il minimo per ogni $0 < D \le \sigma^2$, si deve esibire una distribuzione congiunta $p(x, \hat{x})$ che soddisfi contemporaneamente:
 1. La marginale su $X$ sia esattamente $\mathcal{N}(0, \sigma^2)$.
@@ -3591,7 +3586,7 @@ $$
 
 Il canale test inverso raggiunge esattamente il limite inferiore. Se infine $D \ge \sigma^2$, è sufficiente scegliere la stima banale deterministica $\hat{X} = 0$, per la quale $\mathbb{E}[(X - 0)^2] = \sigma^2 \le D$, richiedendo $R(D) = I(X; 0) = 0$ bit. Il teorema è integralmente dimostrato.
 
-## Derivazione Rigorosa della Soluzione di Reverse Water-Filling per Sorgenti Gaussiane Parallele
+## Derivazione Rigorosa Della Soluzione Di Reverse Water-Filling per Sorgenti Gaussiane Parallele
 
 Si consideri un vettore di $m$ sorgenti continue gaussiane indipendenti $X_1, X_2, \dots, X_m$ aventi varianze decrescenti:
 
@@ -3605,7 +3600,7 @@ $$
 \sum_{i=1}^m D_i = D
 $$
 
-### Formulazione del Problema Variazionale
+### Formulazione Del Problema Variazionale
 
 Poiché le componenti sono indipendenti, l'informazione mutua totale è la somma delle informazioni mutue marginali. La funzione Rate-Distortion complessiva è il risultato della minimizzazione:
 
@@ -3619,7 +3614,7 @@ $$
 \sum_{i=1}^m D_i = D, \quad 0 < D_i \le \sigma_i^2 \quad \forall i = 1, \dots, m
 $$
 
-### Risoluzione tramite Moltiplicatori di Lagrange e Condizioni KKT
+### Risoluzione Tramite Moltiplicatori Di Lagrange E Condizioni KKT
 
 Convertendo i logaritmi in base naturale, la funzione Lagrangiana del problema di ottimizzazione convessa vincolata è data da:
 
@@ -3647,7 +3642,7 @@ $$
 \sum_{i=1}^m \min(\lambda, \sigma_i^2) = D
 $$
 
-### Espressione del Rate per Singola Componente e Rate Totale
+### Espressione Del Rate per Singola Componente E Rate Totale
 
 Sostituendo la distorsione ottima $D_i$ nella funzione di rate di ciascuna componente:
 
@@ -3661,7 +3656,7 @@ $$
 R(D) = \sum_{i=1}^m R_i(D_i) = \sum_{i=1}^m \max\left( 0, \, \frac{1}{2}\log_2\left( \frac{\sigma_i^2}{\lambda} \right) \right) \quad \text{bit/vettore}
 $$
 
-### Interpretazione Geometrica del Reverse Water-Filling
+### Interpretazione Geometrica Del Reverse Water-Filling
 
 Il meccanismo è denominato __Reverse Water-Filling__ (riempimento d'acqua inverso) per contrasto con il water-filling standard impiegato per la capacità di canale:
 1. Si visualizza un recipiente a canne verticali la cui base è posta alla quota zero e le cui altezze corrispondono alle varianze $\sigma_i^2$ delle sorgenti.
@@ -3671,7 +3666,7 @@ Il meccanismo è denominato __Reverse Water-Filling__ (riempimento d'acqua inver
 
 Questo principio matematico costituisce il cardine della __codifica per trasformata__ (Transform Coding, Goyal 2001) alla base di standard di compressione multimediale quali JPEG, MP3, AAC e wavelet: si proietta il segnale su una base ortogonale di decorrelazione (Karhunen-Loève Transform o Discrete Cosine Transform) e si applica il reverse water-filling scartando i coefficienti spettrali a varianza trascurabile.
 
-## Dimostrazione della Convessità della Funzione di Rate-Distortion $R(D)$
+## Dimostrazione Della Convessità Della Funzione Di Rate-Distortion $R(D)$
 
 La convessità rispetto alla distorsione $D$ è una delle proprietà strutturali più importanti della funzione Rate-Distortion, garantendo l'assenza di minimi locali e la decrescenza monotona dell'efficienza marginale di compressione.
 
@@ -3683,7 +3678,7 @@ $$
 R(\alpha D_1 + (1 - \alpha) D_2) \le \alpha R(D_1) + (1 - \alpha) R(D_2), \quad \forall \alpha \in [0, 1]
 $$
 
-### Dimostrazione Analitica tramite Miscela di Canali di Transizione
+### Dimostrazione Analitica Tramite Miscela Di Canali Di Transizione
 
 Siano $D_1$ e $D_2$ due livelli di distorsione ammissibili con corrispondenti tassi ottimi $R(D_1)$ e $R(D_2)$.
 
@@ -3741,7 +3736,7 @@ $$
 R(\alpha D_1 + (1 - \alpha) D_2) \le \alpha R(D_1) + (1 - \alpha) R(D_2)
 $$
 
-### Corollari Fondamentali della Convessità
+### Corollari Fondamentali Della Convessità
 
 1. __Monotonia Decrescente e Pendenza Negativa__:
    Poiché consentire una distorsione maggiore allarga lo spazio di ottimizzazione, la funzione $R(D)$ è monotona non crescente. La convessità implica che la derivata prima (pendenza della curva) sia non positiva e monotona crescente verso lo zero:
@@ -3753,7 +3748,7 @@ $$
 2. __Rendimento Marginale Decrescente__:
    La spesa marginale di bit necessaria per abbattere la distorsione aumenta drasticamente al decrescere di $D$. Nelle vicinanze di $D \to 0$, la pendenza $|s| = -\frac{\mathrm{d}R}{\mathrm{d}D}$ tende a $+\infty$, riflettendo l'elevatissimo costo informativo richiesto per ricostruzioni ad alta fedeltà.
 
-## Algoritmo di Blahut-Arimoto per il Calcolo Numerico della Funzione Rate-Distortion
+## Algoritmo Di Blahut-Arimoto per Il Calcolo Numerico Della Funzione Rate-Distortion
 
 Nelle applicazioni reali con alfabeti discreti o sorgenti arbitrarie, la funzione Rate-Distortion $R(D)$ non ammette quasi mai una forma analitica chiusa. L'__algoritmo di Blahut-Arimoto__ (Blahut 1972; Arimoto 1972) fornisce una procedura numerica iterativa ad alternanza di minimizzazione che converge globalmente al valore ottimo di $R(D)$.
 
@@ -3801,7 +3796,7 @@ $$
    q^{(k+1)}(\hat{x}) = \sum_{x} p(x) p^{(k+1)}(\hat{x} \mid x)
 $$
 
-### Convergenza e Calcolo della Curva
+### Convergenza E Calcolo Della Curva
 
 Poiché il funzionale $J(p, q)$ è convesso rispetto a ciascun argomento ed è limitato inferiormente, la discesa coordinata alternata garantisce la convergenza monotona al minimo globale.
 
@@ -3817,11 +3812,11 @@ $$
 
 Facendo variare il parametro $s \in (-\infty, 0]$, la coppia $(D(s), R(s))$ traccia con precisione arbitraria l'intera frontiera ottima $R(D)$ della sorgente.
 
-## Dimostrazione dell'Ottimalità dei Codici di Golomb per Distribuzioni Geometriche
+## Dimostrazione dell'Ottimalità Dei Codici Di Golomb per Distribuzioni Geometriche
 
 La codifica di Golomb (1966; Gallager & Van Voorhis 1975) costituisce una famiglia universale di codici prefissi a lunghezza variabile progettata specificamente per sorgenti discrete supportate sull'alfabeto infinito numerabile dei numeri interi non negativi $\mathbb{N}_0 = \{0, 1, 2, \dots\}$, la cui distribuzione di probabilità decade esponenzialmente secondo una legge geometrica.
 
-### Modello di Sorgente Geometrica
+### Modello Di Sorgente Geometrica
 
 Si consideri una variabile aleatoria discreta $X \in \{0, 1, 2, \dots\}$ avente funzione di massa di probabilità (PMF) geometrica unificata di parametro $\theta \in (0, 1)$:
 
@@ -3831,7 +3826,7 @@ $$
 
 Tale distribuzione modella tipicamente le lunghezze delle sequenze di zeri (run-length) tra due eventi rari successivi, i coefficienti quantizzati di trasformate spettrali (DCT, Wavelet) e gli errori di predizione nei codificatori lossless audio e video (FLAC, JPEG-LS, H.264).
 
-### Decomposizione Euclidea e Struttura del Codice di Golomb
+### Decomposizione Euclidea E Struttura Del Codice Di Golomb
 
 Fissato un intero positivo $M \ge 1$ (parametro di Golomb), qualsiasi numero intero $x \ge 0$ ammette un'unica scomposizione euclidea con quoziente $q$ e resto $r$:
 
@@ -3872,7 +3867,7 @@ Ne consegue che $Q$ ed $R$ sono variabili aleatorie mutuamente indipendenti. L'a
 - un albero per il quoziente $q$;
 - un albero per il resto $r$.
 
-### Teorema di Gallager-Van Voorhis sulla Scelta Ottima di $M$
+### Teorema Di Gallager-Van Voorhis Sulla Scelta Ottima Di $M$
 
 Robert Gallager e David Van Voorhis (1975) hanno dimostrato che il codice di Huffman ottimo su un alfabeto infinito per la distribuzione geometrica $p(x) = (1-\theta)\theta^x$ coincide con il codice di Golomb se e solo se il parametro $M$ è scelto come l'unico intero che soddisfa la disequazione:
 
@@ -3909,11 +3904,11 @@ $$
 
 coincidendo esattamente con il limite di Shannon per l'alfabeto infinito.
 
-## Dimostrazione del Teorema di Ziv-Lempel sull'Efficienza Asintotica di LZ78
+## Dimostrazione Del Teorema Di Ziv-Lempel sull'Efficienza Asintotica Di LZ78
 
 L'algoritmo di compressione universale LZ78 (Jacob Ziv & Abraham Lempel, 1978) comprime qualsiasi sequenza stazionaria ed ergodica raggiungendo asintoticamente l'entropy rate della sorgente, senza alcuna conoscenza preliminare della funzione di massa di probabilità.
 
-### Il Parsing Incrementale di LZ78
+### Il Parsing Incrementale Di LZ78
 
 Sia $x^n = x_1 x_2 \dots x_n$ una stringa di lunghezza $n$ generata da un alfabeto finito $\mathcal{X}$ di cardinalità $|\mathcal{X}|$.
 
@@ -3929,7 +3924,7 @@ $$
 w_k = w_{j(k)} \cdot a_k
 $$
 
-### Lemma Combinatorio sul Limite Superiore del Numero di Frasi $c(n)$
+### Lemma Combinatorio Sul Limite Superiore Del Numero Di Frasi $c(n)$
 
 Sia $c(n)$ il numero di frasi distinte in un parsing incrementale di una stringa di lunghezza $n$ su alfabeto $\mathcal{X}$. Vogliamo massimizzare $c(n)$ a parità di lunghezza $n$.
 
@@ -3982,7 +3977,7 @@ $$
 
 dove $\epsilon_n \to 0$ al tendere di $n \to \infty$.
 
-### Calcolo della Lunghezza della Sequenza Codificata $l(x^n)$
+### Calcolo Della Lunghezza Della Sequenza Codificata $l(x^n)$
 
 Ciascuna frase $w_k$ per $k = 1, \dots, c(n)$ è identificata dalla coppia $(j(k), a_k)$, dove:
 - $j(k) \in \{0, 1, \dots, k-1\}$ è il puntatore alla frase prefissa nel dizionario, rappresentabile con $\lceil \log_2 c(n) \rceil$ bit;
@@ -4042,13 +4037,13 @@ $$
 
 L'algoritmo LZ78 è universale: converge al limite teorico assoluto di Shannon per qualsiasi sorgente stazionaria ed ergodica senza dover stimare preventivamente la distribuzione di probabilità né conoscere la memoria del processo.
 
-## Teorema del Tempo di Ricorrenza di Kac e Ottimalità Asintotica di LZ77
+## Teorema Del Tempo Di Ricorrenza Di Kac E Ottimalità Asintotica Di LZ77
 
 L'algoritmo a finestra scorrevole LZ77 (Jacob Ziv & Abraham Lempel, 1977) adotta una strategia radicalmente diversa rispetto a LZ78: ricerca le occorrenze delle stringhe correnti all'interno di un buffer di memoria passato (finestra scorrevole di dimensione $W$).
 
 La dimostrazione originaria di Ziv e Lempel garantiva l'ottimalità di LZ77 rispetto a compressori a stati finiti (Finite-State Compressors). L'ottimalità asintotica globale rispetto all'entropia di Shannon è stata dimostrata rigorosamente da Aaron Wyner, Jacob Ziv e Mark Kac tramite la teoria dei __tempi di ricorrenza__.
 
-### Lemma di Ricorrenza di Mark Kac (1947)
+### Lemma Di Ricorrenza Di Mark Kac (1947)
 
 Sia $\{X_i\}_{i=-\infty}^{+\infty}$ un processo stocastico stazionario ed ergodico a valori in un alfabeto discreto $\mathcal{X}$.
 
@@ -4064,7 +4059,7 @@ $$
 \mathbb{E}\left[ R_n(X^n) \mid X^n = x_1^n \right] = \frac{1}{p(x_1^n)}
 $$
 
-### Relazione tra Tempo di Ricorrenza ed Entropia
+### Relazione Tra Tempo Di Ricorrenza Ed Entropia
 
 Prendendo il logaritmo in base 2 del tempo di ritorno ed applicando la disuguaglianza di Jensen:
 
@@ -4090,7 +4085,7 @@ $$
 \lim_{n \to \infty} \frac{1}{n} \log_2 R_n(X^n) = H(\mathcal{X}) \quad \text{con probabilità 1}
 $$
 
-### Connessione Fondamentale con la Dimensione della Finestra in LZ77
+### Connessione Fondamentale Con la Dimensione Della Finestra in LZ77
 
 In LZ77, la ricerca del match più lungo avviene all'interno di una finestra di dimensione $W$.
 
@@ -4110,4 +4105,3 @@ $$
 $$
 
 Le stringhe che non ricadono all'interno della finestra appartengono a code di probabilità atipiche infinitesime e, nel limite asintotico di finestra grande ($W \to \infty$), non degradano il tasso medio di compressione. La codifica a tempo di ricorrenza di LZ77 raggiunge asintoticamente l'entropy rate di Shannon.
-

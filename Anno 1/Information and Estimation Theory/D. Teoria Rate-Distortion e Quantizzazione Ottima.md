@@ -1,4 +1,4 @@
-# D. Teoria Rate-Distortion e Quantizzazione Ottima
+# D. Teoria Rate-Distortion E Quantizzazione Ottima
 
 La codifica di sorgente senza perdita (lossless), formalizzata dai teoremi di Shannon e implementata da algoritmi quali Huffman e Lempel-Ziv, impone che la sequenza originale di dati sia ricostruita con probabilità d'errore rigorosamente nulla. In tale paradigma, il limite invalicabile al tasso medio di compressione coincide con l'entropia della sorgente:
 
@@ -10,7 +10,7 @@ Quando trattiamo grandezze fisiche continue nel tempo o nell'ampiezza (quali seg
 
 La __compressione con perdita__ (lossy compression) supera questo limite accettando una discrepanza controllata tra il segnale originale $X$ e la sua approssimazione discreta $\hat{X}$. La __Teoria Rate-Distortion__, formulata da Claude Shannon nel 1959, stabilisce il limite teorico fondamentale e insuperabile tra il tasso di informazione $R$ (in bit per campione) e la distorsione media tollerata $D$.
 
-## Mappa Concettuale del Capitolo
+## Mappa Concettuale Della Teoria Rate-Distortion
 
 ```mermaid
 flowchart TD
@@ -24,7 +24,7 @@ flowchart TD
     E1 --> E2["Quantizzazione Vettoriale (VQ)<br/>Algoritmo LBG & Splitting<br/>Memory + Shape + Space-Filling Gain"]
 ```
 
-## Dai Limiti della Compressione Lossless alla Teoria Rate-Distortion
+## Dai Limiti Della Compressione Lossless Alla Teoria Rate-Distortion
 
 Comprendere la necessità della compressione con perdita richiede un'analisi puntuale di cosa accade quando discretizziamo una variabile aleatoria continua.
 
@@ -46,7 +46,7 @@ $$
 
 Questo risultato dimostra che una sorgente continua possiede un contenuto informativo intrinsecamente illimitato. Non potendo allocare infiniti bit, dobbiamo necessariamente introdurre un criterio matematico che quantifichi l'inevitabile errore di approssimazione.
 
-### Criteri di Fedeltà e Funzioni di Distorsione
+### Criteri Di Fedeltà E Funzioni Di Distorsione
 
 Sia $\mathcal{X}$ l'alfabeto della sorgente e $\hat{\mathcal{X}}$ l'alfabeto dei simboli di ricostruzione. Una __funzione di distorsione__ (o costo di riproduzione) per singolo simbolo è un'applicazione non negativa:
 
@@ -78,11 +78,11 @@ $$
 \bar{d}(\mathbf{x}, \hat{\mathbf{x}}) = \frac{1}{n} \sum_{k=1}^n d(x_k, \hat{x}_k)
 $$
 
-## La Funzione Rate-Distortion di Shannon
+## La Funzione Rate-Distortion Di Shannon
 
 Shannon ha affrontato il problema ponendosi la domanda fondamentale: qual è il numero minimo di bit per campione necessario per codificare una sorgente in modo tale che il ricevitore possa ricostruirla con una distorsione media non superiore a una soglia assegnata $D$?
 
-### Codici a Blocchi con Perdita e Regione Ammissibile
+### Codici a Blocchi Con Perdita E Regione Ammissibile
 
 Un codice Rate-Distortion $(2^{nR}, n)$ è composto da:
 - un codificatore $f_n: \mathcal{X}^n \to \{1, 2, \dots, 2^{nR}\}$ che associa a ogni sequenza di sorgente un indice discreto;
@@ -98,7 +98,7 @@ La frontiera inferiore dell'insieme di tutte le coppie ammissibili definisce la 
 
 ![[slide_20_rate_distortion_curve.png|center mid]]
 
-### Formulazione Variazionale dell'Informazione di Shannon
+### Formulazione Variazionale dell'Informazione Di Shannon
 
 Shannon ha dimostrato che il limite operativo coincide con una grandezza probabilistica computabile, detta __funzione di informazione Rate-Distortion__:
 
@@ -115,14 +115,14 @@ $$
 Perché minimizziamo rispetto a $p(\hat{x} \mid x)$ tenendo fissa la sorgente $p(x)$?
 La densità di sorgente $p(x)$ è un dato della natura non modificabile. La matrice di transizione $p(\hat{x} \mid x)$ descrive invece il meccanismo di quantizzazione e approssimazione. Minimizzare l'informazione mutua $I(X; \hat{X})$ equivale a cercare il quantizzatore più "parsimonioso", ossia quello che estrae dalla sorgente il minor quantitativo di bit indispensabile a garantire la fedeltà $D$.
 
-### Il Teorema Fondamentale di Rate-Distortion
+### Il Teorema Fondamentale Di Rate-Distortion
 
 Il risultato cardine della teoria della compressione lossy si articola in due parti speculari:
 
 1. __Raggiungibilità (Direct Coding Theorem)__: Per ogni tasso $R > R(D)$, esiste una sequenza di codici a blocchi con lunghezza di blocco $n \to \infty$ che consegue una distorsione media asintotica $\le D$.
 2. __Converso (Converse Theorem)__: È fisicamente e matematicamente impossibile progettare un sistema di compressione operante a un tasso $R < R(D)$ che rispetti il vincolo di distorsione media $D$, qualunque sia la complessità del codice o la memoria utilizzata.
 
-### Proprietà Geometriche e Punti Notevoli della Curva R(D)
+### Proprietà Geometriche E Punti Notevoli Della Curva R(D)
 
 La funzione $R(D)$ gode di proprietà geometriche strutturali:
 
@@ -155,7 +155,7 @@ $$
 
    Per ogni $D \ge D_{\max}$, la funzione vale identicamente $R(D) = 0$.
 
-## Calcolo Analitico: Sorgente Binaria con Distorsione di Hamming
+## Calcolo Analitico: Sorgente Binaria Con Distorsione Di Hamming
 
 Consideriamo una sorgente binaria senza memoria che emette simboli $X \in \{0, 1\}$ governati da una legge di Bernoulli con parametro di sbilanciamento $p$:
 
@@ -165,7 +165,7 @@ $$
 
 Senza perdita di generalità, assumiamo $0 \le p \le \frac{1}{2}$. Adottiamo come metrica la distorsione di Hamming $d_H(x, \hat{x})$.
 
-### Derivazione Analitica del Limite Inferiore
+### Derivazione Analitica Del Limite Inferiore
 
 Sviluppiamo l'informazione mutua per un generico canale test $p(\hat{x} \mid x)$:
 
@@ -199,7 +199,7 @@ $$
 I(X; \hat{X}) \ge H_B(p) - H_B(D)
 $$
 
-### Raggiungibilità e Comportamento ad Alta Distorsione
+### Raggiungibilità E Comportamento Ad Alta Distorsione
 
 Dimostriamo che questo limite è esattamente raggiungibile costruendo il canale test inverso (backward channel). Poniamo:
 
@@ -234,7 +234,7 @@ $$
 R(D) = \begin{cases} H_B(p) - H_B(D) & \text{se } 0 \le D \le p \\ 0 & \text{se } D > p \end{cases} \quad \text{bit/simbolo}
 $$
 
-### Caso Studio Applicativo: Griglie di Occupazione in Robotica Autonoma
+### Caso Studio Applicativo: Griglie Di Occupazione in Robotica Autonoma
 
 Nei robot mobili dotati di sensori LiDAR o radar per la navigazione autonoma, l'ambiente circostante è discretizzato in una mappa a griglia di occupazione bidimensionale (Occupancy Grid Map). Ciascuna cella è una variabile binaria: $X = 1$ indica presenza di un ostacolo, $X = 0$ indica spazio libero calpestabile.
 
@@ -262,11 +262,11 @@ Accettando una distorsione del $10\%$, il robot riduce l'occupazione di banda ra
 > Nei compiti d'esame capita spesso che venga richiesto di calcolare $R(D)$ per $D > p$. L'errore più comune consiste nell'applicare ciecamente la formula $H_B(p) - H_B(D)$, ottenendo un valore negativo privo di senso fisico.
 > Ricorda sempre: non appena $D \ge p$, la stima banale costante $\hat{X} = 0$ soddisfa il vincolo con zero bit, imponendo tassativamente $R(D) = 0$.
 
-## Calcolo Analitico: Sorgente Gaussiana con Distorsione Quadratica
+## Calcolo Analitico: Sorgente Gaussiana Con Distorsione Quadratica
 
 La sorgente gaussiana sotto distorsione quadratica MSE rappresenta il pilastro teorico dell'elaborazione numerica dei segnali continui.
 
-### Derivazione Analitica della Funzione R(D)
+### Derivazione Analitica Della Funzione R(D)
 
 Sia $X \sim \mathcal{N}(0, \sigma^2)$ una variabile continua normale con varianza $\sigma^2$, e consideriamo la distorsione quadratica $d(x, \hat{x}) = (x - \hat{x})^2$.
 
@@ -312,7 +312,7 @@ $$
 
 La derivazione formale completa è consultabile in [[zz. Argomenti extra#Teorema di Rate-Distortion per la Sorgente Gaussiana con Distorsione Quadratica]].
 
-### Funzione Distortion-Rate e la Regola Fondamentale dei +6 dB per Bit
+### Funzione Distortion-Rate E la Regola Fondamentale Dei +6 dB per Bit
 
 Invertendo la relazione tra tasso e distorsione per $R \ge 0$, otteniamo la formulazione duale della __funzione Distortion-Rate__:
 
@@ -360,7 +360,7 @@ Ciascun incremento unitario di bit aggiunge esattamente $6.02$ dB di qualità al
 > Nella derivazione gaussiana, non commettere l'errore di scrivere $X = \hat{X} + Z$ con $\hat{X}$ e $Z$ indipendenti nel quantizzatore reale. Nel quantizzatore fisico, $\hat{X} = Q(X)$, quindi l'errore $X - \hat{X}$ è correlato con $X$.
 > L'indipendenza statistica sussiste esclusivamente nel canale test fittizio orientato a ritroso da $\hat{X}$ verso $X$.
 
-## Sorgenti Gaussiane Parallele e Principio di Reverse Water-Filling
+## Sorgenti Gaussiane Parallele E Principio Di Reverse Water-Filling
 
 Nei moderni algoritmi di compressione audio, immagini e video (quali MP3, AAC, JPEG e H.264), i segnali reali presentano forte correlazione temporale o spaziale. Tramite trasformate ortogonali (come la KLT, la DCT o le Wavelet), il segnale viene decomposto in un insieme di $m$ componenti spettrali tra loro incorrelate.
 
@@ -378,7 +378,7 @@ $$
 R(D) = \min_{\substack{\{D_i\}_{i=1}^m : \\ \sum D_i \le D, \\ 0 < D_i \le \sigma_i^2}} \sum_{i=1}^m \frac{1}{2} \log_2\left( \frac{\sigma_i^2}{D_i} \right)
 $$
 
-### Formulazione Variazionale dell'Allocazione congiunta
+### Formulazione Variazionale dell'Allocazione Congiunta
 
 Impostiamo la funzione Lagrangiana associata al problema di minimizzazione convessa vincolata:
 
@@ -388,7 +388,7 @@ $$
 
 dove $\mu \ge 0$ è il moltiplicatore associato al vincolo di budget globale e $\lambda_i \ge 0$ sono i moltiplicatori associati ai vincoli di non eccedenza $D_i \le \sigma_i^2$.
 
-### Risoluzione Analitica tramite Moltiplicatori di Lagrange e KKT
+### Risoluzione Analitica Tramite Moltiplicatori Di Lagrange E KKT
 
 Calcoliamo la derivata parziale rispetto a ciascuna distorsione $D_i$ e imponiamo le condizioni di Karush-Kuhn-Tucker (KKT):
 
@@ -454,7 +454,7 @@ $$
 
 La derivazione formale estesa è consultabile in [[zz. Argomenti extra#Derivazione Rigorosa della Soluzione di Reverse Water-Filling per Sorgenti Gaussiane Parallele]].
 
-### Interpretazione Geometrica e Contrasto con il Canale Parallelo
+### Interpretazione Geometrica E Contrasto Con Il Canale Parallelo
 
 La dinamica geometrica di questa soluzione prende il nome di __Reverse Water-Filling__ (riempimento inverso d'acqua).
 
@@ -464,11 +464,11 @@ La dinamica geometrica di questa soluzione prende il nome di __Reverse Water-Fil
 
 Analizziamo il contrasto logico e operativo fondamentale tra i due algoritmi di Shannon:
 
-1. __Water-Filling Diretto di Canale (Capitolo C)__:
+1. __Water-Filling Diretto di Canale__:
    - Nel problema di trasmissione su canali paralleli con rumori $\{N_i\}$, disponiamo di un budget di __potenza__ $P$.
    - Versiamo la potenza nei canali che presentano il __minor livello di rumore__ ($N_i < \nu$), garantendo la massima capacità. I canali rumorosi e degradati vengono spenti ponendo $P_i = 0$.
 
-2. __Reverse Water-Filling di Sorgente (Capitolo D)__:
+2. __Reverse Water-Filling di Sorgente__:
    - Nel problema di compressione con distorsione su sorgenti con energie $\{\sigma_i^2\}$, disponiamo di un budget di __distorsione tollerata__ $D$.
    - Riempiamo le componenti di distorsione dal basso fino al livello $\theta$.
    - Proteggiamo e codifichiamo con bit ($R_i > 0$) unicamente le componenti ad __alta varianza__ ($\sigma_i^2 > \theta$), pareggiandone la distorsione residua alla quota comune $\theta$.
@@ -489,11 +489,11 @@ Questo principio permette di eliminare oltre il $90\%$ dei dati senza che l'occh
 > Negli esercizi numerici d'esame con Reverse Water-Filling, non ipotizzare a priori che tutte le componenti siano attive ($R_i > 0$).
 > Procedi a ritroso: calcola $\theta$ ipotizzando che tutte le $m$ componenti siano accese ($\theta = D / m$). Se verifichi che per una o più componenti $\sigma_i^2 \le \theta$, scartale immediatamente ponendo $D_i = \sigma_i^2$, sottrai la loro varianza dal budget totale ($D_{\text{rimasto}} = D - \sum_{\text{spente}} \sigma_i^2$) e ricalcola la soglia $\theta$ unicamente sul sottoinsieme delle componenti rimaste attive.
 
-## Quantizzazione Scalare Ottima di Lloyd-Max
+## Quantizzazione Scalare Ottima Di Lloyd-Max
 
 La teoria Rate-Distortion di Shannon definisce il limite teorico insuperabile operando su blocchi di lunghezza infinita ($n \to \infty$). Nella pratica implementativa di convertitori analogico-digitali (ADC) e DSP a bassissima latenza, il dispositivo basilare è il __quantizzatore scalare__, che elabora i campioni uno alla volta in modo istantaneo.
 
-### Formulazione Matematica del Quantizzatore a K Livelli
+### Formulazione Matematica Del Quantizzatore a K Livelli
 
 Sia $X \in \mathbb{R}$ una variabile aleatoria continua con densità di probabilità $f(x)$. Un quantizzatore scalare a $K$ livelli è una funzione:
 
@@ -521,7 +521,7 @@ $$
 
 Il problema della quantizzazione scalare ottima consiste nell'individuare simultaneamente le $K-1$ soglie interne $\{t_i\}_{i=1}^{K-1}$ e i $K$ livelli di ricostruzione $\{y_i\}_{i=1}^K$ che minimizzano $D$.
 
-### Derivazione delle Due Condizioni di Ottimalità
+### Derivazione Delle Due Condizioni Di Ottimalità
 
 Derivando il funzionale $D$ e imponendo l'annullamento del gradiente, Stuart Lloyd (1957) e Joel Max (1960) hanno stabilito che qualsiasi quantizzatore ottimo deve verificare due condizioni necessarie:
 
@@ -567,7 +567,7 @@ $$
 
    Fissata la partizione dello spazio, ciascun livello di ricostruzione deve coincidere con il valore atteso condizionato di $X$ all'interno della cella, in perfetta risonanza con lo stimatore bayesiano MMSE ricavato in [[zz. Argomenti extra#Ottimalità della Media a Posteriori per il Criterio MMSE]].
 
-### Algoritmo Iterativo ad Alternanza e Proprietà di Convergenza
+### Algoritmo Iterativo Ad Alternanza E Proprietà Di Convergenza
 
 Poiché le soglie dipendono dai livelli e i livelli dipendono a loro volta dalle soglie, il sistema di equazioni non ammette soluzione analitica in forma chiusa per distribuzioni generali.
 
@@ -641,7 +641,7 @@ Confrontiamo questo risultato con il limite teorico di Shannon $R(D)$:
 Per $R = 1$ bit, la formula di Shannon fornisce una distorsione minima pari a $D_{\text{Shannon}} = \sigma^2 2^{-2(1)} = 0.25 \sigma^2$, con uno $\text{SQNR} = 6.02$ dB.
 Il miglior quantizzatore scalare possibile paga uno scarto incolmabile di $1.62$ dB rispetto al limite ultimo della teoria dell'informazione.
 
-### Quantizzatore Gaussiano a 2 Bit e Confronto con la Quantizzazione Uniforme
+### Quantizzatore Gaussiano a 2 Bit E Confronto Con la Quantizzazione Uniforme
 
 Risolvendo l'algoritmo di Lloyd-Max per $K = 4$ livelli ($R = 2$ bit) su una gaussiana standard $X \sim \mathcal{N}(0, 1)$, l'iterazione numerica converge a:
 - Soglie ottime: $t_1 = -0.9816$, $t_2 = 0.0000$, $t_3 = +0.9816$;
@@ -657,7 +657,7 @@ A titolo di confronto:
 > In un quantizzatore di Lloyd-Max, le soglie sono a metà strada tra i livelli di ricostruzione ($t_i = (y_i + y_{i+1})/2$), ma i livelli di ricostruzione __non__ si trovano a metà strada tra le soglie ($y_i \neq (t_{i-1} + t_i)/2$).
 > I livelli $y_i$ sono i baricentri probabilistici condizionati, quindi sono spostati verso le zone in cui la densità $f(x)$ è più alta. Solo per la distribuzione uniforme i centroidi coincidono con i punti medi geometrici.
 
-## Quantizzazione Vettoriale e Algoritmo LBG
+## Quantizzazione Vettoriale E Algoritmo LBG
 
 Il crescente divario tra le prestazioni di Lloyd-Max e il limite di Shannon dimostra che elaborare i campioni in modo isolato è intrinsecamente subottimo. Per superare questa limitazione si adotta la __Quantizzazione Vettoriale__ (Vector Quantization, VQ).
 
@@ -665,7 +665,7 @@ In un quantizzatore vettoriale di dimensione $n$, raggruppiamo i campioni della 
 
 ![[slide_41_lbg_vector_quantization.png|center mid]]
 
-### Perché Quantizzare Vettori: i Tre Guadagni Strutturali
+### Perché Quantizzare Vettori: I Tre Guadagni Strutturali
 
 Come formalizzato da Allen Lookabaugh e Robert M. Gray (1989), la superiorità della quantizzazione vettoriale rispetto a quella scalare risiede in tre vantaggi matematici distinti:
 
@@ -700,7 +700,7 @@ $$
 \Delta \text{SQNR}_{\max} = 10 \log_{10}\left( \frac{\pi e}{6} \right) \approx 1.53 \quad \text{dB}
 $$
 
-### L'Algoritmo di Linde-Buzo-Gray su Dataset Empirici
+### L'Algoritmo Di Linde-Buzo-Gray Su Dataset Empirici
 
 La progettazione analitica di un quantizzatore vettoriale richiederebbe il calcolo di integrali multipli di volume su politopi complessi in $\mathbb{R}^n$, operazione analiticamente intrattabile.
 
@@ -740,7 +740,7 @@ $$
 \frac{J^{(k-1)} - J^{(k)}}{J^{(k)}} < \epsilon
 $$
 
-### Tecnica di Splitting del Codebook
+### Tecnica Di Splitting Del Codebook
 
 Per evitare di rimanere intrappolati in minimi locali sfavorevoli e costruire codebook con cardinalità pari a potenze di due ($K = 2^m$), l'algoritmo LBG impiega la tecnica di __sdoppiamento ricorsivo__ (Codebook Splitting):
 
@@ -759,7 +759,7 @@ $$
    raddoppiando istantaneamente la dimensione del codebook ($1 \to 2 \to 4 \to 8 \dots \to K$).
 3. Si esegue l'alternanza LBG (Voronoi + Centroide) fino a convergenza prima di procedere al successivo sdoppiamento.
 
-### Evidenza Sperimentale su Sorgenti Gaussiane Correlate
+### Evidenza Sperimentale Su Sorgenti Gaussiane Correlate
 
 L'impatto della quantizzazione vettoriale emerge chiaramente comprimendo una sorgente bivariata gaussiana fortemente correlata ($\rho = 0.8$) con varianza unitaria a un tasso di 6 bit per coppia di campioni ($K = 64$ centroidi):
 
@@ -779,13 +779,13 @@ A parità identica di bitrate di trasmissione (3 bit/campione), l'algoritmo LBG 
 | __Sfruttamento Dipendenze__ | Nullo (tratta i campioni come incorrelati) | Completo (sfrutta correlazione, forma e reticolo) |
 | __Prestazioni vs Shannon__ | Ampio gap strutturale | Asintoticamente ottimale per $n \to \infty$ |
 
-## Strumenti Avanzati: Teorema di Separazione, Bound e Metodi Numerici
+## Strumenti Avanzati: Teorema Di Separazione, Bound E Metodi Numerici
 
 Completiamo il quadro della teoria con i teoremi di convergenza sistemica e gli strumenti di calcolo numerico avanzato.
 
-### Teorema di Separazione Congiunta Sorgente-Canale con Distorsione
+### Teorema Di Separazione Congiunta Sorgente-Canale Con Distorsione
 
-Unendo la teoria Rate-Distortion con la teoria della capacità di canale sviluppata nel capitolo [[B. Capacità di Canale e Teorema di Shannon]], Shannon ha formulato il __Teorema di Separazione con Criterio di Fedeltà__:
+Unendo la teoria Rate-Distortion con la teoria della capacità di canale ([[B. Capacità di Canale e Teorema di Shannon]]), Shannon ha formulato il __Teorema di Separazione con Criterio di Fedeltà__:
 
 Una sorgente stazionaria con funzione Rate-Distortion $R(D)$ può essere trasmessa su un canale con capacità $C$ e ricostruita a destinazione con distorsione media non superiore a $D$ se e solo se:
 
@@ -811,7 +811,7 @@ $$
 \lim_{D \to 0} \left[ R(D) - \left( h(X) - \frac{1}{2}\log_2(2\pi e D) \right) \right] = 0
 $$
 
-### Algoritmo di Blahut-Arimoto per il Calcolo Numerico di R(D)
+### Algoritmo Di Blahut-Arimoto per Il Calcolo Numerico Di R(D)
 
 Quando la distribuzione di probabilità della sorgente o la metrica di distorsione non consentono soluzioni analitiche in forma chiusa, la funzione $R(D)$ viene calcolata numericamente tramite l'__algoritmo di Blahut-Arimoto__ (1972).
 
@@ -836,7 +836,7 @@ $$
 
 La procedura converge monotonicamente alla soluzione esatta $(D(s), R(s))$. La derivazione analitica completa è consultabile in [[zz. Argomenti extra#Algoritmo di Blahut-Arimoto per il Calcolo Numerico della Funzione Rate-Distortion]].
 
-### Compendio delle Formule Chiave e Regole Decisionali per l'Esame
+### Compendio Delle Formule Chiave E Regole Decisionali per l'Esame
 
 1. __Sorgente Binaria $\text{Bern}(p)$ con Hamming__:
 

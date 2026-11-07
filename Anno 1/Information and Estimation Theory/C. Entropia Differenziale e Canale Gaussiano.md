@@ -1,6 +1,6 @@
-# C. Entropia Differenziale e Canale Gaussiano
+# C. Entropia Differenziale E Canale Gaussiano
 
-Nei capitoli precedenti abbiamo studiato sorgenti e canali discreti, dove l'entropia di Shannon misura in modo assoluto e strettamente non negativo il contenuto informativo medio o il minimo tasso di compressione senza perdita. Quando passiamo ai sistemi fisici analogici (linee di trasmissione, comunicazioni radio, sensori continui), i segnali assumono valori su insiemi continui come la retta reale $\mathbb{R}$ o lo spazio vettoriale $\mathbb{R}^n$.
+Nelle sorgenti e nei canali a valori discreti, l'entropia di Shannon misura in modo assoluto e strettamente non negativo il contenuto informativo medio o il minimo tasso di compressione senza perdita. Quando passiamo ai sistemi fisici analogici (linee di trasmissione, comunicazioni radio, sensori continui), i segnali assumono valori su insiemi continui come la retta reale $\mathbb{R}$ o lo spazio vettoriale $\mathbb{R}^n$.
 
 L'estensione dell'entropia al dominio continuo, introdotta da Claude Shannon nel 1948 con la definizione di __entropia differenziale__, presenta proprietà geometriche e analitiche profondamente differenti rispetto al dominio discreto: può assumere valori negativi, non è invariante per un semplice cambio di scala delle unità di misura e riflette la densità geometrica di volume occupata dalla distribuzione.
 
@@ -17,7 +17,7 @@ flowchart TD
     D --> H["Canali Paralleli e Water-Filling<br/>Allocazione ottima Pⱼ* = (ν - Nⱼ)⁺"]
 ```
 
-## Limiti dell'Entropia Discreta e Fondamenti dell'Entropia Differenziale
+## Limiti dell'Entropia Discreta E Fondamenti dell'Entropia Differenziale
 
 Consideriamo una variabile aleatoria continua $X$ dotata di funzione di distribuzione cumulativa (CDF) $F(x) = \text{Pr}\{X \le x\}$. Se $F(x)$ è assolutamente continua rispetto alla misura di Lebesgue, esiste la funzione di densità di probabilità (PDF) definita dalla derivata quasi ovunque:
 
@@ -57,7 +57,7 @@ $$
 
 L'entropia differenziale non quantifica il numero assoluto di bit di informazione della sorgente (che per una variabile continua è infinito), ma misura il grado di dispersione relativo della densità rispetto alla misura di Lebesgue di riferimento.
 
-### Comportamento sotto Trasformazioni Affini e Non Invarianza di Scala
+### Comportamento Sotto Trasformazioni Affini E Non Invarianza Di Scala
 
 Una variabile discreta gode di invarianza per qualsiasi trasformazione biunivoca: $H(g(X)) = H(X)$. Per l'entropia differenziale questa proprietà fallisce a causa dello Jacobiano introdotto nel cambio di coordinate della misura differenziale infinitesima.
 
@@ -109,7 +109,7 @@ $$
 
 Se $\mathbf{A} = \mathbf{Q}$ è una matrice ortogonale (rotazione o riflessione pura nello spazio, per cui $\mathbf{Q}^T\mathbf{Q} = \mathbf{I}$ e $|\det \mathbf{Q}| = 1$), l'entropia differenziale rimane identica: $h(\mathbf{Q}\mathbf{X}) = h(\mathbf{X})$.
 
-### Volume Effettivo del Supporto
+### Volume Effettivo Del Supporto
 
 Sebbene $h(X)$ possa essere negativa, la grandezza esponenziale $2^{h(X)}$ definisce il __volume effettivo__ (o lunghezza effettiva per $n=1$) occupato dalla distribuzione nello spazio campionario:
 
@@ -119,7 +119,7 @@ $$
 
 Tale valore è sempre rigorosamente non negativo e quantifica la misura dell'intervallo che conterrebbe la stessa incertezza qualora la variabile fosse distribuita in modo perfettamente uniforme.
 
-## Ponte tra Continuo e Discreto Tramite Quantizzazione Uniforme
+## Ponte Tra Continuo E Discreto Tramite Quantizzazione Uniforme
 
 Per stabilire un collegamento rigoroso tra l'entropia differenziale e l'entropia discreta di Shannon, analizziamo la conversione analogico-digitale (ADC) operata mediante una __quantizzazione uniforme__ con passo $\Delta > 0$.
 
@@ -161,7 +161,7 @@ $$
 H(X^\Delta) = -\sum_{i=-\infty}^{+\infty} \Delta f(x_i) \log_2 f(x_i) - \log_2 \Delta
 $$
 
-### Teorema del Limite di Quantizzazione e Costo Informativo del Continuo
+### Teorema Del Limite Di Quantizzazione E Costo Informativo Del Continuo
 
 Se la funzione integranda $f(x)\log_2 f(x)$ è Riemann-integrabile, la prima sommatoria rappresenta la somma di Riemann che converge all'integrale di Lebesgue quando il passo di quantizzazione tende a zero ($\Delta \to 0$):
 
@@ -185,7 +185,7 @@ Questa equazione rivela il significato concettuale più profondo dell'entropia d
 - Il termine $-\log_2 \Delta$ diverge a $+\infty$ per $\Delta \to 0$. Rappresenta il __costo informativo infinito__ necessario per specificare con precisione assoluta un numero reale sulla retta continua (occorrono infiniti bit per descrivere infinite cifre decimali).
 - L'entropia differenziale $h(X)$ rappresenta la __parte finita__ (l'offset asintotico) che sopravvive alla sottrazione del costo di discretizzazione divergente $-\log_2 \Delta$.
 
-### Risoluzione a $n$ Bit e Interpretazione Pratica
+### Risoluzione a $n$ Bit E Interpretazione Pratica
 
 Se quantizziamo il segnale tramite un convertitore analogico-digitale uniforme con risoluzione pari a $n$ bit frazionari, il passo di quantizzazione vale $\Delta = 2^{-n}$, da cui $\log_2 \Delta = -n$. Sostituendo nella relazione asintotica:
 
@@ -341,11 +341,11 @@ $$
 
 Se esprimiamo l'entropia in funzione della media $\mu = \mathbb{E}[X] = \frac{1}{\lambda}$, otteniamo $h(X) = \log_2(e \mu)$, che mostra come l'entropia cresca logaritmicamente con il valore medio del fenomeno.
 
-## Teorema di Massima Entropia Differenziale e Principi Variazionali
+## Teorema Di Massima Entropia Differenziale E Principi Variazionali
 
 Uno dei pilastri teorici dell'Information Theory è la risposta al problema variazionale: quale distribuzione continua presenta la massima incertezza sotto determinati vincoli fisici?
 
-### Massimizzazione sotto Vincolo di Varianza (Gaussiana)
+### Massimizzazione Sotto Vincolo Di Varianza (Gaussiana)
 
 Sia $X$ una variabile aleatoria continua con media $\mu$ e varianza assegnata $\sigma^2 = \mathbb{E}[(X - \mu)^2]$.
 
@@ -408,7 +408,7 @@ Poiché la divergenza KL si annulla se e solo se le due distribuzioni coincidono
 
 La generalizzazione a $\mathbb{R}^n$ sotto vincolo di matrice di covarianza $\mathbf{K}$ segue identicamente sfruttando la traccia $\mathbb{E}_g[(\mathbf{X}-\boldsymbol{\mu})^T \mathbf{K}^{-1}(\mathbf{X}-\boldsymbol{\mu})] = \text{Tr}(\mathbf{K}^{-1}\mathbf{K}) = n$. I dettagli analitici estesi sono consultabili in [[zz. Argomenti extra#Dimostrazione Variazionale dell'Ottimalità della PDF Gaussiana come Massimizzatore di Entropia Differenziale]].
 
-### Altri Problemi di Massima Entropia
+### Altri Problemi Di Massima Entropia
 
 Lo stesso impianto dimostrativo basato sulla divergenza KL risolve immediatamente altri vincoli geometrici e fisici fondamentali:
 - __Supporto limitato $[a, b]$ senza vincoli di momenti__: La distribuzione che massimizza l'entropia differenziale è la __Uniforme__ $\mathcal{U}[a, b]$, con $h_{\max} = \log_2(b - a)$.
@@ -416,7 +416,7 @@ Lo stesso impianto dimostrativo basato sulla divergenza KL risolve immediatament
 
 Il principio di massima entropia assegna alla distribuzione Gaussiana un ruolo cruciale: a parità di potenza del segnale (energia del secondo ordine), il rumore gaussiano è il perturbatore più distruttivo possibile per un canale di comunicazione, poiché genera la massima incertezza informativa.
 
-## Dimostrazione Informatica della Disuguaglianza di Hadamard
+## Dimostrazione Informatica Della Disuguaglianza Di Hadamard
 
 La Disuguaglianza di Hadamard (1893) stabilisce che per qualsiasi matrice simmetrica definita positiva $\mathbf{K} \in \mathbb{R}^{n \times n}$, il determinante è maggiorato dal prodotto degli elementi sulla diagonale principale:
 
@@ -461,7 +461,7 @@ $$
 
 L'uguaglianza è raggiunta se e solo se $h(X_i \mid X_1, \dots, X_{i-1}) = h(X_i)$ per ogni $i$, ossia se e solo se le coordinate gaussiane sono reciprocamente indipendenti ($K_{ij} = 0$ per $i \neq j$). La derivazione completa è disponibile in [[zz. Argomenti extra#Dimostrazione Informatica della Disuguaglianza di Hadamard]].
 
-## Proprietà di Equipartizione Asintotica nel Continuo ed Insieme Tipico
+## Proprietà Di Equipartizione Asintotica Nel Continuo Ed Insieme Tipico
 
 In analogia con la [[8. Proprietà di Equipartizione Asintotica (AEP)]] nel dominio discreto, l'entropia differenziale governa il comportamento geometrico asintotico di vettori composti da campioni continui indipendenti e identicamente distribuiti (i.i.d.).
 
@@ -488,7 +488,7 @@ $$
 -\frac{1}{n}\log_2 f(X_1, \dots, X_n) = \frac{1}{n}\sum_{i=1}^n Y_i \xrightarrow{P} h(X)
 $$
 
-### Definizione Geometrica e Proprietà dell'Insieme Tipico Continuo
+### Definizione Geometrica E Proprietà dell'Insieme Tipico Continuo
 
 Fissato $\epsilon > 0$, definiamo l'__insieme tipico continuo__ $A_\epsilon^{(n)}$ rispetto alla densità $f(x)$ come:
 
@@ -529,7 +529,7 @@ $$
 
 Se l'entropia differenziale è piccola o negativa, il volume occupato nello spazio campionario si riduce drasticamente, concentrando le sequenze fisiche osservabili attorno alla traiettoria media.
 
-## Informazione Mutua Continua e Invarianza per Trasformazioni Invertibili
+## Informazione Mutua Continua E Invarianza per Trasformazioni Invertibili
 
 L'__informazione mutua__ tra due variabili aleatorie continue congiuntamente distribuite secondo la densità $f(x, y)$ è definita come la divergenza di Kullback-Leibler tra la densità congiunta e il prodotto delle densità marginali:
 
@@ -581,7 +581,7 @@ $$
 
 L'informazione mutua non dipende dalla scelta delle coordinate geometriche né dalle unità fisiche adottate per registrare le osservazioni.
 
-### Limite delle Variabili Quantizzate e Formulazione di Kolmogorov
+### Limite Delle Variabili Quantizzate E Formulazione Di Kolmogorov
 
 Consideriamo le versioni discretizzate $X^\Delta$ e $Y^\Delta$ ottenute quantizzando uniformemente con passo $\Delta$:
 
@@ -636,11 +636,11 @@ Osserviamo che:
 - Per $|\rho| \to 1$, $I(X; Y) \to +\infty$: la dipendenza deterministica tra variabili continue condivide un quantitativo infinito di informazione.
 - L'espressione è indipendente dalla varianza $\sigma^2$, confermando l'invarianza per amplificazione lineare.
 
-## Errore di Stima, Disuguaglianza di Fano Continua ed Entropy Power
+## Errore Di Stima, Disuguaglianza Di Fano Continua Ed Entropy Power
 
-La teoria dell'informazione si salda intimamente con la teoria della stima classica e bayesiana (trattata nei capitoli [[0. Fondamenti di Stima Classica e Limite di Cramer-Rao]] e [[2. Stima Bayesiana - MMSE e LMMSE]]) stabilendo limiti invalicabili sull'errore quadratico medio conseguibile.
+La teoria dell'informazione si salda intimamente con la teoria della stima classica e bayesiana ([[0. Fondamenti di Stima Classica e Limite di Cramer-Rao]] e [[2. Stima Bayesiana - MMSE e LMMSE]]), stabilendo limiti invalicabili sull'errore quadratico medio conseguibile.
 
-### Teorema del Limite Inferiore sull'Errore di Stima (Fano Continuo)
+### Teorema Del Limite Inferiore sull'Errore Di Stima (Fano Continuo)
 
 Sia $X$ una variabile aleatoria continua avente entropia differenziale $h(X)$. Per qualunque stimatore scalare deterministico $\hat{X}$ di $X$:
 
@@ -683,7 +683,7 @@ $$
 
 L'uguaglianza è raggiunta se e solo se la coppia $(X, Y)$ è congiuntamente gaussiana e lo stimatore adottato è il predittore ottimo MMSE bayesiano $\hat{X}_{\text{MMSE}}(Y) = \mathbb{E}[X \mid Y]$.
 
-### Entropy Power e Ponte con il Limite di Cramér-Rao
+### Entropy Power E Ponte Con Il Limite Di Cramér-Rao
 
 Shannon definì la grandezza:
 
@@ -707,7 +707,7 @@ $$
 
 con uguaglianze simultanee se e solo se la distribuzione è perfettamente Gaussiana.
 
-## Il Canale Gaussiano AWGN e la Formula di Shannon-Hartley
+## Il Canale Gaussiano AWGN E la Formula Di Shannon-Hartley
 
 L'applicazione più celebre dell'Information Theory alle telecomunicazioni è la caratterizzazione della capacità di trasmissione di un canale perturbato da rumore additivo bianco gaussiano (AWGN).
 
@@ -757,7 +757,7 @@ $$
 C = \max_{f(x): \mathbb{E}[X^2] \le P} I(X; Y) = \frac{1}{2}\log_2(2\pi e (P + N)) - \frac{1}{2}\log_2(2\pi e N) = \frac{1}{2}\log_2\left( 1 + \frac{P}{N} \right) \quad \text{bit/uso}
 $$
 
-### Canale Continuo a Banda Limitata: La Formula di Shannon-Hartley
+### Canale Continuo a Banda Limitata: La Formula Di Shannon-Hartley
 
 Nei sistemi fisici a tempo continuo, il segnale è una forma d'onda $X(t)$ limitata rigorosamente a una banda di frequenze pari a $B$ Hertz (intervallo $[-B, B]$) e vincolata a una potenza media $P$ Watt:
 
@@ -805,7 +805,7 @@ $$
 
 La motivazione fisica della saturazione risiede nel fatto che espandere la banda $B$ incrementa linearmente il numero di campioni disponibili al secondo ($2B$), ma al contempo raccoglie una quantità proporzionale di rumore termico complessivo in banda ($N_0 B$). L'SNR per singolo campione degrada esattamente alla stessa velocità con cui cresce il numero di campioni.
 
-### Il Limite Ultimo di Shannon ($E_b / N_0 \ge -1.59$ dB)
+### Il Limite Ultimo Di Shannon ($E_b / N_0 \ge -1.59$ dB)
 
 Esprimiamo la potenza di trasmissione $P$ come prodotto tra l'energia spesa per singolo bit di informazione $E_b$ e il tasso di trasmissione effettivo $R$ espresso in bit/s ($P = R \cdot E_b$). Imponendo la condizione di Shannon per una trasmissione a tasso affidabile priva di errori ($R \le C$):
 
@@ -839,7 +839,7 @@ $$
 
 Il valore $-1.59$ dB rappresenta il __Limite Ultimo di Shannon__: al di sotto di questa soglia fisica universale, nessun codice di correzione d'errore (indipendentemente dalla complessità algoritmica o dalla lunghezza di blocco) potrà mai garantire una trasmissione a probabilità d'errore arbitrariamente piccola su canale AWGN.
 
-## Canali Gaussiani Paralleli e Algoritmo di Water-Filling
+## Canali Gaussiani Paralleli E Algoritmo Di Water-Filling
 
 Nei moderni sistemi di telecomunicazione multifrequenza (modulazioni multicarrier come OFDM in Wi-Fi e 5G) o spaziali (sistemi MIMO), il canale complessivo si scompone in un insieme di $k$ subcanali gaussiani paralleli e indipendenti:
 
@@ -861,7 +861,7 @@ $$
 C = \max_{\{P_1, \dots, P_k\}} \sum_{j=1}^k \frac{1}{2}\log_2\left( 1 + \frac{P_j}{N_j} \right) \quad \text{soggetto a} \quad \sum_{j=1}^k P_j \le P, \quad P_j \ge 0
 $$
 
-### Formulazione Variazionale con Condizioni KKT
+### Formulazione Variazionale Con Condizioni KKT
 
 Costruiamo la funzione Lagrangiana incorporando il vincolo globale di potenza (con moltiplicatore di Lagrange $\lambda$) e i vincoli di non negatività sulle potenze locali (con moltiplicatori $\mu_j$):
 
@@ -916,7 +916,7 @@ $$
 
 ![[water_filling_gaussian_channels.svg|center mid]]
 
-### Significato Fisico dell'Algoritmo di Riempimento d'Acqua
+### Significato Fisico dell'Algoritmo Di Riempimento d'Acqua
 
 La metafora idraulica illustra con trasparenza la fisica dell'allocazione:
 1. Immaginiamo un recipiente con fondo irregolare, dove i gradini rappresentano i pavimenti di rumore $N_j$ dei vari subcanali.
@@ -945,11 +945,11 @@ $$
 C = \sum_{j: N_j < \nu} \frac{1}{2}\log_2\left( \frac{\nu}{N_j} \right) \quad \text{bit/uso}
 $$
 
-## Sintesi Comparativa e Guida Operativa all'Esame
+## Sintesi Comparativa E Guida Operativa all'Esame
 
 Riepiloghiamo i concetti cardine per consolidare la memorizzazione e prevenire errori nei calcoli d'esame.
 
-### Tabella Sinottica: Dominio Discreto vs Dominio Continuo
+### Tabella Sinottica: Dominio Discreto Vs Dominio Continuo
 
 | Proprietà Informatica | Dominio Discreto ($X \in \mathcal{X}$) | Dominio Continuo ($X \in \mathbb{R}$) |
 | :--- | :--- | :--- |
@@ -975,7 +975,7 @@ Riepiloghiamo i concetti cardine per consolidare la memorizzazione e prevenire e
 - __Limite di Efficienza Energetica__: $\frac{E_b}{N_0} \ge \ln 2 \approx -1.59$ dB.
 - __Water-Filling__: $P_j^* = \max(0, \nu - N_j)$ con $\sum_{j} (\nu - N_j)^+ = P$.
 
-### Trabocchetti Tipici d'Esame e Check-list
+### Trabocchetti Tipici d'Esame E Check-list
 
 1. __Confondere nats e bit nei calcoli gaussiani__:
    Ricordiamo che $\frac{1}{2}\ln(2\pi e \sigma^2)$ è espressa in __nats__. Se l'esercizio richiede i bit, dobbiamo tassativamente usare $\log_2$ oppure dividere per $\ln 2 \approx 0.6931$.

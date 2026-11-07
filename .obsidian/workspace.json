@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c1d1825382d0dd6b",
+        "id": "b4b90269b875747b",
         "type": "tabs",
         "children": [
           {
-            "id": "0a5af9a49280b5c7",
+            "id": "175d0436951993e6",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-                "bFile": "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
-                "aRef": ""
+                "file": "Anno 1/export/md/Digital Signal Processing-merged.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "diff",
-              "title": "Diff: 1. Quantizzazione  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "Digital Signal Processing-merged"
             }
           }
         ]
@@ -195,8 +195,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "0a5af9a49280b5c7",
+  "active": "175d0436951993e6",
   "lastOpenFiles": [
+    "Anno 1/export/md/Digital Signal Processing-merged.md",
     "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
     "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
     "[!) or line.startswith(",
@@ -242,7 +243,6 @@
     "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
-    "Anno 1/Digital Signal Processing/0. Introduzione.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Senza nome.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"

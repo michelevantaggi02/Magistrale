@@ -27,17 +27,17 @@ $$
 \sigma_e^2 = E[e^2(n)] = \frac{Q^2}{12}
 $$
 
-dove $Q$ indica la __larghezza del livello__ (o passo di quantizzazione / risoluzione, indicato talvolta in letteratura con $\Delta$ o $\text{NFP}$).
+dove $Q$ indica la __larghezza del livello__ (o passo di quantizzazione / risoluzione, indicato talvolta in letteratura con $\Delta$ o $N_{FP}$).
 
 > [!tip] Dither (Aggiunta Intenzionale di Rumore)
 > La quantizzazione di per sé non aggiunge fisicamente rumore al segnale. Tuttavia, con segnali periodici o a bassa ampiezza (es. una sinusoide di ampiezza inferiore a $\frac Q2$ o audio a basso volume), l'errore $e(n)$ diventa fortemente correlato all'ingresso, generando una fastidiosa distorsione armonica nota come __granulation noise__.
 > Per risolvere questo problema si introduce il __dither__: un rumore casuale a basso livello sommato intenzionalmente al segnale _prima_ del quantizzatore:
 >
 > $$
-> x_Q(n) = Q(x(n) + d(n))
+> x_Q(n) = \mathcal{Q}(x(n) + d(n))
 > $$
 >
-> Come dimostrato da __Orfanidis__ (_Capitolo 2, Sez. 2.5 "Analog and Digital Dither", pp. 69–77_), scegliendo un dither con densità di probabilità triangolare (_TPDF dither_) di ampiezza pari a due livelli di quantizzazione ($2Q$):
+> Come dimostrato da __Orfanidis__ (_Capitolo 2, Sez. 2.5 "Analog and Digital Dither", pp. 83–90_), scegliendo un dither con densità di probabilità triangolare (_TPDF dither_) di ampiezza pari a due livelli di quantizzazione ($2Q$):
 > - Si __linearizza__ il quantizzatore, eliminando del tutto le armoniche spurie e la correlazione tra errore e segnale.
 > - La distorsione armonica viene trasformata in un innocuo fruscio di fondo stazionario (rumore bianco), pagando un incremento del rumore di fondo di 4.8 dB ($10\log_{10} 3$) per il TPDF dither (rispetto ai 3 dB del dither rettangolare RPDF).
 > - Il dither si applica sia in forma __analogica__ (prima della conversione A/D) sia in forma __digitale__ (nella riquantizzazione o riduzione della lunghezza di parola, come nel mastering audio da 24 a 16 bit).
@@ -60,7 +60,7 @@ A monte del campionatore (ADC) dobbiamo sempre inserire un __filtro analogico pa
 
 ## Oversampling
 
-Con __oversampling__ (sovracampionamento) si intende la tecnica in cui campioniamo il segnale analogico a una frequenza $f_s' = L \cdot f_s$ molto più alta del minimo di Nyquist ($L \gg 1$, con $L = 2\times, 4\times, 8\times, \dots$).
+Con __oversampling__ (sovracampionamento) si intende la tecnica in cui campioniamo il segnale analogico a una frequenza $f_s' = L \cdot f_s$ molto più alta del minimo di Nyquist ($L \gg 1$, con $L = 2, 4, 8, \dots$, corrispondente a fattori $2\times, 4\times, 8\times, \dots$).
 
 > [!important]
 > L'oversampling __non elimina__ il filtro passa-basso analogico anti-aliasing, ma ne __semplifica enormemente i requisiti circuitali__.
@@ -70,10 +70,11 @@ La selettività accurata viene delegata interamente al dominio digitale:
 1. Un __filtro passa-basso digitale__ taglia con precisione ideale tutte le frequenze oltre la banda base $f_{max}$ (i filtri digitali hanno fase perfettamente lineare, zero usura e nessuna deriva termica).
 2. Viene eseguita la __decimazione__ (downsampling di un fattore $L$) per riportare la frequenza di campionamento al valore originario $f_s$.
 
-![[immagini/oversampling.svg|center mid]]
+Nello schema di sovracampionamento:
+- $f_s$: frequenza di campionamento base (rate di Nyquist);
+- $f_s'$: frequenza di campionamento sovracampionata ($L \cdot f_s$).
 
-- $f_s$: frequenza di campionamento base (rate di Nyquist)
-- $f_s'$: frequenza di campionamento sovracampionata ($L \cdot f_s$)
+![[immagini/oversampling.svg|center mid]]
 
 L'oversampling porta anche un fondamentale guadagno sul rumore di quantizzazione (_Orfanidis, Sez. 2.2_): la potenza totale del rumore $\sigma_e^2 = \frac{Q^2}{12}$ si spalma uniformemente sulla banda estesa $[- \frac{L f_s}2, \frac{L f_s}2]$. Il filtro digitale successivo elimina il rumore fuori dalla banda utile, riducendo la potenza di rumore in banda di un fattore $L$:
 
@@ -131,7 +132,7 @@ $$
 \frac{M_{FP}}{N_{FP}} = 2^B - 1 \approx 2^B = \frac RQ
 $$
 
-Espressa in decibel ($dB$):
+Espressa in decibel (dB):
 
 $$
 \text{DR}_{dB} = 20\log_{10}(2^B-1) \approx 20 \log_{10}(2^B) = B(20 \log_{10}2) \approx 6.02 B \text{ dB}
@@ -141,7 +142,7 @@ L'unico modo per aumentare i decibel in virgola fissa è aumentare i bit: ogni b
 
 > [!important] Differenza tra Gamma Dinamica e SQNR
 > Non dobbiamo confondere la Gamma Dinamica (rapporto tra estremi della scala) con il rapporto Segnale-Rumore di Quantizzazione (__SQNR__).
-> Come illustrato in _Orfanidis (Cap. 2, Sez. 2.1)_, per un segnale sinusoidale a fondo scala:
+> Come illustrato nella teoria classica dell'elaborazione numerica dei segnali (cfr. _Oppenheim & Schafer, Sez. 4.8_), per un segnale sinusoidale a fondo scala:
 >
 > $$
 > \text{SQNR} \approx 6.02 B + 1.76 \text{ dB}
@@ -276,7 +277,7 @@ $$
 
 ### Arrotondamento Vs Troncamento
 
-I due metodi principali per mappare un valore continuo sul livello discreto più vicino sono:
+I due metodi principali per mappare un valore continuo sui livelli discreti di quantizzazione sono:
 - __Arrotondamento (Rounding)__: associa il valore continuo al livello discreto a distanza minima. L'errore è simmetrico e compreso nell'intervallo:
 
 $$
@@ -286,7 +287,7 @@ $$
 - __Troncamento (Truncation)__: taglia semplicemente i bit meno significativi, approssimando sempre per difetto. L'errore risulta asimmetrico e non positivo:
 
 $$
--Q < e \le 0
+-Q < e \le 0 \implies |e|_{\text{max}} = Q
 $$
 
 L'arrotondamento è la scelta d'elezione nel DSP perché non introduce alcun bias continuo ($\bar{e} = 0$) e produce una potenza di errore quattro volte inferiore rispetto alla media quadratica del troncamento ($\frac{Q^2}{12}$ contro $\frac{Q^2}3$).
@@ -367,10 +368,6 @@ $$
 > [!info]
 > ![[1. Quantizzazione#Gamma Dinamica]]
 
-$$
-\text{DR} = \frac RQ = 2^B \approx \frac{M_{FP}}{N_{FP}} = 2^B - 1
-$$
-
 La __gamma dinamica__ (__Dynamic Range__, DR) quantifica il rapporto tra la massima escursione a fondo scala del segnale ($R$) e la minima variazione risolvibile ($Q$):
 
 $$
@@ -389,7 +386,7 @@ Ogni bit aggiuntivo del quantizzatore raddoppia la scala dinamica in ampiezza, i
 
 ![[immagini/errore.svg|center mid]]
 
-L'errore istantaneo è rigorosamente confinato entro un quanto di ampiezza:
+In assenza di saturazione (regione granulare), l'errore istantaneo di arrotondamento è confinato entro l'intervallo di un quanto:
 
 $$
 -\frac Q2 < e(n) \le \frac Q2
@@ -462,6 +459,8 @@ $$
 >$$
 >\text{SQNR}_{\text{dB}} = 6.02 B + 4.77 - 20\log_{10}(k)\text{ dB}
 >$$
+>
+>- Nel caso notevole di un __segnale a fondo scala con fattore di cresta $k = \sqrt{3}$__ (come un segnale con p.d.f. uniforme in $[-R/2, R/2]$, o un'onda triangolare/a dente di sega), si ha $20\log_{10}(\sqrt{3}) \approx 4.77\text{ dB}$. L'SQNR diviene quindi esattamente pari a $6.02 B\text{ dB}$: __solo e soltanto per segnali a pieno carico con fattore di cresta $k = \sqrt{3}$ il rapporto segnale-rumore e la gamma dinamica del quantizzatore coincidono numericamente ($\text{SQNR} = \text{DR} = 6.02 B\text{ dB}$)__.
 
 
 
@@ -493,29 +492,53 @@ $$
 
 - __Zona morta__ ($[-x_1, x_1]$): intervallo centrale attorno allo zero in cui l'uscita viene posta a $y_0 = 0$.
 - __Zona attiva (quasi linearità)__ ($[x_n, x_{n+1}]$, per $n=1,\dots,M-1$ sul semiasse positivo): intervalli intermedi in cui il quantizzatore opera sui segnali a dinamica ordinaria.
-- __Zona di saturazione__ ($[x_M, \infty)$): intervallo estremo di clipping, dove il segnale supera il fondo scala e viene troncato al livello massimo $y_M$. (Qui $M$ indica il numero di livelli sul semiasse positivo, con $M = N/2$).
+- __Zona di saturazione__ ($[x_M, \infty)$): intervallo estremo di clipping, dove il segnale supera il fondo scala e viene troncato al livello massimo $y_M$. Nel modello teorico a simmetria dispari (_mid-tread_ con $y_0 = 0$) i livelli totali sono $2M + 1$; in una codifica signed a $B$ bit su scala finita (es. complemento a due) si ha $M = 2^{B-1}-1 \approx N/2$, considerando trascurabile per $B \ge 8$ l'asimmetria di un singolo livello all'estremo negativo.
 
 ### Condizioni Di Ottimalità: Centroide E Punto Medio
 
-I valori ottimi di $x_i$ e $y_i$ che minimizzano la distorsione $D$ si ricavano annullando le derivate parziali $\frac{\partial D}{\partial y_i} = 0$ e $\frac{\partial D}{\partial x_i} = 0$:
+I valori ottimi delle soglie $x_i$ e dei livelli $y_i$ che minimizzano la distorsione $D$ si ricavano annullando le derivate parziali $\frac{\partial D}{\partial y_i} = 0$ e $\frac{\partial D}{\partial x_i} = 0$:
 
 1. __Condizione di Centroide__ ($\frac{\partial D}{\partial y_i} = 0$):
 
 $$
-y_i = \frac{\int_{x_{i-1}}^{x_i} x p_x(x)\,\mathrm{d}x}{\int_{x_{i-1}}^{x_i} p_x(x)\,\mathrm{d}x} = E[x \mid x_{i-1} \le x < x_i]
+y_i = \frac{\int_{x_i}^{x_{i+1}} x p_x(x)\,\mathrm{d}x}{\int_{x_i}^{x_{i+1}} p_x(x)\,\mathrm{d}x} = E[x \mid x_i \le x < x_{i+1}]
 $$
 
-Ciascun livello di uscita $y_i$ deve coincidere con il __centroide di probabilità__ (valore atteso condizionato) della rispettiva zona di decisione.
+per $i = 1, \dots, M-1$, mentre per la zona di saturazione ($i = M$, ponendo formalmente $x_{M+1} = \infty$):
+
+$$
+y_M = \frac{\int_{x_M}^{\infty} x p_x(x)\,\mathrm{d}x}{\int_{x_M}^{\infty} p_x(x)\,\mathrm{d}x} = E[x \mid x \ge x_M]
+$$
+
+Ciascun livello di uscita $y_i$ deve coincidere con il __centroide di probabilità__ (valore atteso condizionato) della rispettiva regione di decisione.
 
 2. __Condizione di Punto Medio__ ($\frac{\partial D}{\partial x_i} = 0$):
 
 $$
-x_i = \frac{y_i + y_{i+1}}{2}
+x_i = \frac{y_{i-1} + y_i}{2} \quad \text{per } i = 1, 2, \dots, M
 $$
 
-Ciascuna soglia di decisione $x_i$ deve essere esattamente il __punto medio__ tra due livelli di ricostruzione adiacenti.
+Ciascuna soglia di decisione $x_i$ è esattamente il __punto medio__ tra i due livelli di ricostruzione adiacenti $y_{i-1}$ e $y_i$. Ricordando che nella zona morta l'uscita è nulla ($y_0 = 0$), la prima soglia positiva risulta:
 
-Poiché le due equazioni sono mutuamente accoppiate (spostando $y_i$ si spostano gli $x_i$ e viceversa), la soluzione ottima viene calcolata numericamente tramite un algoritmo iterativo fino a convergenza.
+$$
+x_1 = \frac{y_0 + y_1}{2} = \frac{y_1}{2}
+$$
+
+Poiché le due equazioni sono mutuamente accoppiate (spostando $y_i$ si spostano gli $x_i$ e viceversa), la soluzione ottima non è ottenibile in forma chiusa per distribuzioni generiche e viene calcolata numericamente tramite l'algoritmo iterativo di Lloyd-Max fino a convergenza.
+
+Esiste un unico caso notevole in cui il sistema ammette soluzione analitica chiusa immediata: l'ingresso a __distribuzione uniforme__ ($p_x(x) = \frac{1}{2W}$ per $|x| \le W$). In tal caso il centroide $y_i$ si riduce al semplice punto medio geometrico dell'intervallo:
+
+$$
+y_i = \frac{x_i + x_{i+1}}{2}
+$$
+
+Sostituendo nella condizione di punto medio delle soglie $x_i = \frac{y_{i-1} + y_i}{2}$ con $y_0 = 0$, si ricava ricorsivamente:
+
+$$
+y_i = i \cdot y_1, \quad x_i = \left(i - \frac{1}{2}\right) y_1 = \frac{2i - 1}{2} y_1
+$$
+
+Ciò dimostra analiticamente che __per una sorgente a distribuzione uniforme il quantizzatore ottimo di Lloyd-Max degenera esattamente nel quantizzatore uniforme lineare__, con passo costante $Q = y_1$.
 
 ![[immagini/pdf_non_uniforme.png|center mid]]
 
@@ -610,7 +633,20 @@ $$
 x = g^{-1}(\eta) = -\frac 1\lambda \ln\left[1 - \frac{2\eta}R\right] \quad \text{con } 0 \le \eta < \frac{R}{2}
 $$
 
-Per simmetria dispari si ricavano i valori per le ampiezze negative.
+Estendendo la relazione all'intera escursione bidirezionale $\eta \in \left(-\frac{R}{2}, \frac{R}{2}\right)$ tramite la proprietà di antisimmetria dispari $g^{-1}(-\eta) = -g^{-1}(\eta)$:
+
+$$
+x = g^{-1}(\eta) = -\operatorname{sgn}(\eta) \frac{1}{\lambda} \ln\left[1 - \frac{2|\eta|}{R}\right]
+$$
+
+oppure in forma esplicita a tratti:
+
+$$
+x = g^{-1}(\eta) = \begin{cases}
+-\frac{1}{\lambda} \ln\left(1 - \frac{2\eta}{R}\right), & 0 \le \eta < \frac{R}{2} \\[2ex]
+\frac{1}{\lambda} \ln\left(1 + \frac{2\eta}{R}\right), & -\frac{R}{2} < \eta < 0
+\end{cases}
+$$
 
 ### Implementazione dell'Amplificatore a Guadagno Variabile
 
@@ -636,6 +672,10 @@ Per evitare il calcolo in tempo reale di complesse funzioni logaritmiche non lin
 
 ![[immagini/lookup table.svg|center mid]]
 
+L'architettura hardware presenta due notevoli vantaggi computazionali:
+1. __Dimezzamento della memoria tramite simmetria__: grazie alla simmetria dispari $g(-x) = -g(x)$, la tabella deve memorizzare unicamente le $2^{B'-1}$ parole relative ai campioni positivi (ad esempio, con un ADC d'ingresso a $B'=14\text{ bit}$ e target a $B=8\text{ bit}$, bastano $2^{13} = 8192$ celle di memoria anziché 16384), mentre il bit di segno del formato numerico pilota direttamente il segno del dato compresso in uscita.
+2. __Esecuzione deterministica a singolo ciclo di clock__: a run-time la conversione si riduce a un'addizione tra interi (calcolo dell'indirizzo base + offset del campione d'ingresso) e una lettura in memoria SRAM interna, completandosi in un singolo ciclo di istruzione del DSP ($1\text{ clock cycle}$), eliminando qualsiasi latenza computazionale trascendente.
+
 Questa tecnica di mappatura tramite LUT è modulare e può essere applicata direttamente anche a dati bidimensionali (come immagini e matrici video).
 
 ### Compressione Logaritmica: $\mu$-Law E A-Law
@@ -648,7 +688,16 @@ $$
 $$
 
 Nel limite per $\mu \to 0$ (applicando il teorema di de l'Hôpital o lo sviluppo di Taylor), la curva degenera nella caratteristica lineare uniforme $g(x) = x$.
-- __A-law__: variante analoga adottata storicamente in Europa e a livello internazionale.
+- __A-law__: standard adottato in Europa e nelle reti telefoniche internazionali (ITU-T G.711, con parametro $A = 87.6$):
+
+$$
+\eta = g(x) = \begin{cases}
+\operatorname{sgn}(x) \frac{A |x|}{1 + \ln A}, & 0 \le |x| \le \frac{1}{A} \\[2ex]
+\operatorname{sgn}(x) \frac{1 + \ln(A |x|)}{1 + \ln A}, & \frac{1}{A} < |x| \le 1
+\end{cases}
+$$
+
+A differenza della $\mu$-law (strettamente concava ovunque per $x > 0$), la legge A-law possiede un primo tratto lineare attorno allo zero di pendenza costante $\frac{A}{1 + \ln A} \approx 16$, garantendo un comportamento regolare senza saturazioni di pendenza a bassissimo livello, per poi raccordarsi con continuità al profilo logaritmico per $|x| > 1/A$.
 
 La compressione logaritmica consente di mantenere un rapporto SQNR pressoché costante su un'ampia gamma dinamica di potenze vocali, permettendo a un segnale compresso a soli 8 bit di eguagliare la qualità percettiva di una quantizzazione uniforme a 12 bit.
 
@@ -785,7 +834,7 @@ Questo comporta quattro conseguenze fondamentali:
 - La parte reale è __pari__: $\text{Re}[X(-\omega)] = \text{Re}[X(\omega)]$
 - La parte immaginaria è __dispari__: $\text{Im}[X(-\omega)] = -\text{Im}[X(\omega)]$
 
->[!note] Implicazione Pratica
+> [!note] Implicazione Pratica
 >Grazie alla simmetria hermitiana, per i segnali reali non occorre analizzare o memorizzare l'intero intervallo $[-\pi, \pi]$: tutte le informazioni fisiche sono contenute nell'intervallo monolatero $[0, \pi]$ (corrispondente alle frequenze da $0$ a $\frac{f_s}2$). La banda negativa $[-\pi, 0]$ è ridondante.
 
 ### Risposta Impulsiva E Risposta in Frequenza
@@ -923,7 +972,7 @@ Ipotizzando una sequenza reale $x(n) \in \mathbb{R}$:
 - Per l'intera DFT di dimensione $N$ sono necessari $2LN$ MACS reali, che diventano $2N^2$ MACS reali nel caso standard $L = N$.
 
 Nel caso in cui $x(n)$ sia a valori complessi:
-- Ciascun termine richiede 4 moltiplicazioni e 4 somme reali (4 MACS reali), portando il costo computazionale a $4N^2$ MACS reali (equivalenti a $N^2$ __moltiplicazioni complesse__).
+- Ciascun termine richiede 4 moltiplicazioni e 4 somme reali (4 MACS reali), portando il costo computazionale a $4N^2$ MACS reali (equivalenti a $N^2$ __operazioni MAC complesse__, ossia $N^2$ moltiplicazioni complesse e $\approx N^2$ somme complesse).
 
 > [!IMPORTANT] Algoritmo FFT (Fast Fourier Transform)
 > L'algoritmo __FFT__ (Radix-2 Cooley-Tukey) riduce la complessità computazionale da $\mathcal{O}(N^2)$ a soli $\mathcal{O}(N \log_2 N)$ passaggi (richiedendo esattamente $\frac{N}{2} \log_2 N$ moltiplicazioni complesse e $N \log_2 N$ somme complesse), a condizione che la dimensione $N$ sia una potenza di due ($N = 2^m$).
@@ -948,7 +997,7 @@ La sequenza di uscita $y(n)$ risulterà __più lunga__ rispetto alla sequenza di
 ### Fenomeni Di Transitorio
 
 L'evoluzione temporale dell'uscita si suddivide in 3 fasi caratteristiche:
-- __Transitorio di attacco__ ($0 \le n \le M-2$, durata $M-1$ campioni): si verifica quando la memoria del filtro (il registro a scorrimento dei campioni passati) è inizialmente vuota e comincia a riempirsi; il numero di campioni validi di $x(n)$ che concorrono al calcolo della sommatoria aumenta progressivamente da $1$ a $M$ man mano che occupano le celle di ritardo.
+- __Transitorio di attacco__ ($0 \le n \le M-2$, durata $M-1$ campioni): si verifica quando la memoria del filtro (il registro a scorrimento dei campioni passati) è inizialmente vuota e comincia a riempirsi; il numero di campioni validi di $x(n)$ che concorrono al calcolo della sommatoria aumenta progressivamente da $1$ a $M-1$ man mano che occupano le celle di ritardo.
 - __Risposta a regime__ ($M-1 \le n \le L-1$, durata $L-M+1$ campioni): una volta riempita completamente la memoria del filtro con $M$ campioni validi, i nuovi campioni scorrono rimpiazzando quelli più vecchi; l'elaborazione procede a pieno carico.
 - __Transitorio di rilascio (coda)__ ($L \le n \le L+M-2$, durata $M-1$ campioni): quando la sequenza di ingresso si esaurisce ($x(n) = 0$), il registro interno continua a svuotarsi fornendo campioni residui in uscita; la fase si conclude quando tutti i ritardi interni tornano a zero.
 
@@ -1007,7 +1056,7 @@ Nell'elaborazione numerica dei segnali, la catena di acquisizione e analisi spet
 
 Nel mondo reale ogni segnale viene acquisito per un intervallo di tempo limitato $T_L = L \cdot T$. È quindi necessario studiare l'effetto della finestratura nel dominio della [[4. Spettro in frequenza - DTFT|DTFT]], poiché la [[5. Trasformata discreta di Fourier (DFT)|DFT]] opera intrinsecamente su sequenze a durata finita.
 
-La finestra rettangolare ideale di lunghezza $L$ è definita da:
+La finestra rettangolare di lunghezza $L$ è definita da:
 
 $$
 w(n) = \begin{cases}
@@ -1116,7 +1165,7 @@ $$
 
 ![[immagini/hamming.png|center mid]]
 
-La finestra di Hamming porta l'attenuazione del lobo secondario a circa $-40\text{ dB}$ ( $-43\text{ dB}$ teorici, rispetto ai soli $-13\text{ dB}$ della finestra rettangolare), al prezzo di raddoppiare la larghezza del lobo principale ($c = 2$): la risoluzione in frequenza si dimezza a parità di campioni, ma per recuperare la separabilità richiesta è sufficiente aumentare la lunghezza $L$.
+La finestra di Hamming porta l'attenuazione del lobo secondario a circa $-40\text{ dB}$ ($-43\text{ dB}$ teorici, rispetto ai soli $-13\text{ dB}$ della finestra rettangolare), al prezzo di raddoppiare la larghezza del lobo principale ($c = 2$): la risoluzione in frequenza si dimezza a parità di campioni, ma per recuperare la separabilità richiesta è sufficiente aumentare la lunghezza $L$.
 
 ## Finestra Parametrica Di Kaiser
 
@@ -1129,7 +1178,7 @@ $$
 > [!NOTE] Funzione di Bessel $I_0$
 > $I_0(x)$ è la funzione di Bessel modificata del primo tipo e di ordine zero.
 
-Tramite le relazioni empiriche sviluppate da J. F. Kaiser (Orfanidis, Sez. 10.2), assegnati il livello desiderato di attenuazione dei lobi laterali $R$ (in dB positivi, $R > 0$) e la risoluzione spettrale richiesta $\Delta f_w$, è possibile ricavare l'ordine del filtro $M = L-1$ (e quindi la lunghezza finita $L = \lceil c f_s / \Delta f_w \rceil + 1$) e il parametro di forma $\alpha$:
+Tramite le relazioni empiriche sviluppate da J. F. Kaiser (Orfanidis, Sez. 10.2), assegnati il livello desiderato di attenuazione dei lobi laterali $R$ (in dB positivi, $R > 0$) e la risoluzione spettrale richiesta $\Delta f_w$, è possibile ricavare la lunghezza della finestra $L = \lceil c f_s / \Delta f_w \rceil + 1$ (convenzionalmente arrotondata al successivo intero dispari affinché il centro di simmetria $M = \frac{L-1}{2}$ sia intero) e il parametro di forma $\alpha$:
 
 $$
 L - 1 = \frac{c f_s}{\Delta f_w} \iff \Delta f_w = \frac{c f_s}{L-1}
@@ -1326,25 +1375,25 @@ In generale, la risposta impulsiva ideale $d(k)$ ha estensione temporale infinit
 > Se la frequenza di taglio è scelta come frazione intera della frequenza di campionamento (es. $\omega_c = \frac{\pi}{L}$), i passaggi per lo zero della risposta impulsiva cadranno esattamente in corrispondenza dei multipli interi di $L$ ($k = \pm L, \pm 2L, \dots$).
 
 > [!EXAMPLE] Altre Tipologie di Filtri Ideali
-> ### Passa-Alto (HP)
+> __Passa-Alto (HP)__
 > Sfruttando la __proprietà di complementarietà__ rispetto al filtro passa-basso:
 >
 > $$
 > D_{\text{HP}}(\omega) = 1 - D_{\text{LP}}(\omega) \implies d_{\text{HP}}(k) = \delta(k) - d_{\text{LP}}(k)
 > $$
 >
-> ### Passa-Banda (BP)
+> __Passa-Banda (BP)__
 > Ottenuto dalla differenza tra due filtri passa-basso con frequenze di taglio $\omega_b > \omega_a$:
 >
 > $$
-> D_{\text{BP}}(\omega) = D_{\text{LP}_b}(\omega) - D_{\text{LP}_a}(\omega)
+> D_{\text{BP}}(\omega) = D_{\text{LP}_b}(\omega) - D_{\text{LP}_a}(\omega) \implies d_{\text{BP}}(k) = d_{\text{LP}_b}(k) - d_{\text{LP}_a}(k)
 > $$
 >
-> ### Arresta-Banda (BS / Notch)
-> Complementare rispetto al passa-banda:
+> __Arresta-Banda (BS / Notch)__
+> Complementare rispetto al filtro passa-banda:
 >
 > $$
-> D_{\text{BS}}(\omega) = 1 - D_{\text{BP}}(\omega)
+> D_{\text{BS}}(\omega) = 1 - D_{\text{BP}}(\omega) \implies d_{\text{BS}}(k) = \delta(k) - d_{\text{BP}}(k)
 > $$
 
 ### Causalità E Ritardo Nei Filtri FIR
@@ -1481,7 +1530,7 @@ $$
 
 ![[immagini/FIR_hamming_ris_freq.png|center big]]
 
-A parità di lunghezza $N$, la finestra di Hamming abbatte drasticamente il ripple in banda passante e di arresto (riducendolo a circa lo $0.2\%$, corrispondente a un'attenuazione $A_{\text{stop}} \approx 54\text{ dB}$), al prezzo di raddoppiare l'ampiezza della banda di transizione.
+A parità di lunghezza $N$, la finestra di Hamming abbatte drasticamente il ripple in banda passante e di arresto (riducendolo a circa lo $0.2\%$, corrispondente a un'attenuazione $A_{\text{stop}} \approx 54\text{ dB}$), al prezzo di allargare significativamente la banda di transizione di circa $3.5$ volte rispetto alla finestra rettangolare (il fattore di banda normalizzato $D$ passa da circa $0.92$ a circa $3.21$).
 
 ### Finestra Di Kaiser
 
@@ -1511,19 +1560,23 @@ $$
 \omega_{\text{pass}} = \frac{2\pi f_{\text{pass}}}{f_s}, \quad \omega_{\text{stop}} = \frac{2\pi f_{\text{stop}}}{f_s}, \quad \omega_c = \frac{2\pi f_c}{f_s}, \quad \Delta\omega = \frac{2\pi \Delta f}{f_s}
 $$
 
-I valori di attenuazione (in dB) sono calcolati da:
+I valori di attenuazione (in dB) sono legati ai ripple dalle relazioni dirette e dalle rispettive formule inverse:
 
 $$
-A_{\text{pass}} = 20 \log_{10}\left(\frac{1 + \delta_{\text{pass}}}{1 - \delta_{\text{pass}}}\right), \quad A_{\text{stop}} = -20 \log_{10} \delta_{\text{stop}}
+A_{\text{pass}} = 20 \log_{10}\left(\frac{1 + \delta_{\text{pass}}}{1 - \delta_{\text{pass}}}\right) \iff \delta_{\text{pass}} = \frac{10^{A_{\text{pass}}/20} - 1}{10^{A_{\text{pass}}/20} + 1}
 $$
 
-Il metodo di Kaiser genera ondulazioni identiche nelle due bande; si dimensiona pertanto il filtro sul vincolo più stringente:
+$$
+A_{\text{stop}} = -20 \log_{10} \delta_{\text{stop}} \iff \delta_{\text{stop}} = 10^{-\frac{A_{\text{stop}}}{20}}
+$$
+
+Il metodo di Kaiser genera ondulazioni identiche nelle due bande; si dimensiona pertanto il filtro sul vincolo più stringente (ripple minimo):
 
 $$
 \delta = \min(\delta_{\text{pass}}, \delta_{\text{stop}}) \implies A = -20 \log_{10}\delta, \quad \delta = 10^{-\frac{A}{20}}
 $$
 
-Di solito il vincolo più stringente è $\delta_{\text{stop}}$.
+Nella pratica progettuale il vincolo dominante è quasi invariabilmente quello di banda di arresto ($\delta = \delta_{\text{stop}}$, $A = A_{\text{stop}}$).
 
 #### Parametro Di Forma $\alpha$
 
@@ -1578,19 +1631,24 @@ I passi operativi per il dimensionamento completo sono:
 
 ## Metodo Del Campionamento in Frequenza
 
-Quando la risposta desiderata $D(\omega)$ ha un profilo analitico complesso per cui non è agevole calcolare l'integrale della IDTFT in forma analitica chiusa, è possibile campionare la risposta in frequenza in $N$ punti equispaziati incorporando direttamente la fase lineare corrispondente al ritardo causale $M = \frac{N-1}{2}$:
+Quando la risposta desiderata $D(\omega)$ ha un profilo analitico complesso per cui non è agevole calcolare l'integrale della IDTFT in forma analitica chiusa, è possibile campionare la risposta in frequenza desiderata in $N$ punti equispaziati lungo la circonferenza unitaria, imponendo la fase lineare associata al ritardo causale $M = \frac{N-1}{2}$.
+
+Per garantire che la sequenza temporale $h(n)$ sia puramente reale, i campioni di frequenza $H(k)$ devono soddisfare la proprietà di simmetria complessa coniugata della DFT ($H(N-k) = H^*(k)$):
 
 $$
-H(k) = D\left(\frac{2\pi k}{N}\right) \mathrm{e}^{-j \frac{2\pi k}{N} M}, \quad k = 0, 1, \dots, N-1
+H(k) = \begin{cases}
+D\left(\frac{2\pi k}{N}\right) \mathrm{e}^{-j \frac{2\pi k}{N} M}, & k = 0, 1, \dots, M \\
+H^*(N-k), & k = M + 1, \dots, N-1
+\end{cases}
 $$
 
-Applicando una [[5. Trasformata discreta di Fourier (DFT)#IDFT|IDFT]] a $N$ punti sui campioni complessi $H(k)$, si ottiene direttamente la sequenza temporale causale $h(n)$ di lunghezza $N$:
+Applicando la [[5. Trasformata discreta di Fourier (DFT)#IDFT|IDFT]] a $N$ punti sui campioni complessi $H(k)$, si ricava direttamente la risposta impulsiva causale $h(n)$ di lunghezza $N$:
 
 $$
 h(n) = \text{IDFT}\{H(k)\} = \frac{1}{N} \sum_{k=0}^{N-1} H(k) \mathrm{e}^{j \frac{2\pi}{N} k n}, \quad n = 0, 1, \dots, N-1
 $$
 
-La risposta in frequenza continua $H(\omega)$ interpola esattamente i campioni desiderati nelle frequenze discrete $\omega_k = \frac{2\pi k}{N}$. Per mitigare le oscillazioni di Gibbs tra i nodi campionati senza alterare l'interpolazione esatta tramite finestratura temporale, nella pratica di progetto si lasciano tipicamente uno o due campioni non vincolati nella banda di transizione, ottimizzandone numericamente l'ampiezza per massimizzare l'attenuazione in banda di arresto.
+La risposta in frequenza continua $H(\omega)$ interpola esattamente i valori desiderati nei nodi discreti $\omega_k = \frac{2\pi k}{N}$. Per mitigare le ondulazioni di Gibbs che compaiono tra i nodi campionati evitando l'uso di una finestra temporale (la quale distruggerebbe l'interpolazione esatta sui nodi), nella prassi di progetto si lasciano tipicamente uno o due campioni non vincolati all'interno della banda di transizione, ottimizzandone il valore numerico per massimizzare l'attenuazione nella stopband.
 
 ## Filtri a Sottobande
 
@@ -1606,14 +1664,20 @@ $$
 
 dove $M = \frac{N-1}{2}$ campioni.
 
-Per garantire questa proprietà si impiega una batteria di $K$ filtri digitali complementari:
+Per garantire questa proprietà si impiega una batteria di $K$ filtri digitali complementari la cui somma delle risposte impulsive equivale a un ritardo puro di $M$ campioni:
 
 $$
-h_1(n), h_2(n), \dots, h_K(n)
+\sum_{i=1}^{K} h_i(n) = \delta(n - M) \iff \sum_{i=1}^{K} H_i(z) = z^{-M}
+$$
+
+In tal modo, applicando l'operatore di convoluzione lineare si verifica immediatamente:
+
+$$
+\sum_{i=1}^{K} x_i(n) = \sum_{i=1}^{K} (h_i * x)(n) = \left( \sum_{i=1}^{K} h_i(n) \right) * x(n) = \delta(n - M) * x(n) = x(n - M)
 $$
 
 I vincoli di progetto reali per il banco di filtri implicano che:
-- Le bande di transizione siano __sovrapposte e complementari__: l'intervallo di transizione di un filtro coincide con l'intervallo di transizione del filtro contiguo, incrociandosi alla frequenza di taglio a $-6\text{ dB}$ (ossia $-3\text{ dB}$ di potenza);
+- Le bande di transizione siano __sovrapposte e complementari__: l'intervallo di transizione di un filtro coincide con l'intervallo di transizione del filtro contiguo, incrociandosi alla frequenza di taglio a $-6\text{ dB}$ (corrispondente a un guadagno in ampiezza pari a $0.5$ e a un quarto della potenza);
 - Nel caso della finestra di Kaiser, tutti i filtri del banco condividano la __stessa lunghezza__ $N$ (ossia lo stesso ordine $N-1$), garantendo il medesimo ritardo temporale $M = \frac{N-1}{2}$ su tutte le sottobande affinché le componenti possano essere ricomposte in fase;
 - Tutti i filtri offrano la medesima attenuazione in banda di arresto.
 
@@ -1623,7 +1687,7 @@ I vincoli di progetto reali per il banco di filtri implicano che:
 
 I filtri __IIR (Infinite Impulse Response)__ sono sistemi lineari tempo-invarianti (LTI) a tempo discreto caratterizzati da una risposta impulsiva $h(n)$ di durata teoricamente infinita.
 
-A differenza dei filtri [[8. Filtri FIR - Finite Impulse Response|FIR]], la cui uscita dipende esclusivamente da un numero finito $N$ di campioni passati dell'ingresso:
+A differenza dei filtri [[8. Filtri FIR - Finite Impulse Response|FIR]], la cui uscita dipende esclusivamente da un numero finito $N$ di campioni (presenti e passati) dell'ingresso:
 
 $$
 \begin{aligned}
@@ -1674,7 +1738,7 @@ $$
 X(z) = \sum_{n = -\infty}^{\infty} x(n) z^{-n} = \underbrace{\sum_{n=-\infty}^{-1} x(n) z^{-n}}_{\text{parte anticausale}} + \underbrace{\sum_{n=0}^{\infty} x(n) z^{-n}}_{\text{parte causale}}
 $$
 
-dove $z$ è una variabile complessa ($z \in \mathbb{C}$). Se la sequenza è puramente causale, la sommatoria contiene solo potenze negative di $z$; se è anticausale contiene solo potenze positive; se è mista (a due lati) include entrambe.
+dove $z$ è una variabile complessa ($z \in \mathbb{C}$). Se la sequenza è puramente causale, la sommatoria contiene solo potenze non positive di $z$ (potenze intere di $z^{-1}$); se è anticausale contiene solo potenze strettamente positive di $z$; se è mista (a due lati) include entrambe.
 
 Applicando la trasformata Z alla risposta impulsiva $h(n)$ del sistema si ottiene la __funzione di trasferimento__ $H(z)$:
 
@@ -1960,15 +2024,15 @@ $$
 \frac{A_i}{1 - p_i z^{-1}} \xrightarrow{\mathcal{Z}^{-1}} A_i p_i^n u(n) \quad (\text{per ROC causale } |z| > |p_i|)
 $$
 
-### Caso 1: Grado Del Numeratore Minore Del Denominatore ($M < N$)
+### Grado Del Numeratore Minore Del Denominatore ($M < N$)
 
 Se il grado del numeratore è strettamente inferiore a quello del denominatore, l'espansione assume la forma diretta sopra indicata. Ciascun residuo $A_i$ viene calcolato isolando il fattore a denominatore e valutando la funzione nel polo corrispondente $z = p_i$:
 
 $$
-A_i = \left[ (1 - p_i z^{-1}) H(z) \right]_{z = p_i} = \left[ \frac{N(z)}{\prod_{j \neq i} (1 - p_j z^{-1})} \right]_{z = p_i}, \quad i = 1, \dots, N
+A_i = \left[ (1 - p_i z^{-1}) H(z) \right]_{z = p_i} = \left[ \frac{N(z)}{a_0 \prod_{j \neq i} (1 - p_j z^{-1})} \right]_{z = p_i}, \quad i = 1, \dots, N
 $$
 
-### Caso 2: Grado Del Numeratore Uguale Al Denominatore ($M = N$)
+### Grado Del Numeratore Uguale Al Denominatore ($M = N$)
 
 Se il grado del numeratore coincide con quello del denominatore, l'espansione in fratti parziali deve includere una costante additiva $A_0$:
 
@@ -1982,17 +2046,17 @@ $$
 A_0 = \lim_{z \to 0} H(z) = \lim_{z^{-1} \to \infty} H(z) = \frac{b_M}{a_N}
 $$
 
-mentre i residui $A_i$ si calcolano con la medesima formula del Caso 1. Nel tempo, $A_0$ genera un impulso isolato $A_0 \delta(n)$.
+mentre i residui $A_i$ si calcolano con la medesima formula valida per $M < N$. Nel tempo, $A_0$ genera un impulso isolato $A_0 \delta(n)$.
 
-### Caso 3: Grado Del Numeratore Maggiore Del Denominatore ($M > N$)
+### Grado Del Numeratore Maggiore Del Denominatore ($M > N$)
 
-Se il grado del numeratore supera quello del denominatore ($M > N$), si esegue preliminarmente la divisione polinomiale tra $N(z^{-1})$ e $D(z^{-1})$ ordinati secondo le potenze decrescenti di $z^{-1}$, ricavando un polinomio quoziente $Q(z^{-1})$ di grado $M - N$ e un resto $R(z^{-1})$ di grado inferiore a $N$:
+Se il grado del numeratore supera quello del denominatore ($M > N$), si esegue preliminarmente la divisione polinomiale tra i polinomi $N(z)$ e $D(z)$ ordinati secondo le potenze decrescenti di $z^{-1}$, ricavando un polinomio quoziente $Q(z)$ di grado $M - N$ e un resto $R(z)$ di grado inferiore a $N$:
 
 $$
-N(z^{-1}) = Q(z^{-1}) D(z^{-1}) + R(z^{-1}) \implies H(z) = Q(z^{-1}) + \frac{R(z^{-1})}{D(z^{-1})}
+N(z) = Q(z) D(z) + R(z) \implies H(z) = Q(z) + \frac{R(z)}{D(z)}
 $$
 
-Il termine razionale residuo $\frac{R(z^{-1})}{D(z^{-1})}$ ha grado a numeratore strettamente inferiore al denominatore e può essere regolarmente scomposto in fratti parziali. Il quoziente polinomiale $Q(z^{-1}) = \sum_{k=0}^{M-N} q_k z^{-k}$ genera nel tempo una sequenza causale a supporto finito (FIR) formata da impulsi isolati $\sum_{k=0}^{M-N} q_k \delta(n-k)$.
+Il termine razionale residuo $\frac{R(z)}{D(z)}$ ha grado a numeratore strettamente inferiore al denominatore e può essere regolarmente scomposto in fratti parziali. Il quoziente polinomiale $Q(z) = \sum_{k=0}^{M-N} q_k z^{-k}$ genera nel tempo una sequenza causale a supporto finito (FIR) formata da impulsi isolati $\sum_{k=0}^{M-N} q_k \delta(n-k)$.
 
 ### Poli Complessi Coniugati
 
@@ -2017,7 +2081,7 @@ $$
 La risposta impulsiva reale associata alla coppia coniugata è quindi una sinusoide smorzata:
 
 $$
-h(n) = 2 B_1 R_1^n \cos(\omega_1 n + \alpha_1) u(n)
+h_1(n) = 2 B_1 R_1^n \cos(\omega_1 n + \alpha_1) u(n)
 $$
 
 Il fattore di decadimento esponenziale $R_1^n$ assicura la stabilità se il raggio del polo è strettamente minore di uno ($R_1 < 1$).
@@ -2043,7 +2107,7 @@ La catena di progettazione collega direttamente:
 > H(z) = \frac{5 + 2z^{-1}}{1 - 0.8z^{-1}}
 > $$
 >
-> Poiché numeratore e denominatore hanno grado uguale ($M = N = 1$), applichiamo lo sviluppo in fratti parziali del Caso 2:
+> Poiché numeratore e denominatore hanno grado uguale ($M = N = 1$), applichiamo lo sviluppo in fratti parziali con termine costante $A_0$:
 >
 > $$
 > H(z) = A_0 + \frac{A_1}{1 - 0.8z^{-1}}
@@ -2551,22 +2615,22 @@ $$
 y(t) = \sum_{n=-\infty}^\infty y[n] p(t - nT_s)
 $$
 
-- __Impulso ideale (Sinc)__: rappresenta l'interpolatore perfetto secondo il teorema di Nyquist-Shannon:
+__Impulso ideale (sinc)__: rappresenta l'interpolatore perfetto secondo il teorema di Nyquist-Shannon:
 
-  $$
-  p(t) = \frac{\sin(\frac\pi{T_s}t)}{\frac\pi{T_s}t} = \text{sinc}\left(\frac{t}{T_s}\right), \quad -\infty < t < \infty
-  $$
+$$
+p(t) = \frac{\sin(\frac\pi{T_s}t)}{\frac\pi{T_s}t} = \text{sinc}\left(\frac{t}{T_s}\right), \quad -\infty < t < \infty
+$$
 
-  Nel dominio delle frequenze la sua trasformata di Fourier è un filtro passa-basso a gradino netto (__brick-wall__) con banda rigorosamente limitata a $[-f_s/2, f_s/2]$.
-  Tuttavia, l'impulso ideale __non è fisicamente realizzabile__:
-  1. Ha durata temporale infinita ($-\infty < t < \infty$), quindi per calcolare $y(t)$ in un dato istante richiederebbe tutti i campioni infiniti passati e futuri (sistema non causale a ritardo infinito).
-  2. Richiederebbe un filtro analogico di ordine infinito con transizione istantanea a $f_s/2$, impossibile da costruire con componenti fisici reali (resistenze, condensatori, amplificatori operazionali).
+Nel dominio delle frequenze la sua trasformata di Fourier è un filtro passa-basso a gradino netto (__brick-wall__) con banda rigorosamente limitata a $[-f_s/2, f_s/2]$.
+Tuttavia, l'impulso ideale __non è fisicamente realizzabile__:
+1. Ha durata temporale infinita ($-\infty < t < \infty$), quindi per calcolare $y(t)$ in un dato istante richiederebbe tutti i campioni infiniti passati e futuri (sistema non causale a ritardo infinito).
+2. Richiederebbe un filtro analogico di ordine infinito con transizione istantanea a $f_s/2$, impossibile da costruire con componenti fisici reali (resistenze, condensatori, amplificatori operazionali).
 
 Per questo motivo, nei convertitori reali si ricorre a forme di impulso elementari $p(t)$ a __durata finita e causali__, facilmente generabili dall'hardware analogico del DAC.
 
 ![[immagini/tipi_impulso.png|center mid]]
 
-### Zero-Order Hold Interpolation (Impulso Rettangolare)
+### Interpolazione Zero-Order Hold (Impulso Rettangolare)
 
 ![[immagini/zero-hold.png|center mid]]
 
@@ -2584,7 +2648,8 @@ A meno di non operare a frequenze di campionamento molto elevate (sovracampionam
 
 - __A cosa serve__: Collega i campioni adiacenti a coppie mediante segmenti rettilinei continui (First-Order Hold), eliminando i salti bruschi a gradino. La durata complessiva dell'impulso è pari al doppio del periodo di campionamento ($2T_s$).
 - __Comportamento__: Nel dominio della frequenza corrisponde a una funzione $\text{sinc}^2$, con un decadimento asintotico proporzionale a $1/f^2$.
-- Rispetto all'impulso rettangolare, il decadimento quadratico abbatte in maniera decisamente più rapida le repliche ad alta frequenza, migliorando l'approssimazione del segnale. Tuttavia, la sua generazione richiede circuiti analogici integratori di rampa più complessi, oppure calcoli numerici dedicati per determinare la pendenza tra campioni consecutivi.
+
+Rispetto all'impulso rettangolare, il decadimento quadratico abbatte in maniera decisamente più rapida le repliche ad alta frequenza, migliorando l'approssimazione del segnale. Tuttavia, la sua generazione richiede circuiti analogici integratori di rampa più complessi, oppure calcoli numerici dedicati per determinare la pendenza tra campioni consecutivi.
 
 ### Interpolazione Parabolica (Impulso Parabolico)
 
@@ -2592,7 +2657,8 @@ A meno di non operare a frequenze di campionamento molto elevate (sovracampionam
 
 - __A cosa serve__: Realizza un raccordo polinomiale del secondo ordine (spline quadratica) continuo sia nei valori sia nella derivata prima. La sua durata temporale è pari a quattro volte quella rettangolare ($4T_s$, ovvero il doppio di quella triangolare).
 - __Comportamento__: Assume valore unitario in $t=0$ ($p(0)=1$) e presenta zeri di campionamento a $\pm T_s$ e $\pm 2 T_s$, eliminando gli spigoli vivi dell'interpolazione lineare. Nel dominio della frequenza decade come $1/f^3$, offrendo una soppressione eccellente delle repliche spettrali ad alta frequenza.
-- La generazione analogica diretta di impulsi parabolici precisi è tuttavia circuitalmente onerosa e raramente impiegata nei convertitori fisici.
+
+La generazione analogica diretta di impulsi parabolici precisi è tuttavia circuitalmente onerosa e raramente impiegata nei convertitori fisici.
 
 ### Sovracampionamento per l'Interpolazione
 
@@ -2653,11 +2719,19 @@ I campioni ai multipli interi di $L$ mantengono il valore dei campioni originari
 
 Normalmente l'analisi è confinata nell'intervallo di Nyquist di base, ma l'espansione temporale allarga l'intervallo di osservazione a $[-f_s'/2, f_s'/2]$, rendendo visibili le repliche spettrali che devono essere eliminate dal filtro passa-basso digitale.
 
-I parametri di taglio del filtro interpolatore alla nuova frequenza di campionamento sono:
+I parametri di taglio del filtro interpolatore ideale alla nuova frequenza di campionamento sono:
 
 $$f_c = \frac{f_s}2 = \frac{f_s'}{2L}, \quad \omega_c' = \frac{2\pi f_c}{f_s'} = \frac \pi L$$
 
-Il filtro FIR interpolatore deve avere un __guadagno in continua pari a $L$__ per preservare l'ampiezza nominale dei campioni originari ($y_{\text{up}}(nL) = x(n)$) e compensare la scalatura spettrale introdotta dall'espansione del rate.
+Nella progettazione pratica di filtri FIR interpolatori (ad esempio mediante finestratura di Kaiser), la prima replica spettrale indesiderata (immagine) compare centrata a $f_s$, con bordo inferiore a $f_s - f_{\max}$. La transizione del filtro può quindi essere posizionata simmetricamente a cavallo di $f_c = f_s/2$:
+
+$$\Delta f \leq 2\left(\frac{f_s}{2} - f_{\max}\right)$$
+
+$$f_{\text{pass}} = f_c - \frac{\Delta f}{2} = f_{\max}, \quad f_{\text{stop}} = f_c + \frac{\Delta f}{2} = f_s - f_{\max} > \frac{f_s}{2}$$
+
+In tal modo la banda di arresto sopprime interamente le immagini spettrali senza intaccare la banda base originaria.
+
+Il filtro FIR interpolatore deve inoltre avere un __guadagno in continua pari a $L$__ per preservare l'ampiezza nominale dei campioni originari ($y_{\text{up}}(nL) = x(n)$) e compensare la scalatura spettrale introdotta dall'inserimento di $L-1$ zeri.
 
 ### Tecnica Di Progettazione Polifase
 
@@ -2677,7 +2751,7 @@ Scomponendo anche l'indice dei coefficienti $k'$ nella base $L$ con $k' = kL + j
 
 $$y_{\text{up}}(nL+i) = \sum_{k=-M}^{M-1}\sum_{j=0}^{L-1} d(kL+j) x_{\text{up}}((n-k)L + i - j), \quad i=0,\dots,L-1$$
 
-Si noti che l'estremo superiore $k' = LM$ della sommatoria non compare esplicitamente poiché per il filtro interpolatore ideale a banda $\pi/L$ vale $d(LM) = 0$ (proprietà di annullamento della sinc nei multipli di $L$), per cui ciascun sottofiltro polifase ha esattamente $2M$ coefficienti non nulli.
+Si noti che l'estremo superiore $k' = LM$ della sommatoria non compare esplicitamente poiché per il filtro interpolatore ideale a banda $\pi/L$ vale $d(LM) = 0$ (proprietà di annullamento della sinc nei multipli di $L$), per cui ciascun sottofiltro polifase ha una lunghezza pari a $2M$ coefficienti (con $-M \le k \le M-1$).
 
 Si definiscono quindi gli $L$ filtri polifase $d_i(k)$ come:
 
@@ -2712,20 +2786,28 @@ La decimazione è l'operazione duale dell'interpolazione, ovvero la riduzione co
 
 ![[immagini/decimatore_ideale.svg|center big]]
 
-Prima di sottocampionare di un fattore $M$, è indispensabile garantire che lo spettro del segnale sia confinato entro l'intervallo $[0, f_s''/2]$, inserendo un filtro passa-basso digitale con frequenza di taglio $f_c = f_s''/2 = f_s' / (2M)$.
+Prima di sottocampionare di un fattore $M$, è indispensabile garantire che lo spettro del segnale sia confinato entro l'intervallo $[-f_s''/2, f_s''/2]$ (o $|f| \leq f_s''/2$), inserendo un filtro passa-basso digitale con frequenza di taglio $f_c = f_s''/2 = f_s' / (2M)$.
 
 L'eliminazione delle componenti spettrali comprese tra $f_s''/2$ e $f_s'/2$ rappresenta una perdita di informazione irreversibile, ma matematicamente obbligatoria per prevenire distorsioni da ripiegamento spettrale (aliasing).
 
 ![[immagini/blocchi_ideal_decim.png|center mid]]
 
 >[!note]
->Poiché i filtri ideali brick-wall non sono realizzabili, si impiegano filtri FIR progettati ad esempio con finestra di Kaiser, fissando:
+>Poiché i filtri ideali brick-wall non sono realizzabili, si impiegano filtri FIR passa-basso reali progettati ad esempio con finestra di Kaiser.
+>La progettazione standard (Crochiere-Rabiner, Oppenheim-Schafer) fissa la frequenza di taglio nominale del filtro esattamente sulla frequenza di Nyquist decimata:
 >
->$$f_{\text{pass}} < \frac{f_s''}{2}$$
+>$$f_c = \frac{f_s''}{2} = \frac{f_s'}{2M}$$
+>
+>Fissata la banda passante utile $f_{\text{pass}} < f_c$, la banda di transizione si colloca simmetricamente a cavallo di $f_c$:
 >
 >$$\Delta f = 2\left(\frac{f_s''}{2} - f_{\text{pass}}\right)$$
 >
->dove $f_{\text{stop}} = f_s'' - f_{\text{pass}} > \frac{f_s''}{2}$.
+>con frequenza di inizio della banda di arresto pari a:
+>
+>$$f_{\text{stop}} = f_c + \frac{\Delta f}{2} = f_s'' - f_{\text{pass}} > \frac{f_s''}{2}$$
+>
+>Tale condizione garantisce che le componenti che subiscono aliasing si ripieghino unicamente all'interno della banda di transizione $[f_{\text{pass}}, f_s''/2]$, preservando rigorosamente priva di distorsione la banda utile $[0, f_{\text{pass}}]$.
+>(Qualora si richieda l'assenza totale di aliasing anche all'interno della banda di transizione decimata, occorre adottare il criterio più restrittivo $f_{\text{stop}} \leq f_s''/2$, imponendo $f_c = (f_{\text{pass}} + f_{\text{stop}})/2 < f_s''/2$).
 
 Il costo computazionale nominale diretto richiederebbe $N$ moltiplicazioni per ciascun campione ad alta frequenza. Tuttavia, poiché il decimatore trattiene solo 1 campione su $M$ (scartandone $M-1$), implementando la struttura polifase i calcoli vengono eseguiti solo per i campioni in uscita, riducendo l'onere computazionale medio a $N/M$ operazioni per campione d'ingresso.
 
@@ -2760,7 +2842,9 @@ Trattandosi di due filtri ideali passa-basso con tagli rispettivamente pari a $\
 
 $$\omega_c' = \frac{2\pi f_c}{f_s'} = \min\left(\frac \pi L, \frac \pi M\right) = \frac \pi{\max(L,M)}$$
 
-A seconda che risulti $L > M$ (conversione verso l'alto o up-sampling netto) oppure $L < M$ (conversione verso il basso o down-sampling netto), il filtro unico assume le caratteristiche rispettivamente del filtro interpolatore o del filtro decimatore.
+e con __guadagno in continua rigorosamente pari a $L$__ per preservare la dinamica e compensare l'inserimento degli zeri operato dall'upsampler.
+
+A seconda che risulti $L > M$ (conversione verso l'alto o up-sampling netto) oppure $L < M$ (conversione verso il basso o down-sampling netto), il filtro unico assume la frequenza di taglio rispettivamente del filtro interpolatore ($f_c = f_s / 2$) o del filtro decimatore ($f_c = f_s'' / 2$).
 
 ## Filtri Multi-Stadio
 
@@ -2771,8 +2855,8 @@ Per ottimizzare le risorse, la conversione viene scomposta in __più stadi in ca
 Nei convertitori sample-rate a rapporto razionale viene scomposto soltanto lo stadio che impone il vincolo di filtraggio più severo.
 
 L'ordine di allocazione dei fattori intermedi segue una regola precisa:
-- __Dal fattore più grande al più piccolo__ per gli interpolatori (in modo che i filtri a pendenza più ripida operino alle frequenze di campionamento più basse).
-- __Dal fattore più piccolo al più grande__ per i decimatori (per massimizzare la reiezione prima di ridurre ulteriormente la frequenza).
+- __Dal fattore più piccolo al più grande__ per gli interpolatori (in modo che il primo filtro, che possiede la banda di transizione più stretta e l'ordine più elevato, operi alla frequenza di campionamento più bassa possibile).
+- __Dal fattore più grande al più piccolo__ per i decimatori (in modo da abbattere drasticamente la frequenza di campionamento fin dal primo stadio e ridurre il numero di campioni al secondo elaborati dai filtri successivi, lasciando il filtro più selettivo all'uscita alla frequenza più bassa).
 
 ![[immagini/multi_stadio.svg|center big]]
 
@@ -2794,8 +2878,8 @@ Per un filtro interpolatore con fattore $L$ e frequenza di taglio $f_c = \frac{f
 
 $$|H_{\text{dac}}(f_c)| = \left| \frac{\sin(\pi f / f_s')}{\pi f / f_s'}\right |_{f = \frac{f_s'}{2L}} = \frac{\sin(\pi / 2L)}{\pi / 2L}$$
 
-- Per valori elevati di $L$ ($L \geq 16$), l'attenuazione al bordo banda diventa trascurabile (inferiore a frazioni di decibel) e tende a $0\text{ dB}$.
-- Per valori moderati di $L$ (ad esempio per $L \leq 8$), l'attenuazione di diversi decibel è avvertibile; è quindi opportuno compensarla sagomando il filtro interpolatore con una __risposta inversa__ rispetto a quella del DAC nella banda passante.
+- Per valori elevati di $L$ ($L \geq 16$), l'attenuazione al bordo banda diventa del tutto trascurabile (inferiore a $0.02\text{ dB}$) e tende a $0\text{ dB}$.
+- Per valori bassi o moderati di $L$ (ad esempio $L \leq 4$ o $L \leq 8$, o nel caso limite single-rate $L=1$ dove tocca $-3.92\text{ dB}$), l'attenuazione al bordo banda (pari a circa $-0.91\text{ dB}$ per $L=2$, $-0.22\text{ dB}$ per $L=4$ e $-0.06\text{ dB}$ per $L=8$) risulta percettibile nelle applicazioni audio ad alta fedeltà; è quindi opportuno compensarla sagomando il filtro interpolatore con una __risposta inversa__ rispetto a quella del DAC nella banda passante.
 
 ![[immagini/disegno_eq_dac.png|center mid]]
 
@@ -2815,20 +2899,20 @@ L\frac{\omega'/2}{\sin(\omega'/2)}, & \text{se } |\omega'| \leq \frac \pi L\\
 0,& \text{se } \frac\pi L < |\omega'| \leq \pi
 \end{cases} $$
 
-Tale filtro FIR può essere progettato agevolmente mediante il [[8. Filtri FIR - Finite Impulse Response#^14b2ae|Metodo del campionamento in frequenza]].
+Tale filtro FIR può essere progettato agevolmente mediante il [[8. Filtri FIR - Finite Impulse Response#Metodo Del Campionamento in Frequenza|Metodo del campionamento in frequenza]].
 
-Noti la lunghezza $N$ del filtro desiderato (con $N = 2LM + 1$) e i campioni di frequenza, i coefficienti impulsivi simmetrici si determinano mediante IDFT a $N$ punti:
+Noti la lunghezza $N$ del filtro desiderato (con $N = 2LM + 1$) e la griglia dei campioni di frequenza $\omega_i' = \frac{2\pi i}{N}$ (con $-LM \leq i \leq LM$), i coefficienti impulsivi simmetrici si determinano mediante IDFT a $N$ punti:
 
 $$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')e^{j\omega_i'k'}, \quad -LM \leq k' \leq LM $$
+
+Poiché la risposta ideale desiderata $D(\omega')$ è reale e pari ($D(-\omega') = D(\omega')$), la parte immaginaria della sommatoria si annulla per simmetria, riducendo l'espressione alla forma a soli coseni a valori puramente reali:
+
+$$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
 
 Il filtro causale finestrato si ottiene applicando una finestra simmetrica centrata $w(n')$:
 
 $$h(n') = \tilde d(n'-LM)w(n'), \quad 0 \leq n' \leq N-1$$
 
 Dato che la risposta desiderata cresce verso l'alto ai bordi della banda passante per compensare la caduta del DAC, per garantire il livello di attenuazione desiderato nella banda di arresto con una finestra di Kaiser è necessario specificare un'attenuazione di progetto leggermente più severa.
-
-Inoltre, per assicurare coefficienti a valori puramente reali e simmetrici, l'espressione della IDFT si semplifica nella forma a soli coseni:
-
-$$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
 
 ![[immagini/freq_sampling.png|center mid]]

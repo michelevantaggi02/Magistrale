@@ -1,10 +1,10 @@
-# B. Capacità di Canale e Teorema di Shannon
+# B. Capacità Di Canale E Teorema Di Shannon
 
 La trasmissione affidabile di flussi informativi attraverso mezzi fisici reali costituisce il cuore teorico e applicativo delle telecomunicazioni e dell'ingegneria dell'informazione. Qualsiasi canale materiale — dal doppino in rame alla fibra ottica monomodale, dal collegamento radio satellitare al bus di memoria su silicio — è soggetto a dissipazione, dispersione e perturbazioni termiche di natura stocastica.
 
 Nel suo storico trattato del 1948, Claude Shannon scardinò il senso comune dell'epoca dimostrando un principio straordinario: il rumore non impone un pavimento intrinseco alla probabilità d'errore di una trasmissione, bensì delimita esclusivamente la velocità massima con cui l'informazione può attraversare il mezzo. Fintanto che il tasso di trasmissione $R$ (in bit per uso di canale) si mantiene inferiore a una soglia critica calcolata analiticamente, denominata __capacità di canale__ ($C$), possiamo trasmettere con una probabilità d'errore arbitrariamente prossima a zero, sfruttando codici a correzione d'errore su blocchi sufficientemente lunghi.
 
-La mappa concettuale seguente illustra l'architettura logica del capitolo, tracciando il percorso analitico dalla definizione fisica di canale discreto fino alle frontiere asintotiche di Shannon:
+La mappa concettuale seguente illustra l'architettura logica della trasmissione su canale, tracciando il percorso analitico dalla definizione fisica di canale discreto fino alle frontiere asintotiche di Shannon:
 
 ```mermaid
 flowchart TD
@@ -43,7 +43,7 @@ flowchart TD
     SEP --> FDBK
 ```
 
-## Il Modello del Canale di Comunicazione
+## Il Modello Del Canale Di Comunicazione
 
 Sul piano fisico e logico, un processo di telecomunicazione tra un trasmettitore e un ricevitore consiste nell'indurre, mediante una sequenza di sollecitazioni controllate, uno stato fisico correlato e interpretabile all'altro capo del mezzo. La comunicazione ha successo se e solo se il ricevitore riesce a ricostruire univocamente il messaggio inteso dal trasmettitore.
 
@@ -91,11 +91,11 @@ $$
 
 Un codice identificato da $M$ parole di lunghezza $n$ viene denotato convenzionalmente come codice $(2^{nR}, n)$ o codice $(M, n)$.
 
-## Confusione tra Sequenze e Principio delle Sfere di Decodifica
+## Confusione Tra Sequenze E Principio Delle Sfere Di Decodifica
 
 L'insorgenza degli errori di decodifica scaturisce dal fenomeno della __confusione di canale__: poiché il rumore è un processo stocastico dispersivo, due ingressi distinti $X^n(1)$ e $X^n(2)$ possono produrre all'uscita la medesima sequenza $Y^n$ con probabilità strettamente positiva.
 
-### L'Intuizione nel Linguaggio Naturale
+### L'Intuizione Nel Linguaggio Naturale
 
 Consideriamo due frasi trasmesse attraverso un canale di testo rumoroso che altera sporadicamente i caratteri:
 - Messaggio 1: «The cat sat on the mat»
@@ -106,7 +106,7 @@ Se il canale scambia l'ultimo carattere con una 'd', il ricevitore osserva:
 
 In sede di decodifica, entrambe le ipotesi originarie risultano ugualmente plausibili: la stima collassa nell'ambiguità «The cat sat on the ma?». Gli ingressi sono tra loro __confondibili__ perché la loro distanza metrica (in questo caso una sola lettera di differenza) è inferiore all'entità della perturbazione indotta dal canale.
 
-### Il Ruolo della Ridondanza Controllata
+### Il Ruolo Della Ridondanza Controllata
 
 Per sopprimere l'ambiguità, introduciamo __ridondanza geometrica strutturata__: anziché consentire l'uso di tutte le sequenze possibili dell'alfabeto, il trasmettitore seleziona un sottoinsieme ristretto di sequenze opportunamente distanziate.
 
@@ -119,7 +119,7 @@ Se il canale altera la consonante centrale e introduce rumore residuo sull'esten
 
 Il decodificatore confronta l'osservazione con le sole parole lecite del codebook. La correlazione statistica con il Messaggio 2 è schiacciante: la stima restituisce senza esitazione $\hat{W} =$ «The cat sat on the map».
 
-### Interpretazione Geometrica dei Volumi di Decodifica
+### Interpretazione Geometrica Dei Volumi Di Decodifica
 
 Questo principio trova una formulazione geometrica rigorosa nello spazio asintotico delle sequenze tipiche:
 - A ciascuna codeword trasmessa $X^n(w)$ corrisponde nello spazio delle uscite $\mathcal{Y}^n$ un insieme di sequenze condizionatamente tipiche di volume orientativo:
@@ -143,7 +143,7 @@ Questo principio trova una formulazione geometrica rigorosa nello spazio asintot
 
 - Ricordando la definizione di rate $M = 2^{nR}$, notiamo immediatamente che il tasso massimo a cui possiamo comunicare senza confusione coincide con la mutua informazione $I(X; Y)$.
 
-## Canale Discreto Senza Memoria e Capacità di Informazione
+## Canale Discreto Senza Memoria E Capacità Di Informazione
 
 Un canale di comunicazione discreto è identificato dalla terna $(\mathcal{X}, p(y \mid x), \mathcal{Y})$, dove:
 - $\mathcal{X}$ è l'alfabeto d'ingresso discreto e finito;
@@ -154,7 +154,7 @@ Un canale di comunicazione discreto è identificato dalla terna $(\mathcal{X}, p
   p(y \mid x) \ge 0, \quad \sum_{y \in \mathcal{Y}} p(y \mid x) = 1, \quad \forall x \in \mathcal{X}
   $$
 
-### La Proprietà di Memoria Nulla (DMC)
+### La Proprietà Di Memoria Nulla (DMC)
 
 Un canale si definisce __discreto senza memoria__ (__Discrete Memoryless Channel__, DMC) se la distribuzione di probabilità dell'uscita all'istante presente $k$ dipende unicamente dal simbolo d'ingresso al medesimo istante, risultando condizionatamente indipendente da tutti gli ingressi e dalle uscite precedenti:
 
@@ -168,7 +168,7 @@ $$
 p(y^n \mid x^n) = \prod_{k=1}^n p(y_k \mid x_k)
 $$
 
-### Definizione Variazionale della Capacità di Informazione
+### Definizione Variazionale Della Capacità Di Informazione
 
 Definiamo __capacità di informazione__ di un canale discreto senza memoria la massima mutua informazione ottenibile tra l'ingresso $X$ e l'uscita $Y$ su un singolo utilizzo del canale, massimizzando rispetto a tutte le distribuzioni di probabilità ammissibili all'ingresso:
 
@@ -184,7 +184,7 @@ $$
 
 Questo problema variazionale gode di una proprietà analitica decisiva: per una matrice di transizione $p(y \mid x)$ fissata, la mutua informazione $I(X; Y)$ è una __funzione concava__ rispetto al vettore di probabilità d'ingresso $p(x)$ (Teorema di Cover & Thomas 2.7.4). Poiché il simplesso $\mathcal{P}(\mathcal{X})$ è un insieme convesso e compatto (chiuso e limitato in spazio euclideo), per il Teorema di Weierstrass il valore massimo $C$ esiste sempre ed è unico: ogni massimo locale individuato corrisponde tassativamente al massimo globale assoluto (l'eventuale molteplicità dei massimizzatori $p^*(x)$ sussiste unicamente in presenza di simboli d'ingresso ridondanti con righe di transizione identiche).
 
-### Proprietà e Bound Fondamentali della Capacità
+### Proprietà E Bound Fondamentali Della Capacità
 
 Dalla definizione variazionale $C = \max_{p(x)} I(X; Y)$ discendono immediatamente tre proprietà fondamentali che delimitano la capacità di qualsiasi canale discreto:
 
@@ -217,7 +217,7 @@ Dalla definizione variazionale $C = \max_{p(x)} I(X; Y)$ discendono immediatamen
 
 Il canale non può trasferire più bit di quanti ne contenga il suo alfabeto d'ingresso (bottleneck di modulazione/trasmissione) né più bit di quanti ne possa distinguere il suo alfabeto d'uscita (bottleneck di osservazione/ricezione).
 
-### Capacità Operativa di Canale
+### Capacità Operativa Di Canale
 
 Distinguiamo accuratamente la capacità di informazione (costrutto matematico astratto) dalla __capacità operativa__, definita come l'estremo superiore di tutti i tassi di trasmissione per i quali esiste una sequenza di codici con probabilità d'errore asintoticamente nulla:
 
@@ -233,11 +233,11 @@ $$
 
 La massimizzazione di $I(X; Y)$ non è una mera curiosità analitica, ma quantifica con precisione assoluta il limite invalicabile di velocità imposto dalla fisica alla comunicazione numerica.
 
-## Calcolo della Capacità per Canali Canonici
+## Calcolo Della Capacità per Canali Canonici
 
 Esaminiamo ora l'applicazione del principio variazionale $C = \max_{p(x)} I(X; Y)$ alle principali topologie di canale, derivando in forma chiusa le rispettive capacità e interpretandone i risvolti ingegneristici.
 
-### Canale Perfetto Privo di Rumore (Noiseless Channel)
+### Canale Perfetto Privo Di Rumore (Noiseless Channel)
 
 Nel canale ideale, l'uscita riproduce fedelmente e deterministicamente l'ingresso: $Y = X$. La matrice di transizione è la matrice identità: $p(y \mid x) = \delta_{xy}$.
 
@@ -261,7 +261,7 @@ $$
 
 Il massimo è raggiunto quando i simboli d'ingresso sono equiprobabili: $p^*(x) = 1/|\mathcal{X}|$. A ciascun uso del canale trasmettiamo esattamente $\log_2 |\mathcal{X}|$ bit privi di rumore.
 
-### Canale con Uscite Disgiunte Non Sovrapposte
+### Canale Con Uscite Disgiunte Non Sovrapposte
 
 Consideriamo un canale in cui a ingressi distinti corrispondono sottoinsiemi di uscite mutuamente disgiunti. Sia ad esempio $\mathcal{X} = \{0, 1\}$ e $\mathcal{Y} = \{1, 2, 3, 4\}$ con le seguenti transizioni:
 - Se $X = 0$, $Y$ assume equiprobabilmente i valori $\{1, 2\}$;
@@ -283,7 +283,7 @@ $$
 
 Questo risultato evidenzia un punto fondamentale per l'esame: l'aleatorietà dell'uscita non penalizza la capacità fintanto che non produce __confusione__ (sovrapposizione) tra le uscite generate da ingressi diversi.
 
-### Macchina da Scrivere Rumorosa (Noisy Typewriter)
+### Macchina Da Scrivere Rumorosa (Noisy Typewriter)
 
 Immaginiamo una macchina da scrivere con una tastiera circolare di $26$ lettere. Quando premiamo il tasto $x$, il dispositivo batte la lettera corretta $x$ con probabilità $1/2$, oppure batte la lettera successiva $(x+1) \bmod 26$ con probabilità $1/2$.
 
@@ -388,7 +388,7 @@ Esaminiamo il comportamento della capacità nei regimi operativi notevoli:
 3. __Canale Invertitore Deterministico ($q = 1$)__: $H_B(1) = 0 \implies C = 1$ bit/uso. Ogni bit viene sistematicamente negato. Poiché la regola di inversione è nota e priva di aleatorietà, il decodificatore inverte l'uscita ($\hat{X} = 1 - Y$), recuperando il flusso a tasso massimo.
 4. __Simmetria Funzionale__: Poiché $H_B(q) = H_B(1 - q)$, la curva di capacità è perfettamente simmetrica attorno a $q = 1/2$. Operare a $q = 0.9$ offre le medesime prestazioni teoriche di operare a $q = 0.1$.
 
-### Il Canale Binario con Cancellazione (Binary Erasure Channel, BEC)
+### Il Canale Binario Con Cancellazione (Binary Erasure Channel, BEC)
 
 In numerosi contesti reali — quali le reti a commutazione di pacchetto dove i checksum scartano i pacchetti corrotti, o le memorie a semiconduttore con letture sotto-soglia — il ricevitore non subisce inversioni invisibili, ma è consapevole di quando un simbolo è andato perduto.
 
@@ -448,7 +448,7 @@ $$
 C_{\text{BEC}} = 1 - \alpha \quad \text{bit/uso}
 $$
 
-### Confronto Critico e Geometrico tra BSC e BEC
+### Confronto Critico E Geometrico Tra BSC E BEC
 
 Il confronto tra le prestazioni del canale BSC e del canale BEC rivela uno dei concetti più fecondi della teoria dell'informazione: il valore della localizzazione dell'errore.
 
@@ -503,7 +503,7 @@ Un canale $(\mathcal{X}, p(y \mid x), \mathcal{Y})$ si definisce __debolmente si
    \sum_{x \in \mathcal{X}} p(y \mid x) = c = \frac{|\mathcal{X}|}{|\mathcal{Y}|}, \quad \forall y \in \mathcal{Y}
    $$
 
-#### Teorema di Capacità per Canali Debolmente Simmetrici
+#### Teorema Di Capacità per Canali Debolmente Simmetrici
 
 Per qualsiasi canale debolmente simmetrico, la capacità di informazione vale:
 
@@ -539,11 +539,11 @@ $$
 
 L'uscita risulta rigorosamente equiprobabile sull'intero alfabeto $\mathcal{Y}$. Ne deriva che $H(Y) = \log_2 |\mathcal{Y}|$, saturando il bound e confermando che $p^*(x) = 1/|\mathcal{X}|$ realizza la capacità.
 
-## Secondo Teorema di Shannon (Channel Coding Theorem)
+## Secondo Teorema Di Shannon (Channel Coding Theorem)
 
 Il Secondo Teorema Fondamentale di Claude Shannon (1948) stabilisce il confine invalicabile tra la regione di trasmissione affidabile a errore nullo e la regione in cui la comunicazione collassa irreversibilmente nell'ambiguità stocastica.
 
-### Enunciato Globale del Teorema
+### Enunciato Globale Del Teorema
 
 Dato un canale discreto senza memoria con capacità di informazione $C = \max_{p(x)} I(X; Y)$:
 
@@ -563,13 +563,13 @@ Dato un canale discreto senza memoria con capacità di informazione $C = \max_{p
 
    È fisicamente e matematicamente impossibile comunicare con affidabilità ideale superando la capacità del canale.
 
-### Rottura del Paradigma Classico della Ripetizione
+### Rottura Del Paradigma Classico Della Ripetizione
 
 Prima del 1948, la prassi ingegneristica riteneva che l'unico modo per contrastare il rumore consistesse nel ripetere i bit un numero crescente di volte (codici a ripetizione). Tuttavia, ripetere un bit $n$ volte riduce il rate effettivo come $R = 1/n$: per azzerare l'errore ($n \to \infty$), il tasso di trasmissione precipita a zero ($R \to 0$).
 
 Shannon dimostrò la sub-ottimalità di tale approccio. Anziché confinare i segnali su traiettorie monodimensionali collineari, costruiamo parole di codice vettoriali distribuite nell'iperspazio $n$-dimensionale. Sfruttando il fenomeno della concentrazione della misura (AEP congiunta), le sfere di dispersione del rumore si disgiungono quasi totalmente, rendendo possibile comunicare con errore nullo a qualsiasi tasso positivo $R$ purché inferiore a $C$.
 
-### Struttura della Dimostrazione Diretta (Random Coding e Joint AEP)
+### Struttura Della Dimostrazione Diretta (Random Coding E Joint AEP)
 
 La dimostrazione diretta di Shannon non produce un algoritmo costruttivo deterministico (la ricerca di codici pratici capacity-achieving richiederà mezzo secolo, culminando con i codici Turbo, LDPC e Polari), ma prova l'esistenza del codice ottimo mediante il celebre metodo probabilistico:
 
@@ -637,7 +637,7 @@ La dimostrazione diretta di Shannon non produce un algoritmo costruttivo determi
 
 Per consultare lo sviluppo analitico integrale di ogni singolo passaggio, si rimanda alla [[zz. Argomenti extra#Dimostrazione del Teorema di Codifica di Canale (Diretta: Random Coding e Joint AEP)|Dimostrazione del Teorema di Codifica di Canale (Diretta: Random Coding e Joint AEP)]].
 
-### Struttura della Dimostrazione Inversa (Converse via Fano)
+### Struttura Della Dimostrazione Inversa (Converse via Fano)
 
 Dimostriamo ora che nessun sistema può operare in modo affidabile al di sopra della capacità. Consideriamo la catena di elaborazione:
 
@@ -691,7 +691,7 @@ Se $R > C$, la quantità $1 - C/R$ è strettamente positiva. Indipendentemente d
 
 I dettagli analitici formali sono consultabili nella [[zz. Argomenti extra#Dimostrazione della Parte Inversa del Teorema di Codifica di Canale (Converse via Fano)|Dimostrazione della Parte Inversa del Teorema di Codifica di Canale (Converse via Fano)]].
 
-## Dualità di Shannon tra Compressione e Trasmissione
+## Dualità Di Shannon Tra Compressione E Trasmissione
 
 Tra i due pilastri della teoria dell'informazione sussiste una profonda simmetria speculare, formalizzata dal principio di dualità di Shannon:
 
@@ -703,13 +703,13 @@ Tra i due pilastri della teoria dell'informazione sussiste una profonda simmetri
 
 La compressione elimina la ridondanza naturale non strutturata; la codifica di canale inietta ridondanza artificiale strutturata.
 
-## Teorema di Separazione Sorgente-Canale di Shannon
+## Teorema Di Separazione Sorgente-Canale Di Shannon
 
 In un impianto di trasmissione reale, si potrebbe ipotizzare che progettare un unico codificatore congiunto non lineare — che mappi direttamente i campioni della sorgente nei simboli fisici di canale — consenta di superare le prestazioni di un'architettura modulare a stadi disaccoppiati.
 
 Il celebre __Teorema di Separazione Sorgente-Canale__ (Shannon 1948) dimostra inconfutabilmente che tale congettura è errata: l'architettura a due stadi separati è __globalmente e asintoticamente ottima__.
 
-### Enunciato del Teorema
+### Enunciato Del Teorema
 
 Sia assegnata una sorgente stazionaria ed ergodica $\mathcal{V}$ con tasso di entropia $H(\mathcal{V})$ (espressa in bit per simbolo di sorgente), e sia assegnato un canale discreto senza memoria con capacità $C$ (in bit per uso di canale). Supponiamo che il sistema utilizzi il canale $n$ volte per trasmettere ogni blocco di $k$ simboli di sorgente.
 
@@ -727,18 +727,18 @@ Sia assegnata una sorgente stazionaria ed ergodica $\mathcal{V}$ con tasso di en
 
 La dimostrazione rigorosa è consultabile nella sezione [[zz. Argomenti extra#Dimostrazione del Teorema di Separazione Sorgente-Canale di Shannon|Dimostrazione del Teorema di Separazione Sorgente-Canale di Shannon]].
 
-### Impatto Architetturale del Principio di Separazione
+### Impatto Architetturale Del Principio Di Separazione
 
 Il Teorema di Separazione costituisce l'architrave su cui si fonda l'intera industria informatica e delle telecomunicazioni contemporanee:
 - __Disaccoppiamento dei Livelli di Progettazione__: L'ingegnere software che sviluppa un algoritmo di compressione video (es. H.264, HEVC, AV1) deve unicamente ottimizzare la rimozione della ridondanza per minimizzare il bitrate in uscita, senza preoccuparsi del mezzo fisico di destinazione.
 - __Universalità del Canale Digitale__: L'ingegnere delle telecomunicazioni che progetta un collegamento fisico 5G, Wi-Fi 7 o un transponder ottico deve unicamente massimizzare la capacità $C$ del canale e correggere gli errori di bit, trattando il flusso informativo come una sequenza astratta di bit priva di significato semantico.
 - __L'Architettura di Internet__: Senza il Teorema di Separazione, la pila di protocolli ISO/OSI e l'architettura a pacchetti TCP/IP — fondate sul disaccoppiamento tra il livello applicativo e il livello fisico — non avrebbero alcuna giustificazione teorica di ottimalità.
 
-## Capacità di Canale in Presenza di Feedback Causale
+## Capacità Di Canale in Presenza Di Feedback Causale
 
 Un fondamentale quesito teorico riguarda l'impiego del canale di ritorno: se il ricevitore dispone di un collegamento privo di rumore attraverso il quale rinvia immediatamente al trasmettitore i simboli $Y$ ricevuti negli istanti precedenti, la capacità di trasmissione del canale aumenta?
 
-### Teorema di Shannon sull'Invarianza della Capacità con Feedback
+### Teorema Di Shannon sull'Invarianza Della Capacità Con Feedback
 
 Per qualsiasi canale discreto senza memoria (DMC), l'introduzione di un canale di feedback causale privo di rumore non incrementa in alcun modo la capacità di canale:
 
@@ -799,14 +799,14 @@ $$
 
 D'altra parte, trasmettere ignorando il segnale di feedback è un caso particolare di trasmissione con feedback: vale banalmente $C_{\text{feedback}} \ge C$. Concludiamo che $C_{\text{feedback}} = C$.
 
-#### Ruolo Ingegneristico del Feedback
+#### Ruolo Ingegneristico Del Feedback
 
 Sebbene il feedback non aumenti la capacità asintotica di un canale privo di memoria, esso riveste un'importanza applicativa eccezionale:
 1. __Semplificazione Circuitale__: Consente di implementare codici con complessità di codifica e decodifica quasi nulla (come i protocolli ARQ a ritrasmissione rapida e gli schemi ad aggiornamento di stima alla Horstein-Schalkwijk-Kailath).
 2. __Accelerazione della Convergenza__: Aumenta drasticamente l'esponente d'errore di affidabilità ($E(R)$), facendo decadere la probabilità d'errore a zero per lunghezze di blocco $n$ ordini di grandezza inferiori rispetto ai codici aperti.
 3. __Canali con Memoria__: Se il canale presenta memoria temporale o dissolvenza (fading), la conoscenza dello stato del canale al trasmettitore (CSIT) tramite feedback _aumenta effettivamente la capacità_, consentendo di attuare tecniche di allocazione dinamica di potenza (water-filling temporale) e modulazione adattativa.
 
-## Quadro Sinottico e Prontuario per l'Esame
+## Quadro Sinottico E Prontuario per l'Esame
 
 Riepiloghiamo nella tabella seguente le formule e le caratteristiche strutturali dei canali di comunicazione esaminati:
 
@@ -820,7 +820,7 @@ Riepiloghiamo nella tabella seguente le formule e le caratteristiche strutturali
 | __Canale Debolmente Simmetrico__ | Alfabeti discreti arbitrari | Righe e colonne permutate | Uniforme: $p^*(x) = 1/|\mathcal{X}|$ | $\log_2 |\mathcal{Y}| - H(\mathbf{r})$ | Uscita uniforme garantita dalla simmetria di colonna |
 | __DMC con Feedback Causale__ | Alfabeti del canale originario | Feedback causale privo di rumore | Coincidente con il caso aperto | Identica a $C$ del DMC | Non sposta $C$, abbatte la complessità circuitale (ARQ) |
 
-### Trabocchetti d'Esame e Check-List Operativa
+### Trabocchetti d'Esame E Check-List Operativa
 
 - __Massimizzazione di $I(X; Y)$__: Ricorda che $I(X; Y) = H(Y) - H(Y \mid X)$. Nei canali simmetrici (come BSC o weakly symmetric), il termine condizionato $H(Y \mid X)$ è una costante numerica indipendente da $p(x)$; perciò la massimizzazione si riduce a rendere uniforme l'uscita $H(Y)$. Nei canali generici non simmetrici, $H(Y \mid X)$ dipende invece esplicitamente da $p(x)$ e non può essere estratto dall'operatore di massimo.
 - __Probabilità Media vs Probabilità Massima nel Teorema di Canale__: Nella dimostrazione diretta di Shannon, il Random Coding e lo Union Bound dimostrano inizialmente che la probabilità media d'errore sull'ensemble decade a zero ($\mathbb{E}[P_e^{(n)}] \to 0$). All'orale viene spesso chiesto: _come si passa alla probabilità massima d'errore su ogni singola parola?_ La risposta è la tecnica di __expurgation__ (epurazione della metà peggiore delle parole), che costa solo una perdita trascurabile di $1/n$ sul rate.
