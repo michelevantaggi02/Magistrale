@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "956510069bb3b68e",
+        "id": "c1d1825382d0dd6b",
         "type": "tabs",
         "children": [
           {
-            "id": "d95fbf057c6a9ab4",
+            "id": "0a5af9a49280b5c7",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "Anno 2/Autonomous Robotics/11. FastSLAM e Rao-Blackwellized Particle Filter.md",
-                "mode": "source",
-                "source": false
+                "aFile": "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
+                "bFile": "Anno 1/Digital Signal Processing/1. Quantizzazione.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "11. FastSLAM e Rao-Blackwellized Particle Filter"
+              "icon": "diff",
+              "title": "Diff: 1. Quantizzazione  (Working Tree)"
             }
           }
         ]
@@ -80,8 +80,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 480.09825134277344,
-    "collapsed": true
+    "width": 480.09825134277344
   },
   "right": {
     "id": "d5c02c814b48a4b8",
@@ -196,34 +195,37 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "d95fbf057c6a9ab4",
+  "active": "0a5af9a49280b5c7",
   "lastOpenFiles": [
-    "Anno 2/Autonomous Robotics/10. SLAM ed EKF-SLAM.md",
+    "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
+    "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
+    "[!) or line.startswith(",
+    "Anno 1/Machine Learning/7. Model Selection e Model Assessment.md",
+    "Anno 1/Machine Learning/immagini/fig_ex_7_scomposizione_bias_varianza_tradeoff.png",
+    "scratch/page_ch9-143-143.png",
+    "Anno 1/Machine Learning/immagini/fig_9_5_learning_curves_numero_campioni.png",
+    "Anno 1/Machine Learning/immagini/fig_9_4_strategie_validazione_confronto.png",
+    "Anno 1/Machine Learning/immagini/fig_9_3_tradeoff_underfitting_overfitting_best_model.png",
+    "Anno 1/Machine Learning/immagini/fig_9_2_partizione_train_val_test.png",
+    "Anno 1/Machine Learning/immagini/fig_9_1_curve_errore_complessita_modello.png",
+    "scratch/ch9_rawimg-009.png",
+    "scratch/ch9_rawimg-008.png",
+    "scratch/ch9_rawimg-007.png",
+    "scratch/ch9_full.txt",
+    "scratch/ch9_end.txt",
+    "scratch/ch9_text.txt",
     "Anno 2/Autonomous Robotics/11. FastSLAM e Rao-Blackwellized Particle Filter.md",
-    "Anno 2/Autonomous Robotics/immagini/slide_20_gmapping_architecture.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_20_fastslam1_vs_fastslam2_proposal.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_20_fastslam_particle_structure.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_20_rb_slam_conditional_independence_thrun.png",
+    "Anno 2/Autonomous Robotics/10. SLAM ed EKF-SLAM.md",
     "Anno 2/Autonomous Robotics/note/lezione_20.md",
     "Anno 2/Autonomous Robotics/note/lezione_19.md",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_matlab_ekfslam_simulation_trajectory.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_cas_kth_beacon_based_slam.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_cas_kth_line_based_slam.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_ekf_slam_covariance_correlation_shrinkage.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_ekf_slam_loop_closure_covariance_convergence.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_ekf_slam_step5_correction.png",
     "Zero[λj = 0<br>Vincolo inerte]",
     "Mul[λj > 0<br>Reazione vincolare presente]",
     "Act{hj(x) = 0 (Bordo)?}",
     "Slack[4. Slackness Complementare<br>λj hj(x) = 0]",
     "Dual[3. Ammissibilita Duale<br>λj ≥ 0, μk libero]",
     "Feas[2. Ammissibilita Primale<br>hj(x) ≥ 0, rk(x) = 0]",
-    "Staz[1. Stazionarieta Primale<br>∇x L = 0]",
-    "Lag[Lagrangiana Generalizzata<br>L(x, λ, μ) = f + Σ λj hj + Σ μk rk]",
     "Anno 2/Autonomous Robotics/note/lezione_16.md",
     "Anno 1/Machine Learning/6. Metodo dei Moltiplicatori di Lagrange.md",
-    "scratch/ch8_end.txt",
-    "scratch/ch8_full.txt",
     "lezione 12 e 13/9. Reti Convoluzionali: Convoluzione, Receptive Field e Volumi 3D.md",
     "lezione 12 e 13-merged.md",
     "lezione 12 e 13/_TOC_.md",
@@ -241,9 +243,6 @@
     "Anno 1/Digital Signal Processing/6. Finestratura.md",
     "Anno 1/Digital Signal Processing/7. Stima Spettrale di Segnali Non Stazionari.md",
     "Anno 1/Digital Signal Processing/0. Introduzione.md",
-    "Anno 1/Digital Signal Processing/3. Quantizzazione ottima.md",
-    "Anno 1/Digital Signal Processing/2. Quantizzazione uniforme.md",
-    "Anno 2/Deep Learning And Robot Perception/10. Anatomia di una CNN, Visualizzazione delle Feature e Convoluzioni Avanzate.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Senza nome.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"

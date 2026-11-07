@@ -42,22 +42,22 @@ $$
 y(t) = \sum_{n=-\infty}^\infty y[n] p(t - nT_s)
 $$
 
-- __Impulso ideale (Sinc)__: rappresenta l'interpolatore perfetto secondo il teorema di Nyquist-Shannon:
+__Impulso ideale (sinc)__: rappresenta l'interpolatore perfetto secondo il teorema di Nyquist-Shannon:
 
-  $$
-  p(t) = \frac{\sin(\frac\pi{T_s}t)}{\frac\pi{T_s}t} = \text{sinc}\left(\frac{t}{T_s}\right), \quad -\infty < t < \infty
-  $$
+$$
+p(t) = \frac{\sin(\frac\pi{T_s}t)}{\frac\pi{T_s}t} = \text{sinc}\left(\frac{t}{T_s}\right), \quad -\infty < t < \infty
+$$
 
-  Nel dominio delle frequenze la sua trasformata di Fourier è un filtro passa-basso a gradino netto (__brick-wall__) con banda rigorosamente limitata a $[-f_s/2, f_s/2]$.
-  Tuttavia, l'impulso ideale __non è fisicamente realizzabile__:
-  1. Ha durata temporale infinita ($-\infty < t < \infty$), quindi per calcolare $y(t)$ in un dato istante richiederebbe tutti i campioni infiniti passati e futuri (sistema non causale a ritardo infinito).
-  2. Richiederebbe un filtro analogico di ordine infinito con transizione istantanea a $f_s/2$, impossibile da costruire con componenti fisici reali (resistenze, condensatori, amplificatori operazionali).
+Nel dominio delle frequenze la sua trasformata di Fourier è un filtro passa-basso a gradino netto (__brick-wall__) con banda rigorosamente limitata a $[-f_s/2, f_s/2]$.
+Tuttavia, l'impulso ideale __non è fisicamente realizzabile__:
+1. Ha durata temporale infinita ($-\infty < t < \infty$), quindi per calcolare $y(t)$ in un dato istante richiederebbe tutti i campioni infiniti passati e futuri (sistema non causale a ritardo infinito).
+2. Richiederebbe un filtro analogico di ordine infinito con transizione istantanea a $f_s/2$, impossibile da costruire con componenti fisici reali (resistenze, condensatori, amplificatori operazionali).
 
 Per questo motivo, nei convertitori reali si ricorre a forme di impulso elementari $p(t)$ a __durata finita e causali__, facilmente generabili dall'hardware analogico del DAC.
 
 ![[immagini/tipi_impulso.png|center mid]]
 
-### Zero-Order Hold Interpolation (Impulso Rettangolare)
+### Interpolazione Zero-Order Hold (Impulso Rettangolare)
 
 ![[immagini/zero-hold.png|center mid]]
 
@@ -75,7 +75,8 @@ A meno di non operare a frequenze di campionamento molto elevate (sovracampionam
 
 - __A cosa serve__: Collega i campioni adiacenti a coppie mediante segmenti rettilinei continui (First-Order Hold), eliminando i salti bruschi a gradino. La durata complessiva dell'impulso è pari al doppio del periodo di campionamento ($2T_s$).
 - __Comportamento__: Nel dominio della frequenza corrisponde a una funzione $\text{sinc}^2$, con un decadimento asintotico proporzionale a $1/f^2$.
-- Rispetto all'impulso rettangolare, il decadimento quadratico abbatte in maniera decisamente più rapida le repliche ad alta frequenza, migliorando l'approssimazione del segnale. Tuttavia, la sua generazione richiede circuiti analogici integratori di rampa più complessi, oppure calcoli numerici dedicati per determinare la pendenza tra campioni consecutivi.
+
+Rispetto all'impulso rettangolare, il decadimento quadratico abbatte in maniera decisamente più rapida le repliche ad alta frequenza, migliorando l'approssimazione del segnale. Tuttavia, la sua generazione richiede circuiti analogici integratori di rampa più complessi, oppure calcoli numerici dedicati per determinare la pendenza tra campioni consecutivi.
 
 ### Interpolazione Parabolica (Impulso Parabolico)
 
@@ -83,7 +84,8 @@ A meno di non operare a frequenze di campionamento molto elevate (sovracampionam
 
 - __A cosa serve__: Realizza un raccordo polinomiale del secondo ordine (spline quadratica) continuo sia nei valori sia nella derivata prima. La sua durata temporale è pari a quattro volte quella rettangolare ($4T_s$, ovvero il doppio di quella triangolare).
 - __Comportamento__: Assume valore unitario in $t=0$ ($p(0)=1$) e presenta zeri di campionamento a $\pm T_s$ e $\pm 2 T_s$, eliminando gli spigoli vivi dell'interpolazione lineare. Nel dominio della frequenza decade come $1/f^3$, offrendo una soppressione eccellente delle repliche spettrali ad alta frequenza.
-- La generazione analogica diretta di impulsi parabolici precisi è tuttavia circuitalmente onerosa e raramente impiegata nei convertitori fisici.
+
+La generazione analogica diretta di impulsi parabolici precisi è tuttavia circuitalmente onerosa e raramente impiegata nei convertitori fisici.
 
 ### Sovracampionamento per l'Interpolazione
 
@@ -219,19 +221,20 @@ L'eliminazione delle componenti spettrali comprese tra $f_s''/2$ e $f_s'/2$ rapp
 
 >[!note]
 >Poiché i filtri ideali brick-wall non sono realizzabili, si impiegano filtri FIR passa-basso reali progettati ad esempio con finestra di Kaiser.
->Per prevenire rigorosamente qualsiasi ripiegamento spettrale (aliasing) all'interno dell'intero intervallo di Nyquist di destinazione $[-f_s''/2, f_s''/2]$, l'inizio della banda di arresto del filtro anti-aliasing deve essere collocato prima o al più sulla frequenza di Nyquist decimata:
+>La progettazione standard (Crochiere-Rabiner, Oppenheim-Schafer) fissa la frequenza di taglio nominale del filtro esattamente sulla frequenza di Nyquist decimata:
 >
->$$f_{\text{stop}} \leq \frac{f_s''}{2}$$
+>$$f_c = \frac{f_s''}{2} = \frac{f_s'}{2M}$$
 >
->Fissata la banda passante utile $f_{\text{pass}} < f_{\text{stop}}$, la banda di transizione risulta:
+>Fissata la banda passante utile $f_{\text{pass}} < f_c$, la banda di transizione si colloca simmetricamente a cavallo di $f_c$:
 >
->$$\Delta f = f_{\text{stop}} - f_{\text{pass}}$$
+>$$\Delta f = 2\left(\frac{f_s''}{2} - f_{\text{pass}}\right)$$
 >
->con frequenza di taglio nominale a $-6\text{ dB}$:
+>con frequenza di inizio della banda di arresto pari a:
 >
->$$f_c = \frac{f_{\text{pass}} + f_{\text{stop}}}{2} < \frac{f_s''}{2}$$
+>$$f_{\text{stop}} = f_c + \frac{\Delta f}{2} = f_s'' - f_{\text{pass}} > \frac{f_s''}{2}$$
 >
->(Qualora si adotti un criterio rilassato in cui si ammette aliasing nella sola banda di transizione senza contaminare la banda utile $[0, f_{\text{pass}}]$, la condizione limite teorica diventa $f_{\text{stop}} \leq f_s'' - f_{\text{pass}}$).
+>Tale condizione garantisce che le componenti che subiscono aliasing si ripieghino unicamente all'interno della banda di transizione $[f_{\text{pass}}, f_s''/2]$, preservando rigorosamente priva di distorsione la banda utile $[0, f_{\text{pass}}]$.
+>(Qualora si richieda l'assenza totale di aliasing anche all'interno della banda di transizione decimata, occorre adottare il criterio più restrittivo $f_{\text{stop}} \leq f_s''/2$, imponendo $f_c = (f_{\text{pass}} + f_{\text{stop}})/2 < f_s''/2$).
 
 Il costo computazionale nominale diretto richiederebbe $N$ moltiplicazioni per ciascun campione ad alta frequenza. Tuttavia, poiché il decimatore trattiene solo 1 campione su $M$ (scartandone $M-1$), implementando la struttura polifase i calcoli vengono eseguiti solo per i campioni in uscita, riducendo l'onere computazionale medio a $N/M$ operazioni per campione d'ingresso.
 
@@ -302,8 +305,8 @@ Per un filtro interpolatore con fattore $L$ e frequenza di taglio $f_c = \frac{f
 
 $$|H_{\text{dac}}(f_c)| = \left| \frac{\sin(\pi f / f_s')}{\pi f / f_s'}\right |_{f = \frac{f_s'}{2L}} = \frac{\sin(\pi / 2L)}{\pi / 2L}$$
 
-- Per valori elevati di $L$ ($L \geq 16$), l'attenuazione al bordo banda diventa trascurabile (inferiore a frazioni di decibel) e tende a $0\text{ dB}$.
-- Per valori moderati di $L$ (ad esempio per $L \leq 8$), l'attenuazione di diversi decibel è avvertibile; è quindi opportuno compensarla sagomando il filtro interpolatore con una __risposta inversa__ rispetto a quella del DAC nella banda passante.
+- Per valori elevati di $L$ ($L \geq 16$), l'attenuazione al bordo banda diventa del tutto trascurabile (inferiore a $0.02\text{ dB}$) e tende a $0\text{ dB}$.
+- Per valori bassi o moderati di $L$ (ad esempio $L \leq 4$ o $L \leq 8$, o nel caso limite single-rate $L=1$ dove tocca $-3.92\text{ dB}$), l'attenuazione al bordo banda (pari a circa $-0.91\text{ dB}$ per $L=2$, $-0.22\text{ dB}$ per $L=4$ e $-0.06\text{ dB}$ per $L=8$) risulta percettibile nelle applicazioni audio ad alta fedeltà; è quindi opportuno compensarla sagomando il filtro interpolatore con una __risposta inversa__ rispetto a quella del DAC nella banda passante.
 
 ![[immagini/disegno_eq_dac.png|center mid]]
 
@@ -329,14 +332,14 @@ Noti la lunghezza $N$ del filtro desiderato (con $N = 2LM + 1$) e la griglia dei
 
 $$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')e^{j\omega_i'k'}, \quad -LM \leq k' \leq LM $$
 
+Poiché la risposta ideale desiderata $D(\omega')$ è reale e pari ($D(-\omega') = D(\omega')$), la parte immaginaria della sommatoria si annulla per simmetria, riducendo l'espressione alla forma a soli coseni a valori puramente reali:
+
+$$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
+
 Il filtro causale finestrato si ottiene applicando una finestra simmetrica centrata $w(n')$:
 
 $$h(n') = \tilde d(n'-LM)w(n'), \quad 0 \leq n' \leq N-1$$
 
 Dato che la risposta desiderata cresce verso l'alto ai bordi della banda passante per compensare la caduta del DAC, per garantire il livello di attenuazione desiderato nella banda di arresto con una finestra di Kaiser è necessario specificare un'attenuazione di progetto leggermente più severa.
-
-Inoltre, per assicurare coefficienti a valori puramente reali e simmetrici, l'espressione della IDFT si semplifica nella forma a soli coseni:
-
-$$\tilde d(k') = \frac 1N \sum_{i = -LM}^{LM}D(\omega_i')\cos(\omega_i'k'), \quad -LM \leq k' \leq LM $$
 
 ![[immagini/freq_sampling.png|center mid]]
