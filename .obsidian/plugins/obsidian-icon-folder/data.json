@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiInfo",
       "LiMove3d",
       "LiCamera",
       "LiTranspose",
-      "2️⃣",
-      "LiAtom"
+      "2️⃣"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -41,5 +41,6 @@
   "Anno 1/Machine Learning": "LiAtom",
   "Anno 2": "2️⃣",
   "Anno 2/Autonomous Robotics": "LiMove3d",
-  "Anno 2/Deep Learning And Robot Perception": "LiCamera"
+  "Anno 2/Deep Learning And Robot Perception": "LiCamera",
+  "Anno 1/Information and Estimation Theory": "LiInfo"
 }
