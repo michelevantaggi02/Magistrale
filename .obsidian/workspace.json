@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 2/Autonomous Robotics/10. SLAM ed EKF-SLAM.md",
+                "file": "Anno 2/Autonomous Robotics/11. FastSLAM e Rao-Blackwellized Particle Filter.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "10. SLAM ed EKF-SLAM"
+              "title": "11. FastSLAM e Rao-Blackwellized Particle Filter"
             }
           }
         ]
@@ -80,7 +80,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 480.09825134277344
+    "width": 480.09825134277344,
+    "collapsed": true
   },
   "right": {
     "id": "d5c02c814b48a4b8",
@@ -197,20 +198,20 @@
   },
   "active": "d95fbf057c6a9ab4",
   "lastOpenFiles": [
+    "Anno 2/Autonomous Robotics/10. SLAM ed EKF-SLAM.md",
+    "Anno 2/Autonomous Robotics/11. FastSLAM e Rao-Blackwellized Particle Filter.md",
+    "Anno 2/Autonomous Robotics/immagini/slide_20_gmapping_architecture.png",
     "Anno 2/Autonomous Robotics/immagini/slide_20_fastslam1_vs_fastslam2_proposal.png",
     "Anno 2/Autonomous Robotics/immagini/slide_20_fastslam_particle_structure.png",
     "Anno 2/Autonomous Robotics/immagini/slide_20_rb_slam_conditional_independence_thrun.png",
     "Anno 2/Autonomous Robotics/note/lezione_20.md",
     "Anno 2/Autonomous Robotics/note/lezione_19.md",
-    "Anno 2/Autonomous Robotics/10. SLAM ed EKF-SLAM.md",
     "Anno 2/Autonomous Robotics/immagini/slide_19_matlab_ekfslam_simulation_trajectory.png",
     "Anno 2/Autonomous Robotics/immagini/slide_19_cas_kth_beacon_based_slam.png",
     "Anno 2/Autonomous Robotics/immagini/slide_19_cas_kth_line_based_slam.png",
     "Anno 2/Autonomous Robotics/immagini/slide_19_ekf_slam_covariance_correlation_shrinkage.png",
     "Anno 2/Autonomous Robotics/immagini/slide_19_ekf_slam_loop_closure_covariance_convergence.png",
     "Anno 2/Autonomous Robotics/immagini/slide_19_ekf_slam_step5_correction.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_ekf_slam_step4_data_association.png",
-    "Anno 2/Autonomous Robotics/immagini/slide_19_ekf_slam_step3_measurement_prediction.png",
     "Zero[λj = 0<br>Vincolo inerte]",
     "Mul[λj > 0<br>Reazione vincolare presente]",
     "Act{hj(x) = 0 (Bordo)?}",

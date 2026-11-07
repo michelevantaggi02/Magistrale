@@ -66,9 +66,10 @@ Magistrale/
 │   │   ├── 8. Filtro di Kalman Lineare.md
 │   │   ├── 9. Localizzazione con Extended Kalman Filter.md
 │   │   ├── 10. SLAM ed EKF-SLAM.md
+│   │   ├── 11. FastSLAM e Rao-Blackwellized Particle Filter.md
 │   │   ├── zz. Argomenti extra.md
-│   │   ├── immagini/                    # 122 figure estratte e generate ad alta risoluzione
-│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..19)
+│   │   ├── immagini/                    # 126 figure estratte e generate ad alta risoluzione
+│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..20)
 │   │   └── scripts_python/
 │   │       ├── Histogram_gemini_lecture_v10.py
 │   │       ├── particle_filter_1d_simulation.py
@@ -90,7 +91,7 @@ Magistrale/
 | **Anno 1** | **Machine Learning** | Iniziato | `GUIDA_APPUNTI_MACHINE_LEARNING.md`, `dispense/ML_Notes.pdf`, `immagini/` | Guida specifica attiva in `Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md`. 13 capitoli d'esame (`0.`..`C.`) basati sulla dispensa del Prof. Costante (225 pp). Esclusi argomenti con `*` (Capitolo 6 GLMs). Pipeline per dispense LaTeX con figure originali ed esempi grafici ad-hoc. Stesura incrementale un capitolo alla volta. |
 | **Anno 1** | **Information and Estimation Theory** | Iniziato | `GUIDA_APPUNTI_INFORMATION_AND_ESTIMATION_THEORY.md`, `notes/` | Guida specifica attiva in `Anno 1/Information and Estimation Theory/GUIDA_APPUNTI_INFORMATION_AND_ESTIMATION_THEORY.md`. Diviso in due macro-parti con progressione `0..E`: Parte I (Stima e Rilevazione, 6 capitoli `0.`..`5.` ripartiti in Teoria/Limiti e Stimatori/Metodi, Prof. Rugini, ref. Steven Kay Vol. I & II) e Parte II (Teoria dell'Informazione, 9 capitoli `6.`..`E.`, ref. Cover & Thomas, Shannon e paper scientifici). Decompressione on-demand degli archivi zip tematici in sottocartelle di `notes/`. |
 | **Anno 2** | **Deep Learning And Robot Perception** | In corso | `0. Immagini, filtri e gradienti.md`, `immagini/` | Primo capitolo corposo già redatto (450+ righe) corredato da 53 figure. Da proseguire con CNN, feature detection, object detection, segmentation, 3D perception. |
-| **Anno 2** | **Autonomous Robotics** | In corso | 11 file (`0.` - `10.`), `zz. Argomenti extra.md`, `immagini/` (122 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8, 10, 12, 13, 15, 19 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, Monte Carlo Localization (Particle Filter) con Importance Sampling, Low-Variance Resampling, Augmented MCL, KLD-Sampling, modelli di misura LiDAR (catena 4 frame, Feature-Based, Likelihood Field con distance transform precalcolata O(1), Beam Model a 4 componenti), Filtro di Kalman lineare time-varying (osservatore di Luenberger, convenzione Q/R, Joseph form), Extended Kalman Filter (localizzazione in SE(2) su rette di Hesse con correzione segno r e gating), e SLAM / EKF-SLAM (5 passi Scaramuzza, Online vs Full SLAM, DBN, stato aumentato, Jacobiani di misura sparsa, convergenza Dissanayake e loop closing). |
+| **Anno 2** | **Autonomous Robotics** | In corso | 12 file (`0.` - `11.`), `zz. Argomenti extra.md`, `immagini/` (126 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8, 10, 12, 13, 15, 19, 20 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, Monte Carlo Localization (Particle Filter) con Importance Sampling, Low-Variance Resampling, Augmented MCL, KLD-Sampling, modelli di misura LiDAR (catena 4 frame, Feature-Based, Likelihood Field con distance transform precalcolata O(1), Beam Model a 4 componenti), Filtro di Kalman lineare time-varying (osservatore di Luenberger, convenzione Q/R, Joseph form), Extended Kalman Filter (localizzazione in SE(2) su rette di Hesse con correzione segno r e gating), SLAM / EKF-SLAM (5 passi Scaramuzza, Online vs Full SLAM, DBN, stato aumentato, convergenza Dissanayake), e FastSLAM / Rao-Blackwellized Particle Filter (FastSLAM 1.0/2.0, ML data association, GMapping su griglie di occupazione, N_eff adattivo e loop closing). |
 
 ---
 
