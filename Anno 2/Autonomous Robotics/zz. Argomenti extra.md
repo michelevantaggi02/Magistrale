@@ -1,4 +1,4 @@
-# Zz. Argomenti Extra
+# zz. Argomenti extra
 
 Questo documento raccoglie dimostrazioni, approfondimenti matematici e argomenti collaterali utili alla comprensione completa degli argomenti del corso di _Autonomous Robotics_, ma non strettamente richiesti come parte teorica principale d'esame.
 
@@ -48,11 +48,15 @@ Per aumentare l'accuratezza senza calcolare derivate analitiche superiori, i met
 Il metodo RK2 (noto anche come metodo del punto medio) calcola due stadi:
 1. Una prima stima di prova della pendenza all'inizio del passo:
 
-   $$k_1 = T \, f(\mathbf{x}(kT), \mathbf{u}(kT), kT)$$
+$$
+k_1 = T \, f(\mathbf{x}(kT), \mathbf{u}(kT), kT)
+$$
 
 2. Una seconda valutazione della pendenza nel punto medio dell'intervallo ($t + T/2$), usando lo stato stimato con metà incremento $k_1$:
 
-   $$k_2 = T \, f\left(\mathbf{x}(kT) + \frac{1}{2} k_1, \; \mathbf{u}\left(kT + \frac{T}{2}\right), \; kT + \frac{T}{2}\right)$$
+$$
+k_2 = T \, f\left(\mathbf{x}(kT) + \frac{1}{2} k_1, \; \mathbf{u}\left(kT + \frac{T}{2}\right), \; kT + \frac{T}{2}\right)
+$$
 
 La posa finale al passo successivo è:
 
@@ -354,7 +358,9 @@ Sul robot reale intervengono due effetti parassiti:
 
 1. __Distorsione Hard-Iron__: generata da corpi ferromagnetici permanentemente magnetizzati montati a bordo del robot (altoparlanti, viti ferrose, telaio in acciaio, magneti permanenti dei motori DC). Produce un campo magnetico costante $\mathbf{b}_{\text{hard}}$ solidale alla terna del robot che trasla il centro della circonferenza:
 
-   $$\mathbf{B}_{\text{misurato}} = \mathbf{B}_{\text{reale}} + \mathbf{b}_{\text{hard}}$$
+$$
+\mathbf{B}_{\text{misurato}} = \mathbf{B}_{\text{reale}} + \mathbf{b}_{\text{hard}}
+$$
 
 2. __Distorsione Soft-Iron__: generata da materiali ad alta permeabilità magnetica passivi (ferro dolce, schermature metalliche, piste di rame con correnti variabili) che deflettono e comprimono le linee di flusso del campo magnetico esterno a seconda dell'orientamento. È descritta da una matrice di deformazione $3 \times 3$ simmetrica $M_{\text{soft}}$, che deforma la circonferenza in un'ellisse inclinata.
 
@@ -367,15 +373,19 @@ $$
 #### Procedura Di Calibrazione Ad Ellisse
 
 Per calibrare il magnetometro:
-1. Si fa compiere al robot una rotazione lenta di $360^\circ$ raccogliendo un insieme di punti sul piano.
-2. Si esegue un fitting di regressione ai minimi quadrati per individuare i parametri dell'ellisse (centro $\mathbf{b}_{\text{hard}}$, assi principali e inclinazione della matrice $M_{\text{soft}}$).
+1. Si fa compiere al robot una rotazione lenta di $360^\circ$ raccogliendo un insieme di punti sul piano;
+2. Si esegue un fitting di regressione ai minimi quadrati per individuare i parametri dell'ellisse (centro $\mathbf{b}_{\text{hard}}$, assi principali e inclinazione della matrice $M_{\text{soft}}$);
 3. Si applica la trasformazione inversa:
 
-   $$\mathbf{B}_{\text{calibrato}} = M_{\text{soft}}^{-1} (\mathbf{B}_{\text{misurato}} - \mathbf{b}_{\text{hard}})$$
+$$
+\mathbf{B}_{\text{calibrato}} = M_{\text{soft}}^{-1} (\mathbf{B}_{\text{misurato}} - \mathbf{b}_{\text{hard}})
+$$
 
-   riportando i dati su un cerchio unitario centrato nell'origine da cui ricavare l'angolo di rotta assoluto privo di offset:
+riportando i dati su un cerchio unitario centrato nell'origine da cui ricavare l'angolo di rotta assoluto privo di offset:
 
-   $$\theta = \text{atan2}(B_{y,\text{calibrato}}, B_{x,\text{calibrato}})$$
+$$
+\theta = \operatorname{atan2}(B_{y,\text{calibrato}}, B_{x,\text{calibrato}})
+$$
 
 ### Meccanica Dei Micro-Giroscopi MEMS E Forza Di Coriolis
 
@@ -946,21 +956,21 @@ Ciascuna densità di probabilità deve integrare a 1 sull'intervallo di misura c
 
 1. __Componente Gaussiana Locale ($p_{\text{hit}}$)__:
 
-   $$
-   \int_0^{z_{\max}} p_{\text{hit}}(z_k \mid x_t, m) \, \mathrm{d}z_k = 1 \implies \eta_{\text{hit}} = \left( \int_0^{z_{\max}} \frac{1}{\sqrt{2\pi \sigma_{\text{hit}}^2}} \exp\left( - \frac{(z_k - z_t^{k*})^2}{2\sigma_{\text{hit}}^2} \right) \mathrm{d}z_k \right)^{-1}
-   $$
+$$
+\int_0^{z_{\max}} p_{\text{hit}}(z_k \mid x_t, m) \, \mathrm{d}z_k = 1 \implies \eta_{\text{hit}} = \left( \int_0^{z_{\max}} \frac{1}{\sqrt{2\pi \sigma_{\text{hit}}^2}} \exp\left( - \frac{(z_k - z_t^{k*})^2}{2\sigma_{\text{hit}}^2} \right) \mathrm{d}z_k \right)^{-1}
+$$
 
-   In termini della funzione errore gaussiana $\text{erf}(\cdot)$:
+In termini della funzione errore gaussiana $\text{erf}(\cdot)$:
 
-   $$
-   \eta_{\text{hit}} = \left[ \frac{1}{2} \left( \text{erf}\left(\frac{z_{\max} - z_t^{k*}}{\sqrt{2}\sigma_{\text{hit}}}\right) - \text{erf}\left(\frac{-z_t^{k*}}{\sqrt{2}\sigma_{\text{hit}}}\right) \right) \right]^{-1}
-   $$
+$$
+\eta_{\text{hit}} = \left[ \frac{1}{2} \left( \text{erf}\left(\frac{z_{\max} - z_t^{k*}}{\sqrt{2}\sigma_{\text{hit}}}\right) - \text{erf}\left(\frac{-z_t^{k*}}{\sqrt{2}\sigma_{\text{hit}}}\right) \right) \right]^{-1}
+$$
 
 2. __Componente Esponenziale per Ostacoli Imprevisti ($p_{\text{short}}$)__:
 
-   $$
-   \int_0^{z_t^{k*}} \eta_{\text{short}} \lambda_{\text{short}} \mathrm{e}^{-\lambda_{\text{short}} z_k} \, \mathrm{d}z_k = 1 \implies \eta_{\text{short}} = \frac{1}{1 - \mathrm{e}^{-\lambda_{\text{short}} z_t^{k*}}}
-   $$
+$$
+\int_0^{z_t^{k*}} \eta_{\text{short}} \lambda_{\text{short}} \mathrm{e}^{-\lambda_{\text{short}} z_k} \, \mathrm{d}z_k = 1 \implies \eta_{\text{short}} = \frac{1}{1 - \mathrm{e}^{-\lambda_{\text{short}} z_t^{k*}}}
+$$
 
 ### Stima Dei Parametri Tramite Algoritmo Expectation-Maximization (EM)
 
@@ -972,9 +982,9 @@ L'algoritmo EM itera due passi fino a convergenza:
 
 1. __Expectation Step (E-step)__: calcolo delle responsabilità a posteriori per ogni misura $j$:
 
-   $$
-   \gamma_{j,i} = \mathbb{E}[e_{j,i}] = \frac{\alpha_i \, p_i(z_j \mid z_j^*)}{\sum_{k \in \{\text{hit},\text{short},\text{max},\text{rand}\}} \alpha_k \, p_k(z_j \mid z_j^*)}
-   $$
+$$
+\gamma_{j,i} = \mathbb{E}[e_{j,i}] = \frac{\alpha_i \, p_i(z_j \mid z_j^*)}{\sum_{k \in \{\text{hit},\text{short},\text{max},\text{rand}\}} \alpha_k \, p_k(z_j \mid z_j^*)}
+$$
 
 2. __Maximization Step (M-step)__: aggiornamento in forma chiusa dei parametri:
    - Aggiornamento dei pesi di miscela:
@@ -1171,10 +1181,18 @@ $$
 
 Si presentano due regimi operativi distinti:
 1. __Robot a destra del beacon__ ($\hat{x}_{t|t-1} > m_1$):
-   $$H_x = +1$$
+
+$$
+H_x = +1
+$$
+
    All'aumentare di $x$, la distanza dal beacon aumenta;
 2. __Robot a sinistra del beacon__ ($\hat{x}_{t|t-1} < m_1$):
-   $$H_x = -1$$
+
+$$
+H_x = -1
+$$
+
    All'aumentare di $x$, la distanza dal beacon diminuisce.
 
 Nel punto esatto di coincidenza $\hat{x}_{t|t-1} = m_1$, la derivata classica non esiste. Nel calcolo numerico si adotta la convenzione del subgradiente scegliendo un valore all'interno dell'intervallo $[-1, +1]$:
