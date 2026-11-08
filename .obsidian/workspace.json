@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/export/md/Information and Estimation Theory-merged.md",
+                "file": "Anno 1/Machine Learning/6. Metodo dei Moltiplicatori di Lagrange.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Information and Estimation Theory-merged"
+              "title": "6. Metodo dei Moltiplicatori di Lagrange"
             }
           }
         ]
@@ -197,13 +197,22 @@
   },
   "active": "175d0436951993e6",
   "lastOpenFiles": [
-    "Anno 1/export/pdf/Information and Estimation Theory-merged.pdf",
-    "Anno 1/export/md/Digital Signal Processing-merged.md",
-    "Anno 1/export/md/Information and Estimation Theory-merged.md",
+    "scratch/ch10_full.txt",
+    "scratch/ch10_text.txt",
+    "Anno 1/Machine Learning/7. Model Selection e Model Assessment.md",
     "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
+    "Anno 1/export/md/Information and Estimation Theory-merged.md",
+    "Anno 1/Information and Estimation Theory/immagini/mle_principle_curve.png",
+    "Anno 1/Information and Estimation Theory/immagini/slide_51_mle_principle_curve.png",
+    "Anno 1/Information and Estimation Theory/immagini/mle_principle_curve.svg",
+    "Anno 1/Information and Estimation Theory/1. Stimatori Classici - BLUE, MLE e LSE.md",
+    "Anno 1/export/pdf/Information and Estimation Theory-merged.pdf",
+    "Anno 1/export/pdf/Lezioni integrative DSP-merged.pdf",
+    "Anno 1/export/pdf/Digital Signal Processing-merged.pdf",
+    "Anno 1/export/md/Information and Estimation Theory-merged.md",
+    "Anno 1/export/md/Digital Signal Processing-merged.md",
     "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
     "[!) or line.startswith(",
-    "Anno 1/Machine Learning/7. Model Selection e Model Assessment.md",
     "Anno 1/Machine Learning/immagini/fig_ex_7_scomposizione_bias_varianza_tradeoff.png",
     "scratch/page_ch9-143-143.png",
     "Anno 1/Machine Learning/immagini/fig_9_5_learning_curves_numero_campioni.png",
@@ -211,9 +220,6 @@
     "Anno 1/Machine Learning/immagini/fig_9_3_tradeoff_underfitting_overfitting_best_model.png",
     "Anno 1/Machine Learning/immagini/fig_9_2_partizione_train_val_test.png",
     "Anno 1/Machine Learning/immagini/fig_9_1_curve_errore_complessita_modello.png",
-    "scratch/ch9_rawimg-009.png",
-    "scratch/ch9_rawimg-008.png",
-    "scratch/ch9_rawimg-007.png",
     "scratch/ch9_full.txt",
     "scratch/ch9_end.txt",
     "scratch/ch9_text.txt",
@@ -223,10 +229,6 @@
     "Anno 2/Autonomous Robotics/note/lezione_19.md",
     "Zero[λj = 0<br>Vincolo inerte]",
     "Mul[λj > 0<br>Reazione vincolare presente]",
-    "Act{hj(x) = 0 (Bordo)?}",
-    "Slack[4. Slackness Complementare<br>λj hj(x) = 0]",
-    "Dual[3. Ammissibilita Duale<br>λj ≥ 0, μk libero]",
-    "Feas[2. Ammissibilita Primale<br>hj(x) ≥ 0, rk(x) = 0]",
     "Anno 2/Autonomous Robotics/note/lezione_16.md",
     "Anno 1/Machine Learning/6. Metodo dei Moltiplicatori di Lagrange.md",
     "lezione 12 e 13/9. Reti Convoluzionali: Convoluzione, Receptive Field e Volumi 3D.md",
@@ -241,8 +243,6 @@
     "Anno 1/Machine Learning/5. Modelli Generativi per la Classificazione.md",
     "Anno 2/Deep Learning And Robot Perception/note/lezione_16.md",
     "Anno 1/Information and Estimation Theory/0. Fondamenti di Stima Classica e Limite di Cramer-Rao.md",
-    "Anno 1/Digital Signal Processing/B. Sistemi Multi-Rate.md",
-    "Anno 1/Digital Signal Processing/8. Filtri FIR - Finite Impulse Response.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Senza nome.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"

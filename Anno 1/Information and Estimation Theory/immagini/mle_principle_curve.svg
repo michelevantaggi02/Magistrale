@@ -1,0 +1,190 @@
+<svg width="100%" height="380" viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradiente Likelihood (Blu) -->
+    <linearGradient id="gradLikelihood" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.02"/>
+    </linearGradient>
+
+    <!-- Gradiente Log-Likelihood (Teal) -->
+    <linearGradient id="gradLogL" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0d9488" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#0d9488" stop-opacity="0.02"/>
+    </linearGradient>
+
+    <!-- Filtro Ombra per Card e Badge -->
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+
+    <!-- Simboli per θ̂_MLE definiti con precisione vettoriale LaTeX -->
+    <g id="theta-mle-blue">
+      <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-style="italic" font-weight="bold" fill="#0284c7">θ</text>
+      <path d="M 1.5,-11.5 L 4.5,-14.5 L 7.5,-11.5" fill="none" stroke="#0284c7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="10" y="2" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-style="normal" font-weight="bold" fill="#0284c7">MLE</text>
+    </g>
+
+    <g id="theta-mle-teal">
+      <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-style="italic" font-weight="bold" fill="#0d9488">θ</text>
+      <path d="M 1.5,-11.5 L 4.5,-14.5 L 7.5,-11.5" fill="none" stroke="#0d9488" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="10" y="2" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-style="normal" font-weight="bold" fill="#0d9488">MLE</text>
+    </g>
+
+    <g id="theta-mle-dark">
+      <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="12.5" font-style="italic" font-weight="bold" fill="#0f172a">θ</text>
+      <path d="M 1.5,-11 L 4.5,-14 L 7.5,-11" fill="none" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="9.5" y="2" font-family="system-ui, -apple-system, sans-serif" font-size="8.5" font-style="normal" font-weight="bold" fill="#0f172a">MLE</text>
+    </g>
+  </defs>
+
+  <!-- Sfondo Bianco Tipografico con Bordo Neutro -->
+  <rect width="100%" height="100%" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <!-- Divisore Centrale tratteggiato tra i due pannelli -->
+  <line x1="400" y1="20" x2="400" y2="305" stroke="#e2e8f0" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- ========================================== -->
+  <!-- PANNELLO SINISTRO: Funzione di Verosimiglianza -->
+  <!-- ========================================== -->
+  <g id="panel-likelihood">
+    <!-- Intestazione Pannello Sinistro -->
+    <text x="215" y="30" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#0369a1">1. Funzione di Verosimiglianza L(θ; x)</text>
+    <text x="215" y="46" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">Campione x fissato — parametro incognito θ variabile</text>
+
+    <!-- Griglia e Linee di Riferimento -->
+    <g stroke="#f1f5f9" stroke-width="1">
+      <line x1="65" y1="205" x2="375" y2="205"/>
+      <line x1="65" y1="150" x2="375" y2="150"/>
+      <line x1="65" y1="95" x2="375" y2="95"/>
+    </g>
+
+    <!-- Assi Cartesiani Pannello Sinistro -->
+    <line x1="65" y1="260" x2="380" y2="260" stroke="#334155" stroke-width="1.8"/>
+    <line x1="65" y1="260" x2="65" y2="65" stroke="#334155" stroke-width="1.8"/>
+    <!-- Frecce Assi -->
+    <polygon points="380,260 371,256 371,264" fill="#334155"/>
+    <polygon points="65,65 61,74 69,74" fill="#334155"/>
+
+    <!-- Etichette Assi -->
+    <text x="382" y="278" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-style="italic" font-weight="bold" fill="#0f172a">θ (parametro)</text>
+    <text x="56" y="65" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-style="italic" font-weight="bold" fill="#0369a1">L(θ; x)</text>
+
+    <!-- Area e Curva di Verosimiglianza -->
+    <path d="M 75.0,259.8 L 79.7,259.7 L 84.5,259.5 L 89.2,259.3 L 94.0,259.0 L 98.7,258.5 L 103.5,257.8 L 108.2,256.8 L 113.0,255.5 L 117.7,253.8 L 122.5,251.5 L 127.2,248.6 L 131.9,244.9 L 136.7,240.3 L 141.4,234.7 L 146.2,228.0 L 150.9,220.2 L 155.7,211.2 L 160.4,201.2 L 165.2,190.2 L 169.9,178.4 L 174.7,166.1 L 179.4,153.6 L 184.2,141.3 L 188.9,129.7 L 193.6,119.1 L 198.4,110.0 L 203.1,102.8 L 207.9,97.9 L 212.6,95.3 L 217.4,95.3 L 222.1,97.9 L 226.9,102.8 L 231.6,110.0 L 236.4,119.1 L 241.1,129.7 L 245.8,141.3 L 250.6,153.6 L 255.3,166.1 L 260.1,178.4 L 264.8,190.2 L 269.6,201.2 L 274.3,211.2 L 279.1,220.2 L 283.8,228.0 L 288.6,234.7 L 293.3,240.3 L 298.1,244.9 L 302.8,248.6 L 307.5,251.5 L 312.3,253.8 L 317.0,255.5 L 321.8,256.8 L 326.5,257.8 L 331.3,258.5 L 336.0,259.0 L 340.8,259.3 L 345.5,259.5 L 350.3,259.7 L 355.0,259.8 L 355.0,260.0 L 75.0,260.0 Z" fill="url(#gradLikelihood)"/>
+    <path d="M 75.0,259.8 L 79.7,259.7 L 84.5,259.5 L 89.2,259.3 L 94.0,259.0 L 98.7,258.5 L 103.5,257.8 L 108.2,256.8 L 113.0,255.5 L 117.7,253.8 L 122.5,251.5 L 127.2,248.6 L 131.9,244.9 L 136.7,240.3 L 141.4,234.7 L 146.2,228.0 L 150.9,220.2 L 155.7,211.2 L 160.4,201.2 L 165.2,190.2 L 169.9,178.4 L 174.7,166.1 L 179.4,153.6 L 184.2,141.3 L 188.9,129.7 L 193.6,119.1 L 198.4,110.0 L 203.1,102.8 L 207.9,97.9 L 212.6,95.3 L 217.4,95.3 L 222.1,97.9 L 226.9,102.8 L 231.6,110.0 L 236.4,119.1 L 241.1,129.7 L 245.8,141.3 L 250.6,153.6 L 255.3,166.1 L 260.1,178.4 L 264.8,190.2 L 269.6,201.2 L 274.3,211.2 L 279.1,220.2 L 283.8,228.0 L 288.6,234.7 L 293.3,240.3 L 298.1,244.9 L 302.8,248.6 L 307.5,251.5 L 312.3,253.8 L 317.0,255.5 L 321.8,256.8 L 326.5,257.8 L 331.3,258.5 L 336.0,259.0 L 340.8,259.3 L 345.5,259.5 L 350.3,259.7 L 355.0,259.8" fill="none" stroke="#0284c7" stroke-width="2.6"/>
+
+    <!-- Linee Tratteggiate di Proiezione del Massimo -->
+    <line x1="215" y1="95" x2="215" y2="260" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <line x1="65" y1="95" x2="215" y2="95" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+    <!-- Punto di Massimo MLE -->
+    <circle cx="215" cy="95" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+    <use href="#theta-mle-blue" x="201" y="278"/>
+    <text x="58" y="99" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="#0369a1">L<tspan font-size="8" dy="2">max</tspan></text>
+
+    <!-- Punti Sub-Ottimi θ₁ e θ₂ per contrasto didattico -->
+    <!-- Punto θ₁ -->
+    <line x1="145.0" y1="229.8" x2="145.0" y2="260" stroke="#d97706" stroke-width="1.2" stroke-dasharray="2,2"/>
+    <line x1="65" y1="229.8" x2="145.0" y2="229.8" stroke="#d97706" stroke-width="1.0" stroke-dasharray="2,2"/>
+    <circle cx="145.0" cy="229.8" r="3.5" fill="#d97706"/>
+    <text x="145.0" y="276" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-style="italic" font-weight="bold" fill="#b45309">θ<tspan font-size="8.5" font-style="normal" dy="2">1</tspan></text>
+    <text x="58" y="232.8" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#b45309">L(θ₁)</text>
+
+    <!-- Punto θ₂ -->
+    <line x1="285.0" y1="229.8" x2="285.0" y2="260" stroke="#d97706" stroke-width="1.2" stroke-dasharray="2,2"/>
+    <circle cx="285.0" cy="229.8" r="3.5" fill="#d97706"/>
+    <text x="285.0" y="276" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-style="italic" font-weight="bold" fill="#b45309">θ<tspan font-size="8.5" font-style="normal" dy="2">2</tspan></text>
+
+    <!-- Badge Callout Concettuale -->
+    <g transform="translate(245, 80)" filter="url(#shadow)">
+      <rect x="0" y="0" width="138" height="46" rx="6" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.2"/>
+      <text x="69" y="18" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="bold" fill="#0369a1">Massima Plausibilità</text>
+      <text x="69" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" fill="#0284c7">Picco globale sui dati x</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- PANNELLO DESTRO: Log-Likelihood e Score   -->
+  <!-- ========================================== -->
+  <g id="panel-log-likelihood">
+    <!-- Intestazione Pannello Destro -->
+    <text x="615" y="30" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#0f766e">2. Log-Likelihood ln L(θ) e Score</text>
+    <text x="615" y="46" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">La monotonia crescente di ln(·) preserva l'arg max</text>
+
+    <!-- Griglia e Linee di Riferimento -->
+    <g stroke="#f1f5f9" stroke-width="1">
+      <line x1="465" y1="205" x2="775" y2="205"/>
+      <line x1="465" y1="150" x2="775" y2="150"/>
+      <line x1="465" y1="95" x2="775" y2="95"/>
+    </g>
+
+    <!-- Assi Cartesiani Pannello Destro -->
+    <line x1="465" y1="260" x2="780" y2="260" stroke="#334155" stroke-width="1.8"/>
+    <line x1="465" y1="260" x2="465" y2="65" stroke="#334155" stroke-width="1.8"/>
+    <!-- Frecce Assi -->
+    <polygon points="780,260 771,256 771,264" fill="#334155"/>
+    <polygon points="465,65 461,74 469,74" fill="#334155"/>
+
+    <!-- Etichette Assi -->
+    <text x="782" y="278" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-style="italic" font-weight="bold" fill="#0f172a">θ (parametro)</text>
+    <text x="456" y="65" text-anchor="end" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-style="italic" font-weight="bold" fill="#0f766e">ln L(θ)</text>
+
+    <!-- Area e Curva di Log-Likelihood -->
+    <path d="M 493.7,250.3 L 498.3,238.8 L 502.9,227.7 L 507.5,217.1 L 512.0,207.0 L 516.6,197.2 L 521.2,187.9 L 525.8,179.1 L 530.3,170.7 L 534.9,162.7 L 539.5,155.2 L 544.1,148.1 L 548.6,141.5 L 553.2,135.3 L 557.8,129.6 L 562.4,124.2 L 566.9,119.4 L 571.5,115.0 L 576.1,111.0 L 580.7,107.4 L 585.3,104.3 L 589.8,101.7 L 594.4,99.5 L 599.0,97.7 L 603.6,96.4 L 608.1,95.5 L 612.7,95.1 L 617.3,95.1 L 621.9,95.5 L 626.4,96.4 L 631.0,97.7 L 635.6,99.5 L 640.2,101.7 L 644.7,104.3 L 649.3,107.4 L 653.9,111.0 L 658.5,115.0 L 663.1,119.4 L 667.6,124.2 L 672.2,129.6 L 676.8,135.3 L 681.4,141.5 L 685.9,148.1 L 690.5,155.2 L 695.1,162.7 L 699.7,170.7 L 704.2,179.1 L 708.8,187.9 L 713.4,197.2 L 718.0,207.0 L 722.5,217.1 L 727.1,227.7 L 731.7,238.8 L 736.3,250.3 L 736.3,260.0 L 493.7,260.0 Z" fill="url(#gradLogL)"/>
+    <path d="M 493.7,250.3 L 498.3,238.8 L 502.9,227.7 L 507.5,217.1 L 512.0,207.0 L 516.6,197.2 L 521.2,187.9 L 525.8,179.1 L 530.3,170.7 L 534.9,162.7 L 539.5,155.2 L 544.1,148.1 L 548.6,141.5 L 553.2,135.3 L 557.8,129.6 L 562.4,124.2 L 566.9,119.4 L 571.5,115.0 L 576.1,111.0 L 580.7,107.4 L 585.3,104.3 L 589.8,101.7 L 594.4,99.5 L 599.0,97.7 L 603.6,96.4 L 608.1,95.5 L 612.7,95.1 L 617.3,95.1 L 621.9,95.5 L 626.4,96.4 L 631.0,97.7 L 635.6,99.5 L 640.2,101.7 L 644.7,104.3 L 649.3,107.4 L 653.9,111.0 L 658.5,115.0 L 663.1,119.4 L 667.6,124.2 L 672.2,129.6 L 676.8,135.3 L 681.4,141.5 L 685.9,148.1 L 690.5,155.2 L 695.1,162.7 L 699.7,170.7 L 704.2,179.1 L 708.8,187.9 L 713.4,197.2 L 718.0,207.0 L 722.5,217.1 L 727.1,227.7 L 731.7,238.8 L 736.3,250.3" fill="none" stroke="#0d9488" stroke-width="2.6"/>
+
+    <!-- Linea Tratteggiata di Proiezione del Massimo (identico theta_mle!) -->
+    <line x1="615" y1="95" x2="615" y2="260" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+    <!-- Retta Tangente Orizzontale nel Massimo (Score = 0) -->
+    <line x1="535" y1="95" x2="695" y2="95" stroke="#16a34a" stroke-width="2.2"/>
+    <polygon points="535,95 543,91 543,99" fill="#16a34a"/>
+    <polygon points="695,95 687,91 687,99" fill="#16a34a"/>
+
+    <!-- Punto di Massimo MLE -->
+    <circle cx="615" cy="95" r="5" fill="#0d9488" stroke="#ffffff" stroke-width="2"/>
+    <use href="#theta-mle-teal" x="601" y="278"/>
+
+    <!-- Badge Callout Equazione di Score (sopra la tangente) -->
+    <g transform="translate(535, 58)" filter="url(#shadow)">
+      <rect x="0" y="0" width="160" height="26" rx="5" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+      <text x="80" y="17" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="bold" fill="#15803d">Score: ∂ ln L / ∂θ = 0</text>
+    </g>
+
+    <!-- Indicazioni Pendenza (Derivata Prima) -->
+    <g font-family="system-ui, -apple-system, sans-serif" font-size="9.5">
+      <!-- Pendenza Positiva a Sinistra -->
+      <text x="525" y="170" text-anchor="middle" fill="#0284c7" font-weight="bold">∂ ln L / ∂θ &gt; 0</text>
+      <text x="525" y="183" text-anchor="middle" fill="#64748b">(crescente)</text>
+      <line x1="510" y1="205" x2="540" y2="190" stroke="#0284c7" stroke-width="1.5"/>
+      <polygon points="540,190 531,191 535,198" fill="#0284c7"/>
+
+      <!-- Pendenza Negativa a Destra -->
+      <text x="705" y="170" text-anchor="middle" fill="#dc2626" font-weight="bold">∂ ln L / ∂θ &lt; 0</text>
+      <text x="705" y="183" text-anchor="middle" fill="#64748b">(decrescente)</text>
+      <line x1="690" y1="190" x2="720" y2="205" stroke="#dc2626" stroke-width="1.5"/>
+      <polygon points="720,205 715,198 711,206" fill="#dc2626"/>
+    </g>
+
+    <!-- Indicazione Curvatura del Secondo Ordine -->
+    <g transform="translate(545, 215)" filter="url(#shadow)">
+      <rect x="0" y="0" width="140" height="26" rx="5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="70" y="17" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="bold" fill="#334155">∂² ln L / ∂θ² &lt; 0 (Concavo)</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- BARRA DI SINTESI INFERIORE                -->
+  <!-- ========================================== -->
+  <g transform="translate(30, 312)">
+    <rect x="0" y="0" width="740" height="52" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+    <g transform="translate(170, 22)">
+      <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="bold" fill="#0369a1">Principio Fondamentale:</text>
+      <use href="#theta-mle-dark" x="145" y="-1"/>
+      <text x="178" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="bold" fill="#0f172a">= arg max<tspan font-size="8.5" dy="2.5">θ</tspan><tspan font-size="11.5" dy="-2.5"> L(θ; x)  =  arg max</tspan><tspan font-size="8.5" dy="2.5">θ</tspan><tspan font-size="11.5" dy="-2.5"> ln L(θ; x)</tspan></text>
+    </g>
+    <text x="370" y="41" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#64748b">
+      La monotonia stretta di ln(·) preserva la radice ottima e trasforma i prodotti di densità campionarie in sommatorie differenziabili
+    </text>
+  </g>
+</svg>

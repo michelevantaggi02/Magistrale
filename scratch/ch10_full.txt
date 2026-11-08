@@ -1,0 +1,772 @@
+9. Model Selection and Model Assessment
+
+144
+
+The final error will be the average of the errors obtained on the various folds. The pseudocode in this case is analogous to the one used for model selection, with the difference
+that we do not have the outer for loop iterating on the hyper-parameters, because in
+model assessment we are only interested in the performance. An example, in the case of
+model assessment with cross-validation is shown in the algorithm 6.
+Algorithm 6 Model Assessment with K-Fold Cross-validation
+1: Input: Dtotal
+2:
+AvgErr = 0
+3:
+for all k ∈ {0, 1, . . . , K} do
+4:
+Train model on the K − 1 folds excluding the k-th (use the optimal DoF configuration found during the model selection)
+5:
+V alErr = Test the trained model on the k-th fold
+6:
+CurrErr+ = V alErr
+7:
+end for
+8:
+AvgErr = CurrErr/K
+9: return AvgErr
+
+Chapter 10
+
+Ridge and Lasso Regression
+10.1
+
+Ridge Regression
+
+In the previous chapter, when we talked about bias-variance decomposition, we saw how
+the variance of the linear regression depends proportionally on the variance of the noise
+of the measurements t and inversely on the variance of the data:
+V ar[hwM LE (xo )] = σϵ2 xT0 (XT X)−1 x0
+
+(10.1)
+
+it is possible to show that this term can be approximated in the following way:
+V ar[hwM LE (xo )] ∼ σϵ2
+
+D
+N
+
+(10.2)
+
+where D is the number of effective parameters (typically equal to the number of features)
+and N is the number of samples in the training set. This relation highlights how as the
+number of samples of the training set increases, the variance of the estimator decreases
+and consequently the overfitting is contained. This is intuitive, since the model has more
+experience at its disposal during the training (even if the term (XT X)−1 expresses this
+concept better, since it says that it is not enough to have more samples, but it is necessary that the samples represent as many input configurations as possible). Conversely,
+as the number of features (parameters) increases, the variance increases. This is also
+reasonable, as the model becomes more complex and the risk of overfitting increases.
+This phenomenon is often referred to as the Curse of Dimensionality.
+We have also seen how the variance of the estimate for a test sample is closely related
+to the variance of the parameters learned via MLE: both, in fact depend on (XT X)−1 :
+
+V ar[wM LE ] = σϵ2 (XT X)−1
+
+(10.3)
+
+V ar[hwM LE (xo )] = σϵ2 xT0 (XT X)−1 x0
+
+(10.4)
+
+10. Ridge and Lasso Regression
+
+146
+
+it is evident then that if XT X is a singular matrix or at least ”close” to the singularity,
+the uncertainty about the parameters and the estimate grows. When does this condition
+occur?
+In general, a square matrix U is non-invertible or singular if one of the following
+equivalent conditions is true:
+• det U = |U | = 0;
+• At least one eigenvalue is null;
+• U is Rank-deficient, i.e., one or more of its columns (or rows) is linear combination of the others.
+In our case, we are interested in checking whether the design matrix X is singular.
+Since we can reasonably assume that a sample cannot be a linear combination of other
+samples (this is if the dataset has been properly collected), the last condition of the
+previous list reduces to the following:
+• X is singular if it is Column-Rank-deficient, i.e., , one or more of its columns is
+linear combination of the others. In particular, it is singular if one of its features
+is a linear combination of the others.
+This concept is closely related to Collinearity and Multicollinearity: a feature is
+multicollinear to others if its correlation with the latter is high. This means that it can
+be expressed ”approximately” as a linear combination of other features. Not surprisingly, if multicollinearity is present, we observe an increase in uncertainty related to the
+parameters.
+In practice a feature will never be a perfect linear combination of others (unless it
+was constructed as such), but strong collinearity results in ”almost” linear dependence
+leading to ”almost” rank-deficiency. As a result, (XT X)−1 will become very large, greatly
+increasing the variance on the parameters wM LE .
+To address collinearity and multicollinearity we can use the correlation matrix and
+the Variance Inflation Factor (VIF). However, the use of VIF is not optimal, because
+it is not always clear what is a value of VIF that can act as a cut-off to determine
+multicollinearity. Also, to compute VIF, we need to train a model for each feature,
+which can become computationally prohibitive in case of datasets with many features
+and many samples.
+Is there another solution to handle cases where XT X → 0 and thus overfitting?
+N.B. Multicollinearity
+
+→
+
+Rank-deficiency
+
+→
+
+XT X → 0
+
+→
+
+V ar[hwM LE (xo )] → ∞ → High Variance → Overfitting.
+Recall that, from an intuitive point of view, if a feature has a strong collinearity with
+another, during optimization the value of the loss function (contour line) with respect to
+
+10. Ridge and Lasso Regression
+
+147
+
+the weight w associated with that feature will be constant over a wide range of values.
+There will thus be many good choices of w with respect to minimization, which increases
+the uncertainty in determining it. Intuitively, in fact, if a feature is collinear, it does not
+add information in order to predict t̂, so almost any value will do.
+In the degenerate case where a feature is a perfect linear combination of others, we
+actually get a minimization problem with inifinite solutions with respect to the parameter
+associated with that feature: the variance of wM LE then becomes infinite.
+This, during optimization, results in very high values for the parameters, in modulus.
+Indeed, suppose that a parameter wi of a feature i becomes very large, and that this
+feature is collinear to another feature j. Since the parameter wj associated to the latter
+is free to assume values over a very wide range without changing the loss, to compensate
+the value wi (in order to have reasonable predictions t̂ and close to the supervision label),
+also wj will assume high values with opposite sign.
+From this last consideration we can deduce that, in order to compensate the collinearity and avoid to have high variance values for wM LE , we can think to constrain the norm
+of the parameters: this operation is called Regularization. The idea is to optimize the
+value of the trainable parameters with the constraint that their norm must be small.
+In this way, if a feature is collinear, the constraint will prevent the weight relative to it
+from growing and indeed will cause it to cancel, since it has no impact with respect to
+prediction. The regularization performs intrinsically a Feature selection: by cancelling
+or reducing a lot the parameters related to collinear features or to those that are not
+significant with respect to the prediction, it is implicitly reducing the degrees of freedom
+of the model.
+Following this intuition we can introduce a regularized version of Linear regression,
+which takes the name of Ridge Regression:
+
+wM LE,RIDGE = argmin
+w∈RD
+
+subject to
+
+D−1
+X
+
+N
+−1
+X
+
+(t(i) − wT x(i) )2
+
+(10.5)
+
+i=0
+
+wj2 ≤ l
+
+j=1
+
+N.B. In the above formula w0 is not included!
+N.B. 2 The features x must be centered in zero, since the Ridge Estimator are
+not equivariant with respect to scaling operations.
+
+10. Ridge and Lasso Regression
+
+148
+
+Using Lagrange multipliers, the previous problem can be written as follows:
+wM LE,RIDGE = argmin
+w∈RD
+
+N
+−1
+X
+
+(i)
+
+(t
+
+T
+
+(i) 2
+
+−w x ) +λ
+
+i=0
+
+D−1
+X
+
+wj2
+
+(10.6)
+
+j=1
+
+where it is possible to prove that ∀l ∃λ ≥ 0 such that the solution to problem 10.5 is the
+same as 10.6.
+We now derive the analytical solution for this problem.
+
+10. Ridge and Lasso Regression
+
+149
+
+N.B. 3 In the case of linear regression, we saw that the loss function:
+N −1
+
+L(w) =
+
+1 X (i)
+(t − wT x(i) )2
+2
+
+(10.7)
+
+i=0
+
+can be written in the following vector form:
+1
+L(w)) (t − Xw)T (t − Xw)
+2
+
+(10.8)
+
+we can see this by considering that:
+
+X∈R
+
+N ×D
+
+x(0) )T
+
+
+
+
+
+
+
+w0
+
+
+
+t(0)
+
+
+
+ (1) 
+
+ (1) 
+
+ x
+ t
+
+ w1 
+
+N ×1
+D×1
+
+
+
+
+
+= .  ,w∈R
+=
+= .  ,t∈R
+.
+
+
+.
+.
+.
+ . 
+ . 
+ . 
+x(N −1)
+
+t(N −1)
+(10.9)
+
+wD−1
+
+thus
+
+
+t(0) − (x(0) )T w
+
+
+
+
+
+t(0) − wT x(0)
+
+
+
+
+ 
+
+ t(1) − (x(1) )T w   t(1) − wT x(1) 
+=
+
+t − Xw = 
+..
+..
+
+ 
+
+.
+.
+
+ 
+
+(N
+−1)
+(N
+−1)
+T
+(N
+−1)
+T
+(N
+−1)
+t
+− (x
+) w
+t
+−w x
+
+(10.10)
+
+and:
+1
+(t − Xw)T (t − Xw) =
+2
+
+
+t(0) − wT x(0)
+..
+.
+
+
+
+
+
+1  (0)
+
+(t − wT x(0) ) . . . (t(N −1) − wT x(N −1) 
+
+
+2
+(N
+−1)
+T
+(N
+−1)
+t
+−w x
+
+
+1
+(t(0) − wT x(0) )2 + · · · + (t(N −1) − wT x(N −1) )2
+=
+2
+N −1
+1 X (i)
+=
+(t − wT x(i) )2
+(10.11)
+2
+
+=
+
+i=0
+
+As with linear regression, the loss function of ridge regression can be written in vector
+
+10. Ridge and Lasso Regression
+
+150
+
+form:
+1
+1
+L(w) = (t − Xw)T (t − Xw) + λwT w
+2
+2
+1 T
+1
+T T T
+= (t − w X ) (t − Xw) + λwT w
+2
+2
+ λ
+1 T
+t t − tT Xw − wT XT t + wT XT Xw + wT w
+=
+2
+2
+ λ T
+1
+T T
+T T
+T
+=
+−2w X t + w X Xw + t t + w w
+2
+2
+
+∇w L(w) = ∇w
+
+(10.12)
+
+
+ λ T
+1
+T T
+T T
+T
+−2w X t + w X Xw + t t + w w = 0
+2
+2
+
+=⇒ −XT t + XT X + λw = 0 =⇒ (XT X + λI)w = XT t
+=⇒ wM LE,RIDGE = (XT X + λI)−1 XT t
+
+(10.13)
+
+The MLE solution for ridge regression is similar to that for linear regression with the
+exception of the term λI which adds up to XT X. Since λ ≥ 0, we are adding to the
+elements on the diagonal of XT X a positive term. Thus, even in the case where XT X
+is singular, XT X + λI would not be singular. To understand this, assume for simplicity
+that XT X is in diagonal form and thus has eigenvalues along the diagonal. if XT X is
+singular, we will find at least one null eigenvalue along the diagonal. If λ > 0 we will
+add a positive term to all elements of the diagonal of XT X and thus have no more null
+eigenvalues.
+
+10.1.1
+
+Effective Number of Parameters
+
+In the case of Linear Regression, we have seen that the number of parameters (and hence
+the degrees of freedom) is equal to the number D of features (or of the basis functions
+used). In general, however, the effective number of parameters could be different due to,
+for example, collinearity of the features. To calculate the actual number of parameters,
+in the case of linear regression we can exploit the Hat Matrix:
+H = X(XT X)−1 XT
+
+(10.14)
+
+H, as we have already mentioned in previous chapters, is idempotent and symmetrical.
+
+10. Ridge and Lasso Regression
+
+151
+
+Recall that a matrix is idempotent if HT H = H. To prove the idempotency of H
+it is sufficient to observe that:
+HT H = (X(XT X)−1 XT )T X(XT X)−1 XT
+= (XT )T ((XT X)T )−1 XT X(XT X)−1 XT
+|
+{z
+}
+(A−1 )T =(AT )−1
+
+= X
+(XT
+X)−1 
+XTX(XT X)−1 XT = X(XT X)−1 XT = H
+
+
+
+
+(10.15)
+
+while for symmetry we note that:
+HT = (X(XT X)−1 XT )T = X(XT X)−1 XT = H
+
+(10.16)
+
+As we saw earlier, the hat matrix relates the estimates t̂ to the supervision labels t
+and since it is idempotent we speak in this case of Projection. We have also seen that
+H has the following properties:
+• hi,i measures the distance between the feature value x(i) of the i-th sample and
+the average of the features over all N samples.
+• hi,i is between 0 and 1.
+• The sum of all hi,i (i.e., the sum of the diagonal of H, i.e., the trace of H) corresponds to the number of parameters in the regression (the dimensionality of wM L ),
+i.e., D.
+This last property can be understood by considering that X ∈ RN ×D . Since usually
+D ≤ N , if X has full rank it must necessarily be equal to rank(X) = min(N, D) = D.
+If we assume that we have no collinearity, XT X is nonsingular and the trace of H is:
+trace(H) = trace(X(XT X)−1 XT )
+
+trace(XT X(XT X)−1 )
+
+=
+|{z}
+
+trace(AB)=trace(BA)
+
+= trace(ID×D ) = D
+
+(10.17)
+
+In the case where instead a feature was a linear combination of others, we could exclude
+the associated column from X and the rank would then be P < D, resulting in fewer
+degrees of freedom.
+We now calculate the actual DoFs in the case of ridge regression. The hat matrix
+for ridge regression is given by:
+t̂ = XwM LE,RIDGE = X(XT X + λI)−1 XT t
+|
+{z
+}
+
+(10.18)
+
+Hλ
+
+To compute the trace of Hλ we need to compute its eigenvalues. To do this we resort
+
+10. Ridge and Lasso Regression
+
+152
+
+to Singular Value Decomposition (SVD). SVD is a technique that allows a matrix
+X to be expressed by the product of 3 matrices:
+X = UDVT
+
+(10.19)
+
+where U and V are orthogonal matrices of order N × D and D × D respectively.
+• U contains the eigenvectors of XXT ;
+• V contains the eigenvectors of XT X;
+• D is a diagonal matrix whose elements on the diagonal are the Singular Values
+of X. The singular values other than 0 of X are the square roots of the eigenvalues
+of both XXT and XT X.
+We can now compute the trace of Hλ by applying SVD to X. The term XT X that
+appears in the expression of Hλ then becomes:
+XT X = VDUT UDVT
+
+(10.20)
+
+since U and V are orthogonal we have that VT = V−1 and UT = U−1 , so:
+T
+XT X = VD |U{z
+U} DVT = VD2 VT
+
+(10.21)
+
+=I
+
+hence Hλ can be expressed as:
+Hλ = UDVT (VD2 VT + λI)−1 VDUT
+T −1
+T
+= UDVT (VD2 VT + |VλV
+{z }) VDU
+VVT =I
+
+= UDVT (V(D2 + λI)VT )−1 VDUT
+
+(10.22)
+
+since (ABC)−1 = (BC)−1 A−1 = C−1 B−1 A−1 we have:
+Hλ = UDVT ( |{z}
+VT )−1 (D2 + λI)−1 (V)−1 VDUT
+VT =V−1
+
+T
+T
+T
+= UD |V{z
+V}(D2 + λI)−1 V
+| {zV} DU
+=I
+2
+
+= UD(D + λI)
+
+=I
+
+−1
+
+DU
+
+T
+
+(10.23)
+
+We note at this point that the expression UD(D2 + λI)−1 DUT is the diagonalization
+of Hλ with respect to U.
+
+10. Ridge and Lasso Regression
+
+153
+
+N.B. A matrix T is diagonalizable if there exists a matrix P such that:
+
+P
+
+−1
+
+λ1
+
+0
+
+...
+
+
+ 0 λ2 . . .
+TP = C = 
+. .
+ .
+0
+
+0
+
+...
+
+0
+
+
+
+
+0
+
+
+
+λn
+
+(10.24)
+
+in our case we have T = Hλ , P = U and C = D(D2 +I)−1 D is the diagonalization
+of Hλ with respect to U in fact:
+U−1 Hλ U = D(D2 + λI)−1 D
+=⇒ Hλ = UD(D2 + λI)−1 DU−1
+=⇒ Hλ = UD(D2 + λI)−1 DUT
+
+(10.25)
+
+Consequently, D(D2 + λI)−1 D contains the eigenvalues of Hλ and each element on
+d2
+
+i
+its diagonal has the form d2 +λ
+. The trace of Hλ is then given by the sum of these
+i
+
+elements:
+trace(Hλ ) =
+
+D−1
+X
+
+d2j
+
+j=0
+
+d2j + λ
+
+(10.26)
+
+The eigenvalues of Hλ are therefore the scaled version via λ of the eigenvalues of XT X.
+By increasing λ we are pushing the eigenvalues of Hλ to zero and consequently reducing
+its degrees of freedom.
+• If λ → ∞ then the DoF → 0;
+• If λ → 0 then the DoF → D.
+Thus, regularization results in a reduction in the degrees of freedom of the model
+and, thus, in the risk of overfitting.
+
+10.1.2
+
+Bias and Variance of the Ridge Regression model
+
+Let’s calculate the expected value and variance of wM LE,RIDGE
+N.B. 2 We are not computing the bias and variance of the prediction on a test
+sample, but on the optimal parameters wM LE,RIDGE . The two are clearly related,
+as we saw earlier, but the computation is slightly different.
+Assuming that the true process has a linear dependence between input and output,
+we have that E[t|X] = Xw in the case of linear regression (and also ridge regression,
+
+10. Ridge and Lasso Regression
+
+154
+
+once we learn the optimal parameters). Hence:
+E[wM LE,RIDGE |X] = E[(XT X + λI)−1 XT t|X]
+= (XT X + λI)−1 XT E[t|X] = (XT X + λI)−1 XT X
+
+w
+|{z}
+the true unknown model
+
+= (XT X + λI)−1 (XT X + λI − λI)w
+= [I − λ(XT X + λI)−1 ]w
+= w − λ(XT X + λI)−1 w
+
+(10.27)
+
+Thus the bias of the ridge regression estimator is proportional to λ: the higher λ, the
+higher the bias, while for λ → 0 we return to the unbiased case of linear regression.
+As for the variance, it can be shown that:
+trace(V ar[wM LE,RIDGE |X]) = σϵ2
+
+D−1
+X
+
+d2j
+
+j=0
+
+d2j + λ
+
+(10.28)
+
+while for linear regression:
+trace(V ar[wM LE,LR |X]) = σϵ2
+
+D−1
+X
+
+1
+d2
+j=0 j
+
+(10.29)
+
+Hence, with λ ≥ 0 we have that trace(V ar[wM LE,LR |X]) > trace(V ar[wM LE,RIDGE |X]):
+ridge regression thus has systematically less uncertainty about its estimated optimal parameters thatn linear regression.
+
+10.2
+
+Lasso Regression
+
+In ridge regression high values of λ tend to make the parameters associated with the
+various features very small. If, on the other hand, we really want to ”zero out” some
+degrees of freedom, we can use Lasso Regression, which produces a sparse solution,
+i.e., a model with many parameters at zero. In practice, the only difference with ridge
+regression is in the constraint on the solution problem, which is no longer related to the
+square of the parameters, but to their modulus:
+wM LE,LASSO = argmin
+w∈RD
+
+subject to
+
+D−1
+X
+j=1
+
+N
+−1
+X
+
+(t(i) − wT x(i) )2
+
+(10.30)
+
+i=0
+
+|wj | ≤ l
+
+(10.31)
+
+
