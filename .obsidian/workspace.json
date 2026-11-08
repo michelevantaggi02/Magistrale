@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "b4b90269b875747b",
+        "id": "717d705172fee770",
         "type": "tabs",
         "children": [
           {
-            "id": "175d0436951993e6",
+            "id": "02b658e669125dc4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Machine Learning/8. Regressione Ridge e Lasso.md",
+                "file": "Anno 1/Machine Learning/9. Support Vector Machines.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "8. Regressione Ridge e Lasso"
+              "title": "9. Support Vector Machines"
             }
           }
         ]
@@ -144,7 +144,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Anno 1/Digital Signal Processing/4. Spettro in frequenza - DTFT.md",
+                "file": "Anno 1/Machine Learning/9. Support Vector Machines.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -195,19 +195,27 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "175d0436951993e6",
+  "active": "6e19a07923072cbc",
   "lastOpenFiles": [
+    "Anno 1/Machine Learning-merged.md",
+    "Anno 1/Machine Learning/9. Support Vector Machines.md",
+    "Anno 1/Machine Learning/immagini/fig_11_3_molteplici_iperpiani_separatori.png",
+    "Anno 1/Machine Learning/immagini/fig_11_4_insiemi_convessi_vs_non_convessi.png",
+    "scratch/pages_ch11/page-162.png",
+    "scratch/raw_img-008.png",
+    "scratch/raw_img-003.png",
+    "Anno 1/Machine Learning/immagini/fig_11_5_funzione_convessa.png",
+    "Anno 1/Machine Learning/immagini/fig_11_13_separabile_con_outlier.png",
+    "Anno 1/Machine Learning/immagini/fig_11_11_trasformazione_feature_non_lineare.png",
+    "Anno 1/Machine Learning/immagini/fig_ex_9_soft_margin_slack_hinge_loss.png",
+    "Anno 1/Machine Learning/2. Teoria della Probabilita.md",
+    "Anno 1/Machine Learning/immagini/fig_ex_9_geometria_svm_margine_support_vectors.png",
+    "scratch/generate_svm_diagrams.py",
+    "scratch/pages_ch11",
+    "Anno 1/Machine Learning/immagini/ch11_text.txt",
+    "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
+    "Anno 1/Machine Learning/8. Regressione Ridge e Lasso.md",
     "Anno 1/Machine Learning/3. Regressione Lineare.md",
-    "scratch/page_ch5-094-094.png",
-    "scratch/page_ch5-093.png",
-    "scratch/page_ch5-092.png",
-    "scratch/page_ch5-091.png",
-    "scratch/page_ch5-090.png",
-    "scratch/page_ch5-089.png",
-    "scratch/page_ch5-088.png",
-    "scratch/page_ch5-087.png",
-    "scratch/page_ch5-086.png",
-    "scratch/page_ch5-085.png",
     "scratch/p93_bbox.xml",
     "scratch/make_split_schema.py",
     "scratch/make_schema.py",
@@ -215,16 +223,10 @@
     "scratch/make_classification_approaches_schema.py",
     "scratch/make_bayes_schema.py",
     "scratch/make_bayes_error_schema.py",
-    "scratch/extracted_13/ppt/media/media-50-1.mp4",
-    "scratch/extracted_13/ppt/media/media-27-1.mp4",
-    "scratch/extracted_13/ppt/media",
     "Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md",
-    "Anno 1/Machine Learning/2. Teoria della Probabilita.md",
     "Anno 1/Machine Learning/5. Modelli Generativi per la Classificazione.md",
-    "Anno 1/Machine Learning/8. Regressione Ridge e Lasso.md",
     "Anno 1/Machine Learning/6. Metodo dei Moltiplicatori di Lagrange.md",
     "Anno 1/Machine Learning/7. Model Selection e Model Assessment.md",
-    "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
     "Anno 1/export/md/Information and Estimation Theory-merged.md",
     "Anno 1/Information and Estimation Theory/1. Stimatori Classici - BLUE, MLE e LSE.md",
     "Anno 1/export/md/Information and Estimation Theory-merged.md",
@@ -241,7 +243,6 @@
     "Anno 2/Deep Learning And Robot Perception/9. Reti Convoluzionali: Convoluzione, Receptive Field e Volumi 3D.md",
     "lezione 12 e 13/10. Anatomia di una CNN, Visualizzazione delle Feature e Convoluzioni Avanzate.md",
     "lezione 12 e 13/11. Architetture CNN Classiche e la Rivoluzione Residuale: Da AlexNet a ResNet.md",
-    "lezione 12 e 13/12. Architetture CNN Avanzate, Modelli Efficienti e ConvNeXt.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Senza nome.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"

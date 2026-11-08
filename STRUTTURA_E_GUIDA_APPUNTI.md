@@ -37,7 +37,7 @@ Magistrale/
 │   │   ├── ...
 │   │   ├── 3. Trasformata di Fourier.md
 │   │   └── immagini/
-│   ├── Machine Learning/                # [IN CORSO] 9 capitoli completati (0..8: Notazione, Supervised, Probabilita, Regressione Lineare, Algoritmi di Classificazione, Modelli Generativi, Moltiplicatori di Lagrange, Model Selection e Assessment, Regressione Ridge e Lasso)
+│   ├── Machine Learning/                # [IN CORSO] 10 capitoli completati (0..9: Notazione, Supervised, Probabilita, Regressione Lineare, Algoritmi di Classificazione, Modelli Generativi, Moltiplicatori di Lagrange, Model Selection e Assessment, Regressione Ridge e Lasso, Support Vector Machines)
 │   │   ├── 0. Notazione e Concetti Fondamentali.md
 │   │   ├── 1. Introduzione al Supervised Learning.md
 │   │   ├── 2. Teoria della Probabilita.md
