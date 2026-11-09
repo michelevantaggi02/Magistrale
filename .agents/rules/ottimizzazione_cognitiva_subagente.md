@@ -88,6 +88,7 @@ Il subagente applica rigorosamente i seguenti principi:
     `![[nome_file.svg|center mid]]` (oppure `small` o `big` in base al livello di dettaglio testuale).
   - Divieto assoluto di codice SVG inline o tag HTML `<p align="center">` all'interno del Markdown.
   - Se due immagini `small` si susseguono, inserirle sulla stessa riga di testo separate da un solo spazio (`![[img1.svg|center small]] ![[img2.svg|center small]]`).
+  - **Rendering Matematico in SVG**: Per evitare stringhe LaTeX non compilate nei diagrammi (es. `w_t^{(i)} = ...`), impostare sempre `matplotlib.rcParams['svg.fonttype'] = 'path'` e `matplotlib.rcParams['mathtext.fontset'] = 'dejavusans'`, racchiudendo le formule tra `r"$...$"`. Questo converte simboli, indici e formule in tracciati vettoriali integrati.
 
 ### 4.4 Conformità Tassativa alle Linee Guida del Vault (`STRUTTURA_E_GUIDA_APPUNTI.md`)
 - [ ] **Convenzioni Linter**:
@@ -99,3 +100,15 @@ Il subagente applica rigorosamente i seguenti principi:
 - [ ] **Integrità elenchi**: nessun elenco puntato o numerato interrotto da callout o immagini; completare l'elenco prima di inserire elementi blocco.
 - [ ] **Zero perdite di contenuti**: è categoricamente vietato omettere formule, dimostrazioni o passaggi matematici.
 - [ ] **Divieto di meta-commenti**: esporre direttamente la teoria corretta e pulita, senza menzionare revisioni, refusi delle slide o passaggi corretti dalle note dello studente.
+
+### 4.5 Gestione Obbligatoria dello Pseudocodice (Plugin `obsidian-pseudocode`)
+- [ ] **Blocchi `pseudo` esclusivi per algoritmi formali**:
+  - Quando viene descritto un algoritmo formale, un ciclo di stima stocastica o una procedura computazionale con formule matematiche, è **tassativamente vietato l'uso di blocchi di testo generico (`text`)**.
+  - Lo pseudocodice deve essere inserito all'interno di un blocco ```` ```pseudo ```` gestito dal plugin `obsidian-pseudocode`.
+- [ ] **Sintassi LaTeX Algorithmic rigorosa**:
+  - Racchiudere l'algoritmo in `\begin{algorithm} ... \end{algorithm}` con `\caption{...}` e `\begin{algorithmic} ... \end{algorithmic}`.
+  - Dichiarare input e output con `\REQUIRE` ed `\ENSURE`.
+  - Utilizzare le istruzioni standard: `\STATE` per singola istruzione/assegnazione, `\FOR{...}` ... `\ENDFOR`, `\IF{...}` ... `\ELSE` ... `\ENDIF`, `\WHILE{...}` ... `\ENDWHILE`, `\RETURN`.
+  - Inserire i commenti con `\COMMENT{...}`.
+- [ ] **Piena renderizzazione KaTeX delle formule**:
+  - Tutte le variabili, vettori, matrici, sommatorie e simboli devono essere racchiusi tra `$ ... $` per garantire la renderizzazione tipografica corretta all'interno del blocco.

@@ -49,6 +49,7 @@ Il subagente esamina il testo **esclusivamente sotto due dimensioni oggettive di
 - [ ] **Coerenza dimensionale e tensoriale**: netta distinzione tra scalari, vettori (grassetto corsivo/minuscolo $\mathbf{x}$) e matrici/tensori (grassetto maiuscolo $\mathbf{A}$). Dimensioni compatibili nelle moltiplicazioni matriciali e convenzioni esplicite sui canali (es. $[C, H, W]$ vs $[H, W, C]$).
 - [ ] **Condizioni di validità e vincoli**: dichiarazione esplicita delle condizioni di stabilità, invertibilità, definita positività delle covarianze, regolarità statistica, o vincoli fisici (es. cinematica non olonoma, conservazione dell'energia).
 - [ ] **Costo computazionale e convenzioni**: ordini di grandezza asintotici $O(\cdot)$ corretti, numero di operazioni coerente e acronimi ingegneristici standard.
+- [ ] **Rappresentazione di algoritmi e pseudocodice**: verifica che gli algoritmi procedurali e formali siano redatti in blocchi ```` ```pseudo ```` conformi al plugin `obsidian-pseudocode`, con formulazione matematica esatta priva di refusi nelle equazioni di assegnazione.
 
 ### 4.2 Fedeltà alle Sorgenti e Assenza di Allucinazioni
 - [ ] **Aderenza al perimetro didattico**: concetti, convenzioni di simboli ed esempi fedeli alle slide e dispense della materia corrente.

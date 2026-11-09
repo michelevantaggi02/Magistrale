@@ -1281,3 +1281,236 @@ $$
 
 Questa formulazione matriciale scalare-vettore è implementata integralmente nel metodo `passo_correzione` della classe `ExtendedKalmanFilter1D` in `scripts_python/Particle_gemini_lecture_v4.py`, garantendo perfetta consistenza teorica ed efficienza computazionale $O(M^3)$ (con $M$ pari al numero di beacon, tipicamente $M=2$, dunque istantaneo).
 
+
+
+## Laboratorio Sperimentale: Ambiente di Sviluppo ROS 2, Versione Didattica di GMapping (slam_gmapping_didactic) e Chiusura del Ciclo
+
+Nelle applicazioni didattiche dello SLAM probabilistico, i filtri a particelle convenzionali operano frequentemente come "black box": all'interno dell'ambiente ROS la mappa e la posa del robot vengono aggiornate a schermo, ma i meccanismi stocastici sottostanti rimangono invisibili (la dispersione della nuvola tra le scansioni, il calo dell'efficienza campionaria, le ipotesi scartate dal ricampionamento, la divergenza delle mappe di particelle differenti e l'allineamento geometrico durante la chiusura del ciclo).
+
+Per colmare questo divario, il laboratorio si avvale del pacchetto `slam_gmapping_didactic` per ROS 2 Humble. Questo ambiente strumenta l'algoritmo GMapping esponendo su topic e display dedicati ogni singola fase del ciclo a particelle, consentendo di osservare quantitativamente e visivamente il comportamento dello SLAM su griglie di occupazione sia nel mondo simulato standard del TurtleBot3 sia in un circuito chiuso appositamente progettato per lo studio del loop closing.
+
+### Configurazione dell'Ambiente di Lavoro ROS 2 e Simulazione Docker
+
+L'ambiente di sviluppo si basa su un container Docker con ROS 2 Humble e Gazebo Classic, eseguito su host Ubuntu 22.04 in WSL2 con integrazione grafica WSLg:
+- __Accelerazione grafica hardware__: WSLg veicola il rendering OpenGL accelerato mediante il driver Mesa D3D12 interfacciato alla GPU dedicata. Le variabili d'ambiente necessarie nell'host sono:
+
+```bash
+export LIBVA_DRIVER_NAME=d3d12
+export GALLIUM_DRIVER=d3d12
+export MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
+```
+
+Nel file `docker-compose.gpu.yml`, la variabile `LD_LIBRARY_PATH: /usr/lib/wsl/lib` garantisce che i processi nel container accedano direttamente alle librerie Direct3D del sottosistema Windows;
+- __Workspace condiviso__: la cartella `ros2_ws/src` è montata bidirezionalmente tra host (`~/ros2-dev-env/ros2_ws`) e container (`/workspace/ros2_ws`), permettendo la modifica del codice dall'editor dell'host e la compilazione immediata nel container;
+- __Gestione rigorosa del tempo simulato (`use_sim_time`)__: in simulazione, tutti i nodi devono sincronizzarsi esclusivamente sul clock virtuale pubblicato da Gazebo sul topic `/clock`:
+  1. I nodi software leggono l'orario corrente tramite `self.get_clock().now()` e non con funzioni di sistema host (`time.time()`);
+  2. Le azioni periodiche impiegano i timer ROS (`create_timer`) anziché bloccare l'esecuzione con chiamate sincrone (`time.sleep()`);
+  3. Le interrogazioni alle trasformazioni geometriche (`tf2`) devono richiedere la trasformata allo stamp esatto del messaggio sensoriale (`msg.header.stamp`) e non all'istante corrente, garantendo che ogni scansione laser sia proiettata nella posa in cui è stata effettivamente acquisita.
+
+### Architettura del Pacchetto Didattico e Metodi di Intercettazione C++
+
+Il pacchetto `slam_gmapping_didactic` è strutturato come estensione della libreria computazionale originale `openslam_gmapping`. La libreria cardine non viene alterata; l'intercettazione dei dati è realizzata mediante la sottoclasse C++ `DidacticGridSlamProcessor`, derivata da `GMapping::GridSlamProcessor`.
+
+La sottoclasse esegue l'override di tre funzioni virtuali invocate dalla libreria nei momenti chiave del ciclo operativo:
+
+```mermaid
+flowchart LR
+    A["<b>onOdometryUpdate()</b><br>Invocato dopo il moto<br>Copia pose predette (step1)"] --> B["<b>onScanmatchUpdate()</b><br>Invocato dopo scan matching<br>Copia pose corrette (step2)<br>Mappe best/worst, pesi"]
+    B --> C["<b>onResampleUpdate()</b><br>Invocato prima del resampling<br>Registra Neff, particelle distinte<br>Nuova generazione (step3)"]
+```
+
+1. `onOdometryUpdate()`: intercetta lo stato immediatamente successivo all'applicazione dell'incremento odometrico e del rumore gaussiano, memorizzando le pose predette prima dell'intervento della correzione telemetrica;
+2. `onScanmatchUpdate()`: cattura le pose rifinite dall'algoritmo di scan matching sul likelihood field, calcola i pesi normalizzati, individua la particella con peso attuale massimo e minimo, risale l'albero delle traiettorie ed estrae le mappe di occupazione associate;
+3. `onResampleUpdate()`: prima che la popolazione venga sostituita fisicamente in memoria, calcola la dimensione campionaria efficace $N_{\text{eff}}$, memorizza gli indici estratti dalla routine di campionamento e conteggia il numero di particelle distinte sopravvissute.
+
+### Strumentazione Didattica e Rassegna dei Topic
+
+La versione didattica suddivide la trasparenza del filtro in sei passi operativi, ciascuno dei quali pubblica specifici topic informativi:
+
+#### Visualizzazione Continua delle Particelle e Correzione Laser
+
+Le pose di tutte le $N$ particelle vengono pubblicate a ogni singola scansione laser (a circa $5\text{ Hz}$) sul topic `/gmapping/particles` (tipo `geometry_msgs/msg/PoseArray`).
+
+Poiché il LiDAR del TurtleBot3 opera nell'intervallo angolare $[0, 2\pi)$ con asse centrale a $\pi$, il sensore interno virtuale di GMapping punta all'indietro rispetto al verso di marcia. La classe di supporto converte analiticamente ogni posa interna prima della pubblicazione:
+
+$$
+\mathbf{T}_{\text{map}}^{\text{base}} = \mathbf{T}_{\text{map}}^{\text{laser\_c}} \cdot (\mathbf{T}_{\text{base}}^{\text{laser\_c}})^{-1}
+$$
+
+garantendo che in RViz2 le frecce gialle puntino concordemente con la direzione effettiva del veicolo.
+
+#### Parametrizzazione Dichiarativa e Preset Didattici
+
+I parametri dell'algoritmo sono esposti come parametri ROS modificabili tramite file YAML nella cartella `config/`. Il confronto tra il preset `originale.yaml` e il preset `didattico.yaml` è sintetizzato nella tabella sottostante:
+
+| Parametro ROS | Preset Originale | Preset Didattico | Significato Fisico e Funzionale |
+| :--- | :--- | :--- | :--- |
+| `particles` | $30$ | $50$ | Dimensione della popolazione del filtro a particelle |
+| `resampleThreshold` | $0.5$ | $0.5$ | Soglia di attivazione del ricampionamento come frazione di $N$ |
+| `srr`, `str` | $0.1$, $0.1$ | $0.4$, $0.4$ | Rumore di traslazione dovuto a traslazione e rotazione |
+| `srt`, `stt` | $0.2$, $0.2$ | $0.5$, $0.5$ | Rumore di rotazione dovuto a traslazione e rotazione |
+| `linearUpdate` | $1.0\text{ m}$ | $1.0\text{ m}$ | Avanzamento metrico per attivare l'aggiornamento del filtro |
+| `angularUpdate` | $0.5\text{ rad}$ | $0.5\text{ rad}$ | Rotazione angolare per attivare l'aggiornamento del filtro |
+| `temporalUpdate` | $1.0\text{ s}$ | $-1.0\text{ s}$ (disattivato) | Intervallo temporale forzato (disattivato nel preset didattico) |
+| `seed` | $0$ (casuale) | $42$ (fisso) | Seme del generatore pseudocasuale per garantire esecuzioni ripetibili |
+
+Il preset didattico adotta un rumore odometrico circa quattro volte maggiore e disattiva l'aggiornamento temporale periodico a robot fermo: in questo modo, la dispersione della nuvola diviene chiaramente percepibile e lo scan matching interviene unicamente quando il robot esegue uno spostamento nello spazio.
+
+#### Le Tre Fasi del Ciclo e la Dimensione Campionaria Efficace
+
+Ad ogni aggiornamento metatemporale del filtro, il nodo pubblica le istantanee delle tre fasi:
+- `/gmapping/update/step1_predicted`: frecce rosse che rappresentano le pose dopo il solo moto odometrico;
+- `/gmapping/update/step2_matched`: frecce verdi che rappresentano le pose dopo l'allineamento dello scan matching;
+- `/gmapping/update/step3_resampled`: frecce blu che mostrano la nuova generazione estratta dopo il ricampionamento (il topic rimane vuoto se $N_{\text{eff}} \ge T$).
+
+I valori scalari diagnostici vengono emessi sui topic:
+- `/gmapping/neff` (`Float64`): dimensione campionaria efficace $N_{\text{eff}} \in [1, N]$;
+- `/gmapping/neff_threshold` (`Float64`): soglia $T = \text{resampleThreshold} \cdot N$;
+- `/gmapping/unique_particles` (`Int32`): numero di particelle distinte sopravvissute;
+- `/gmapping/resampled` (`Bool`): flag booleano di avvenuto ricampionamento;
+- `/gmapping/info` (`Marker`): visualizzazione testuale fluttuante al di sopra del robot con il riepilogo in tempo reale dei parametri.
+
+#### Mappe delle Particelle e Pesatura di Verosimiglianza
+
+Per esaminare come l'ipotesi di traiettoria influenza la costruzione dell'ambiente, il nodo pubblica:
+- `/gmapping/map_best_particle`: griglia di occupazione costruita dalla particella a peso attuale massimo. Gli ostacoli sono pubblicati con valore convenzionale $120$ per essere visualizzati in colore verde brillante;
+- `/gmapping/map_worst_particle`: griglia costruita dalla particella a peso attuale minimo, renderizzata in tonalità viola;
+- `/gmapping/particle_weights`: serie di sfere tridimensionali centrate sulle pose delle particelle, con raggio e colore graduati dal rosso (peso quasi nullo) al verde (peso dominante).
+
+#### Analisi della Convergenza: Segmenti di Correzione, Coalescenza ed Ellissi
+
+Il quinto passo implementa gli indicatori analitici della convergenza spaziale:
+- `/gmapping/scanmatch`: segmenti congiungenti la posa prevista dal moto (estremo rosso) con la posa corretta dallo scan matcher (estremo verde), affiancati dalla proiezione dei singoli fasci laser prima e dopo la correzione;
+- `/gmapping/trajectory_tree`: visualizzazione ad albero di tutte le traiettorie storiche delle particelle. I rami sono graduati cromaticamente in base al numero di discendenti, dal blu scuro del tronco comune all'azzurro chiaro delle ramificazioni terminali;
+- `/gmapping/coalescence_depth`: contatore intero che misura quanti aggiornamenti all'indietro occorre risalire lungo l'albero per incontrare l'antenato comune a tutte le particelle attive;
+- `/gmapping/uncertainty`: ellisse di covarianza bidimensionale centrata sul baricentro delle particelle, calcolata con semiassi proporzionali a $2\sigma$ lungo le direzioni principali d'errore;
+- `/gmapping/map_disagreement`: griglia differenziale che evidenzia le celle in cui le mappe della particella migliore e peggiore discordano (celle occupate solo dalla prima in verde, occupate solo dalla seconda in viola).
+
+#### Simulazione della Deriva Odometrica con il Nodo odom_drift
+
+In un simulatore fisico privo di attriti realistici, l'odometria ruote è pressoché perfetta: una mappa generata dalla sola odometria risulterebbe già coerente. Per simulare il comportamento di un robot mobile reale su pavimentazioni irregolari, il nodo ausiliario `odom_drift.py` intercetta la trasformazione vera `odom` $\to$ `base_footprint` e vi inietta errori sistematici e stocastici:
+
+```mermaid
+flowchart LR
+    M["<b>map</b>"] --> ON["<b>odom_noisy</b><br>Frame disturbato visto da GMapping"]
+    ON --> O["<b>odom</b><br>Frame vero di Gazebo"]
+    O --> BF["<b>base_footprint</b>"]
+```
+
+I parametri del disturbo odometrico comprendono:
+- `drift_trans_scale`: errore di scala sistematico sulla traslazione ($0.03 = +3\%$ di percorrenza stimata);
+- `drift_rot_scale`: errore di scala sistematico sulla rotazione ($0.05 = +5\%$ su ogni sterzata);
+- `drift_rot_per_meter`: deriva angolare sistematica dovuta a raggio ruote asimmetrico ($0.02\text{ rad/m}$);
+- `drift_trans_noise`: ampiezza del rumore stocastico di traslazione ($0.01\text{ m}/\sqrt{\text{m}}$);
+- `drift_rot_noise`: ampiezza del rumore stocastico d'orientamento ($0.01\text{ rad}/\sqrt{\text{m}}$).
+
+GMapping assume come sorgente odometrica il frame `odom_noisy`. Contestualmente, il nodo pubblica sul topic `/gmapping/map_odometry` la mappa risultante dalla registrazione delle scansioni laser nelle pose fornite dalla pura odometria disturbata, priva di correzione da scan matching.
+
+### Il Mondo Simulato ad Anello (anello.world) per la Chiusura del Ciclo
+
+Per consentire la sperimentazione sistematica della chiusura del ciclo, l'ambiente include il mondo `anello.world` (sviluppato in formato SDF per Gazebo):
+
+![[slide_22_anello_world_gazebo_corridor.png|center big]]
+
+Le caratteristiche geometriche del mondo sono così dimensionate:
+- __Corridoio continuo a circuito chiuso__: anello a pianta rettangolare di ingombro $12\text{ m} \times 8\text{ m}$, con larghezza della corsia pari a $2.5\text{ m}$ attorno a un blocco centrale chiuso;
+- __Sviluppo metrico del giro__: percorso complessivo di circa $30\text{ m}$, sufficiente a far accumulare all'odometria un errore spaziale superiore alla portata del fascio laser ($3.5\text{ m}$);
+- __Disposizione asimmetrica degli ostacoli__: colonne cilindriche e setti murari distribuiti in modo non simmetrico per garantire che ciascun tratto dell'anello possieda una firma percettiva univoca ed escludere fenomeni di aliasing percettivo.
+
+### Guida Operativa agli 11 Esperimenti Sistematici di Laboratorio
+
+La cartella `config/` del pacchetto contiene i file di configurazione preimpostati per replicare 11 condizioni di funzionamento sperimentali:
+
+```bash
+ros2 launch slam_gmapping_didactic slam_gmapping_didactic.launch.py config:=<nome_preset>
+```
+
+#### E1. Confronto tra Preset Originale e Didattico
+- __Comando__: `config:=originale` vs `config:=didattico`
+- __Fenomeno da osservare__: con il preset originale, l'aggiornamento temporale frequente e il rumore odometrico ridotto mantengono la nuvola di particelle quasi puntiforme; con il preset didattico, la dispersione a ventaglio durante il moto è pienamente percepibile.
+
+#### E2. Sensibilità al Numero di Particelle
+- __Comando__: `config:=exp_particelle_5`, `config:=exp_particelle_30`, `config:=exp_particelle_100`
+- __Fenomeno da osservare__: con $5$ particelle, il ricampionamento riduce immediatamente la popolazione a 1 o 2 ipotesi distinte, rendendo la mappa fragile in curva; con $100$ particelle, la nuvola è ricca e la stima robusta, ma il tempo di aggiornamento per passo (`update_time_ms`) cresce in modo proporzionale alla cardinalità campionaria.
+
+#### E3. Decomposizione delle Componenti di Rumore Odometrico
+- __Comando__: `config:=exp_rumore_rotazione` (`srt, stt = 0.8`, `srr, str = 0.1`) vs `config:=exp_rumore_traslazione` (`srr, str = 0.8`, `srt, stt = 0.1`)
+- __Fenomeno da osservare__: nel primo caso le particelle si aprono ad arco trasversalmente alla traiettoria non appena il robot approccia una curva; nel secondo caso la nuvola si allunga in direzione longitudinale lungo l'asse di marcia.
+
+#### E4. Soglia di Ricampionamento: Depletion vs Degenerazione
+- __Comando__: `config:=exp_ricampiona_sempre` (`resampleThreshold = 1.0`) vs `config:=exp_ricampiona_mai` (`resampleThreshold = 0.0`)
+- __Fenomeno da osservare__:
+  1. Con soglia unitaria il filtro ricampiona a ogni scansione: il numero di particelle uniche crolla a valori minimi e la storia passata viene cancellata continuamente (_particle depletion_);
+  2. Con soglia nulla il filtro non ricampiona mai: le particelle mantengono traiettorie indipendenti senza convergenza genealogica, ma $N_{\text{eff}}$ scende inesorabilmente verso $1.0$, indicando che una sola particella accentra l'intera probabilità mentre le rimanenti $N-1$ sprecano risorse computazionali.
+
+#### E5. Regolazione della Frequenza di Aggiornamento
+- __Comando__: `config:=exp_aggiornamenti_frequenti` (`linearUpdate = 0.3`, `angularUpdate = 0.2`) vs `config:=exp_aggiornamenti_radi` (`linearUpdate = 2.0`, `angularUpdate = 1.0`)
+- __Fenomeno da osservare__: aggiornamenti frequenti mantengono l'incertezza contenuta ma saturano la CPU; aggiornamenti radi consentono all'incertezza odometrica di espandersi notevolmente tra un passo e l'altro prima del riallineamento dello scan matching.
+
+#### E6. Dinamica di Dispersione in Rettilineo vs Curva
+- __Comando__: `config:=didattico`
+- __Fenomeno da osservare__: a parità di parametri, la navigazione lungo lunghi corridoi rettilinei mantiene $N_{\text{eff}}$ elevato; l'inserimento in una serie di curve strette induce cadute ripide di $N_{\text{eff}}$ e innesca frequenti ricampionamenti.
+
+#### E7. Verifica della Ripetibilità Stocastica
+- __Comando__: `config:=didattico` (`seed = 42`) vs `config:=exp_seed_casuale` (`seed = 0`)
+- __Fenomeno da osservare__: con seme fisso e manovre ripetute via teleoperazione calibrata, le traiettorie e i pesi evolvono in modo rigorosamente deterministico; con seme casuale, ogni prova evidenzia realizzazioni differenti della popolazione campionaria.
+
+#### E8. Ispezione delle Mappe Interne delle Particelle
+- __Comando__: `config:=exp_mappe_interne` (`particle_maps_full = false`)
+- __Fenomeno da osservare__: le mappe delle particelle migliore e peggiore mostrano unicamente i punti terminali colpiti dal laser (privi di rasterizzazione dello spazio libero), evidenziando la struttura compatta impiegata internamente dall'algoritmo di scan matching.
+
+#### E9. Chiusura del Ciclo nel Circuito ad Anello
+- __Comando__: avvio Gazebo con `./start_gazebo.sh anello` e GMapping con `config:=exp_chiusura_ciclo`
+- __Fenomeno da osservare__: durante la percorrenza dell'anello l'albero delle traiettorie si espande; al rientro nella corsia iniziale, le particelle che hanno accumulato errori di posa non riescono a far combaciare la scansione corrente con i muri registrati all'inizio del giro e ricevono pesi quasi nulli. $N_{\text{eff}}$ subisce una forte caduta (fino a circa $25$ su $60$), il ricampionamento estingue le traiettorie distorte e la mappa globale `/map` si riallinea perfettamente.
+
+#### E10. Impatto della Deriva Odometrica
+- __Comando__: `config:=exp_odometria_deriva` (`odom_drift = true`) nel mondo standard
+- __Fenomeno da osservare__: la traiettoria arancione con deriva (`path_noisy`) devia progressivamente dalla traiettoria reale bianca (`path_true`). La mappa costruita con la pura odometria (`/gmapping/map_odometry`) risulta pesantemente incurvata e sdoppiata, mentre la mappa stimata da GMapping (`/map`) rimane rettilinea e geometricamente corretta.
+
+#### E11. Chiusura del Ciclo in Presenza di Forte Deriva
+- __Comando__: avvio Gazebo con `./start_gazebo.sh anello` e GMapping con `config:=exp_chiusura_ciclo_deriva`
+- __Fenomeno da osservare__: al termine del giro completo di $30\text{ m}$, l'odometria accumula un errore metrico di circa $3\text{ m}$ e uno scarto angolare di $34^\circ$, producendo una mappa a corridoi aperti e pareti sovrapposte. Lo scan matching di GMapping riconnette il ciclo azzerando l'errore residuo a circa $2\text{ cm}$ e meno di $1^\circ$.
+
+### Sequenza di Avvio dei Terminali
+
+Per evitare conflitti nell'albero delle trasformazioni TF (dovuti all'assenza temporanea del frame `map` prima dell'elaborazione della prima scansione), i processi vanno avviati in terminali indipendenti rispettando il seguente ordine temporale:
+
+1. __Terminale 1 (Simulazione Gazebo)__:
+   ```bash
+   cd ~/ros2-dev-env
+   ./start.sh --gpu
+   ./start_gazebo.sh anello
+   ```
+   Attendere la visualizzazione completa della finestra del simulatore Gazebo con il robot posizionato all'ingresso dell'anello.
+
+2. __Terminale 2 (Nodo GMapping Didattico)__:
+   ```bash
+   cd ~/ros2-dev-env
+   ./connect.sh
+   source install/setup.bash
+   ros2 launch slam_gmapping_didactic slam_gmapping_didactic.launch.py config:=exp_chiusura_ciclo_deriva
+   ```
+   Attendere nel terminale la notifica `Initialization complete`: a partire da questo istante il frame `map` è regolarmente pubblicato sull'albero TF.
+
+3. __Terminale 3 (Interfaccia Grafica RViz2)__:
+   ```bash
+   cd ~/ros2-dev-env
+   ./connect.sh
+   ros2 run rviz2 rviz2 \
+     -d $(ros2 pkg prefix --share slam_gmapping_didactic)/rviz/didattico.rviz \
+     --ros-args -p use_sim_time:=true
+   ```
+
+4. __Terminale 4 (Teleoperazione Robot con Limitatore di Velocità)__:
+   ```bash
+   cd ~/ros2-dev-env
+   ./teleop_frecce.sh 0.15 0.1 0.8
+   ```
+   Lo script rimappa i tasti freccia su `cmd_vel` imponendo una velocità lineare moderata ($0.15\text{ m/s}$ in avanti), ottimale per garantire l'allineamento dello scan matching ed evitare slittamenti fisici anomali nel simulatore.
+
+5. __Terminale 5 (Monitoraggio Real-Time Opzionale dei Pesi)__:
+   ```bash
+   cd ~/ros2-dev-env
+   ./connect.sh
+   rqt_plot /gmapping/neff/data /gmapping/neff_threshold/data /gmapping/unique_particles/data
+   ```

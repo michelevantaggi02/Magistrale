@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "717d705172fee770",
+        "id": "703e48a8233ea4bd",
         "type": "tabs",
         "children": [
           {
-            "id": "02b658e669125dc4",
+            "id": "7ea60981fcf76b17",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Anno 1/Machine Learning/9. Support Vector Machines.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "9. Support Vector Machines"
+              "title": "Nuova scheda"
             }
           }
         ]
@@ -144,7 +140,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Anno 1/Machine Learning/9. Support Vector Machines.md",
+                "file": "Anno 1/export/pdf/Digital Signal Processing-merged.pdf",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -195,38 +191,42 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6e19a07923072cbc",
+  "active": "08d86cc9d4ce593b",
   "lastOpenFiles": [
-    "Anno 1/Machine Learning-merged.md",
+    "Anno 2/Autonomous Robotics/12. SLAM con Griglie di Occupazione e GMapping.md",
+    "Anno 2/Autonomous Robotics/immagini/slide_08_histogram_1d_bimodal_likelihood.svg",
+    "Anno 2/Autonomous Robotics/immagini/slide_20_gmapping_architecture.svg",
+    "Anno 2/Autonomous Robotics/immagini/slide_20_fastslam1_vs_fastslam2_proposal.svg",
+    "Anno 2/Autonomous Robotics/immagini/slide_20_fastslam_particle_structure.svg",
+    "Anno 2/Autonomous Robotics/immagini/slide_22_ros_coordinate_frames_rep105.svg",
+    "Anno 2/Autonomous Robotics/immagini/slide_22_gmapping_algorithm_tro2007.svg",
+    "Anno 2/Autonomous Robotics/6. Localizzazione con Particle Filter.md",
+    "Anno 2/Autonomous Robotics/note/lezione_22.md",
+    "scratch/extracted_12/ppt/media/image-6-3.png",
+    "scratch/extracted_12/ppt/media/image-1-1.png",
+    "scratch/page_ch5-094-094.png",
+    "Anno 1/Machine Learning/dispense/ML_Notes.pdf",
+    "Anno 1/export/pdf/Digital Signal Processing-merged.pdf",
+    "Anno 1/Machine Learning/immagini/fig_ex_A_forward_backward_backpropagation.png",
+    "Anno 1/Machine Learning/A. Reti Neurali.md",
+    "scratch/generate_nn_diagrams.py",
+    "Anno 1/Machine Learning/7. Model Selection e Model Assessment.md",
+    "scratch/ch12_text.txt",
+    "Anno 1/Machine Learning/8. Regressione Ridge e Lasso.md",
     "Anno 1/Machine Learning/9. Support Vector Machines.md",
-    "Anno 1/Machine Learning/immagini/fig_11_3_molteplici_iperpiani_separatori.png",
-    "Anno 1/Machine Learning/immagini/fig_11_4_insiemi_convessi_vs_non_convessi.png",
-    "scratch/pages_ch11/page-162.png",
-    "scratch/raw_img-008.png",
-    "scratch/raw_img-003.png",
-    "Anno 1/Machine Learning/immagini/fig_11_5_funzione_convessa.png",
-    "Anno 1/Machine Learning/immagini/fig_11_13_separabile_con_outlier.png",
-    "Anno 1/Machine Learning/immagini/fig_11_11_trasformazione_feature_non_lineare.png",
-    "Anno 1/Machine Learning/immagini/fig_ex_9_soft_margin_slack_hinge_loss.png",
+    "Anno 1/Machine Learning-merged.md",
     "Anno 1/Machine Learning/2. Teoria della Probabilita.md",
-    "Anno 1/Machine Learning/immagini/fig_ex_9_geometria_svm_margine_support_vectors.png",
     "scratch/generate_svm_diagrams.py",
     "scratch/pages_ch11",
     "Anno 1/Machine Learning/immagini/ch11_text.txt",
     "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
-    "Anno 1/Machine Learning/8. Regressione Ridge e Lasso.md",
     "Anno 1/Machine Learning/3. Regressione Lineare.md",
     "scratch/p93_bbox.xml",
     "scratch/make_split_schema.py",
     "scratch/make_schema.py",
-    "scratch/make_hif_schema.py",
-    "scratch/make_classification_approaches_schema.py",
-    "scratch/make_bayes_schema.py",
-    "scratch/make_bayes_error_schema.py",
     "Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md",
     "Anno 1/Machine Learning/5. Modelli Generativi per la Classificazione.md",
     "Anno 1/Machine Learning/6. Metodo dei Moltiplicatori di Lagrange.md",
-    "Anno 1/Machine Learning/7. Model Selection e Model Assessment.md",
     "Anno 1/export/md/Information and Estimation Theory-merged.md",
     "Anno 1/Information and Estimation Theory/1. Stimatori Classici - BLUE, MLE e LSE.md",
     "Anno 1/export/md/Information and Estimation Theory-merged.md",
@@ -238,11 +238,6 @@
     "Anno 2/Autonomous Robotics/note/lezione_19.md",
     "Anno 2/Autonomous Robotics/note/lezione_16.md",
     "lezione 12 e 13/9. Reti Convoluzionali: Convoluzione, Receptive Field e Volumi 3D.md",
-    "lezione 12 e 13-merged.md",
-    "lezione 12 e 13/_TOC_.md",
-    "Anno 2/Deep Learning And Robot Perception/9. Reti Convoluzionali: Convoluzione, Receptive Field e Volumi 3D.md",
-    "lezione 12 e 13/10. Anatomia di una CNN, Visualizzazione delle Feature e Convoluzioni Avanzate.md",
-    "lezione 12 e 13/11. Architetture CNN Classiche e la Rivoluzione Residuale: Da AlexNet a ResNet.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Senza nome.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"

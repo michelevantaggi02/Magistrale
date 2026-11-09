@@ -37,7 +37,7 @@ Magistrale/
 │   │   ├── ...
 │   │   ├── 3. Trasformata di Fourier.md
 │   │   └── immagini/
-│   ├── Machine Learning/                # [IN CORSO] 10 capitoli completati (0..9: Notazione, Supervised, Probabilita, Regressione Lineare, Algoritmi di Classificazione, Modelli Generativi, Moltiplicatori di Lagrange, Model Selection e Assessment, Regressione Ridge e Lasso, Support Vector Machines)
+│   ├── Machine Learning/                # [IN CORSO] 11 capitoli completati (0..9, A: Notazione, Supervised, Probabilita, Regressione Lineare, Algoritmi di Classificazione, Modelli Generativi, Moltiplicatori di Lagrange, Model Selection e Assessment, Regressione Ridge e Lasso, Support Vector Machines, Reti Neurali)
 │   │   ├── 0. Notazione e Concetti Fondamentali.md
 │   │   ├── 1. Introduzione al Supervised Learning.md
 │   │   ├── 2. Teoria della Probabilita.md
@@ -67,9 +67,10 @@ Magistrale/
 │   │   ├── 9. Localizzazione con Extended Kalman Filter.md
 │   │   ├── 10. SLAM ed EKF-SLAM.md
 │   │   ├── 11. FastSLAM e Rao-Blackwellized Particle Filter.md
+│   │   ├── 12. SLAM con Griglie di Occupazione e GMapping.md
 │   │   ├── zz. Argomenti extra.md
-│   │   ├── immagini/                    # 126 figure estratte e generate ad alta risoluzione
-│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..20)
+│   │   ├── immagini/                    # 129 figure estratte e generate ad alta risoluzione
+│   │   ├── note/                        # Trascrizioni grezze delle lezioni (lezioni 2..22)
 │   │   └── scripts_python/
 │   │       ├── Histogram_gemini_lecture_v10.py
 │   │       ├── particle_filter_1d_simulation.py
@@ -91,7 +92,7 @@ Magistrale/
 | **Anno 1** | **Machine Learning** | Iniziato | `GUIDA_APPUNTI_MACHINE_LEARNING.md`, `dispense/ML_Notes.pdf`, `immagini/` | Guida specifica attiva in `Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md`. 13 capitoli d'esame (`0.`..`C.`) basati sulla dispensa del Prof. Costante (225 pp). Esclusi argomenti con `*` (Capitolo 6 GLMs). Pipeline per dispense LaTeX con figure originali ed esempi grafici ad-hoc. Stesura incrementale un capitolo alla volta. |
 | **Anno 1** | **Information and Estimation Theory** | Iniziato | `GUIDA_APPUNTI_INFORMATION_AND_ESTIMATION_THEORY.md`, `notes/` | Guida specifica attiva in `Anno 1/Information and Estimation Theory/GUIDA_APPUNTI_INFORMATION_AND_ESTIMATION_THEORY.md`. Diviso in due macro-parti con progressione `0..E`: Parte I (Stima e Rilevazione, 6 capitoli `0.`..`5.` ripartiti in Teoria/Limiti e Stimatori/Metodi, Prof. Rugini, ref. Steven Kay Vol. I & II) e Parte II (Teoria dell'Informazione, 9 capitoli `6.`..`E.`, ref. Cover & Thomas, Shannon e paper scientifici). Decompressione on-demand degli archivi zip tematici in sottocartelle di `notes/`. |
 | **Anno 2** | **Deep Learning And Robot Perception** | In corso | `0. Immagini, filtri e gradienti.md`, `immagini/` | Primo capitolo corposo già redatto (450+ righe) corredato da 53 figure. Da proseguire con CNN, feature detection, object detection, segmentation, 3D perception. |
-| **Anno 2** | **Autonomous Robotics** | In corso | 12 file (`0.` - `11.`), `zz. Argomenti extra.md`, `immagini/` (126 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8, 10, 12, 13, 15, 19, 20 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, Monte Carlo Localization (Particle Filter) con Importance Sampling, Low-Variance Resampling, Augmented MCL, KLD-Sampling, modelli di misura LiDAR (catena 4 frame, Feature-Based, Likelihood Field con distance transform precalcolata O(1), Beam Model a 4 componenti), Filtro di Kalman lineare time-varying (osservatore di Luenberger, convenzione Q/R, Joseph form), Extended Kalman Filter (localizzazione in SE(2) su rette di Hesse con correzione segno r e gating), SLAM / EKF-SLAM (5 passi Scaramuzza, Online vs Full SLAM, DBN, stato aumentato, convergenza Dissanayake), e FastSLAM / Rao-Blackwellized Particle Filter (FastSLAM 1.0/2.0, ML data association, GMapping su griglie di occupazione, N_eff adattivo e loop closing). |
+| **Anno 2** | **Autonomous Robotics** | In corso | 13 file (`0.` - `12.`), `zz. Argomenti extra.md`, `immagini/` (129 figure), `scripts_python/` | Lezioni 2, 4, 5, 6, 7, 8, 10, 12, 13, 15, 19, 20, 22 completate. Copre: cinematica differenziale/Ackermann, moto stocastico, sensori e metrologia, feature lineari e mappe, filtro di Bayes continuo/discreto, Markov Localization con Histogram Filter 1D/2D, Monte Carlo Localization (Particle Filter) con Importance Sampling, Low-Variance Resampling, Augmented MCL, KLD-Sampling, modelli di misura LiDAR (catena 4 frame, Feature-Based, Likelihood Field con distance transform precalcolata O(1), Beam Model a 4 componenti), Filtro di Kalman lineare time-varying (osservatore di Luenberger, convenzione Q/R, Joseph form), Extended Kalman Filter (localizzazione in SE(2) su rette di Hesse con correzione segno r e gating), SLAM / EKF-SLAM (5 passi Scaramuzza, Online vs Full SLAM, DBN, stato aumentato, convergenza Dissanayake), FastSLAM / Rao-Blackwellized Particle Filter (FastSLAM 1.0/2.0, ML data association, GMapping su griglie di occupazione, N_eff adattivo e loop closing), SLAM con Griglie di Occupazione e GMapping (proposta ottima via scan matching, N_eff e adaptive resampling, ray casting Bresenham e modello a contatori busy/visited, architettura ROS REP 105, confronto filtraggio vs ottimizzazione con Cartographer, e laboratorio sperimentale slam_gmapping_didactic in zz. Argomenti extra con 11 esperimenti e chiusura del ciclo nel mondo anello). |
 
 ---
 
@@ -297,6 +298,22 @@ Quando nelle presentazioni, nei file sorgente o nelle lezioni sono presenti anim
 >    - **Motivazione tipografica per la stampa**: Nei documenti PDF impaginati in formato verticale (A4 standard), una figura con sviluppo marcatamente verticale ruba spazio prezioso al testo, crea voragini bianche ai lati e forza interruzioni o salti pagina ingiustificati. Un layout orizzontale compatto (con altezza contenuta, indicativamente 180–320 px su larghezze di 600–1100 px) si incastona perfettamente tra i paragrafi senza spezzare il flusso di lettura.
 >    - **Multi-Pannello e Confronti**: Se lo schema illustra più fasi, proprietà o algoritmi a confronto, organizzare i blocchi come **colonne o card affiancate orizzontalmente da sinistra verso destra** (es. 2, 3 o 4 pannelli laterali), evitando tassativamente sequenze verticali chilometriche.
 >    - **Diagrammi Mermaid**: Impostare di default la direzione orizzontale da sinistra a destra (`flowchart LR`), riservando `flowchart TD` solo a gerarchie strettamente discendenti o ad alberi sintattici.
+> 7. **Scelta del Formato (SVG vs PNG) e Rendering Vettoriale delle Formule Matematiche**:
+>    - **SVG Vettoriale Obbligatorio per Immagini e Schemi Generati**: Tutti i grafici cartesiani, le pipeline algoritmiche, i diagrammi a blocchi e gli schemi sintetici generati per gli appunti devono essere salvati direttamente come **`.svg`** (es. `![[schema_architettura.svg|center big]]`).
+>      - **Risoluzione infinita**: non sgrana mai a nessun livello di zoom a video né in fase di stampa cartacea;
+>      - **Peso file irrisorio**: tipicamente 15–40 KB di puro codice vettoriale contro i 500–1000 KB di un raster PNG ad alta densità;
+>      - **Nessun appesantimento del PDF (anzi, alleggerimento)**: in esportazione PDF (tramite `better-export-pdf`), i file SVG vengono inclusi come primitive e tracciati vettoriali nativi anziché pesanti matrici bitmap a 300 DPI, riducendo drasticamente il peso del file PDF finale e garantendo massima fluidità di scorrimento.
+>    - **PNG Riservato ai Media Raster Naturali**: Il formato PNG va utilizzato unicamente per fotografie fisiche (piattaforme robotiche, attuatori, sensori reali), screenshot da simulatori 3D (Gazebo, RViz) o estratti raster storici dalle slide che contengono grafici bitmap complessi.
+>    - **Risoluzione del Rendering delle Formule Matematiche / LaTeX nei Diagrammi Generati**:
+>      - **Problema**: Né Obsidian né i motori browser interpretano il codice LaTeX grezzo (`$...$`) all'interno di file immagine esterni. Se le formule vengono inserite come testo semplice, appaiono stringhe grezze con graffe e comandi non compilati (es. `w_t^{(i)} = ...`).
+>      - **Soluzione Vettoriale con Matplotlib**: Negli script programmatici di generazione grafica (Python con `matplotlib`), impostare sempre:
+>        ```python
+>        import matplotlib
+>        matplotlib.rcParams['svg.fonttype'] = 'path'
+>        matplotlib.rcParams['mathtext.fontset'] = 'dejavusans'
+>        ```
+>      - Racchiudere ogni formula nella sintassi mathtext standard: `r"$w_t^{(i)} = w_{t-1}^{(i)} \cdot \eta^{(i)}$"`, `r"$N_{\mathrm{eff}} = \frac{1}{\sum_{i=1}^N (\tilde{w}_i)^2}$"`, `r"$x_t^{(i)} \sim \mathcal{N}(\mu, \Sigma)$"`.
+>      - La direttiva `svg.fonttype = 'path'` converte automaticamente ogni glifo e simbolo matematico ($\oplus, \mu, \Sigma, \eta$, sommatorie, frazioni, integrali) in tracciati geometrici vettoriali (`<path d="…" />`) incorporati nell'SVG: la resa tipografica è identica a LaTeX, scalabile all'infinito e 100% indipendente da font di sistema o compilatori esterni.
 
 ### 3.4 Callout di Obsidian
 I callout arricchiscono il testo dividendo le nozioni teoriche da esempi ed evidenze:
@@ -332,7 +349,43 @@ def euler(p, v, w, T):
 ```
 ````
 
-### 3.7 Lingua e Traduzione dei Materiali Forniti
+### 3.7 Gestione di Algoritmi e Pseudocodice (Plugin `obsidian-pseudocode`)
+> [!IMPORTANT] Regola Tassativa: Utilizzo Obbligatorio di Blocchi ```` ```pseudo ````
+> Quando all'interno di un capitolo viene presentato uno **pseudocodice formale**, un ciclo di stima stocastica o un algoritmo procedurale:
+> 1. **Divieto di blocchi `text` generici**: È **severamente vietato** inserire pseudocodici matematici all'interno di blocchi generici (come ```` ```text ```` o ```` ```plain ````), poiché tali blocchi trattano il testo come verbatim puro impedendo la renderizzazione delle formule KaTeX/LaTeX.
+> 2. **Sintassi nativa LaTeX Pseudocode**: Gli algoritmi formali devono essere inseriti all'interno di un blocco di codice con identificatore ```` ```pseudo ```` gestito dal plugin `obsidian-pseudocode` (libreria `pseudocode.js`).
+> 3. **Struttura tipografica standard**:
+>    ````latex
+>    ```pseudo
+>    \begin{algorithm}
+>    \caption{Nome Descrittivo dell'Algoritmo}
+>    \begin{algorithmic}
+>    \REQUIRE Dati di ingresso con formule $\mathbf{x}_0, \mathbf{u}_t, \mathbf{z}_t$
+>    \ENSURE Risultato stimato $\hat{\mathbf{x}}_t, P_t$
+>    \STATE Inizializzazione o istruzione generica $\bar{\mathbf{x}} \leftarrow \mathbf{0}$
+>    \FOR{$k = 1$ \TO $M$}
+>        \STATE Campionamento stocastico $\mathbf{x}_t^{[k]} \sim p(\mathbf{x}_t \mid \mathbf{x}_{t-1}^{[k]}, \mathbf{u}_t)$
+>        \IF{condizione di aggiornamento $N_{\text{eff}} < T$}
+>            \STATE Ricampionamento $\mathcal{S}_t \leftarrow \text{Resample}(\bar{\mathcal{S}}_t)$
+>        \ELSE
+>            \STATE Aggiornamento dei pesi $w_t^{[k]} \leftarrow w_{t-1}^{[k]} \cdot \eta^{[k]}$
+>        \ENDIF
+>    \ENDFOR
+>    \RETURN $\mathcal{S}_t$
+>    \end{algorithmic}
+>    \end{algorithm}
+>    ```
+>    ````
+> 4. **Comandi LaTeX supportati nel blocco `pseudo`**:
+>    - Ambienti: `\begin{algorithm} ... \end{algorithm}`, `\begin{algorithmic} ... \end{algorithmic}`.
+>    - Intestazione e IO: `\caption{...}`, `\REQUIRE ...`, `\ENSURE ...`, `\INPUT ...`, `\OUTPUT ...`.
+>    - Istruzioni: `\STATE ...`, `\RETURN ...`, `\PRINT ...`.
+>    - Controllo del flusso: `\IF{...}` ... `\ELSIF{...}` ... `\ELSE` ... `\ENDIF`, `\FOR{... \TO ...}` ... `\ENDFOR`, `\FORALL{...}` ... `\ENDFOR`, `\WHILE{...}` ... `\ENDWHILE`, `\REPEAT` ... `\UNTIL{...}`.
+>    - Commenti: `\COMMENT{testo del commento}`.
+>    - Formule matematiche: Tutte le variabili, matrici, sommatorie e simboli devono essere inseriti tra singoli dollari `$ ... $` (o doppi dollari `$$ ... $$` se a blocco).
+> 5. **Codice sorgente reale (Python/C++/MATLAB)**: I file di implementazione eseguibile o le funzioni di libreria (es. script didattici di laboratorio, `motionmodel.cpp`, definizioni di nodi ROS) mantengono la normale evidenziazione sintattica ```` ```python ````, ```` ```cpp ```` o ```` ```matlab ````.
+
+### 3.8 Lingua e Traduzione dei Materiali Forniti
 > [!IMPORTANT] Regola Tassativa sulla Lingua Italiana
 > - **Redazione sempre in Italiano**: Tutti gli appunti, le spiegazioni, i commenti e i riassunti devono essere scritti rigorosamente in **lingua italiana**.
 > - **Traduzione dei file forniti**: Se vengono forniti materiali in inglese o in altre lingue (slide dei professori, paper scientifici, manuali o documentazione), questi devono essere **interamente tradotti e rielaborati in italiano**.
