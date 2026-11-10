@@ -383,6 +383,36 @@ I passaggi operativi si articolano in sequenza rigorosa:
 5. __Accumulo dei Gradienti__: ricaviamo i gradienti per ogni strato mediante $\frac{\partial L}{\partial \mathbf{W}^{[k]}} = \boldsymbol{\delta}^{[k]} (\mathbf{a}^{[k-1]})^T$ e $\frac{\partial L}{\partial \mathbf{b}^{[k]}} = \boldsymbol{\delta}^{[k]}$;
 6. __Aggiornamento Parametrico__: applichiamo la correzione di discesa del gradiente a pesi e bias.
 
+```pseudo
+\begin{algorithm}
+\caption{Retropropagazione dell'Errore per Multi-Layer Perceptron (Backpropagation per MLP a $r$ Strati)}
+\begin{algorithmic}
+\REQUIRE Campione di ingresso $\mathbf{x} \in \mathbb{R}^D$, target $\mathbf{t}$, tasso di apprendimento $\alpha > 0$, pesi correnti $\{\mathbf{W}^{[k]}, \mathbf{b}^{[k]}\}_{k=1}^r$
+\ENSURE Pesi e bias aggiornati $\{\mathbf{W}^{[k]}, \mathbf{b}^{[k]}\}_{k=1}^r$
+\STATE $\mathbf{a}^{[0]} \leftarrow \mathbf{x}$
+\FOR{$k = 1$ \TO $r-1$}
+    \STATE $\mathbf{z}^{[k]} \leftarrow \mathbf{W}^{[k]} \mathbf{a}^{[k-1]} + \mathbf{b}^{[k]}$
+    \STATE $\mathbf{a}^{[k]} \leftarrow \mathrm{ReLU}(\mathbf{z}^{[k]})$
+\ENDFOR
+\STATE $\mathbf{z}^{[r]} \leftarrow \mathbf{W}^{[r]} \mathbf{a}^{[r-1]} + \mathbf{b}^{[r]}$
+\STATE $\hat{\mathbf{t}} \leftarrow g_r(\mathbf{z}^{[r]})$
+\STATE $\boldsymbol{\delta}^{[r]} \leftarrow \hat{\mathbf{t}} - \mathbf{t}$
+\FOR{$k = r-1$ \TO $1$ \STEP $-1$}
+    \STATE $\boldsymbol{\delta}^{[k]} \leftarrow \left( (\mathbf{W}^{[k+1]})^T \boldsymbol{\delta}^{[k+1]} \right) \odot \mathbb{I}(\mathbf{z}^{[k]} \ge 0)$
+    \STATE $\frac{\partial L}{\partial \mathbf{W}^{[k+1]}} \leftarrow \boldsymbol{\delta}^{[k+1]} (\mathbf{a}^{[k]})^T$
+    \STATE $\frac{\partial L}{\partial \mathbf{b}^{[k+1]}} \leftarrow \boldsymbol{\delta}^{[k+1]}$
+\ENDFOR
+\STATE $\frac{\partial L}{\partial \mathbf{W}^{[1]}} \leftarrow \boldsymbol{\delta}^{[1]} \mathbf{x}^T$
+\STATE $\frac{\partial L}{\partial \mathbf{b}^{[1]}} \leftarrow \boldsymbol{\delta}^{[1]}$
+\FOR{$k = 1$ \TO $r$}
+    \STATE $\mathbf{W}^{[k]} \leftarrow \mathbf{W}^{[k]} - \alpha \frac{\partial L}{\partial \mathbf{W}^{[k]}}$
+    \STATE $\mathbf{b}^{[k]} \leftarrow \mathbf{b}^{[k]} - \alpha \frac{\partial L}{\partial \mathbf{b}^{[k]}}$
+\ENDFOR
+\RETURN $\{\mathbf{W}^{[k]}, \mathbf{b}^{[k]}\}_{k=1}^r$
+\end{algorithmic}
+\end{algorithm}
+```
+
 ## Funzioni di Costo e Segnali di Errore all'Output
 
 L'algoritmo di Backpropagation retropropaga l'errore a ritroso a partire dal termine di uscita $\boldsymbol{\delta}^{[r]} = \frac{\partial L}{\partial \mathbf{z}^{[r]}}$. Dimostriamo analiticamente che, abbinando correttamente ciascuna funzione di costo alla corrispondente funzione di attivazione canonica, si verifica un'identica proprietà algebrica di cancellazione esatta.
