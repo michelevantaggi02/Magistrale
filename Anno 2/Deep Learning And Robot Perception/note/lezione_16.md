@@ -73,3 +73,9 @@ slide 89: l'attention layer può decidere quante informazioni locali utilizzare 
 slide 92: Il vision transformer divide l'immagine in patch 16x16, quindi la visione dell'immagine manca di alcuni dettagli perché utilizziamo patch molto grandi.
 Vogliamo quindi avere più patch di dimensione minore, il problema è che la complessità aumenta quadraticamente (quindi con il quadrato dei token).
 
+slide 105: 
+//// inserisci immagine, 2 oggetti ground truth, 6 oggetti candidati (bordo tratteggiato), quindi 4 no-objects
+Per performare il matching il candidato deve essere vicino al ground truth e deve avere la probabilità della classe corretta alta.
+Se la probabilità non è abbastanza alta devo addestrare per alzarla e per far sovrapporre i bordi.
+
+slide 112: 

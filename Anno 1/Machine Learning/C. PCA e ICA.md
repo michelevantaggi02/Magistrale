@@ -23,7 +23,7 @@ La __Principal Component Analysis__ (PCA) identifica un sottospazio lineare a di
 
 Per cogliere l'intuizione fisica dell'algoritmo, consideriamo un dataset $\mathcal{D} = \{\mathbf{x}^{(0)}, \dots, \mathbf{x}^{(N-1)}\}$ contenente i risultati di un'indagine condotta su piloti di elicotteri radiocomandati. Ciascun campione è descritto da due feature continue ($D = 2$): l'abilità tecnica di guida ($x_1$) e il grado di divertimento percepito ($x_2$).
 
-![[fig_14_1_direzione_massima_variazione_pca.png|center mid]]
+![[fig_14_1_direzione_massima_variazione_pca.svg|center mid]]
 
 Intuitivamente, le due variabili presentano una marcata correlazione positiva: chi si diverte di più tende a esercitarsi con maggiore costanza e a sviluppare un'abilità superiore. Se osserviamo la distribuzione geometrica dei punti, emerge con chiarezza che la direzione di massima variabilità dei dati non corre lungo l'asse $x_1$ né lungo l'asse $x_2$, bensì lungo una retta inclinata definita dal versore $\mathbf{u}_1$. Viceversa, la direzione ortogonale $\mathbf{u}_2$ cattura una frazione minima di dispersione.
 
@@ -60,7 +60,7 @@ $$
 \|\mathbf{u}\|_2^2 = \mathbf{u}^T \mathbf{u} = 1
 $$
 
-![[fig_14_2_proiezione_campione_direzione_variazione.png|center mid]]
+![[fig_14_2_proiezione_campione_direzione_variazione.svg|center mid]]
 
 La coordinata scalare della proiezione del generico campione $\mathbf{x}^{(i)}$ lungo il versore $\mathbf{u}$ coincide con il prodotto scalare:
 

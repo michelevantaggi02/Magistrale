@@ -1,0 +1,747 @@
+8. Lagrange Multiplier Method
+
+130
+
+h(x) ≥ 0:
+L(x, λ) = f (x) + λh(x)
+
+(8.13)
+
+the stationarity conditions are:
+∇x L(x, λ) = 0
+∂L(x, λ)
+=0
+∂λ
+λh(x) = 0
+h(x) ≥ 0
+λ≥0
+
+(8.14)
+
+where the last two equations will change depending on the 4 scenarios identified above.
+The conditions expressed in the 8.14 are known as Karush-Kuhn-Tucker (KKT)
+conditions.
+In general, we may be dealing with optimization problems with multiple constraints,
+both equality and inequality. It is easy to extend the previous considerations to the
+more general case. Suppose we want to maximize a function f (x) subject to inequality constraints hj (x) ≥ 0 with j = 1, . . . , J and equality constraints rk (x) = 0 with
+k = 1, . . . , K. By introducing the Lagrangian multipliers λj and µk , we can write the
+Lagrangian function as follows:
+L(x, λ1 , . . . , λJ , µ1 , . . . , µK ) = f (x) +
+
+J
+X
+j
+
+λj hj (x) +
+
+K
+X
+
+µk rk (x)
+
+(8.15)
+
+k
+
+and the KKT conditions are:
+∇x L(x, λ1 , . . . , λJ , µ1 , . . . , µK ) = 0
+∂L(x, λ1 , . . . , λJ , µ1 , . . . , µK )
+= 0 , ∀j = 1, . . . , J
+∂λj
+∂L(x, λ1 , . . . , λJ , µ1 , . . . , µK )
+= 0 , ∀k = 1, . . . , K
+∂µ k
+λj hj (x) = 0 , ∀j = 1, . . . , J
+rk (x) = 0 , ∀k = 1, . . . , K
+hj (x) ≥ 0 , ∀j = 1, . . . , J
+λj ≥ 0 , ∀j = 1, . . . , J
+
+(8.16)
+
+Chapter 9
+
+Model Selection and Model
+Assessment
+In the previous chapters, we introduced various supervised learning algorithms with
+the aim of estimating, from the data, a model capable of mapping two random variables, i.e., t (the output variable) and x (the feature vector). These two variables are
+characterized by a joint distribution p(t, x) which is unknown and of which we have
+information only through a set of samples (the dataset) that are realizations of it. In
+detail, we have access to a dataset, called training set Dtraining consisting of samples
+{(x(0) , t(0) ), (x(1) , t(1) ), . . . , (x(N1 −1) , t(N1 −1) )} which are realizations of the joint distribution, i.e., (x(i) , t(i) ) ∼ p(x, t).
+Using the training data, we try to estimate a model that relates x and t and approximates well the unknown relationship that exists between the two variables. We saw
+that, in some case, it is sufficient for us to directly estimate the function t = f (x) (as
+in the case of discriminant functions), other times we instead try to model the posterior
+distribution of the output variable p(t|x) (as in the case of discriminative models). We
+have also seen that we can directly make inference about the joint distribution p(x, t)
+with approaches based on generative models.
+Regardless of the type of strategy we use, the goal is always the same: to minimize
+a cost function computed on the training set data. In general, the cost function, or
+Loss function, expresses a measure of similarity between the predicted value t̂ and the
+true value of supervision t. We have, for example seen the quadratic loss for Linear
+regression:
+L(t, t̂) = L(t, hw (x)) = L(t, wT x) = (t̂ − t)2
+
+(9.1)
+
+or the sigmoid-based loss for Logistic Regression:
+L(t, t̂) = L(t, hw (x)) = L(t, σ(wT x)) = t log(σ(wT x)) + (1 − t) log(1 − σ(wT x)) (9.2)
+It is of interest to calculate the error on all samples in the training set and obtain
+
+9. Model Selection and Model Assessment
+
+132
+
+the Training Error. For example, in the case of regression, we have already seen in
+Chapter 2, equation 2.10, that this can be calculated as:
+n −1
+
+X
+1 1
+Etraining =
+(hwM LE (x(i) ) − t(i) )2
+2
+
+(9.3)
+
+i=0
+
+and which corresponds to the loss function used to find the optimal parameters of the
+Linear regression model (see equation 4.11). Alternatively, we can also consider the
+mean:
+
+n −1
+
+Etraining =
+
+1
+1 X
+(hwM LE (x(i) ) − t(i) )2
+2N1
+
+(9.4)
+
+i=0
+
+However, having a low training error is, in general, not what we really care about.
+What is important to us is that the model provides a prediction as close as possible to
+the true value when it processes samples never seen during training, i.e., , test samples.
+We are, in particular, interested in understanding whether the error computed on a
+never-seen dataset, the Test Set Dtest , is indeed low: we therefore consider the Test
+Error and, specifically, consider the average loss function computed on the test dataset:
+Etest = E[L(t, hwM LE (x))|Dtraining ]
+
+(9.5)
+
+where conditioning on Dtraining indicates that the training set is fixed and used to train
+the model with which we computed the predictions on Dtest .
+A good model, in fact, guarantees a low test error and not too much different from
+the training one. If in fact the error on the training set is much lower than the error on
+the test set we say we have overfitting. Vice versa, if the error on training sets is high
+regardless of the error on the test set (although we also expect this to be very high), it
+means that the model is not even able to explain the training samples and, therefore,
+to capture the characteristics of the data generation process: in this case we speak of
+underfitting.
+A Machine Learning model acts on the trainable parameters w and, once optimized,
+achieves a certain test error. What can we do if we are not satisfied with this error? In
+general, it is possible to act on the structure and definition of the hypothesis function
+hw (x): the ML algorithm is responsible to find the optimal set of w , while we can act
+on the characteristics of the hypothesis function. We can, for example:
+• Choose the structure of the hypothesis function. For example, we may choose to
+use a hypothesis function that predicts a linear relationship between input and
+output with respect to parameters (i.e., Linear regression);
+• Choose whether and which basis function to use;
+• Choose what importance to give to the regularization hyper-parameter (as we will
+see in the case of Ridge Regression);
+
+9. Model Selection and Model Assessment
+
+133
+
+Figure 9.1: Training and test error curves varying the model complexity (degree of
+freedom).
+• Choose whether to perform a polynomial expansion and of what degree;
+• Choose the form of the class conditional distributions for generative models;
+• Choose the number of neighbors to consider in K-NN classifier;
+• ...
+Each of these choices has an impact on the Complexity of the model or, alternatively,
+on its Degree of freedom (DoF), i.e., , its representational power. If we notice that a
+model gives very high errors on both training and test sets, it means that it is rigid (low
+complexity). To increase its flexibility we can, for example, use more basis functions or
+reduce the effect of regularization. However, increasing the complexity too much could
+result in models that follow the noise of the training data, leading to overfitting. To
+better understand this concept, we can draw the training and test error curves as the
+complexity of the model varies (see Figure 9.1)
+From the figure we can see that, as the degrees of freedom of the model increase, the
+error on the training decreases (the model has more flexibility and is free to follow the
+training data). However, although initially also the test error decreases, by increasing
+the complexity, at some point it will tend to grow since the model begins to follow the
+noise and no longer focuses on the pattern hidden among the data.
+It makes sense to ask ourselves what the best strategy is for identifying the best degree
+of complexity. As we have seen, to do this it is necessary to evaluate the performance
+of the model on data never seen during training.
+A first option would be to train the model on Dtraining with a specific configuration
+of the degrees of freedom (hyper-parameters and design choices), test it on Dtest , and
+reiterate if we are not satisfied with the performance. In this way, however, the test
+dataset does in fact play a role in determining the hyper-parameters: we actively use it
+to determine them, and so they necessarily take values that ”work” well with respect to
+
+9. Model Selection and Model Assessment
+
+134
+
+Figure 9.2: Training, Validation and Test splits.
+the test data. We have, in fact, ”exhausted” all of our data and have no more ”unseen”
+samples to test the generalization capabilities of the final model. For this reason, we
+need to consider a third set, known as Validation Set, to be used to find the best
+configuration with respect to the complexity of the model (see Figure 9.2).
+The procedure that is used to choose the configuration of the degrees of freedom of
+a model (and thus its complexity) is known as Model Selection. The procedure that
+instead aims at evaluating the performance and the generalization capabilities of the
+model once both the trainable parameters and the hyper-parameters that control
+its complexity have been optimized (the latter using the model selection procedure), is
+known as Model Assessment.
+Before introducing the strategies we can use to perform model selection and model
+assessment, let us give some more details about the concept of model complexity and,
+in particular, the trade-off between rigidity and flexibility.
+
+9.1
+
+Bias-Variance Decomposition
+
+As we said in the previous section, when we define the machine learning model to be
+used, we make choices and assumptions that affect its structure and thus the result we
+obtain. As mentioned above, our ultimate goal is to obtain a model that works well on
+data that have never been used either to find the trainable parameters, or for the hyperparameters and model choices that determine the degrees of freedom (complexity): the
+test data.
+The purpose of the algorithm is then to estimate the ”true unknown” model by
+using the training data. When we design the algorithm, as we already mentioned,
+we make some choices that influence its flexibility. For example, if we choose to use
+linear regression, we are deciding that the ”unknown” model is characterized by a linear
+relationship between input and output. These assumptions clearly entails an error with
+respect to the true model, an error that will be higher the more the assumption deviates
+from reality. If the assumptions are too strong, we can think of relaxing them and
+increase the complexity of the model. However, in this case we risk, as we already saw,
+to incur into overfitting. To characterize these scenarios, we define two concepts:
+• Bias: the error deriving from assumptions that are too strong and ”unrealistic” (or
+in any case not completely true) that the lerning algorithm makes. More generally,
+
+9. Model Selection and Model Assessment
+
+135
+
+its the error the arises from using a model with a reduced number of degrees of
+freedom.
+• Variance:the error associated with the sensitivity of the learning algorithm to
+noise in the training data.
+A model with high bias and low variance is a rigid model with few degrees of freedom,
+while a flexible model (with many degrees of freedom) has high variance and low bias.
+Having a high error due to bias leads us to a condition called Underfitting, as the
+error is generated by the amount of relevant information contained in the data that is
+discarded due to the low representative power of the model. Instead, a high error because
+of the variance is said Overfitting and it depends from having modeled also the noise
+of the training set (that, in practice, translates in a model that ”learns to memorize”
+the training data). In this second case, we are, in fact, modeling information that is not
+relevant for inference.
+Let us try to formalize these aspects. Assume that we want to estimate a response
+variable t from features x. We denote by f (x) the ”unknown” model that relates the
+two variables and assume that we have access not directly to y = f (x), but to a noisy
+version of it t = f (x) + ϵ, where ϵ ∼ N (0, σϵ2 ). Since f (x) is a deterministic function, we
+have that:
+E[t] = f (x)
+
+(9.6)
+
+V ar[t] = σϵ2
+
+(9.7)
+
+We can now calculate the error we have when we use an estimate hw∗ (x) (our hypothesis function that we choose to estimate the unknown process) to predict the output
+associated with a test sample x0 (here, we assume that we have already completed the
+training and found the optimal parameters w∗ :
+Err(x0 ) = E[(t − hw∗ (x))2 |x = x0 ] = E[t2 ] − 2E[hw∗ (x0 )]E[t] + E[hw∗ (x0 )2 ]
+
+(9.8)
+
+By noticing that:
+V ar[t] = E[t2 ] − E[t]2 =⇒ E[t2 ] = V ar[t] + E[t]2 = σϵ2 + f (x0 )2
+
+(9.9)
+
+E[hw∗ (x0 )2 ] = V ar[hw∗ (x0 )] + E[hw∗ (x0 )]2
+
+(9.10)
+
+we obtain:
+Err(x0 ) = σϵ2 + f (x0 )2 − 2E[hw∗ (x0 )]f (x0 ) + V ar[hw∗ (x0 )] + E[hw∗ (x0 )]2
+=
+
+σϵ2
++ (E[hw∗ (x0 )] − f (x0 ))2 + V ar[hw∗ (x0 )] (9.11)
+|{z}
+|
+{z
+} |
+{z
+}
+VARIANCE
+Noise or irreducible error
+BIAS2
+
+The error is therefore composed of a part related to the noise on t, which we cannot
+
+9. Model Selection and Model Assessment
+
+136
+
+reduce (it is in fact called irreducible error), a part related to the Bias and one related
+to the Variance. We can act on these two terms, since they depend on the hypothesis
+function hw∗ (x0 ) we choose.
+
+9.1.1
+
+Example: K-NN Regressor
+
+In the previous chapters we have introduced the K-NN classifier. There is also a version
+of this algorithm for regression problems, where the estimated output value is computed
+as the average of the output values associated with the K points in the neighborhood of
+the test sample in the feature space:
+h(x0 ) =
+
+1 X
+t
+K
+
+(9.12)
+
+t∈Nx0
+
+by again assuming t = f (x0 ) + ϵ, with ϵ ∼ N (0, σϵ2 ) and by noticing that:
+E[h(x0 )] =
+
+1 X
+1 X
+E[t] =
+f (x0 )
+K
+K
+t∈Nx0
+
+(9.13)
+
+t∈Nx0
+
+and that:
+V ar[h(x0 )] = V ar[
+
+1 X
+t]
+K
+t∈Nx0
+
+=
+=
+
+1
+K2
+
+X
+
+V ar[t]
+
+t∈Nx0
+
+1 X
+V ar[f (x0 )] + V ar[ϵ]
+K2
+t∈Nx0
+
+=
+
+1 X
+V ar[ϵ]
+K2
+t∈Nx0
+
+=
+
+1
+σϵ2
+2
+Kσ
+=
+ϵ
+K2
+K
+
+(9.14)
+
+we obtain:
+1 X
+σϵ2
+f (x0 ) − f (x0 )]2 +
+K
+K
+|{z}
+t∈Nx0
+{z
+} Variance
+|
+Bias
+
+Err(x0 ) = σϵ2 + [
+
+(9.15)
+
+Hence, by increasing K, i.e., the number of neighbors to be considered, the variance
+decreases and the bias increases: this is reasonable, since the average to predict the
+output of the test sample is calculated on a larger number of samples and potentially
+farther and farther from x0 in the feature space. Consequently, the prediction will be
+less affected by the noise present on the training samples, but, with K too large we risk
+to predict always the same value.
+
+9. Model Selection and Model Assessment
+
+9.1.2
+
+137
+
+Example: Linear Regression
+
+We now analyze the Bias and the Variance in the case of Linear Regression. As we know,
+the hypothesis function, once the optimal parameters have been estimated using MLE,
+can be expressed as follows (assuming we do not use basis functions):
+T
+T
+hwM LE |X,t (x0 ) = wM
+LE x0 = x0 wM LE
+
+(9.16)
+
+T
+and by substituting in place of wM
+LE the expression given by the normal equation:
+
+hwM LE |X,t (x0 ) = xT0 (XT X)−1 XT t
+
+(9.17)
+
+We start by calculating the Bias term and we do so by assuming that the ”true”
+model f (x0 ) is indeed linear, i.e., f (x0 ) = xT0 w
+Bias = f (x0 ) − ED [xT0 (XT X)−1 XT
+
+t
+|{z}
+
+]
+
+=f (X)+ϵ=Xw+ϵ
+
+= xT0 w − ED [xT0 (XT X)−1 XT (Xw + ϵ)]
+= xT0 w − ED [xT0 (XT X)−1 XT Xw + xT0 (XT X)−1 XT ϵ)]
+= xT0 w − ED [xT0 
+XTXw] +xT0 (XT X)−1 XT E[ϵ]
+(XT
+X)−1 
+|
+{z
+}
+|{z}
+
+
+=ED [f (x0 )]=xT
+0w
+
+= xT0 w − xT0 w = 0
+
+
+
+=0
+
+(9.18)
+
+We can see that, if the true unknown model is indeed linear, then the Linear Regression
+model has zero bias, i.e., , it is Unbiased.
+
+9. Model Selection and Model Assessment
+
+138
+
+Let’s now calculate the variance term, again assuming that the true model is linear.
+Variance = V ar[hwM LE ] = E[(hwM LE (x0 ) −
+
+E[hwM LE ]
+)2 ]
+| {z }
+=xT
+0 w since the model is unbiased
+
+= E[(xT0 wM LE − xT0 w)2 ]
+= E[(xT0 (XT X)−1 XT t − xT0 w)2 ]
+= E[(xT0 (XT X)−1 XT (Xw + ϵ) − xT0 w)2 ]
+T
+T 2
+= E[( x
+w + xT0 (XT X)−1 XT ϵ − x
+w) ]
+0
+0
+
+= E[(xT0 (XT X)−1 XT ϵ)2 ]
+= E[(xT0 (XT X)−1 XT ϵ)(xT0 (XT X)−1 XT ϵ)T ]
+= E[xT0 (XT X)−1 XT ϵϵT (xT0 (XT X)−1 XT )T ]
+= xT0 (XT X)−1 XT E[ϵϵT ](xT0 (XT X)−1 XT )T
+= xT0 (XT X)−1 XT σϵ2 I(xT0 (XT X)−1 XT )T
+= σϵ2 xT0 
+XTX(xT0 (XT X)−1 )T
+(XT
+X)−1 
+
+
+
+
+= σϵ2 xT0 (XT X)−1 x0
+
+(9.19)
+
+The Variance is therefore related to the spread of the noise σϵ2 and is inversely proportional to the variance of the data. This is intuitive, since the more different the data are
+in the training set, the more experience the model has in training. Consequently, the
+effect of noise will be reduced. This result is closely related to what we had obtained by
+calculating the variance on the estimated weights with MLE:
+V ar[wM LE ] = σϵ2 (XT X)−1
+
+9.2
+
+(9.20)
+
+Approaches for Model Selection and Model Assessment
+
+9.2.1
+
+Model Selection
+
+From the previous sections we have understood that the choice of the flexibility or
+complexity of the model is fundamental. To do so, we have the possibility to act on
+several aspects. In particular, the DoFs of a model can depend on:
+• Type of algorithm and hypothesis function hw (x). For example, we could
+choose the hypothesis function of Linear Regression, Ridge Regression, Neural
+Networks, etc.... Each hypothesis function carries with it assumptions that impact
+the flexibility of the model;
+• Hyper-parameters of regularization. For example, the λ hyper-parameter of
+Ridge Regression or Lasso Regression that we will see in the next chapter;
+
+9. Model Selection and Model Assessment
+
+139
+
+Figure 9.3: Configurations of DoF that result in underfitting, overfitting and Best Model.
+• Hyper-parameters specific to the chosen algorithm. For example, the number of K neighbors of K-NN classifier;
+• Degree of polynomial expansion of features;
+• Number and type of Basis functions;
+• Choice of the number of parameters w of the algorithm. In linear regression, for example, by increasing the basis functions we are in fact increasing the
+number of parameters to be learned and thus the flexibility of the model. With
+neural networks, as we will see, we will have even more flexibility with respect to
+the choice of vector size w .
+• ...
+The best DoF configuration for the model is the one that guarantees the lowest error
+on the data set used, i.e., the point shown as ”Best Model” in the graph in Figure 9.3.
+However, as we said, we cannot use the test set to find the best configuration, otherwise
+we would no longer have any useful data to verify the generalization capabilities of the
+final model (the one with both parameters w , and hyper-parameters and design choices
+fixed). Instead, we must use a third set of data, called the validation set, to identify
+the best degree of complexity for our problem.
+We have three possible strategies for identifying a sub-set of Validation: Fixed
+Validation set, Cross-Validation (K-Fold) and Leave-One-Out (see Figure 9.4).
+• Fixed Validation Set: In this case we split the entire dataset into 3 fixed subsets:
+one for training, one for validation and one for testing. The typical split is 60% −
+20% − 20% and is normally done after a shuffle of the data to try to compensate
+
+9. Model Selection and Model Assessment
+
+140
+
+Figure 9.4: Fixed Validation set, Cross-Validation and Leave-one-out.
+for situations where the data were collected sequentially and are therefore not in
+i.i.d. At this point, to identify the best DoF configurations, the strategy is as
+follows: we choose a certain complexity configuration (e.g., , a certain value for
+the hyper-parameter λ), we train the model on the training set (60% of the data)
+with that configuration, we test the performance on the validation set, and we
+iterate for all possible DoF configurations. In the end, the best model will be the
+one that guarantees the lowest error on the validation set. A pseudocode of this
+procedure is shown in the algorithm 3, in the case of exploring the best values for
+the hyper-parameter λ. The fixed validation set strategy is appropriate in case of
+Algorithm 3 Model Selection with Fixed Validation set
+1: Input: Dtraining and Dvalidation
+2:
+for all λj ∈ {10−3 , 10−2 , 10−1 , 100 , 101 , 102 , 103 } do
+3:
+Train model on Dtraining with λj
+4:
+Test the trained model on Dvalidation
+5:
+end for
+6: Select as the best λj the one that attains the lowest error on Dvalidation
+datasets with a large number of samples, because, in these cases, the statistical
+representativeness of the various sub-sets is reasonable and the risk of having, for
+example, samples on the training set very different from those of the validation set
+is reduced.
+• K-Fold Cross Validation: In case of not very large datasets, in order to avoid
+having very different samples on the various sub-sets, one possibility is to iteratively
+use various parts of the training set both for the actual training of the parameters
+and as validation. In this case, we initially divide the dataset into 2 subsets,
+typically 70% for training and 30% for testing. Next, the training set is divided
+into K subset (K fold). Given a certain configuration of DoF, we use K − 1 of
+those folds to train the model and the last one as validation to compute the error.
+We repeat this operation considering all the possible combinations of the folds (we
+make therefore in total K trainings for that particular configuration of DoF). The
+
+9. Model Selection and Model Assessment
+
+141
+
+overall error for that particular DoF configuration is calculated as the average of
+the errors obtained in the various validation folds. This procedure is repeated for
+all configurations considered and the best one is chosen as the one that obtains
+the lowest average error. This procedure is expressed in the algorithm 4, again in
+the case of exploring the best values for the hyper-parameter λ.
+Algorithm 4 Model Selection with K-Fold Cross-validation
+1: Input: Dtraining
+2: λ∗ = n.a.
+3: AvgErr = 0
+4:
+for all λj ∈ {10−3 , 10−2 , 10−1 , 100 , 101 , 102 , 103 } do
+5:
+CurrErr = 0
+6:
+for all k ∈ {0, 1, . . . , K} do
+7:
+Train model on the K − 1 folds excluding the k-th with λj
+8:
+V alErr = Test the trained model on the k-th fold
+9:
+CurrErr+ = V alErr
+10:
+end for
+11:
+CurrAvgErr = CurrErr/K
+12:
+if CurrAvgErr < AvgErr then
+13:
+AvgErr = CurrAvgErr
+14:
+λ∗ = λj
+15:
+end if
+16:
+end for
+17: return λ∗
+
+• Leave-One-Out: This strategy is used in the case of very small datasets and is a
+special case of cross-validation in which each fold contains a single sample of the
+dataset: the training is done iteratively on N − 1 samples and the test on the last
+remaining sample. The procedure is shown in the Algorithm 5.
+Whatever is the strategy used, once identified the best configuration of DoF, it
+is common to re-train the model with that configuration putting together the data
+of the training and of the validation set (in the case of fixed validation set) or using
+all the training set (in the case of cross-validation and leave-one-out). This is done
+since, as we will see in the next sub-section, a model trained with more data exhibits,
+in general, better generalization capabilities. Consequently, once chosen the optimal
+hyper-parameters with the procedures of model selection, it is convenient to use all the
+training data available to train the final model.
+
+9. Model Selection and Model Assessment
+
+142
+
+Algorithm 5 Model Selection with Leave-One-Out
+1: Input: Dtraining with N samples
+2: λ∗ = n.a.
+3: AvgErr = 0
+4:
+for all λj ∈ {10−3 , 10−2 , 10−1 , 100 , 101 , 102 , 103 } do
+5:
+CurrErr = 0
+6:
+for all i ∈ {0, 1, . . . , N − 1} do
+7:
+Train model on the N − 1 samples excluding the i-th with λj
+8:
+V alErr = Test the trained model on the i-th sample
+9:
+CurrErr+ = V alErr
+10:
+end for
+11:
+CurrAvgErr = CurrErr/N
+12:
+if CurrAvgErr < AvgErr then
+13:
+AvgErr = CurrAvgErr
+14:
+λ∗ = λj
+15:
+end if
+16:
+end for
+17: return λ∗
+
+N.B. In the case where multiple elements controlling DoFs are explored at the
+same time (e.g., , multiple hyper-parameters) it is necessary to perform a Grid
+Search, i.e., the hyper-parameters should be explored in a grid (with nested for
+loops). This is because, for example, the optimal parameter λ given a certain
+degree of polynomial expansion may not be the same for another degree. We
+therefore need to explore all possible combinations of the various elements that
+affect DoFs.
+N.B. 2 The exploration space of hyper-parameters is theoretically infinite (λ takes
+values in R) and thus the computational cost of exploring it properly could be very
+high. A possible strategy could involve a first step in which values are explored
+at very large intervals (e.g., {10−3 , 10−2 , 10−1 , 100 , 101 , 102 , 103 }). Next, once we
+have identified the interval that guarantees the smallest error, we can perform a
+more granular search in that area (e.g., [10−2 , 10−1 ]).
+
+Role of the number or training samples
+From the point of view of the impact on the trend of the training and the test errors, also
+the number of training samples plays a fundamental role and can therefore be object of
+evaluation through model selection. Typically, having fixed the complexity of the model
+(therefore the various hyper-parameters, the design choices, etc...), if this is trained with
+a reduced number of samples we expect a very high error on the test and very low on
+the training: the loss function used during training depends on few samples and it is,
+therefore, easier for the model to set its parameters w to guarantee a low error. However,
+
+9. Model Selection and Model Assessment
+
+143
+
+Figure 9.5: Training and test error by varying the number of training samples
+with little experience is clear that the model perform poorly on data never seen. By
+increasing the number of samples of the training set, the model has more and more
+elements to take into account during the optimization and it will be more difficult to
+reduce the estimation error for all of them. On the other hand, with more experience
+it is easire to understand the structure of the data generation process and therefore to
+generalize better on samples never seen: the test error therefore will decrease (you see
+Figure 9.5). It is therefore clear that it is always worthwhile to increase the number
+of samples in the training set. However, since acquiring the dataset is expensive, this
+type of study is carried out to get an idea of the real advantage that we could obtain by
+acquiring more data. In fact, training the model using more and more portions of the
+training set is equivalent to simulate the situation in which we increase the size of our
+dataset.
+
+9.2.2
+
+Model Assessment
+
+Once we have trained the model and identified the best DoF configuration, we can verify
+the performance of our model on never observed data, i.e., the Assessment phase. For
+this phase we can use the same techniques seen for the model selection, that is Fixed
+Test Set, K-Fold Cross Validation and Leave-one-out. In the case of fixed test set,
+it is sufficient to evaluate the performance of the final model on the split of the dataset
+reserved for testing. In this case, as previously said, it is better to use the model trained
+on all the data that do not belong to the test set (using both the training and validation
+data).
+If we choose instead to use Cross validation or Leave-One-Out for model assessment
+because of the small size of the dataset, we must:
+• Divide the whole dataset into folds (or consider all the samples of the dataset in
+the case of Leave-One-Out);
+• Retrain the model for each possible combination of folds using the optimal hyperparameters found in the model selection phase;
+• Perform the test on the remaining fold
+
+

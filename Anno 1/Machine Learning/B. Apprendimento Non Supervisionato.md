@@ -63,7 +63,7 @@ $$
 
 Risolviamo il problema formulando uno schema di __discesa a blocchi coordinati__ (noto come algoritmo di Lloyd): decomponiamo il problema globale in due semipassi alternati, ciascuno dei quali ammette una soluzione analitica esatta in forma chiusa.
 
-![[fig_13_1_iterazione_kmeans_centroidi.png|center mid]]
+![[fig_13_1_iterazione_kmeans_centroidi.svg|center big]]
 
 Visualizziamo la dinamica iterativa del processo:
 
@@ -258,7 +258,7 @@ Nonostante la loro efficienza, K-Means e K-Medoids soffrono di due stringenti li
 
 Per superare tali vincoli formuliamo un modello probabilistico continuo a densità mista: i __Modelli a Mistura di Gaussiane__ (__Gaussian Mixture Models__, GMM).
 
-![[fig_13_2_mistura_gaussiane_unidimensionale.png|center mid]]
+![[fig_13_2_mistura_gaussiane_unidimensionale.svg|center mid]]
 
 ### Assegnamento Morbido e Limiti Geometrici di K-Means
 
