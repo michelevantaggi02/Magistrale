@@ -1,48 +1,156 @@
+import matplotlib
+matplotlib.use('Agg')
+matplotlib.rcParams['font.sans-serif'] = 'DejaVu Sans'
+matplotlib.rcParams['font.family'] = 'sans-serif'
+matplotlib.rcParams['mathtext.fontset'] = 'dejavusans'
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-fig, ax = plt.subplots(figsize=(10.5, 4.6), dpi=300)
-ax.set_xlim(0, 11)
-ax.set_ylim(0, 5.5)
-ax.axis('off')
+def generate_figure(output_path):
+    fig_w, fig_h = 16, 8.4
+    fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=300)
+    fig.patch.set_facecolor('#ffffff')
+    ax.set_facecolor('#ffffff')
+    ax.set_xlim(0, 16)
+    ax.set_ylim(0, 8.4)
+    ax.axis('off')
 
-# Title
-ax.text(5.5, 5.15, 'Tassonomia dei Tre Approcci Fondamentali alla Classificazione', fontsize=12.5, weight='bold', ha='center', color='#1A202C')
+    # Title & Subtitle
+    ax.text(8.0, 7.95, "Tassonomia dei Tre Approcci Fondamentali alla Classificazione",
+            fontsize=16, weight='bold', ha='center', va='center', color='#0F172A')
+    ax.text(8.0, 7.55, "Inquadramento concettuale dei paradigmi di inferenza supervisionata (ML_Notes, Sez. 5.4)",
+            fontsize=10.5, ha='center', va='center', color='#475569')
 
-# Box 1: Modelli Generativi
-c1_bg, c1_b = '#EBF8FF', '#3182CE'
-rect1 = patches.FancyBboxPatch((0.4, 0.8), 3.1, 4.0, boxstyle='round,pad=0.08', facecolor=c1_bg, edgecolor=c1_b, linewidth=1.8)
-ax.add_patch(rect1)
-ax.text(1.95, 4.45, '1. Modelli Generativi', fontsize=11, weight='bold', ha='center', color='#2B6CB0')
-ax.text(1.95, 4.05, r'Stima $p(\mathbf{x}|\mathcal{C}_k)$ e $P(\mathcal{C}_k)$' + '\n' + r'$\Downarrow$ Bayes' + '\n' + r'$p(\mathcal{C}_k|\mathbf{x}) = \frac{p(\mathbf{x}|\mathcal{C}_k)P(\mathcal{C}_k)}{p(\mathbf{x})}$', fontsize=8.8, ha='center', color='#2C5282')
-ax.text(1.95, 2.75, 'Modelli Tipici:', fontsize=9.2, weight='bold', ha='center', color='#2D3748')
-ax.text(1.95, 2.35, '• Gaussian LDA / QDA\n• Naive Bayes\n• Mixture di Gaussiane (GMM)', fontsize=8.4, ha='center', color='#2D3748')
-ax.text(1.95, 1.45, 'Caratteristiche:\n(+) Outlier/Novelty detection\n(+) Permette sintesi dati\n(-) Elevato costo parametri\n(-) Modella la densita di input', fontsize=8.2, ha='center', color='#2C5282')
+    # 3 Columns
+    card_w = 4.6
+    card_h = 5.8
+    y_card = 1.30
+    xs = [0.8, 5.7, 10.6]
 
-# Box 2: Modelli Discriminativi Probabilistici
-c2_bg, c2_b = '#F0FFF4', '#38A169'
-rect2 = patches.FancyBboxPatch((3.9, 0.8), 3.2, 4.0, boxstyle='round,pad=0.08', facecolor=c2_bg, edgecolor=c2_b, linewidth=1.8)
-ax.add_patch(rect2)
-ax.text(5.5, 4.45, '2. Discriminativi Probabilistici', fontsize=10.5, weight='bold', ha='center', color='#276749')
-ax.text(5.5, 4.05, r'Modellano direttamente' + '\n' + r'la probabilita a posteriori:' + '\n' + r'$p(\mathcal{C}_k|\mathbf{x}) = \sigma(\mathbf{w}^T\boldsymbol{\phi}(\mathbf{x}))$', fontsize=8.8, ha='center', color='#22543D')
-ax.text(5.5, 2.75, 'Modelli Tipici:', fontsize=9.2, weight='bold', ha='center', color='#2D3748')
-ax.text(5.5, 2.35, '• Regressione Logistica\n• Softmax per Multiclasse\n• Reti Neurali con BCE/CE', fontsize=8.4, ha='center', color='#2D3748')
-ax.text(5.5, 1.45, 'Caratteristiche:\n(+) Nessun costo per $p(\mathbf{x})$\n(+) Calibrazione probabilita\n(+) Scelta flessibile della soglia\n(-) Non genera nuovi campioni', fontsize=8.2, ha='center', color='#22543D')
+    configs = [
+        {
+            "title": "1. MODELLI GENERATIVI",
+            "subtitle": r"Modellazione congiunta $p(\mathbf{x}, \mathcal{C}_k)$",
+            "theme_border": "#2563EB",
+            "theme_header": "#DBEAFE",
+            "theme_text": "#1E3A8A",
+            "pill_bg": "#EFF6FF",
+            "formula": r"$p(\mathcal{C}_k|\mathbf{x}) = \frac{p(\mathbf{x}|\mathcal{C}_k)P(\mathcal{C}_k)}{p(\mathbf{x})}$",
+            "formula_desc": r"Stima $p(\mathbf{x}|\mathcal{C}_k)$ e $P(\mathcal{C}_k)$ $\to$ Bayes",
+            "models": [
+                "• Gaussian LDA & QDA",
+                "• Naive Bayes (Bernoulliano)",
+                "• Modelli a Mistura di Gaussiane (GMM)"
+            ],
+            "traits": [
+                ("Densità p(x)", "Modellata (outlier detection)"),
+                ("Incertezza", r"Probabilistica $p(\mathcal{C}_k|\mathbf{x})$"),
+                ("Soglia", "Regolabile a posteriori"),
+                ("Sintesi dati", "Campioni sintetici generabili")
+            ]
+        },
+        {
+            "title": "2. DISCRIMINATIVI PROBABILISTICI",
+            "subtitle": r"Modellazione a posteriori $p(\mathcal{C}_k \mid \mathbf{x})$",
+            "theme_border": "#059669",
+            "theme_header": "#D1FAE5",
+            "theme_text": "#065F46",
+            "pill_bg": "#ECFDF5",
+            "formula": r"$p(\mathcal{C}_1|\mathbf{x}) = \sigma(\mathbf{w}^T\boldsymbol{\phi}(\mathbf{x})) \quad\text{o}\quad \frac{k_k}{K}$",
+            "formula_desc": r"Modella $p(\mathcal{C}_k|\mathbf{x})$ senza stimare $p(\mathbf{x})$",
+            "models": [
+                "• Regressione Logistica",
+                "• K-Nearest Neighbors (K-NN)",
+                "• Softmax Multi-classe & Reti Neurali"
+            ],
+            "traits": [
+                ("Densità p(x)", "Non modellata (basso costo)"),
+                ("Incertezza", r"Probabilistica $p(\mathcal{C}_k|\mathbf{x})$"),
+                ("Soglia", "Regolabile a posteriori"),
+                ("Sintesi dati", "Non generabili dal modello")
+            ]
+        },
+        {
+            "title": "3. FUNZIONI DISCRIMINANTI",
+            "subtitle": r"Mappatura diretta $\mathbf{x} \mapsto \hat{t} \in \{-1, +1\}$",
+            "theme_border": "#D97706",
+            "theme_header": "#FEF3C7",
+            "theme_text": "#92400E",
+            "pill_bg": "#FFFBEB",
+            "formula": r"$\hat{t} = f(\mathbf{x}) = \mathrm{sign}\left(\mathbf{w}^T\boldsymbol{\phi}(\mathbf{x}) + b\right)$",
+            "formula_desc": r"Superficie di decisione geometrica",
+            "models": [
+                "• Percettrone di Rosenblatt",
+                "• Support Vector Machines (SVM)",
+                "• Kernel SVM (frontiere non lineari)"
+            ],
+            "traits": [
+                ("Densità p(x)", "Non modellata (massima efficienza)"),
+                ("Incertezza", "Assente (decisione deterministica)"),
+                ("Soglia", "Fissa (richiede riaddestramento)"),
+                ("Sintesi dati", "Non generabili dal modello")
+            ]
+        }
+    ]
 
-# Box 3: Funzioni Discriminanti Dirette
-c3_bg, c3_b = '#FEFCBF', '#D69E2E'
-rect3 = patches.FancyBboxPatch((7.5, 0.8), 3.1, 4.0, boxstyle='round,pad=0.08', facecolor=c3_bg, edgecolor=c3_b, linewidth=1.8)
-ax.add_patch(rect3)
-ax.text(9.05, 4.45, '3. Funzioni Discriminanti', fontsize=10.5, weight='bold', ha='center', color='#B7791F')
-ax.text(9.05, 4.05, r'Mappatura diretta input $\to$ classe' + '\n' + r'senza calcolo probabilistico:' + '\n' + r'$y = f(\mathbf{w}^T\boldsymbol{\phi}(\mathbf{x})) \in \{-1, +1\}$', fontsize=8.8, ha='center', color='#744210')
-ax.text(9.05, 2.75, 'Modelli Tipici:', fontsize=9.2, weight='bold', ha='center', color='#2D3748')
-ax.text(9.05, 2.35, '• Perceptron di Rosenblatt\n• Support Vector Machines (SVM)\n• K-Nearest Neighbors (K-NN)', fontsize=8.4, ha='center', color='#2D3748')
-ax.text(9.05, 1.45, 'Caratteristiche:\n(+) Approccio diretto ed essenziale\n(+) Efficienza computazionale\n(-) Output deterministico secco\n(-) Nessuna misura di incertezza', fontsize=8.2, ha='center', color='#744210')
+    for x, cfg in zip(xs, configs):
+        # 1. Outer Card Box
+        rect = patches.FancyBboxPatch((x, y_card), card_w, card_h, boxstyle='round,pad=0.0',
+                                      facecolor='#FFFFFF', edgecolor='#CBD5E1', linewidth=1.5)
+        ax.add_patch(rect)
+        
+        # 2. Header Box
+        h_h = 0.95
+        h_rect = patches.FancyBboxPatch((x, y_card + card_h - h_h), card_w, h_h, boxstyle='round,pad=0.0',
+                                        facecolor=cfg["theme_header"], edgecolor=cfg["theme_border"], linewidth=1.8)
+        ax.add_patch(h_rect)
+        ax.text(x + card_w/2, y_card + card_h - 0.32, cfg["title"],
+                fontsize=11.5, weight='bold', ha='center', va='center', color=cfg["theme_text"])
+        ax.text(x + card_w/2, y_card + card_h - 0.68, cfg["subtitle"],
+                fontsize=8.8, ha='center', va='center', color='#334155')
 
-# Bottom rule box
-ax.text(5.5, 0.35, r'Regola Metodologica: se l\'obiettivo e solo la decisione, la funzione discriminante e sufficiente; se serve quantificare l\'incertezza o gestire costi asimmetrici, e indispensabile un modello probabilistico',
-        fontsize=8.4, weight='bold', ha='center', color='#1A202C',
-        bbox=dict(boxstyle='round,pad=0.3', facecolor='#F7FAFC', edgecolor='#CBD5E0', lw=1.2))
+        # 3. Block 1: Formulazione Matematica
+        y_b1 = y_card + card_h - 1.25
+        ax.text(x + 0.35, y_b1, "FORMULAZIONE MATEMATICA", fontsize=8.2, weight='bold', color='#64748B')
+        ax.text(x + 0.35, y_b1 - 0.30, cfg["formula_desc"], fontsize=8.4, color='#1E293B')
+        
+        # Formula box
+        f_box = patches.FancyBboxPatch((x + 0.3, y_b1 - 1.10), card_w - 0.6, 0.65, boxstyle='round,pad=0.0',
+                                      facecolor=cfg["pill_bg"], edgecolor=cfg["theme_border"], linewidth=1.0)
+        ax.add_patch(f_box)
+        ax.text(x + card_w/2, y_b1 - 0.77, cfg["formula"], fontsize=9.2, ha='center', va='center', color=cfg["theme_text"])
 
-plt.savefig('Anno 1/Machine Learning/immagini/fig_ex_4_tassonomia_approcci_classificazione.png', dpi=300, bbox_inches='tight', facecolor='white')
-print('OK: Classification approaches schema generated')
+        # 4. Block 2: Modelli Tipici del Corso
+        y_b2 = y_b1 - 1.48
+        ax.text(x + 0.35, y_b2, "MODELLI TIPICI DEL CORSO", fontsize=8.2, weight='bold', color='#64748B')
+        for i, m in enumerate(cfg["models"]):
+            ax.text(x + 0.45, y_b2 - 0.32 - i*0.28, m, fontsize=8.6, weight='bold', color='#0F172A')
+
+        # 5. Block 3: Proprietà e Caratteristiche
+        y_b3 = y_b2 - 1.48
+        ax.text(x + 0.35, y_b3, "PROPRIETÀ E CARATTERISTICHE", fontsize=8.2, weight='bold', color='#64748B')
+        for i, (label, val) in enumerate(cfg["traits"]):
+            y_line = y_b3 - 0.30 - i*0.28
+            ax.text(x + 0.45, y_line, f"• {label}:", fontsize=8.2, weight='bold', color='#1E293B')
+            ax.text(x + 1.75, y_line, val, fontsize=8.1, color='#475569')
+
+    # Bottom Banner
+    bot_y = 0.30
+    bot_h = 0.75
+    banner = patches.FancyBboxPatch((0.8, bot_y), 14.4, bot_h, boxstyle='round,pad=0.0',
+                                    facecolor='#F8FAFC', edgecolor='#94A3B8', linewidth=1.2)
+    ax.add_patch(banner)
+    
+    line1 = r"$\mathbf{Regola\;Metodologica\;d'Esame:}$ se l'obiettivo è la sola decisione secca, la funzione discriminante è la più efficiente;"
+    line2 = r"se occorre calibrare l'incertezza o gestire costi asimmetrici, è indispensabile un approccio probabilistico."
+    ax.text(8.0, bot_y + 0.48, line1, fontsize=8.6, ha='center', va='center', color='#0F172A')
+    ax.text(8.0, bot_y + 0.22, line2, fontsize=8.6, ha='center', va='center', color='#334155')
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, facecolor='#ffffff', bbox_inches='tight')
+    plt.close()
+    print(f"Generated {output_path} successfully.")
+
+if __name__ == '__main__':
+    generate_figure('scratch/test_schema.png')

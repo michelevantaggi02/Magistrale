@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 1/Machine Learning/4. Algoritmi di Classificazione.md",
+                "file": "Anno 2/Deep Learning And Robot Perception/note/lezione_16.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "4. Algoritmi di Classificazione"
+              "title": "lezione_16"
             }
           }
         ]
@@ -197,6 +197,19 @@
   },
   "active": "7ea60981fcf76b17",
   "lastOpenFiles": [
+    "Anno 1/Machine Learning/immagini/fig_ex_4_tassonomia_approcci_classificazione.svg",
+    "scratch/__pycache__/make_classification_approaches_schema.cpython-314.pyc",
+    "scratch/__pycache__",
+    "scratch/validate_classification_image.py",
+    "scratch/test_schema.png",
+    "scratch/test_schema.py",
+    "scratch/c1.png",
+    "scratch/c2.png",
+    "scratch/c3.png",
+    "Anno 2/Deep Learning And Robot Perception/note/lezione_16.md",
+    "scratch/check_boxes.py",
+    "scratch/inspect_bottom.png",
+    "Anno 1/Machine Learning/4. Algoritmi di Classificazione.md",
     "Anno 1/Machine Learning/C. PCA e ICA.md",
     "Anno 1/Machine Learning/immagini/fig_ex_C_ica_cocktail_party_non_gaussianity.png",
     "Anno 1/Machine Learning/immagini/fig_ex_C_pca_proiezione_ricostruzione_scree_plot.png",
@@ -204,25 +217,15 @@
     "Anno 1/Machine Learning/immagini/fig_14_2_proiezione_campione_direzione_variazione.png",
     "Anno 1/Machine Learning/immagini/fig_14_1_direzione_massima_variazione_pca.png",
     "scratch/cropped_fig14_2.png",
-    "scratch/cropped_fig14_1.png",
-    "scratch/page_219-219.png",
-    "scratch/raw_ch14_img-002.png",
-    "scratch/raw_ch14_img-001.png",
-    "scratch/raw_ch14_img-000.png",
     "scratch/ch14_text.txt",
     "scratch/extracted_13/ppt/media/media-50-1.mp4",
     "scratch/extracted_13/ppt/media/media-27-1.mp4",
     "scratch/extracted_13/ppt/media",
-    "scratch/extracted_13/ppt",
-    "scratch/extracted_13",
     "Anno 1/Machine Learning/B. Apprendimento Non Supervisionato.md",
-    "scratch/generate_unsupervised_diagrams.py",
-    "scratch/ch13_text.txt",
     "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
     "Anno 2/Autonomous Robotics/12. SLAM con Griglie di Occupazione e GMapping.md",
     "Anno 2/Autonomous Robotics/6. Localizzazione con Particle Filter.md",
     "Anno 2/Autonomous Robotics/note/lezione_22.md",
-    "Anno 1/Machine Learning/dispense/ML_Notes.pdf",
     "Anno 1/Machine Learning/A. Reti Neurali.md",
     "Anno 1/Machine Learning/7. Model Selection e Model Assessment.md",
     "Anno 1/Machine Learning/8. Regressione Ridge e Lasso.md",
@@ -240,9 +243,6 @@
     "Anno 1/export/md/Digital Signal Processing-merged.md",
     "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
     "Anno 2/Autonomous Robotics/11. FastSLAM e Rao-Blackwellized Particle Filter.md",
-    "Anno 2/Autonomous Robotics/10. SLAM ed EKF-SLAM.md",
-    "Anno 2/Autonomous Robotics/note/lezione_20.md",
-    "Anno 2/Autonomous Robotics/note/lezione_19.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
     "Senza nome.canvas",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Feature Detection e Matching.canvas"

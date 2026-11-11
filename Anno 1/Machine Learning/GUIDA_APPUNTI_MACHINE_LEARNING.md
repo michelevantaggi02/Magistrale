@@ -133,9 +133,9 @@ La dispensa del professore è rigorosa ma in alcuni passaggi teorici manca di su
    - *Iperpiani e separatori*: mostrare graficamente la differenza tra decision boundary lineari e non lineari in 2D/3D.
    - *Confronto geometrico di vincoli*: visualizzare i contorni di livello ellittici della loss a confronto con il rombo $L_1$ (spigoli $\to$ sparsità) e il cerchio $L_2$.
    - *Pipeline e grafi computazionali*: mostrare il flusso in avanti (forward) e all'indietro (backpropagation) del gradiente nelle reti neurali.
-2. **Strumenti di Generazione**:
-   - Schemi vettoriali in **SVG** puliti, con etichette chiare e colori armoniosi.
-   - Grafici generati tramite script **Python (Matplotlib/Seaborn)** salvati a 300 DPI con sfondo bianco puro.
+2. **Strumenti e Formati di Generazione (Precedenza Assoluta ad SVG)**:
+   - È possibile generare immagini sia in formato vettoriale `.svg` sia in raster `.png` (ad alta risoluzione, 300 DPI con sfondo bianco puro).
+   - **Tassativa precedenza ad SVG**: il formato vettoriale `.svg` deve avere **sempre la precedenza assoluta** come scelta prioritaria per diagrammi concettuali, curve matematiche, architetture e schemi a blocchi (scalabilità infinita senza perdita di risoluzione, peso file irrisorio e perfetta resa vettoriale nei PDF). Il formato `.png` a 300 DPI è ammesso come valida alternativa o fallback per contenuti raster complessi.
 3. **Naming dei Grafici di Esempio**:
    - Salvare in `Anno 1/Machine Learning/immagini/` con il prefisso `fig_ex_` oppure `schema_`:
      ```text
@@ -143,6 +143,11 @@ La dispensa del professore è rigorosa ma in alcuni passaggi teorici manca di su
      schema_<capitolo>_<descrizione>.svg
      ```
    - Esempio: `fig_ex_4_geometria_hat_matrix.png`, `schema_12_backprop_flusso.svg`, `fig_ex_10_lasso_vs_ridge_vincoli.png`.
+4. **Requisiti Tassativi di Qualità Grafica e Testuale (Zero Overlap, Zero Overflow, Sintesi Visiva)**:
+   - *Less Text, More Structure*: Le immagini non devono duplicare i paragrafi teorici degli appunti; devono essere mappe strutturali chiare, leggibili a colpo d'occhio.
+   - *Verifica Anti-Sovrapposizione e Anti-Overflow*: Prima di dare per corretta un'immagine, verificare sempre che nessun testo fuoriesca dai riquadri/card/banner o dal canvas, e che non vi siano testi o etichette sovrapposti tra loro.
+   - *Margini di respiro*: Mantenere margini ariosi su tutti i lati delle card e riquadri (almeno il 15–20% di spazio libero alla base delle card verticali).
+   - *Frasi lunghe*: Spezzare sempre i testi lunghi su più righe o sintetizzarli per impedire sforamenti orizzontali.
 
 ### 3.4 Ottimizzazione Cognitiva e Visuale tramite Subagente (`cognitive-study-editor-v3`)
 In conformità alla regola generale definita in `[[.agents/rules/ottimizzazione_cognitiva_subagente.md|ottimizzazione_cognitiva_subagente.md]]`:
@@ -261,6 +266,7 @@ Prima di ritenere completato un capitolo della materia:
 - [ ] **Supporto Visivo Integrativo**: Concetti astratti o geometrici privi di figure nel PDF sono stati arricchiti con grafici didattici ad-hoc (`fig_ex_...png` o `schema_...svg`).
 - [ ] **Centratura e Dimensionamento Immagini**: Tutte le immagini hanno `|center small`, `|center mid` o `|center big`.
 - [ ] **Affiancamento Immagini Small Consecutive**: Le immagini `small` consecutive sono posizionate sulla stessa riga separate da uno spazio.
+- [ ] **Verifica Anti-Overlap e Anti-Overflow delle Immagini**: Per ogni immagine generata, è stato verificato che non vi siano testi o etichette sovrapposti (zero overlap), che nessuna scritta fuoriesca dai riquadri/card o dal canvas (zero overflow), e che il contenuto testuale sia sintetico ed essenziale (zero testo eccessivo).
 - [ ] **Notazione Rigorosa del Docente**: Rispetto puntuale delle convenzioni di `0. Notazione e Concetti Fondamentali` ($\mathbf{x}$ vettore colonna, $\mathbf{X} \in \mathbb{R}^{N \times D}$, $y$ vs $t$, $\hat{y}$, $\mathbf{w}$ / $\boldsymbol{\theta}$).
 - [ ] **Sintassi Tipografica Linter**: Utilizzo di `__grassetto__`, `_corsivo_` e `…`.
 - [ ] **Assenza di Linee Orizzontali**: Nessun separatore `---` presente nel corpo del testo.

@@ -314,6 +314,12 @@ Quando nelle presentazioni, nei file sorgente o nelle lezioni sono presenti anim
 >        ```
 >      - Racchiudere ogni formula nella sintassi mathtext standard: `r"$w_t^{(i)} = w_{t-1}^{(i)} \cdot \eta^{(i)}$"`, `r"$N_{\mathrm{eff}} = \frac{1}{\sum_{i=1}^N (\tilde{w}_i)^2}$"`, `r"$x_t^{(i)} \sim \mathcal{N}(\mu, \Sigma)$"`.
 >      - La direttiva `svg.fonttype = 'path'` converte automaticamente ogni glifo e simbolo matematico ($\oplus, \mu, \Sigma, \eta$, sommatorie, frazioni, integrali) in tracciati geometrici vettoriali (`<path d="…" />`) incorporati nell'SVG: la resa tipografica è identica a LaTeX, scalabile all'infinito e 100% indipendente da font di sistema o compilatori esterni.
+> 8. **Controllo Anti-Overlap, Anti-Overflow e Divieto di Testo Eccessivo (Zero Overlap & Less Text)**:
+>    - **Principio "Less Text, More Structure"**: Le immagini didattiche e i diagrammi non devono trasformarsi in muri di testo o replicare interi paragrafi già presenti nel Markdown. Devono essere mappe strutturali chiare, leggibili a colpo d'occhio, con formule chiave in risalto, etichette sintetiche e box ariosi.
+>    - **Verifica Tassativa Prima dell'Approvazione**: Prima di considerare corretta qualsiasi immagine generata sinteticamente, è obbligatorio verificare visivamente e geometricamente che:
+>      1. **Zero Overflow**: Nessun testo o etichetta fuoriesca dai bordi delle card, dei riquadri, dei banner o dell'area utile del canvas (mantenere margini di respiro interni ampi su tutti e 4 i lati, con almeno il 15–20% di spazio libero alla base delle card verticali).
+>      2. **Zero Overlap**: Nessun testo si sovrapponga ad altri testi o linee grafiche (pairwise overlap = 0).
+>      3. **Wrapping o Condensazione**: Le frasi lunghe devono essere suddivise su più righe o rese più concise per evitare sforamenti orizzontali.
 
 ### 3.4 Callout di Obsidian
 I callout arricchiscono il testo dividendo le nozioni teoriche da esempi ed evidenze:
@@ -586,6 +592,7 @@ Prima di concludere qualsiasi sessione di scrittura o refactoring di un appunto:
 - [ ] **Affiancamento Immagini Small Consecutive**: Le immagini `small` che compaiono in sequenza sono posizionate sulla stessa riga (separate da uno spazio) per comparire affiancate orizzontalmente anziché impilate verticalmente.
 - [ ] **Tema Chiaro delle Immagini (Print-Ready)**: Tutte le immagini generate sinteticamente (SVG, grafici matplotlib, schemi) adottano rigorosamente un tema chiaro su sfondo bianco (`#ffffff`), con testi e assi scuri ad alto contrasto (`#0f172a`, `#334155`), per garantire un'esportazione PDF pulita e una stampa cartacea perfetta senza spreco di inchiostro né blocchi neri.
 - [ ] **Sviluppo Orizzontale dei Grafici**: I grafici, i diagrammi vettoriali e gli schemi concettuali sono progettati con orientamento orizzontale/panoramico (aspect ratio landscape es. 16:9 o multi-pannello a colonne affiancate, `flowchart LR` per Mermaid) per ottimizzare lo spazio verticale della pagina A4 ed evitare salti pagina indesiderati.
+- [ ] **Verifica Anti-Overlap e Anti-Overflow delle Immagini**: Per ogni immagine generata sinteticamente, è stato verificato che non vi siano testi o etichette sovrapposte (zero overlap), che nessuna scritta fuoriesca dai riquadri/card o dal canvas (zero overflow), e che il contenuto testuale sia sintetico ed essenziale (zero testo eccessivo).
 - [ ] **Formule Matematiche**: Tutte le formule matematiche sono bilanciate e conformi a KaTeX.
 - [ ] **Sintassi Tipografica Linter**: I termini chiave usano il doppio underscore `__termine__` e il corsivo usa il singolo `_termine_`.
 - [ ] **Integrità degli Elenchi**: Gli elenchi puntati o numerati non sono spezzati da immagini, callout o altri blocchi intermedi; ogni elenco viene concluso prima di inserire figure o callout di approfondimento.

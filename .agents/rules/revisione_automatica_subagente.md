@@ -55,6 +55,10 @@ Il subagente esamina il testo **esclusivamente sotto due dimensioni oggettive di
 - [ ] **Aderenza al perimetro didattico**: concetti, convenzioni di simboli ed esempi fedeli alle slide e dispense della materia corrente.
 - [ ] **Integrazione critica da note e paper**: chiarimento rigoroso di passaggi sintetici o schemi alla lavagna segnalati nelle note degli studenti o nei paper.
 - [ ] **Correzione di refusi della sorgente**: segnalazione di eventuali errori o incongruenze riscontrate direttamente nelle slide o note del docente (evitando di replicare sviste nel vault).
+- [ ] **Controllo Qualità delle Figure e Schemi Generati**: qualora il capitolo contenga diagrammi o immagini didattiche ad-hoc (`fig_ex_...` o `schema_...`), accertarsi che:
+  - Le formule, le etichette e le proprietà illustrate siano rigorosamente coerenti con la teoria.
+  - Non vi siano testi o etichette sovrapposti né scritte che fuoriescono dai riquadri/card o dal canvas.
+  - Il diagramma sia visivamente pulito e sintetico, privo di testo prolisso o eccessivo che replichi inutilmente i paragrafi del Markdown.
 
 ### 4.3 Assoluta Assenza di Meta-Commenti e Precisazioni su Correzioni o Refusi
 > [!IMPORTANT] Regola Tassativa: Nessuna Menzione del Processo Correttivo nel Testo

@@ -69,3 +69,7 @@ slide 87: questi metodi forniscono un grosso effetto di regolarizzazione, diminu
 slide 88: Si inizia addestrando il transformer con meno token (usando patch più grandi) e si effettua poi fine tuning con patch più piccole, e quindi un numero di token maggiore.
 
 slide 89: l'attention layer può decidere quante informazioni locali utilizzare ad ogni layer.
+
+slide 92: Il vision transformer divide l'immagine in patch 16x16, quindi la visione dell'immagine manca di alcuni dettagli perché utilizziamo patch molto grandi.
+Vogliamo quindi avere più patch di dimensione minore, il problema è che la complessità aumenta quadraticamente (quindi con il quadrato dei token).
+

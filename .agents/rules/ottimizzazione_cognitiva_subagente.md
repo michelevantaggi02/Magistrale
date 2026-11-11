@@ -82,13 +82,21 @@ Il subagente applica rigorosamente i seguenti principi:
   - **Testi, assi ed etichette**: scuri ad altissimo contrasto (`#0f172a`, `#1e293b`, `#334155`).
   - **Griglie e bordi**: grigio neutro tenue e sottile (`#cbd5e1`, `#e2e8f0`).
   - **Dati, curve e card**: curve nitide e brillanti (`#2563eb`, `#059669`, `#dc2626`, `#d97706`, `#7c3aed`), card e aree di riempimento a tinte pastello delicate (`#eff6ff`, `#ecfdf5`, `#fef3c7`, `#fef2f2`).
-- [ ] **Grafici cartesiani e curve matematiche (SVG)**:
-  - Generati come file vettoriali dedicati `.svg` salvati nella cartella **`immagini/`** della materia corrente.
-  - Inclusi nel Markdown **esclusivamente** tramite la sintassi nativa degli allegati Obsidian:
-    `![[nome_file.svg|center mid]]` (oppure `small` o `big` in base al livello di dettaglio testuale).
+- [ ] **Grafici cartesiani e schemi generati (Precedenza Assoluta ad SVG rispetto a PNG)**:
+  - Possono essere generati sia in formato vettoriale `.svg` sia in raster `.png` (ad alta risoluzione a 300 DPI), ma **bisogna dare sempre la precedenza al formato vettoriale SVG** come prima scelta prioritaria (risoluzione infinita, peso file irrisorio, resa vettoriale nativa nei PDF senza sgranare). Il formato `.png` a 300 DPI è ammesso come alternativa o fallback per contenuti raster complessi.
+  - I file vanno salvati nella cartella **`immagini/`** della materia corrente e inclusi nel Markdown **esclusivamente** tramite la sintassi nativa degli allegati Obsidian:
+    `![[nome_file.svg|center mid]]` oppure `![[nome_file.png|center mid]]` (oppure `small` o `big` in base al livello di dettaglio testuale).
   - Divieto assoluto di codice SVG inline o tag HTML `<p align="center">` all'interno del Markdown.
   - Se due immagini `small` si susseguono, inserirle sulla stessa riga di testo separate da un solo spazio (`![[img1.svg|center small]] ![[img2.svg|center small]]`).
-  - **Rendering Matematico in SVG**: Per evitare stringhe LaTeX non compilate nei diagrammi (es. `w_t^{(i)} = ...`), impostare sempre `matplotlib.rcParams['svg.fonttype'] = 'path'` e `matplotlib.rcParams['mathtext.fontset'] = 'dejavusans'`, racchiudendo le formule tra `r"$...$"`. Questo converte simboli, indici e formule in tracciati vettoriali integrati.
+  - **Rendering Matematico nei Grafici**: Per evitare stringhe LaTeX non compilate nei diagrammi (es. `w_t^{(i)} = ...`), impostare sempre `matplotlib.rcParams['svg.fonttype'] = 'path'` e `matplotlib.rcParams['mathtext.fontset'] = 'dejavusans'`, racchiudendo le formule tra `r"$...$"`. Questo converte simboli, indici e formule in tracciati vettoriali integrati.
+- [ ] **Divieto di Testo Eccessivo nelle Immagini (Principio "Less Text, More Structure")**:
+  - Le immagini didattiche e i diagrammi non devono replicare interi paragrafi o muri di testo già ampiamente descritti nel corpo Markdown della lezione.
+  - I grafici devono configurarsi come mappe visive e strutturali: formule chiave in risalto, etichette sintetiche, elenchi schematici a punti e visualizzazione immediata delle relazioni logico-geometriche.
+- [ ] **Verifica Geometrica Preventiva Anti-Sovrapposizione e Anti-Overflow (Tassativa Prima del Rilascio)**:
+  - Prima di dare per corretta qualsiasi immagine generata sinteticamente, è obbligatorio verificare visivamente e geometricamente che:
+    1. **Nessun testo fuoriesca dai riquadri/card o dal canvas**: i testi non devono mai toccare né oltrepassare i bordi delle card o dei contenitori (garantire margini interni di respiro minimi su tutti e 4 i lati, e almeno il 15–20% di spazio libero alla base delle card verticali).
+    2. **Nessun testo si sovrapponga**: eliminare categoricamente collisioni o intersezioni tra etichette, testi descrittivi, formule e tracciati grafici (pairwise overlap = 0).
+    3. Le frasi lunghe devono essere opportunamente mandate a capo (multi-line) o condensate per non superare la larghezza utile dell'elemento grafico.
 
 ### 4.4 Conformità Tassativa alle Linee Guida del Vault (`STRUTTURA_E_GUIDA_APPUNTI.md`)
 - [ ] **Convenzioni Linter**:
