@@ -78,4 +78,3 @@ slide 105:
 Per performare il matching il candidato deve essere vicino al ground truth e deve avere la probabilità della classe corretta alta.
 Se la probabilità non è abbastanza alta devo addestrare per alzarla e per far sovrapporre i bordi.
 
-slide 112: 
