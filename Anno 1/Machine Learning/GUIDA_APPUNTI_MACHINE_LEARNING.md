@@ -255,6 +255,11 @@ Tutti i documenti `.md` di Machine Learning devono uniformarsi senza eccezioni a
   - `>[!IMPORTANT]`: condizioni matematiche cruciali, limiti teorici, proprietà d'esame.
   - `>[!EXAMPLE]`: esempi numerici o geometrici applicati.
 
+### 5.6 Divieto Assoluto di Formule Metanarrative di Transizione ("Nel capitolo precedente...", "In questo capitolo vedremo...")
+- **Divieto di Retrospettive e Anticipazioni**: È severamente vietato aprire o intervallare i capitoli con frasi quali *"Nel capitolo precedente abbiamo visto/studiato..."*, *"Nei capitoli precedenti abbiamo trattato..."*, *"In questo capitolo vedremo/esploreremo..."*, *"Il presente capitolo si propone di..."*, *"Come vedremo nel prossimo capitolo..."*.
+- **Motivazione Tecnica e Tipografica (Concatenazione in PDF Unificato)**: Tutti i file markdown della materia vengono concatenati sequenzialmente tramite plugin di merge (`advanced-merger`) in un unico volume continuo compilato in PDF (`Machine Learning-merged.pdf`). All'interno di una dispensa continua, i riferimenti a capitoli precedenti o successivi risultano ridondanti, artificiali e spezzano la scorrevolezza della lettura.
+- **Incipit Diretto e Assertivo**: Ciascun capitolo deve entrare immediatamente nel cuore del tema ingegneristico, matematico o concettuale, esponendo la teoria e le problematiche in modo naturale e consequenziale.
+
 ## 6. Checklist di Controllo Qualità per Machine Learning
 
 Prima di ritenere completato un capitolo della materia:
@@ -272,6 +277,7 @@ Prima di ritenere completato un capitolo della materia:
 - [ ] **Assenza di Linee Orizzontali**: Nessun separatore `---` presente nel corpo del testo.
 - [ ] **Integrità degli Elenchi**: Nessun elenco interrotto a metà da blocchi grafici o callout.
 - [ ] **Divieto di Meta-Commenti**: Nessuna frase o callout fa riferimento a refusi delle note o a spiegazioni del processo correttivo.
+- [ ] **Assenza di Formule Metanarrative di Transizione**: Nessuna frase di apertura o raccordo contiene formule quali *"nel capitolo precedente abbiamo visto"*, *"in questo capitolo vedremo"*, *"nel prossimo capitolo"* (testo pronto per la concatenazione unificata in PDF).
 - [ ] **Ritmo e Comprensibilità**: Testo scorrevole, paragrafi brevi (1-4 righe), prima persona ingegneristica, spiegazione intuitiva prima delle formule analitiche.
 - [ ] **Certificazione di Revisione con Subagente Indipendente**: Il capitolo è stato esaminato da un subagente indipendente fino a conseguire la certificazione formale `CONFORME`.
 - [ ] **Revisione con l'Utente**: Il capitolo è stato concluso e presentato all'utente per la validazione prima di passare al capitolo successivo.

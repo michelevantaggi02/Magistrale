@@ -13,15 +13,28 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
+                "file": "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Deep Learning And Robot Perception-merged"
+              "title": "1. Introduzione al Supervised Learning"
+            }
+          },
+          {
+            "id": "611aeb01f875548e",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.15.1"
+              },
+              "icon": "lucide-book-up",
+              "title": "Note di rilascio 1.15.1"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -195,8 +208,15 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "08d86cc9d4ce593b",
+  "active": "611aeb01f875548e",
   "lastOpenFiles": [
+    "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
+    "Anno 1/Machine Learning/2. Teoria della Probabilita.md",
+    "Anno 1/Machine Learning/3. Regressione Lineare.md",
+    "Anno 1/Machine Learning/4. Algoritmi di Classificazione.md",
+    "Anno 1/Machine Learning/C. PCA e ICA.md",
+    "Anno 1/Machine Learning/B. Apprendimento Non Supervisionato.md",
+    "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
     "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
     "Anno 2/export/md/Deep Learning And Robot Perception-merged.md",
     "Anno 2/Autonomous Robotics/note/lezione_23.md",
@@ -224,13 +244,9 @@
     "scratch/__pycache__/make_cap_6_figures_svg.cpython-314.pyc",
     "scratch/audit_cap_6.py",
     "scratch/audit_cap_6_svg.py",
-    "Anno 1/Machine Learning/0. Notazione e Concetti Fondamentali.md",
     "Anno 1/Machine Learning/7. Model Selection e Model Assessment.md",
     "Anno 1/Machine Learning/6. Metodo dei Moltiplicatori di Lagrange.md",
     "Anno 1/Machine Learning/5. Modelli Generativi per la Classificazione.md",
-    "Anno 1/Machine Learning/4. Algoritmi di Classificazione.md",
-    "Anno 1/Machine Learning/C. PCA e ICA.md",
-    "Anno 1/Machine Learning/B. Apprendimento Non Supervisionato.md",
     "Anno 2/Autonomous Robotics/0. Modelli Cinematici e di Movimento.md",
     "Anno 2/Autonomous Robotics/6. Localizzazione con Particle Filter.md",
     "Anno 2/Autonomous Robotics/note/lezione_22.md",
@@ -238,9 +254,6 @@
     "Anno 1/Machine Learning/8. Regressione Ridge e Lasso.md",
     "Anno 1/Machine Learning/9. Support Vector Machines.md",
     "Anno 1/Machine Learning-merged.md",
-    "Anno 1/Machine Learning/2. Teoria della Probabilita.md",
-    "Anno 1/Machine Learning/1. Introduzione al Supervised Learning.md",
-    "Anno 1/Machine Learning/3. Regressione Lineare.md",
     "Anno 1/Machine Learning/GUIDA_APPUNTI_MACHINE_LEARNING.md",
     "Anno 1/export/md/Information and Estimation Theory-merged.md",
     "Anno 2/Deep Learning And Robot Perception/Mappa Concettuale - Computer Vision e Feature Matching.canvas",
