@@ -24,6 +24,12 @@ img[alt*="center"]{
 	width: 45%;
 }
 
+.markdown-rendered .image-embed[alt*="mini"],
+.markdown-source-view.mod-cm6 .cm-content .image-embed[alt*="mini"]{
+	width: 25%;
+}
+
+
 .markdown-rendered .image-embed[alt*="full"],
 .markdown-source-view.mod-cm6 .cm-content .image-embed[alt*="full"]{width:100%;}
 
